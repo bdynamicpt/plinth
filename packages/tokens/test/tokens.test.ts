@@ -126,9 +126,16 @@ describe('contrast', () => {
     ['text-muted', 'surface-sunken'],
     ['accent-text', 'surface'],
     ['on-accent', 'accent'],
+    ['on-accent', 'accent-hover'],
+    ['on-accent', 'accent-active'],
+    ['on-danger', 'danger-solid'],
+    ['on-danger', 'danger-solid-hover'],
+    ['on-danger', 'danger-solid-active'],
     ['success-text', 'success-surface'],
     ['warning-text', 'warning-surface'],
     ['danger-text', 'danger-surface'],
+    ['danger-text', 'surface'],
+    ['danger-text', 'surface-raised'],
   ] as const;
 
   describe.each(['light', 'dark'] as const)('%s', (mode) => {
