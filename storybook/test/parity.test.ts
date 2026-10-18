@@ -498,6 +498,7 @@ describe('parity with the stories', () => {
       'List row/DisabledLink',
       'List row/WithAction',
       'List row/LongText',
+      'List row/LongValue',
       'List row/with extra attributes',
       'List row/link with extra attributes',
       'List row/current button',
