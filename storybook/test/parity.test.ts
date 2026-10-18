@@ -7,6 +7,7 @@ import {
   PlinthIconButton,
   PlinthListCard,
   PlinthListRow,
+  PlinthMenuSheet,
   PlinthPill,
   PlinthPillRow,
   PlinthSectionMenu,
@@ -32,6 +33,8 @@ import * as listCardStories from '../stories/components/ListCard.stories.ts';
 import { listCard, listCardRows, type ListCardArgs } from '../stories/components/list-card.ts';
 import * as listRowStories from '../stories/components/ListRow.stories.ts';
 import { listRow, type ListRowArgs } from '../stories/components/list-row.ts';
+import * as menuSheetStories from '../stories/components/MenuSheet.stories.ts';
+import { menuSheet, type MenuSheetArgs } from '../stories/components/menu-sheet.ts';
 import * as pillRowStories from '../stories/components/PillRow.stories.ts';
 import { pill, pillRow, type PillArgs, type PillRowArgs } from '../stories/components/pill-row.ts';
 import * as sectionMenuStories from '../stories/components/SectionMenu.stories.ts';
@@ -107,6 +110,17 @@ const sheetDefaults: SheetArgs = {
   placement: 'center',
   body: '<p>Body</p>',
   footer: '<button type="button">Apply</button>',
+};
+
+const menuSheetDefaults: MenuSheetArgs = {
+  id: 'menu',
+  title: 'Menu',
+  closeLabel: 'Close',
+  userName: 'Sam Lee',
+  userDetail: 'sam@example.com',
+  userHref: '#profile',
+  nav: '<a href="#inbox">Inbox</a>',
+  account: '<button type="button">Sign out</button>',
 };
 
 const pillDefaults: PillArgs = { label: 'Open', selected: false, disabled: false };
@@ -326,6 +340,22 @@ const cases: ParityCase[] = [
   }),
   sheetCase('Sheet/empty footer', { ...sheetDefaults, footer: '  ' }),
   sheetCase('Sheet/id with spaces', { ...sheetDefaults, id: 'filters' }, {}, ' filters '),
+  ...storyArgs<MenuSheetArgs>(menuSheetStories).map(([story, args]) =>
+    menuSheetCase(`Menu sheet/${story}`, args),
+  ),
+  menuSheetCase('Menu sheet/with extra attributes', menuSheetDefaults, {
+    class: 'is-shell',
+    'data-testid': 'menu',
+    'aria-describedby': 'menu-hint',
+    closedby: 'closerequest',
+  }),
+  menuSheetCase('Menu sheet/blank user parts and account', {
+    ...menuSheetDefaults,
+    userDetail: ' ',
+    userHref: ' ',
+    account: '  ',
+  }),
+  menuSheetCase('Menu sheet/blank user name', { ...menuSheetDefaults, userName: '  ' }),
   sheetCase('Sheet/unknown placement', {
     ...sheetDefaults,
     placement: 'start' as SheetArgs['placement'],
@@ -532,6 +562,37 @@ function sectionMenuCase(
     markup: sectionMenu(args, attributes),
     vue: { component: PlinthSectionMenu, props: { ...props, ...attributes }, slot, html: true },
     blade: { component: 'section-menu', props, attributes, slot },
+  };
+}
+
+/** The menu sheet's parity; its nav and account are markup, passed in as the slots. */
+function menuSheetCase(
+  story: string,
+  args: MenuSheetArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = {
+    id: args.id,
+    title: args.title,
+    closeLabel: args.closeLabel,
+    ...Object.fromEntries(
+      (['userName', 'userDetail', 'userSrc', 'userHref'] as const)
+        .filter((name) => args[name] !== undefined)
+        .map((name) => [name, args[name]]),
+    ),
+  };
+  const named: Record<string, string> = args.account ? { account: args.account } : {};
+  return {
+    story,
+    markup: menuSheet(args, attributes),
+    vue: {
+      component: PlinthMenuSheet,
+      props: { ...props, ...attributes },
+      slot: args.nav,
+      html: true,
+      named,
+    },
+    blade: { component: 'menu-sheet', props, attributes, slot: args.nav, named },
   };
 }
 
@@ -745,6 +806,17 @@ describe('parity with the stories', () => {
       'Sheet/empty footer',
       'Sheet/id with spaces',
       'Sheet/unknown placement',
+      'Menu sheet/Default',
+      'Menu sheet/WithPhoto',
+      'Menu sheet/StaticUser',
+      'Menu sheet/WithoutUser',
+      'Menu sheet/WithoutAccount',
+      'Menu sheet/Grouped',
+      'Menu sheet/LongNavigation',
+      'Menu sheet/LongName',
+      'Menu sheet/with extra attributes',
+      'Menu sheet/blank user parts and account',
+      'Menu sheet/blank user name',
       'Header/Default',
       'Header/WithBack',
       'Header/WithoutLeading',
