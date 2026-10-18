@@ -59,6 +59,7 @@ describe('tiers', () => {
     expect(tier('semantic').length).toBeGreaterThan(30);
     expect(tier('component').map((t) => t.path.join('.'))).toEqual([
       'header.height',
+      'data-table.row-height',
       'list-row.height',
       'pill.height',
       'sheet.width',

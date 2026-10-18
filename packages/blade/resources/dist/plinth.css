@@ -858,6 +858,8 @@
  *   spans every column (colspan).
  * Paging controls sit outside the table.
  *
+ * From 768px up the actions sit at the start of their cell, under their column header.
+ *
  * Text wraps in its cell. A table wider than its container, from 768px up, belongs in a
  * scrolling container the app adds. --plinth-data-table-row-height is a body row's height (44px).
  */
@@ -1103,6 +1105,7 @@
     .plinth-data-table-column:not([aria-sort]),
     .plinth-data-table [data-phone='hidden'].plinth-data-table-column {
       position: static;
+      box-sizing: border-box;
       display: table-cell;
       inline-size: auto;
       block-size: var(--plinth-touch-target);
@@ -1146,6 +1149,7 @@
     .plinth-data-table-cell[data-kind='actions'],
     .plinth-data-table [data-phone='hidden'].plinth-data-table-cell {
       position: relative;
+      box-sizing: border-box;
       display: table-cell;
       block-size: var(--plinth-data-table-row-height);
       padding-block: var(--plinth-space-2);
@@ -1167,10 +1171,6 @@
 
     .plinth-data-table-value {
       text-align: inherit;
-    }
-
-    .plinth-data-table-cell[data-kind='actions'] {
-      text-align: end;
     }
 
     .plinth-data-table-cell[data-kind='actions'] .plinth-data-table-value {
