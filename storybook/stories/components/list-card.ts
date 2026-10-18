@@ -26,9 +26,9 @@ export function listCard(
   const { classes, extra } = rootAttributes('plinth-list-card', attributes);
   return [
     `<div class="${classes}"${extra}>`,
-    heading ? `<${tag} class="plinth-list-card-heading">${escape(heading)}</${tag}>` : '',
+    heading?.trim() ? `<${tag} class="plinth-list-card-heading">${escape(heading)}</${tag}>` : '',
     `<ul class="plinth-list-card-list" role="list">${listCardRows(rows)}</ul>`,
-    footer ? `<p class="plinth-list-card-footer">${escape(footer)}</p>` : '',
+    footer?.trim() ? `<p class="plinth-list-card-footer">${escape(footer)}</p>` : '',
     '</div>',
   ].join('');
 }

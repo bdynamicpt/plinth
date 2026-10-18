@@ -17,6 +17,11 @@ it('leaves out an empty heading and footer', function () {
         ->toBe('<div class="plinth-list-card"><ul class="plinth-list-card-list" role="list"></ul></div>');
 });
 
+it('leaves out a heading and footer of only spaces', function () {
+    expect(squish(Blade::render('<x-plinth::list-card heading="  " footer=" "></x-plinth::list-card>')))
+        ->toBe('<div class="plinth-list-card"><ul class="plinth-list-card-list" role="list"></ul></div>');
+});
+
 it('takes a heading level, and falls back to h2', function () {
     $heading = fn (mixed $level) => squish(Blade::render(
         '<x-plinth::list-card heading="Display" :heading-level="$level"></x-plinth::list-card>',

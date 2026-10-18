@@ -854,8 +854,9 @@
  * color.border; no shadow, per ADR 3: the card does not float). The card resets the list's
  * margin, padding and bullets, and prints role="list" so Safari keeps announcing it. Each row
  * goes in its own <li> and keeps its own root, states and divider; the surface clips the rows'
- * hover and selection tints to its corners. The focus ring of a row is drawn inside the row, so
- * it is never cut off.
+ * hover and selection tints to its corners, and anything a row positions outside itself (a
+ * popover or a dialog is in the top layer, so it is not). The first and last rows take the
+ * surface's inner radius, so their focus ring, drawn inside the row, follows the corners.
  */
 
 @layer plinth {
@@ -895,6 +896,18 @@
     line-height: var(--plinth-font-leading-normal);
     color: var(--plinth-color-text-muted);
     overflow-wrap: anywhere;
+  }
+
+  .plinth-list-card-list > li:first-child > .plinth-list-row {
+    border-start-start-radius: calc(
+      var(--plinth-radius-container) - var(--plinth-border-width-thin)
+    );
+    border-start-end-radius: calc(var(--plinth-radius-container) - var(--plinth-border-width-thin));
+  }
+
+  .plinth-list-card-list > li:last-child > .plinth-list-row {
+    border-end-start-radius: calc(var(--plinth-radius-container) - var(--plinth-border-width-thin));
+    border-end-end-radius: calc(var(--plinth-radius-container) - var(--plinth-border-width-thin));
   }
 }
 

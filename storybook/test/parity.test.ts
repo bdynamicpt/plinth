@@ -198,6 +198,12 @@ const cases: ParityCase[] = [
     },
     { class: 'mb-4', id: 'account', 'data-testid': 'account', 'aria-describedby': 'account-help' },
   ),
+  listCardCase('List card/blank heading and footer', {
+    heading: '  ',
+    headingLevel: 'h2',
+    footer: ' ',
+    rows: [listRowDefaults],
+  }),
   listCardCase('List card/unknown heading level', {
     heading: 'Account',
     headingLevel: 'h1' as ListCardArgs['headingLevel'],
@@ -505,6 +511,7 @@ describe('parity with the stories', () => {
       'List card/MixedRows',
       'List card/LongText',
       'List card/with extra attributes',
+      'List card/blank heading and footer',
       'List card/unknown heading level',
       'Pill row/Filters',
       'Pill row/WithoutCounts',

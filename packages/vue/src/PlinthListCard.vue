@@ -20,10 +20,12 @@ const level = computed(() => resolveLevel(props.headingLevel));
 
 <template>
   <div class="plinth-list-card">
-    <component :is="level" v-if="heading" class="plinth-list-card-heading">{{ heading }}</component>
+    <component :is="level" v-if="heading?.trim()" class="plinth-list-card-heading">{{
+      heading
+    }}</component>
     <ul class="plinth-list-card-list" role="list">
       <slot />
     </ul>
-    <p v-if="footer" class="plinth-list-card-footer">{{ footer }}</p>
+    <p v-if="footer?.trim()" class="plinth-list-card-footer">{{ footer }}</p>
   </div>
 </template>

@@ -51,6 +51,17 @@ to its rounded corners, and their focus ring is drawn inside the row, so it is n
 </x-plinth::list-card>`}
 />
 
+In Vue, the same:
+
+<Source
+  language="html"
+  dark
+  code={`<PlinthListCard heading="Account" footer="Signing out ends the session on this device only.">
+  <li><PlinthListRow>Email<template #trailing>ana@example.com</template></PlinthListRow></li>
+  <li><PlinthListRow button @click="signOut">Sign out</PlinthListRow></li>
+</PlinthListCard>`}
+/>
+
 <Canvas of={ListCardStories.MixedRows} />
 <Canvas of={ListCardStories.WithFooter} />
 
@@ -58,7 +69,8 @@ to its rounded corners, and their focus ring is drawn inside the row, so it is n
 
 The heading is a real heading, so a screen reader user can jump to it from the page's outline.
 To make the card a landmark as well, wrap it in a `<section>` with the same name
-(`<section aria-label="Preferences">`).
+(`<section aria-label="Preferences">`), and keep that label the same as the heading's text when
+either changes.
 
 ## Depth
 

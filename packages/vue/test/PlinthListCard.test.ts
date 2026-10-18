@@ -26,6 +26,13 @@ describe('PlinthListCard', () => {
     );
   });
 
+  it('leaves out a heading and footer of only spaces', () => {
+    const wrapper = mount(PlinthListCard, { props: { heading: '  ', footer: ' ' } });
+
+    expect(wrapper.find('.plinth-list-card-heading').exists()).toBe(false);
+    expect(wrapper.find('.plinth-list-card-footer').exists()).toBe(false);
+  });
+
   it('takes a heading level, and falls back to h2', () => {
     const level = (value: string) =>
       mount(PlinthListCard, {
