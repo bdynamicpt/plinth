@@ -6,6 +6,7 @@
   "type": "module",
   "exports": {
     ".": "./dist/plinth.css",
+    "./fonts.css": "./dist/fonts/index.css",
     "./src/components/*": "./src/components/*",
     "./*": "./dist/*"
   },

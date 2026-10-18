@@ -14,7 +14,7 @@
  *
  * Variants (data-variant): primary (default, also when missing), secondary, ghost, danger, and
  * danger-ghost for a low-emphasis destructive action (Remove next to an item).
- * Sizes (data-size): sm 32px, md 40px (default), lg 44px. The small size keeps a 40px touch
+ * Sizes (data-size): sm 28px, md 36px (default), lg 44px. Sizes below 40px keep a 40px touch
  * target through an invisible hit area. Icons inside are 16px on sm and 20px otherwise.
  *
  * States:
@@ -96,6 +96,8 @@
     --plinth-button-height: var(--plinth-control-sm);
     --plinth-button-padding: var(--plinth-space-3);
     --plinth-button-icon-size: var(--plinth-size-icon-sm);
+
+    font-size: var(--plinth-font-size-xs);
   }
 
   .plinth-button[data-size='lg'] {
@@ -105,12 +107,17 @@
     font-size: var(--plinth-font-size-md);
   }
 
-  /* The small button is 32px tall; this keeps its touch target at 40px without changing its look. */
-  .plinth-button[data-size='sm']::before {
+  /*
+   * Buttons shorter than the touch target (sm 28px, md 36px) keep a 40px one through an invisible
+   * hit area, centred on the button, without changing its look.
+   */
+  .plinth-button::before {
     position: absolute;
-    inset-block: calc((var(--plinth-control-sm) - var(--plinth-touch-target)) / 2);
+    inset-block-start: 50%;
     inset-inline: 0;
+    block-size: max(100%, var(--plinth-touch-target));
     content: '';
+    translate: 0 -50%;
   }
 
   @media (hover: hover) {

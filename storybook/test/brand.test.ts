@@ -73,6 +73,7 @@ describe('the example brand', () => {
       ['text-muted', 'surface'],
       ['text-muted', 'surface-sunken'],
       ['accent-text', 'surface'],
+      ['accent-text', 'accent-subtle'],
       ['on-accent', 'accent'],
       ['on-accent', 'accent-hover'],
       ['on-accent', 'accent-active'],

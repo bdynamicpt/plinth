@@ -50,12 +50,20 @@
     --plinth-ref-color-red-700: #b91c1c;
     --plinth-ref-color-red-800: #991b1b;
     --plinth-ref-color-red-950: #450a0a;
+    --plinth-ref-color-black-alpha-5: #0000000d;
+    --plinth-ref-color-black-alpha-8: #00000014;
     --plinth-ref-color-black-alpha-10: #0000001a;
+    --plinth-ref-color-black-alpha-12: #0000001f;
     --plinth-ref-color-black-alpha-15: #00000026;
+    --plinth-ref-color-black-alpha-20: #00000033;
     --plinth-ref-color-black-alpha-30: #0000004d;
     --plinth-ref-color-black-alpha-50: #00000080;
     --plinth-ref-color-black-alpha-60: #00000099;
     --plinth-ref-color-black-alpha-70: #000000b3;
+    --plinth-ref-color-white-alpha-5: #ffffff0d;
+    --plinth-ref-color-white-alpha-8: #ffffff14;
+    --plinth-ref-color-white-alpha-12: #ffffff1f;
+    --plinth-ref-color-white-alpha-20: #ffffff33;
     --plinth-ref-space-0: 0;
     --plinth-ref-space-1: 0.25rem;
     --plinth-ref-space-2: 0.5rem;
@@ -72,7 +80,9 @@
     --plinth-ref-size-16: 1rem;
     --plinth-ref-size-20: 1.25rem;
     --plinth-ref-size-24: 1.5rem;
+    --plinth-ref-size-28: 1.75rem;
     --plinth-ref-size-32: 2rem;
+    --plinth-ref-size-36: 2.25rem;
     --plinth-ref-size-40: 2.5rem;
     --plinth-ref-size-44: 2.75rem;
     --plinth-ref-radius-0: 0;
@@ -86,8 +96,8 @@
     --plinth-ref-border-width-1: 1px;
     --plinth-ref-border-width-2: 2px;
     --plinth-ref-border-width-3: 3px;
-    --plinth-ref-font-family-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    --plinth-ref-font-family-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+    --plinth-ref-font-family-sans: Geist, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --plinth-ref-font-family-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
     --plinth-ref-font-size-12: 0.75rem;
     --plinth-ref-font-size-14: 0.875rem;
     --plinth-ref-font-size-16: 1rem;
@@ -102,6 +112,10 @@
     --plinth-ref-font-weight-700: 700;
     --plinth-ref-font-leading-125: 1.25;
     --plinth-ref-font-leading-150: 1.5;
+    --plinth-ref-font-tracking-0: 0;
+    --plinth-ref-font-tracking-neg-1: -0.01em;
+    --plinth-ref-font-tracking-neg-2: -0.02em;
+    --plinth-ref-font-tracking-neg-4: -0.04em;
     --plinth-ref-duration-120: 120ms;
     --plinth-ref-duration-200: 200ms;
     --plinth-ref-duration-320: 320ms;
@@ -146,14 +160,18 @@
     --plinth-font-weight-bold: var(--plinth-ref-font-weight-700);
     --plinth-font-leading-tight: var(--plinth-ref-font-leading-125);
     --plinth-font-leading-normal: var(--plinth-ref-font-leading-150);
+    --plinth-font-tracking-normal: var(--plinth-ref-font-tracking-0);
+    --plinth-font-tracking-snug: var(--plinth-ref-font-tracking-neg-1);
+    --plinth-font-tracking-tight: var(--plinth-ref-font-tracking-neg-2);
+    --plinth-font-tracking-tighter: var(--plinth-ref-font-tracking-neg-4);
     --plinth-duration-fast: var(--plinth-ref-duration-120);
     --plinth-duration-normal: var(--plinth-ref-duration-200);
     --plinth-duration-slow: var(--plinth-ref-duration-320);
     --plinth-easing-standard: var(--plinth-ref-easing-standard);
     --plinth-easing-enter: var(--plinth-ref-easing-enter);
     --plinth-easing-exit: var(--plinth-ref-easing-exit);
-    --plinth-control-sm: var(--plinth-ref-size-32);
-    --plinth-control-md: var(--plinth-ref-size-40);
+    --plinth-control-sm: var(--plinth-ref-size-28);
+    --plinth-control-md: var(--plinth-ref-size-36);
     --plinth-control-lg: var(--plinth-ref-size-44);
     --plinth-touch-target: var(--plinth-ref-size-40);
     --plinth-size-icon-sm: var(--plinth-ref-size-16);
@@ -177,9 +195,9 @@
     --plinth-color-surface-sunken: var(--plinth-ref-color-neutral-100);
     --plinth-color-text: var(--plinth-ref-color-neutral-900);
     --plinth-color-text-muted: var(--plinth-ref-color-neutral-600);
-    --plinth-color-border: var(--plinth-ref-color-neutral-200);
-    --plinth-color-border-strong: var(--plinth-ref-color-neutral-400);
-    --plinth-color-divider: var(--plinth-ref-color-neutral-100);
+    --plinth-color-border: var(--plinth-ref-color-black-alpha-8);
+    --plinth-color-border-strong: var(--plinth-ref-color-black-alpha-20);
+    --plinth-color-divider: var(--plinth-ref-color-black-alpha-5);
     --plinth-color-accent: var(--plinth-ref-color-brand-600);
     --plinth-color-accent-text: var(--plinth-ref-color-brand-700);
     --plinth-color-on-accent: var(--plinth-ref-color-neutral-0);
@@ -200,9 +218,10 @@
     --plinth-color-danger-solid-hover: var(--plinth-ref-color-red-700);
     --plinth-color-danger-solid-active: var(--plinth-ref-color-red-800);
     --plinth-color-on-danger: var(--plinth-ref-color-neutral-0);
-    --plinth-elevation-1: 0 1px 2px 0 #0000001a;
-    --plinth-elevation-2: 0 4px 12px 0 #00000026;
-    --plinth-elevation-3: 0 12px 32px 0 #00000026;
+    --plinth-color-accent-subtle: var(--plinth-ref-color-brand-50);
+    --plinth-elevation-1: 0 1px 2px 0 #0000000d;
+    --plinth-elevation-2: 0 4px 12px 0 #00000014;
+    --plinth-elevation-3: 0 12px 32px 0 #0000001f;
   }
 
   [data-theme="dark"],
@@ -213,9 +232,9 @@
     --plinth-color-surface-sunken: var(--plinth-ref-color-neutral-800);
     --plinth-color-text: var(--plinth-ref-color-neutral-50);
     --plinth-color-text-muted: var(--plinth-ref-color-neutral-400);
-    --plinth-color-border: var(--plinth-ref-color-neutral-800);
-    --plinth-color-border-strong: var(--plinth-ref-color-neutral-600);
-    --plinth-color-divider: var(--plinth-ref-color-neutral-900);
+    --plinth-color-border: var(--plinth-ref-color-white-alpha-12);
+    --plinth-color-border-strong: var(--plinth-ref-color-white-alpha-20);
+    --plinth-color-divider: var(--plinth-ref-color-white-alpha-8);
     --plinth-color-accent: var(--plinth-ref-color-brand-600);
     --plinth-color-accent-text: var(--plinth-ref-color-brand-300);
     --plinth-color-on-accent: var(--plinth-ref-color-neutral-0);
@@ -236,6 +255,7 @@
     --plinth-color-danger-solid-hover: var(--plinth-ref-color-red-700);
     --plinth-color-danger-solid-active: var(--plinth-ref-color-red-800);
     --plinth-color-on-danger: var(--plinth-ref-color-neutral-0);
+    --plinth-color-accent-subtle: var(--plinth-ref-color-brand-950);
     --plinth-elevation-1: 0 1px 2px 0 #0000004d;
     --plinth-elevation-2: 0 4px 12px 0 #00000080;
     --plinth-elevation-3: 0 12px 32px 0 #00000099;
@@ -249,9 +269,9 @@
       --plinth-color-surface-sunken: var(--plinth-ref-color-neutral-800);
       --plinth-color-text: var(--plinth-ref-color-neutral-50);
       --plinth-color-text-muted: var(--plinth-ref-color-neutral-400);
-      --plinth-color-border: var(--plinth-ref-color-neutral-800);
-      --plinth-color-border-strong: var(--plinth-ref-color-neutral-600);
-      --plinth-color-divider: var(--plinth-ref-color-neutral-900);
+      --plinth-color-border: var(--plinth-ref-color-white-alpha-12);
+      --plinth-color-border-strong: var(--plinth-ref-color-white-alpha-20);
+      --plinth-color-divider: var(--plinth-ref-color-white-alpha-8);
       --plinth-color-accent: var(--plinth-ref-color-brand-600);
       --plinth-color-accent-text: var(--plinth-ref-color-brand-300);
       --plinth-color-on-accent: var(--plinth-ref-color-neutral-0);
@@ -272,6 +292,7 @@
       --plinth-color-danger-solid-hover: var(--plinth-ref-color-red-700);
       --plinth-color-danger-solid-active: var(--plinth-ref-color-red-800);
       --plinth-color-on-danger: var(--plinth-ref-color-neutral-0);
+      --plinth-color-accent-subtle: var(--plinth-ref-color-brand-950);
       --plinth-elevation-1: 0 1px 2px 0 #0000004d;
       --plinth-elevation-2: 0 4px 12px 0 #00000080;
       --plinth-elevation-3: 0 12px 32px 0 #00000099;
@@ -381,7 +402,7 @@
  *
  * Variants (data-variant): primary (default, also when missing), secondary, ghost, danger, and
  * danger-ghost for a low-emphasis destructive action (Remove next to an item).
- * Sizes (data-size): sm 32px, md 40px (default), lg 44px. The small size keeps a 40px touch
+ * Sizes (data-size): sm 28px, md 36px (default), lg 44px. Sizes below 40px keep a 40px touch
  * target through an invisible hit area. Icons inside are 16px on sm and 20px otherwise.
  *
  * States:
@@ -463,6 +484,8 @@
     --plinth-button-height: var(--plinth-control-sm);
     --plinth-button-padding: var(--plinth-space-3);
     --plinth-button-icon-size: var(--plinth-size-icon-sm);
+
+    font-size: var(--plinth-font-size-xs);
   }
 
   .plinth-button[data-size='lg'] {
@@ -472,12 +495,17 @@
     font-size: var(--plinth-font-size-md);
   }
 
-  /* The small button is 32px tall; this keeps its touch target at 40px without changing its look. */
-  .plinth-button[data-size='sm']::before {
+  /*
+   * Buttons shorter than the touch target (sm 28px, md 36px) keep a 40px one through an invisible
+   * hit area, centred on the button, without changing its look.
+   */
+  .plinth-button::before {
     position: absolute;
-    inset-block: calc((var(--plinth-control-sm) - var(--plinth-touch-target)) / 2);
+    inset-block-start: 50%;
     inset-inline: 0;
+    block-size: max(100%, var(--plinth-touch-target));
     content: '';
+    translate: 0 -50%;
   }
 
   @media (hover: hover) {

@@ -18,13 +18,14 @@
       "$value": "{ref.color.neutral.400}"
     },
     "border": {
-      "$value": "{ref.color.neutral.800}"
+      "$value": "{ref.color.white-alpha.12}",
+      "$description": "Translucent, so it sits right on any surface."
     },
     "border-strong": {
-      "$value": "{ref.color.neutral.600}"
+      "$value": "{ref.color.white-alpha.20}"
     },
     "divider": {
-      "$value": "{ref.color.neutral.900}"
+      "$value": "{ref.color.white-alpha.8}"
     },
     "accent": {
       "$value": "{ref.color.brand.600}"
@@ -87,6 +88,10 @@
     },
     "on-danger": {
       "$value": "{ref.color.neutral.0}"
+    },
+    "accent-subtle": {
+      "$value": "{ref.color.brand.950}",
+      "$description": "A tinted surface for selected states, such as the active nav item, with accent-text on it."
     }
   },
   "elevation": {

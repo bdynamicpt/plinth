@@ -6,9 +6,10 @@ use BDynamic\Plinth\Plinth;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Filament\Support\Assets\Css;
+use Filament\Support\Assets\Font;
 
 /**
- * Registers Plinth's built CSS with Filament's asset manager, so a panel needs no Node build:
+ * Registers Plinth's built CSS and its fonts with Filament's asset manager, so a panel needs no Node build:
  *
  *     $panel->plugin(PlinthPlugin::make());
  *
@@ -32,6 +33,7 @@ class PlinthPlugin implements Plugin
     {
         $panel->assets([
             Css::make('plinth', Plinth::cssPath()),
+            Font::make('plinth', Plinth::fontsPath()),
         ], self::PACKAGE);
     }
 

@@ -86,6 +86,15 @@ describe('tiers', () => {
     expect(token('focus-ring.offset-filled').value).toBe('2px');
   });
 
+  it('defaults to Geist and Geist Mono, with system fonts behind them', () => {
+    expect(token('ref.font.family.sans').value).toMatch(/^Geist, system-ui/);
+    expect(token('ref.font.family.mono').value).toMatch(/^'Geist Mono', ui-monospace/);
+  });
+
+  it('has letter spacing for headings', () => {
+    expect(token('font.tracking.tight').value).toBe('-0.02em');
+  });
+
   it('has icon sizes of 16, 20 and 24 px', () => {
     expect(['sm', 'md', 'lg'].map((s) => token(`size.icon.${s}`).value)).toEqual([
       '1rem',
@@ -96,8 +105,8 @@ describe('tiers', () => {
 
   it('has control sizes, the touch target, layers, elevation and breakpoints', () => {
     expect(['sm', 'md', 'lg'].map((s) => token(`control.${s}`).value)).toEqual([
-      '2rem',
-      '2.5rem',
+      '1.75rem',
+      '2.25rem',
       '2.75rem',
     ]);
     expect(token('touch-target').value).toBe('2.5rem');
@@ -125,6 +134,7 @@ describe('contrast', () => {
     ['text-muted', 'surface-raised'],
     ['text-muted', 'surface-sunken'],
     ['accent-text', 'surface'],
+    ['accent-text', 'accent-subtle'],
     ['on-accent', 'accent'],
     ['on-accent', 'accent-hover'],
     ['on-accent', 'accent-active'],

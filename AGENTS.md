@@ -26,8 +26,9 @@ The design system of BDynamic's projects. Nothing in Plinth may know about any o
   attribute order.
 - **Storybook** (`@storybook/html-vite`, not Vue) documents and tests the plain HTML. Addons: docs,
   a11y, viewport (390, 768, 1440 px), a light/dark switch driven by the tokens.
-- **Brand per project:** Plinth ships neutral defaults; a project overrides tokens, never forks a
-  component.
+- **Brand per project:** Plinth ships its default look (docs/adr/0003: Geist and Geist Mono,
+  hairline borders, a sparing blue accent with tinted states); a project overrides tokens, never
+  forks a component.
 
 ## Layout and build
 

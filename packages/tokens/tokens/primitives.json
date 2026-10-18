@@ -158,11 +158,23 @@
         }
       },
       "black-alpha": {
+        "5": {
+          "$value": "#0000000d"
+        },
+        "8": {
+          "$value": "#00000014"
+        },
         "10": {
           "$value": "#0000001a"
         },
+        "12": {
+          "$value": "#0000001f"
+        },
         "15": {
           "$value": "#00000026"
+        },
+        "20": {
+          "$value": "#00000033"
         },
         "30": {
           "$value": "#0000004d"
@@ -175,6 +187,20 @@
         },
         "70": {
           "$value": "#000000b3"
+        }
+      },
+      "white-alpha": {
+        "5": {
+          "$value": "#ffffff0d"
+        },
+        "8": {
+          "$value": "#ffffff14"
+        },
+        "12": {
+          "$value": "#ffffff1f"
+        },
+        "20": {
+          "$value": "#ffffff33"
         }
       }
     },
@@ -232,8 +258,14 @@
       "24": {
         "$value": "1.5rem"
       },
+      "28": {
+        "$value": "1.75rem"
+      },
       "32": {
         "$value": "2rem"
+      },
+      "36": {
+        "$value": "2.25rem"
       },
       "40": {
         "$value": "2.5rem"
@@ -286,6 +318,7 @@
         "$type": "fontFamily",
         "sans": {
           "$value": [
+            "Geist",
             "system-ui",
             "-apple-system",
             "Segoe UI",
@@ -297,6 +330,7 @@
         },
         "mono": {
           "$value": [
+            "Geist Mono",
             "ui-monospace",
             "SFMono-Regular",
             "Menlo",
@@ -355,6 +389,22 @@
         },
         "150": {
           "$value": 1.5
+        }
+      },
+      "tracking": {
+        "$type": "dimension",
+        "$description": "Letter spacing, in hundredths of an em.",
+        "0": {
+          "$value": "0"
+        },
+        "neg-1": {
+          "$value": "-0.01em"
+        },
+        "neg-2": {
+          "$value": "-0.02em"
+        },
+        "neg-4": {
+          "$value": "-0.04em"
         }
       }
     },

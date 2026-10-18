@@ -13,6 +13,7 @@ class PlinthServiceProvider extends ServiceProvider
 
         $this->publishes([
             Plinth::cssPath() => public_path('vendor/plinth/plinth.css'),
+            Plinth::fontsPath() => public_path('vendor/plinth/fonts'),
         ], 'plinth-assets');
     }
 }

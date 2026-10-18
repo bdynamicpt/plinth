@@ -1,4 +1,4 @@
-import { copyFileSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { copyFileSync, cpSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 
 /**
@@ -20,6 +20,8 @@ const dist = new URL('../dist/', import.meta.url);
 
 mkdirSync(dist, { recursive: true });
 copyFileSync(tokensCss, new URL('tokens.css', dist));
+// The default typefaces, with their @font-face rules in fonts/index.css (see fonts/README.md).
+cpSync(new URL('../fonts/', import.meta.url), new URL('fonts/', dist), { recursive: true });
 
 const names = readdirSync(components)
   .filter((file) => file.endsWith('.css'))
@@ -46,4 +48,4 @@ for (const name of names) {
 }
 
 writeFileSync(new URL('plinth.css', dist), parts.join('\n'));
-console.log(`css: built plinth.css, tokens.css, ${names.join(', ')}`);
+console.log(`css: built plinth.css, tokens.css, fonts/, ${names.join(', ')}`);

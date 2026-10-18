@@ -148,6 +148,22 @@
       "normal": {
         "$value": "{ref.font.leading.150}"
       }
+    },
+    "tracking": {
+      "$type": "dimension",
+      "$description": "Letter spacing: tight for headings, tighter for large display type.",
+      "normal": {
+        "$value": "{ref.font.tracking.0}"
+      },
+      "snug": {
+        "$value": "{ref.font.tracking.neg-1}"
+      },
+      "tight": {
+        "$value": "{ref.font.tracking.neg-2}"
+      },
+      "tighter": {
+        "$value": "{ref.font.tracking.neg-4}"
+      }
     }
   },
   "duration": {
@@ -177,12 +193,12 @@
   },
   "control": {
     "$type": "dimension",
-    "$description": "Control heights.",
+    "$description": "Control heights (28, 36 and 44 px). Controls smaller than the touch target keep it through their hit area.",
     "sm": {
-      "$value": "{ref.size.32}"
+      "$value": "{ref.size.28}"
     },
     "md": {
-      "$value": "{ref.size.40}"
+      "$value": "{ref.size.36}"
     },
     "lg": {
       "$value": "{ref.size.44}"

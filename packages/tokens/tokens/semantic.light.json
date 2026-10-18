@@ -18,13 +18,14 @@
       "$value": "{ref.color.neutral.600}"
     },
     "border": {
-      "$value": "{ref.color.neutral.200}"
+      "$value": "{ref.color.black-alpha.8}",
+      "$description": "Translucent, so it sits right on any surface."
     },
     "border-strong": {
-      "$value": "{ref.color.neutral.400}"
+      "$value": "{ref.color.black-alpha.20}"
     },
     "divider": {
-      "$value": "{ref.color.neutral.100}"
+      "$value": "{ref.color.black-alpha.5}"
     },
     "accent": {
       "$value": "{ref.color.brand.600}"
@@ -87,13 +88,17 @@
     },
     "on-danger": {
       "$value": "{ref.color.neutral.0}"
+    },
+    "accent-subtle": {
+      "$value": "{ref.color.brand.50}",
+      "$description": "A tinted surface for selected states, such as the active nav item, with accent-text on it."
     }
   },
   "elevation": {
     "$type": "shadow",
     "1": {
       "$value": {
-        "color": "{ref.color.black-alpha.10}",
+        "color": "{ref.color.black-alpha.5}",
         "offsetX": "0",
         "offsetY": "1px",
         "blur": "2px",
@@ -102,7 +107,7 @@
     },
     "2": {
       "$value": {
-        "color": "{ref.color.black-alpha.15}",
+        "color": "{ref.color.black-alpha.8}",
         "offsetX": "0",
         "offsetY": "4px",
         "blur": "12px",
@@ -111,7 +116,7 @@
     },
     "3": {
       "$value": {
-        "color": "{ref.color.black-alpha.15}",
+        "color": "{ref.color.black-alpha.12}",
         "offsetX": "0",
         "offsetY": "12px",
         "blur": "32px",

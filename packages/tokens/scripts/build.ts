@@ -156,6 +156,7 @@ function buildTailwindTheme(tokens: Token[]): string {
     ...entries('text', group('font', 'size')),
     ...entries('font-weight', group('font', 'weight')),
     ...entries('leading', group('font', 'leading')),
+    ...entries('tracking', group('font', 'tracking')),
     // Tailwind multiplies one spacing unit (p-4 is 4 units); Plinth's is the 4px step.
     ['--spacing', space1.cssVar],
     ...entries('radius', group('radius')),

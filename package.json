@@ -24,6 +24,7 @@
     "./tokens.css": "./packages/tokens/dist/tokens.css",
     "./tailwind.css": "./packages/tokens/dist/tailwind-theme.css",
     "./css": "./packages/css/dist/plinth.css",
+    "./fonts.css": "./packages/css/dist/fonts/index.css",
     "./css/*": "./packages/css/dist/*",
     "./vue": {
       "types": "./packages/vue/dist/index.d.ts",
