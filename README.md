@@ -18,7 +18,8 @@ thin Blade and Vue layers that print the same markup, documented and tested in S
 
 ```
 packages/
-  tokens/     the tokens (src/tokens.ts); builds CSS custom properties, a JS/TS export, a Tailwind theme
+  tokens/     the tokens in DTCG JSON (tokens/*.json), built with Style Dictionary to CSS custom
+              properties, a JS/TS export and a Tailwind theme
   css/        one stylesheet per component, tokens only, mobile first; builds dist/plinth.css
   vue/        Vue 3 components that print the markup contract
   blade/      Composer package: Blade components, a Filament plugin, and the built CSS
@@ -59,8 +60,9 @@ out of memory.
 
 What the tests cover:
 
-- `packages/tokens`: Vitest. Every reference resolves, light and dark have the same names, text
-  colours meet WCAG AA in both themes, and the CSS and Tailwind output are right.
+- `packages/tokens`: Vitest on the build output. The three tiers are there, semantic colours are
+  built from primitives in both themes, text colours meet WCAG AA, and the CSS and Tailwind output
+  are right (Tailwind itself compiles the theme).
 - `packages/vue`: Vitest with Vue Test Utils.
 - `packages/blade`: Pest with Testbench, including the Filament plugin (`composer test` there).
 - `storybook`: Vitest **parity tests** render every story's markup, the Blade component and the
@@ -69,6 +71,18 @@ What the tests cover:
 
 Screenshot comparison is paused until the foundations settle
 ([#9](https://github.com/bdynamicpt/plinth/issues/9)).
+
+## Tokens
+
+The tokens are in `packages/tokens/tokens/`, in three tiers ([ADR 1](docs/adr/0001-design-tokens-in-dtcg-built-with-style-dictionary.md)):
+
+| Tier      | File                                                 | Custom properties               | Used by                             |
+| --------- | ---------------------------------------------------- | ------------------------------- | ----------------------------------- |
+| Primitive | `primitives.json`                                    | `--plinth-ref-color-neutral-50` | semantic tokens only                |
+| Semantic  | `semantic.json`, `semantic.light.json`, `.dark.json` | `--plinth-color-surface`        | components; projects override these |
+| Component | `component.json`                                     | `--plinth-header-height`        | one component                       |
+
+Storybook has a page for each tier under **Foundations**.
 
 ## Using Plinth from a project while you work on it
 
@@ -131,13 +145,19 @@ the theme file, so page code gets the tokens as utilities (`bg-surface`, `text-t
 @import '@bdynamic/plinth/tailwind.css';
 ```
 
-**Your brand**: override the custom properties after Plinth's CSS, outside any layer (Plinth's
-own are inside `@layer plinth`, so yours win):
+**Your brand**: override the **semantic** tokens after Plinth's CSS, outside any layer (Plinth's
+own are inside `@layer plinth`, so yours win). Storybook's example brand,
+[`storybook/brands/example.css`](storybook/brands/example.css), is a complete example; switch to
+it with **Brand** in the toolbar.
 
 ```css
 :root {
-  --plinth-palette-brand-600: #0f766e;
-  --plinth-font-sans: 'Your Font', system-ui, sans-serif;
+  --plinth-color-accent: #0f766e;
+  --plinth-radius-pill: 0.25rem;
+  --plinth-font-family-body: 'Your Font', system-ui, sans-serif;
+}
+[data-theme='dark'] {
+  --plinth-color-accent: #14b8a6;
 }
 ```
 

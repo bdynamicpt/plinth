@@ -21,7 +21,9 @@ Before writing code, settle and write down:
 - states, as ARIA attributes (`aria-expanded`, `aria-current`, `aria-invalid`), or `is-*` only
   when no ARIA attribute fits;
 - which props Blade and Vue take, and what goes in the slot;
-- any token that is missing. Add it to `packages/tokens/src/tokens.ts` first (light and dark).
+- any token that is missing. Add a semantic (or component) token in `packages/tokens/tokens/`
+  first, built from primitives, in light and dark where it changes with the theme (see
+  `docs/adr/0001`). Components never use primitives (`--plinth-ref-*`).
 
 ## 2. Scaffold and wire up
 
@@ -58,7 +60,7 @@ Change all four together so they keep printing the same markup:
 - **Markup function** (`<name>.ts`): the contract as code. Escape every piece of text.
 - **CSS:** the contract in the top comment, in the same shape as the badge's. Mobile first, the
   phone in the base rules, `@media (min-width: 768px)` and `(min-width: 1280px)` only adding.
-  Tokens only, logical properties, touch targets at least `--plinth-size-touch`, transitions on
+  Tokens only, logical properties, touch targets at least `--plinth-touch-target`, transitions on
   `--plinth-duration-*`, a visible `:focus-visible`, and a `forced-colors` rule for any edge or
   dot that is only a colour.
 - **Blade:** `@props` with defaults, `$attributes->merge(['class' => …])` on the root, fallback

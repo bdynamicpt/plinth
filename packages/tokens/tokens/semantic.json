@@ -1,0 +1,194 @@
+{
+  "$description": "Semantic tokens that do not change with the theme. Components use these.",
+  "space": {
+    "$type": "dimension",
+    "0": {
+      "$value": "{ref.space.0}"
+    },
+    "0-5": {
+      "$value": "{ref.space.0-5}"
+    },
+    "1": {
+      "$value": "{ref.space.1}"
+    },
+    "2": {
+      "$value": "{ref.space.2}"
+    },
+    "3": {
+      "$value": "{ref.space.3}"
+    },
+    "4": {
+      "$value": "{ref.space.4}"
+    },
+    "5": {
+      "$value": "{ref.space.5}"
+    },
+    "6": {
+      "$value": "{ref.space.6}"
+    },
+    "8": {
+      "$value": "{ref.space.8}"
+    },
+    "10": {
+      "$value": "{ref.space.10}"
+    },
+    "12": {
+      "$value": "{ref.space.12}"
+    },
+    "14": {
+      "$value": "{ref.space.14}"
+    },
+    "16": {
+      "$value": "{ref.space.16}"
+    }
+  },
+  "radius": {
+    "$type": "dimension",
+    "control": {
+      "$value": "{ref.radius.6}",
+      "$description": "Buttons, inputs and other controls."
+    },
+    "container": {
+      "$value": "{ref.radius.12}",
+      "$description": "Cards, sheets and dialogs."
+    },
+    "pill": {
+      "$value": "{ref.radius.full}",
+      "$description": "Badges and other pill shapes."
+    }
+  },
+  "font": {
+    "family": {
+      "$type": "fontFamily",
+      "body": {
+        "$value": "{ref.font.family.sans}"
+      },
+      "mono": {
+        "$value": "{ref.font.family.mono}"
+      }
+    },
+    "size": {
+      "$type": "dimension",
+      "xs": {
+        "$value": "{ref.font.size.12}"
+      },
+      "sm": {
+        "$value": "{ref.font.size.14}"
+      },
+      "md": {
+        "$value": "{ref.font.size.16}"
+      },
+      "lg": {
+        "$value": "{ref.font.size.18}"
+      },
+      "xl": {
+        "$value": "{ref.font.size.20}"
+      },
+      "2xl": {
+        "$value": "{ref.font.size.24}"
+      },
+      "3xl": {
+        "$value": "{ref.font.size.30}"
+      },
+      "4xl": {
+        "$value": "{ref.font.size.36}"
+      }
+    },
+    "weight": {
+      "$type": "fontWeight",
+      "regular": {
+        "$value": "{ref.font.weight.400}"
+      },
+      "medium": {
+        "$value": "{ref.font.weight.500}"
+      },
+      "semibold": {
+        "$value": "{ref.font.weight.600}"
+      },
+      "bold": {
+        "$value": "{ref.font.weight.700}"
+      }
+    },
+    "leading": {
+      "$type": "number",
+      "tight": {
+        "$value": "{ref.font.leading.125}"
+      },
+      "normal": {
+        "$value": "{ref.font.leading.150}"
+      }
+    }
+  },
+  "duration": {
+    "$type": "duration",
+    "$description": "Drops to 0ms under prefers-reduced-motion.",
+    "fast": {
+      "$value": "{ref.duration.120}"
+    },
+    "normal": {
+      "$value": "{ref.duration.200}"
+    },
+    "slow": {
+      "$value": "{ref.duration.320}"
+    }
+  },
+  "easing": {
+    "$type": "cubicBezier",
+    "standard": {
+      "$value": "{ref.easing.standard}"
+    },
+    "enter": {
+      "$value": "{ref.easing.enter}"
+    },
+    "exit": {
+      "$value": "{ref.easing.exit}"
+    }
+  },
+  "control": {
+    "$type": "dimension",
+    "$description": "Control heights.",
+    "sm": {
+      "$value": "{ref.size.32}"
+    },
+    "md": {
+      "$value": "{ref.size.40}"
+    },
+    "lg": {
+      "$value": "{ref.size.44}"
+    }
+  },
+  "touch-target": {
+    "$type": "dimension",
+    "$value": "{ref.size.40}",
+    "$description": "The smallest touch target any component may have."
+  },
+  "layer": {
+    "$type": "number",
+    "$description": "Stacking order. Components use these, never a raw z-index.",
+    "base": {
+      "$value": 0
+    },
+    "sticky": {
+      "$value": 100
+    },
+    "overlay": {
+      "$value": 200
+    },
+    "sheet": {
+      "$value": 300
+    },
+    "toast": {
+      "$value": 400
+    }
+  },
+  "breakpoint": {
+    "$type": "dimension",
+    "$description": "Mobile first: base rules are the phone; these add to them.",
+    "md": {
+      "$value": "768px"
+    },
+    "lg": {
+      "$value": "1280px"
+    }
+  }
+}

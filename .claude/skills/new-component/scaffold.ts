@@ -32,7 +32,7 @@ const files: Record<string, string> = {
 @layer plinth {
   .plinth-${name} {
     padding: var(--plinth-space-2);
-    font-family: var(--plinth-font-sans);
+    font-family: var(--plinth-font-family-body);
     font-size: var(--plinth-font-size-sm);
     color: var(--plinth-color-text);
   }

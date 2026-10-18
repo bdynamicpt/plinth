@@ -1,0 +1,42 @@
+/*
+ * Tidewater: a made-up brand that shows how a project brings its own look to Plinth.
+ *
+ * It overrides semantic tokens only, outside any layer (Plinth's own tokens are in
+ * @layer plinth, so these win). No component CSS is touched. A real project keeps a file like
+ * this in its own repository and scopes it to :root instead of [data-brand].
+ */
+
+[data-brand='example'] {
+  --plinth-font-family-body: ui-serif, georgia, 'Times New Roman', serif;
+  --plinth-radius-control: 0.125rem;
+  --plinth-radius-container: 0.25rem;
+  --plinth-radius-pill: 0.25rem;
+  --plinth-color-surface: #fbf7f0;
+  --plinth-color-surface-raised: #fff;
+  --plinth-color-surface-sunken: #efe7da;
+  --plinth-color-text: #1c1917;
+  --plinth-color-text-muted: #57534e;
+  --plinth-color-border: #e7dccb;
+  --plinth-color-border-strong: #a8a29e;
+  --plinth-color-divider: #f3ece1;
+  --plinth-color-accent: #0f766e;
+  --plinth-color-accent-text: #115e59;
+  --plinth-color-on-accent: #fff;
+  --plinth-color-focus-ring: #0f766e;
+}
+
+[data-brand='example'][data-theme='dark'],
+[data-brand='example'].dark {
+  --plinth-color-surface: #14110f;
+  --plinth-color-surface-raised: #1c1917;
+  --plinth-color-surface-sunken: #292524;
+  --plinth-color-text: #fafaf9;
+  --plinth-color-text-muted: #a8a29e;
+  --plinth-color-border: #292524;
+  --plinth-color-border-strong: #57534e;
+  --plinth-color-divider: #1c1917;
+  --plinth-color-accent: #0f766e;
+  --plinth-color-accent-text: #5eead4;
+  --plinth-color-on-accent: #fff;
+  --plinth-color-focus-ring: #5eead4;
+}

@@ -1,0 +1,102 @@
+{
+  "$description": "Semantic tokens for the light theme. A project overrides these.",
+  "color": {
+    "$type": "color",
+    "surface": {
+      "$value": "{ref.color.neutral.50}"
+    },
+    "surface-raised": {
+      "$value": "{ref.color.neutral.0}"
+    },
+    "surface-sunken": {
+      "$value": "{ref.color.neutral.100}"
+    },
+    "text": {
+      "$value": "{ref.color.neutral.900}"
+    },
+    "text-muted": {
+      "$value": "{ref.color.neutral.600}"
+    },
+    "border": {
+      "$value": "{ref.color.neutral.200}"
+    },
+    "border-strong": {
+      "$value": "{ref.color.neutral.400}"
+    },
+    "divider": {
+      "$value": "{ref.color.neutral.100}"
+    },
+    "accent": {
+      "$value": "{ref.color.brand.600}"
+    },
+    "accent-text": {
+      "$value": "{ref.color.brand.700}"
+    },
+    "on-accent": {
+      "$value": "{ref.color.neutral.0}"
+    },
+    "focus-ring": {
+      "$value": "{ref.color.brand.600}"
+    },
+    "overlay": {
+      "$value": "{ref.color.black-alpha.50}"
+    },
+    "success": {
+      "$value": "{ref.color.green.600}"
+    },
+    "success-surface": {
+      "$value": "{ref.color.green.100}"
+    },
+    "success-text": {
+      "$value": "{ref.color.green.800}"
+    },
+    "warning": {
+      "$value": "{ref.color.amber.500}"
+    },
+    "warning-surface": {
+      "$value": "{ref.color.amber.100}"
+    },
+    "warning-text": {
+      "$value": "{ref.color.amber.800}"
+    },
+    "danger": {
+      "$value": "{ref.color.red.600}"
+    },
+    "danger-surface": {
+      "$value": "{ref.color.red.100}"
+    },
+    "danger-text": {
+      "$value": "{ref.color.red.800}"
+    }
+  },
+  "elevation": {
+    "$type": "shadow",
+    "1": {
+      "$value": {
+        "color": "{ref.color.black-alpha.10}",
+        "offsetX": "0",
+        "offsetY": "1px",
+        "blur": "2px",
+        "spread": "0"
+      }
+    },
+    "2": {
+      "$value": {
+        "color": "{ref.color.black-alpha.15}",
+        "offsetX": "0",
+        "offsetY": "4px",
+        "blur": "12px",
+        "spread": "0"
+      }
+    },
+    "3": {
+      "$value": {
+        "color": "{ref.color.black-alpha.15}",
+        "offsetX": "0",
+        "offsetY": "12px",
+        "blur": "32px",
+        "spread": "0"
+      }
+    }
+  }
+}
