@@ -15,13 +15,13 @@ use Filament\Support\Assets\Font;
  *
  * Then run `php artisan filament:assets` (Filament runs it on `composer update`) to publish it.
  */
-class PlinthPlugin implements Plugin
+final class PlinthPlugin implements Plugin
 {
     public const PACKAGE = 'bdynamicpt/plinth';
 
     public static function make(): static
     {
-        return app(static::class);
+        return app(self::class);
     }
 
     public function getId(): string

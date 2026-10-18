@@ -5,7 +5,7 @@ namespace BDynamic\Plinth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
-class PlinthServiceProvider extends ServiceProvider
+final class PlinthServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {

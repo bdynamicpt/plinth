@@ -1,7 +1,7 @@
 <?php
 
-use BDynamic\Plinth\Enums\ButtonSize;
 use BDynamic\Plinth\Enums\ButtonVariant;
+use BDynamic\Plinth\Enums\Size;
 use Illuminate\Support\Facades\Blade;
 
 $svg = '<svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg>';
@@ -20,7 +20,7 @@ it('takes every variant and size', function (string $variant, string $size) {
     expect(Blade::render("<x-plinth::button variant=\"{$variant}\" size=\"{$size}\">Go</x-plinth::button>"))
         ->toContain("data-variant=\"{$variant}\"")
         ->toContain("data-size=\"{$size}\"");
-})->with(ButtonVariant::values())->with(ButtonSize::values());
+})->with(ButtonVariant::values())->with(array_column(Size::controls(), 'value'));
 
 it('falls back to primary and md for values it does not know', function () {
     expect(Blade::render('<x-plinth::button variant="loud" size="huge">Go</x-plinth::button>'))

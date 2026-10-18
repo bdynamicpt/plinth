@@ -2,7 +2,7 @@
 
 namespace BDynamic\Plinth;
 
-class Plinth
+final class Plinth
 {
     /** The default typefaces: the font files and fonts/index.css with their @font-face rules. */
     public static function fontsPath(): string

@@ -1,6 +1,6 @@
 <?php
 
-use BDynamic\Plinth\Enums\IconSize;
+use BDynamic\Plinth\Enums\Size;
 use Illuminate\Support\Facades\Blade;
 
 $svg = '<svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg>';
@@ -29,7 +29,7 @@ it('stays decorative with a blank label', function () use ($svg) {
 it('takes every size', function (string $size) use ($svg) {
     expect(Blade::render("<x-plinth::icon size=\"{$size}\">{$svg}</x-plinth::icon>"))
         ->toContain("data-size=\"{$size}\"");
-})->with(IconSize::values());
+})->with(array_column(Size::icons(), 'value'));
 
 it('falls back to md for a size it does not know', function () use ($svg) {
     expect(Blade::render("<x-plinth::icon size=\"huge\">{$svg}</x-plinth::icon>"))

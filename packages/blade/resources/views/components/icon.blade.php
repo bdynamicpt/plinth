@@ -11,7 +11,7 @@
 @endphp
 <span {{ $attributes->except('aria-label')->merge(array_filter([
     'class' => 'plinth-icon',
-    'data-size' => \BDynamic\Plinth\Enums\IconSize::resolve($size)->value,
+    'data-size' => \BDynamic\Plinth\Enums\Size::resolve($size, \BDynamic\Plinth\Enums\Size::icons())->value,
     'data-mirror' => $mirror ? '' : null,
     'role' => $name !== null ? 'img' : null,
     'aria-label' => $name,

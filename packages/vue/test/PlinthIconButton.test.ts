@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
-import { buttonSizes, buttonVariants, PlinthIconButton } from '../src/index.ts';
+import { controlSizes, buttonVariants, PlinthIconButton } from '../src/index.ts';
 
 const svg = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"></path></svg>';
 const slots = { default: svg };
@@ -20,7 +20,7 @@ describe('PlinthIconButton', () => {
     expect(wrapper.attributes('aria-label')).toBe('Close');
   });
 
-  it.each(buttonVariants.flatMap((variant) => buttonSizes.map((size) => [variant, size])))(
+  it.each(buttonVariants.flatMap((variant) => controlSizes.map((size) => [variant, size])))(
     'takes the %s variant at the %s size',
     (variant, size) => {
       // @ts-expect-error: the pairs are built from the lists, so they are valid.

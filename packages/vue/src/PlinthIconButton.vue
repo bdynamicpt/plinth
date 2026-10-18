@@ -1,13 +1,8 @@
 <script setup lang="ts">
 // Markup contract: packages/css/src/components/button.css (icon button)
 import { computed, useAttrs } from 'vue';
-import {
-  buttonIconSize,
-  buttonSize,
-  buttonVariant,
-  type ButtonSize,
-  type ButtonVariant,
-} from './button';
+import { buttonVariant, type ButtonVariant } from './button';
+import { controlSizes, iconSizeFor, resolveSize, type ControlSize } from './size';
 
 defineOptions({ inheritAttrs: false });
 
@@ -16,7 +11,7 @@ const props = withDefaults(
     /** The accessible name: required, since the button has no visible text. */
     label: string;
     variant?: ButtonVariant;
-    size?: ButtonSize;
+    size?: ControlSize;
     href?: string;
     disabled?: boolean;
     busy?: boolean;
@@ -37,8 +32,8 @@ const props = withDefaults(
 
 const attrs = useAttrs();
 const dataVariant = computed(() => buttonVariant(props.variant));
-const dataSize = computed(() => buttonSize(props.size));
-const iconSize = computed(() => buttonIconSize(dataSize.value));
+const dataSize = computed(() => resolveSize(props.size, controlSizes, 'md'));
+const iconSize = computed(() => iconSizeFor(dataSize.value));
 const isBusy = computed(() => props.busy && !props.disabled);
 const name = computed(() => props.label || (attrs['aria-label'] as string | undefined));
 const rest = computed(() =>

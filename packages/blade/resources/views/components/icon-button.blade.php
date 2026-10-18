@@ -16,7 +16,7 @@
         throw new InvalidArgumentException('<x-plinth::icon-button> needs a label: it is the only name the button has.');
     }
     $variant = \BDynamic\Plinth\Enums\ButtonVariant::resolve($variant ?? \BDynamic\Plinth\Enums\ButtonVariant::Ghost);
-    $size = \BDynamic\Plinth\Enums\ButtonSize::resolve($size);
+    $size = \BDynamic\Plinth\Enums\Size::resolve($size, \BDynamic\Plinth\Enums\Size::controls());
     $isLink = filled($href);
     $isBusy = $busy && ! $disabled;
     $root = array_filter([
