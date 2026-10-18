@@ -6,6 +6,13 @@
       "$value": "{space.14}"
     }
   },
+  "data-table": {
+    "row-height": {
+      "$type": "dimension",
+      "$value": "{size.row}",
+      "$description": "A body row's height in the table layout, from 768 px up (44px)."
+    }
+  },
   "list-row": {
     "height": {
       "$type": "dimension",

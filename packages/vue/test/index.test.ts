@@ -5,6 +5,12 @@ import {
   PlinthAvatar,
   PlinthBadge,
   PlinthButton,
+  PlinthDataTable,
+  PlinthDataTableCell,
+  PlinthDataTableColumn,
+  PlinthDataTableEmpty,
+  PlinthDataTableRow,
+  PlinthDataTableSort,
   PlinthHeader,
   PlinthIcon,
   PlinthIconButton,
@@ -26,6 +32,12 @@ describe('the Plinth plugin', () => {
     expect(app.component('PlinthAvatar')).toBe(PlinthAvatar);
     expect(app.component('PlinthBadge')).toBe(PlinthBadge);
     expect(app.component('PlinthButton')).toBe(PlinthButton);
+    expect(app.component('PlinthDataTable')).toBe(PlinthDataTable);
+    expect(app.component('PlinthDataTableCell')).toBe(PlinthDataTableCell);
+    expect(app.component('PlinthDataTableColumn')).toBe(PlinthDataTableColumn);
+    expect(app.component('PlinthDataTableEmpty')).toBe(PlinthDataTableEmpty);
+    expect(app.component('PlinthDataTableRow')).toBe(PlinthDataTableRow);
+    expect(app.component('PlinthDataTableSort')).toBe(PlinthDataTableSort);
     expect(app.component('PlinthHeader')).toBe(PlinthHeader);
     expect(app.component('PlinthIcon')).toBe(PlinthIcon);
     expect(app.component('PlinthIconButton')).toBe(PlinthIconButton);

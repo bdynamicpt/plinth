@@ -1,6 +1,8 @@
 <?php
 
 use BDynamic\Plinth\Enums\ButtonVariant;
+use BDynamic\Plinth\Enums\DataTableCellKind;
+use BDynamic\Plinth\Enums\DataTableSort;
 use BDynamic\Plinth\Enums\HeadingLevel;
 use BDynamic\Plinth\Enums\SheetPlacement;
 use BDynamic\Plinth\Enums\Size;
@@ -19,7 +21,9 @@ it('defaults each choice the way the components do', function () {
         ->and(ButtonVariant::default())->toBe(ButtonVariant::Primary)
         ->and(Size::default())->toBe(Size::Medium)
         ->and(HeadingLevel::default())->toBe(HeadingLevel::Two)
-        ->and(SheetPlacement::default())->toBe(SheetPlacement::Center);
+        ->and(SheetPlacement::default())->toBe(SheetPlacement::Center)
+        ->and(DataTableSort::default())->toBe(DataTableSort::None)
+        ->and(DataTableCellKind::default())->toBe(DataTableCellKind::Field);
 });
 
 it('sizes a control\'s icons to the control', function () {
@@ -64,5 +68,8 @@ it('matches the lists the Vue layer and the stories use', function () {
     }
     foreach (SheetPlacement::values() as $value) {
         expect($vue('sheet.ts'))->toContain("'{$value}'");
+    }
+    foreach ([...DataTableSort::values(), ...DataTableCellKind::values()] as $value) {
+        expect($vue('data-table.ts'))->toContain("'{$value}'");
     }
 });
