@@ -35,7 +35,9 @@ Stylelint enforces most of these (`stylelint.config.js`), along with property or
 
 ## What a component ships
 
-Every component ships all of these in the same pull request:
+Every component ships all of these in the same pull request. An agent (or you) can start with
+`node .claude/skills/new-component/scaffold.ts <name>`, which writes the files below for a minimal
+component; `.claude/skills/new-component/SKILL.md` walks through the rest.
 
 1. **CSS**: `packages/css/src/components/<name>.css`, with its markup contract in a comment at the
    top.
