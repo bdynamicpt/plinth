@@ -143,6 +143,11 @@
       content: '';
       translate: 0 -50%;
     }
+
+    /* An icon button is narrower than 40px, so its hit area grows sideways too. */
+    .plinth-icon-button::before {
+      inset-inline: min(0%, 50% - var(--plinth-touch-target) / 2);
+    }
   }
 
   @media (hover: hover) {

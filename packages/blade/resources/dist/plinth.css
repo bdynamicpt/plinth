@@ -693,6 +693,11 @@
       content: '';
       translate: 0 -50%;
     }
+
+    /* An icon button is narrower than 40px, so its hit area grows sideways too. */
+    .plinth-icon-button::before {
+      inset-inline: min(0%, 50% - var(--plinth-touch-target) / 2);
+    }
   }
 
   @media (hover: hover) {
@@ -821,6 +826,12 @@
  * pads it below the status bar and the notch on a phone that draws under them (viewport-fit=cover);
  * the inline padding clears the notch on a phone held sideways. It is sticky on the
  * layer.sticky z-index, so it sits above the page and below sheets and menus (the top layer).
+ * Content scrolls under it, so the app sets scroll-padding-block-start on its scrolling element
+ * (calc(var(--plinth-header-height) + env(safe-area-inset-top))) to keep a focused element or an
+ * anchor's target from landing under the header.
+ *
+ * The actions sit var(--plinth-space-2) apart, so on a touch screen the 40px hit areas of 32px
+ * icon buttons don't overlap.
  *
  * The app owns the state: the header has no variants or states of its own. What the actions do is
  * the app's (a link, a commandfor, wire:click, @click on the icon button).
@@ -854,7 +865,7 @@
   .plinth-header-actions {
     display: flex;
     flex: none;
-    gap: var(--plinth-space-1);
+    gap: var(--plinth-space-2);
     align-items: center;
   }
 

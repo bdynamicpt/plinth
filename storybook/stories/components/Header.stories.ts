@@ -4,10 +4,12 @@ import { iconButton } from './icon-button.ts';
 import { sampleIcons } from './icons.ts';
 import { listCard } from './list-card.ts';
 import type { ListRowArgs } from './list-row.ts';
+import { sheet } from './sheet.ts';
 import '@bdynamic/plinth-css/src/components/icon.css';
 import '@bdynamic/plinth-css/src/components/button.css';
 import '@bdynamic/plinth-css/src/components/list-row.css';
 import '@bdynamic/plinth-css/src/components/list-card.css';
+import '@bdynamic/plinth-css/src/components/sheet.css';
 import '@bdynamic/plinth-css/src/components/header.css';
 
 const action = (
@@ -66,6 +68,7 @@ export const WithoutLeading: Story = {
   args: { title: 'Overview', leading: undefined, actions: notifications + search },
 };
 
+/** Just the title: a page with nothing to go back to and no actions. */
 export const TitleOnly: Story = {
   args: { title: 'Settings', leading: undefined, actions: undefined },
 };
@@ -98,10 +101,23 @@ const conversations = Array.from({ length: 4 }, (_, card) =>
   }),
 ).join('');
 
-/** The header on a page: it sticks to the top while the content scrolls under it. */
+/** The menu sheet the menu button opens (commandfor="menu"); the app supplies it. */
+const menuSheet = sheet({
+  id: 'menu',
+  title: 'Menu',
+  closeLabel: 'Close',
+  placement: 'end',
+  body: listCard({
+    headingLevel: 'h3',
+    rows: ['Inbox', 'Archive', 'Settings'].map((title) => row(title)),
+  }),
+});
+
+/** The header on a page: it sticks to the top while the content scrolls under it. The menu
+ * button opens the app's menu sheet. */
 export const OnAPage: Story = {
   render: () =>
-    `${header(meta.args)}<main style="display: grid; gap: var(--plinth-space-6); padding: var(--plinth-space-4);">${conversations}</main>`,
+    `${header(meta.args)}${menuSheet}<main style="display: grid; gap: var(--plinth-space-6); padding: var(--plinth-space-4);">${conversations}</main>`,
 };
 
 /** The same header in right-to-left text: the parts swap sides and the back arrow points right. */

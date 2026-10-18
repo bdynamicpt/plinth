@@ -39,7 +39,8 @@ trailing actions. It sticks to the top of the page while the content scrolls und
 - **`plinth-header-leading`** is optional and holds one action, usually an
   [icon button](?path=/docs/components-icon-button--docs): a **back** link (with `mirror`, so
   its arrow points the other way in right-to-left text) or a **menu** button that opens the
-  app's menu sheet with `commandfor` and `command="show-modal"`.
+  app's menu sheet with `commandfor` and `command="show-modal"`. The app supplies that
+  [sheet](?path=/docs/components-sheet--docs); the On a page story below has one.
 - **`plinth-header-title`** is an `<h1>`, the page's heading, and is required. It stays on one
   line and ends in an ellipsis when it doesn't fit.
 - **`plinth-header-actions`** is optional and holds the trailing actions: two or three icon
@@ -100,6 +101,17 @@ The header is `position: sticky` at the top, on the **`--plinth-layer-sticky`** 
 the page's content, below sheets and menus, which sit in the browser's top layer. It sticks
 within its scrolling parent, so put it at the top of the page, not inside a box that scrolls on
 its own.
+
+Content scrolls under the header, so a focused element or the target of an in-page link can land
+behind it. Set `scroll-padding-block-start` on the page's scrolling element to keep them clear:
+
+<Source
+  language="css"
+  dark
+  code={`html {
+  scroll-padding-block-start: calc(var(--plinth-header-height) + env(safe-area-inset-top));
+}`}
+/>
 
 <Canvas of={HeaderStories.OnAPage} />
 

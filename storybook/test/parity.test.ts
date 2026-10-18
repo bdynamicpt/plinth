@@ -284,7 +284,7 @@ const cases: ParityCase[] = [
   headerCase(
     'Header/with extra attributes',
     { title: 'Inbox', actions: '<button type="button">Search</button>' },
-    { class: 'is-scrolled', id: 'top', 'data-testid': 'header', 'aria-label': 'Inbox' },
+    { class: 'app-header', id: 'top', 'data-testid': 'header', 'aria-label': 'Inbox' },
   ),
   headerCase('Header/blank slots', { title: 'Settings', leading: '  ', actions: ' ' }),
   iconCase(
@@ -384,20 +384,6 @@ function listRowCase(story: string, args: ListRowArgs, attributes: Attributes = 
 }
 
 /** The card's own parity; its rows are each a list row's markup in an <li>, passed in as the slot. */
-function headerCase(story: string, args: HeaderArgs, attributes: Attributes = {}): ParityCase {
-  const props = { title: args.title };
-  const named = {
-    ...(args.leading ? { leading: args.leading } : {}),
-    ...(args.actions ? { actions: args.actions } : {}),
-  };
-  return {
-    story,
-    markup: header(args, attributes),
-    vue: { component: PlinthHeader, props: { ...props, ...attributes }, slot: '', named },
-    blade: { component: 'header', props, attributes, slot: '', named },
-  };
-}
-
 function listCardCase(story: string, args: ListCardArgs, attributes: Attributes = {}): ParityCase {
   const props = {
     ...(args.heading ? { heading: args.heading } : {}),
@@ -410,6 +396,20 @@ function listCardCase(story: string, args: ListCardArgs, attributes: Attributes 
     markup: listCard(args, attributes),
     vue: { component: PlinthListCard, props: { ...props, ...attributes }, slot, html: true },
     blade: { component: 'list-card', props, attributes, slot },
+  };
+}
+
+function headerCase(story: string, args: HeaderArgs, attributes: Attributes = {}): ParityCase {
+  const props = { title: args.title };
+  const named = {
+    ...(args.leading ? { leading: args.leading } : {}),
+    ...(args.actions ? { actions: args.actions } : {}),
+  };
+  return {
+    story,
+    markup: header(args, attributes),
+    vue: { component: PlinthHeader, props: { ...props, ...attributes }, slot: '', named },
+    blade: { component: 'header', props, attributes, slot: '', named },
   };
 }
 

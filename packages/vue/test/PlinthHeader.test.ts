@@ -54,12 +54,12 @@ describe('PlinthHeader', () => {
   it('keeps extra classes and attributes on the root', () => {
     const wrapper = mount(PlinthHeader, {
       props: { title: 'Inbox' },
-      attrs: { class: 'is-scrolled', id: 'top', 'data-testid': 'header', 'aria-label': 'Inbox' },
+      attrs: { class: 'app-header', id: 'top', 'data-testid': 'header', 'aria-label': 'Inbox' },
       slots: { actions: () => h('button', { type: 'button' }, 'Search') },
     });
 
     expect(wrapper.element.tagName).toBe('HEADER');
-    expect(wrapper.classes()).toEqual(['plinth-header', 'is-scrolled']);
+    expect(wrapper.classes()).toEqual(['plinth-header', 'app-header']);
     expect(wrapper.attributes()).toMatchObject({
       id: 'top',
       'data-testid': 'header',

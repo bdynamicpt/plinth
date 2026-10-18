@@ -48,11 +48,11 @@ it('escapes the title', function () {
 
 it('keeps extra classes and attributes on the root', function () {
     $html = Blade::render(
-        '<x-plinth::header title="Inbox" class="is-scrolled" id="top" wire:key="header" x-ref="header" data-testid="header" aria-label="Inbox" />'
+        '<x-plinth::header title="Inbox" class="app-header" id="top" wire:key="header" x-ref="header" data-testid="header" aria-label="Inbox" />'
     );
 
     expect($html)
-        ->toContain('class="plinth-header is-scrolled"')
+        ->toContain('class="plinth-header app-header"')
         ->toContain('id="top"')
         ->toContain('wire:key="header"')
         ->toContain('x-ref="header"')
