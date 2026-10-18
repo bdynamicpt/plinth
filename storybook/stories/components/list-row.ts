@@ -15,7 +15,7 @@ export interface ListRowArgs {
   href?: string;
   /** Renders the row as a button, when it has no href. */
   button: boolean;
-  /** The row for the page being shown: aria-current="page". */
+  /** The row for the page being shown: aria-current="page", on a link or static row. */
   current: boolean;
   /** Disables a link or button row. */
   disabled: boolean;
@@ -37,7 +37,7 @@ export function listRow(
     tag === 'button' ? `<button type="${escape(type)}"` : `<${tag}`,
     ` class="${classes}"`,
     href && !disabled ? ` href="${escape(href)}"` : '',
-    current ? ' aria-current="page"' : '',
+    current && tag !== 'button' ? ' aria-current="page"' : '',
     disabled && tag === 'button' ? ' disabled' : '',
     disabled && tag === 'a' ? ' role="link" aria-disabled="true"' : '',
     extra,

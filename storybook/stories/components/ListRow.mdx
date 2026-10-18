@@ -45,9 +45,9 @@ row it belongs to (_More actions for Ana Lima_).
 
 ## States
 
-- **Current:** set `current` on the row for the page being shown (it prints
+- **Current:** set `current` on the link row for the page being shown (it prints
   `aria-current="page"`); the app decides which one it is. It takes the selection tint and a
-  heavier title.
+  heavier title. A button row doesn't print it, since a button is not a page.
 - **Disabled:** a disabled button row gets `disabled`; a disabled link row loses its `href` and
   reads as a disabled link (`role="link"`, `aria-disabled="true"`).
 
@@ -57,12 +57,24 @@ row it belongs to (_More actions for Ana Lima_).
 
 ## In a list
 
-Put rows next to each other, or each in its own `<li>` of a `<ul>`, and a hairline divider
-(`--plinth-color-divider`) sits between them. Long titles and descriptions wrap.
+Put rows next to each other, or each as the direct child of its own `<li>` in a `<ul>`, and a
+hairline divider (`--plinth-color-divider`) sits between them; a wrapper element between the
+`<li>` and the row drops it. Reset the list yourself (`margin`, `padding`, `list-style: none`) and
+add `role="list"`, which Safari needs to keep announcing a list without bullets. Long titles and
+descriptions wrap.
+
+The focus ring is drawn inside the row, so a scrolling sheet or a card doesn't cut it off.
 
 <Canvas of={ListRowStories.List} />
 <Canvas of={ListRowStories.LongText} />
 <Canvas of={ListRowStories.RightToLeft} />
+
+## Routing
+
+Plinth never routes. A link row is a plain `<a href>`, so in a single-page app hand it your
+router's link: with Vue Router, `<RouterLink custom v-slot="{ href, navigate, isActive }">`
+around `<PlinthListRow :href="href" :current="isActive" @click="navigate">`; in Livewire, add
+`wire:navigate`. The listener and the attribute land on the row's root.
 
 ## Tuning
 

@@ -13,7 +13,7 @@
         'class' => 'plinth-list-row',
         'type' => $tag === 'button' ? 'button' : null,
         'href' => $tag === 'a' && ! $disabled ? $href : null,
-        'aria-current' => $current ? 'page' : null,
+        'aria-current' => $current && $tag !== 'button' ? 'page' : null,
         'disabled' => $tag === 'button' && $disabled ? '' : null,
         'role' => $tag === 'a' && $disabled ? 'link' : null,
         'aria-disabled' => $tag === 'a' && $disabled ? 'true' : null,

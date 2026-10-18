@@ -64,7 +64,10 @@ export const Button: Story = { args: { title: 'Sign out', button: true } };
 export const Current: Story = {
   args: {
     title: 'Overview',
+    description: 'Everything at a glance',
     leading: leadingIcon(sampleIcons.star),
+    trailing: '12',
+    chevron: true,
     href: '#overview',
     current: true,
   },
@@ -115,7 +118,12 @@ const settings = [
 /** Rows in a list, each in its own <li>, with the dividers between them. */
 export const List: Story = {
   render: () =>
-    `<ul style="margin: 0; padding: 0; list-style: none;">${settings.map((row) => `<li>${row}</li>`).join('')}</ul>`,
+    `<ul role="list" style="margin: 0; padding: 0; list-style: none;">${settings.map((row) => `<li>${row}</li>`).join('')}</ul>`,
+};
+
+/** Rows in a short scrolling area, as in a sheet: Tab to a row and the ring stays whole. */
+export const InScrollingSheet: Story = {
+  render: () => `<div style="max-block-size: 7rem; overflow: auto;">${settings.join('')}</div>`,
 };
 
 /** The same rows in right-to-left text: the slots swap sides and the chevrons point left. */

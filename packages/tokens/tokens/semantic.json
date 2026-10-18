@@ -86,6 +86,10 @@
     },
     "offset-filled": {
       "$value": "{ref.border-width.2}"
+    },
+    "offset-inset": {
+      "$value": "-2px",
+      "$description": "Inside the element's edge, minus the ring's width: for full-width rows in a scrolling container, which would cut off a ring drawn outside them."
     }
   },
   "font": {

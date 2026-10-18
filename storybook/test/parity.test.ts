@@ -174,6 +174,7 @@ const cases: ParityCase[] = [
     { class: 'ms-2', 'data-testid': 'notifications', type: 'text/html' },
   ),
   listRowCase('List row/current button', { ...listRowDefaults, button: true, current: true }),
+  listRowCase('List row/current static row', { ...listRowDefaults, current: true }),
   listRowCase('List row/disabled static row', { ...listRowDefaults, disabled: true }),
   iconCase(
     'Icon/with an aria-label attribute',
@@ -388,6 +389,7 @@ describe('parity with the stories', () => {
       'List row/with extra attributes',
       'List row/link with extra attributes',
       'List row/current button',
+      'List row/current static row',
       'List row/disabled static row',
       'Icon/with an aria-label attribute',
     ]);

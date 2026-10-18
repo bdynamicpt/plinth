@@ -147,6 +147,7 @@
     --plinth-focus-ring-width: var(--plinth-ref-border-width-2);
     --plinth-focus-ring-offset: 0;
     --plinth-focus-ring-offset-filled: var(--plinth-ref-border-width-2);
+    --plinth-focus-ring-offset-inset: -2px;
     --plinth-font-family-body: var(--plinth-ref-font-family-sans);
     --plinth-font-family-mono: var(--plinth-ref-font-family-mono);
     --plinth-font-size-xs: var(--plinth-ref-font-size-12);
@@ -859,13 +860,17 @@
  * needs a static row, and its own accessible name.
  *
  * States:
- * - current: aria-current="page" on the row for the page being shown, set by the app; the
- *   selection tint (accent-subtle, accent-text) and a heavier title.
+ * - current: aria-current="page" on a link row (or a static row) for the page being shown, set
+ *   by the app; the selection tint (accent-subtle, accent-text) and a heavier title. A button
+ *   row never prints it: a button is not a page.
  * - disabled: `disabled` on a <button>; on a link, no href, role="link" and aria-disabled="true".
- * - hover only where the device can hover; the focus ring on :focus-visible.
+ * - hover only where the device can hover; the focus ring on :focus-visible, drawn inside the
+ *   row (focus-ring.offset-inset).
  *
  * A hairline divider (color.divider) sits between two rows that follow each other, as siblings
- * or each in its own <li>. The height is --plinth-list-row-height (44px); a description makes the
+ * or each as the direct child of its own <li>; a wrapper element in between drops it. The app
+ * resets the list (margin, padding, list-style) and adds role="list", which Safari needs to keep
+ * announcing a list without bullets. The height is --plinth-list-row-height (44px); a description makes the
  * row taller.
  */
 
@@ -927,9 +932,10 @@
     opacity: var(--plinth-opacity-disabled);
   }
 
+  /* Inside the row, so a scrolling sheet or a card doesn't cut the ring off at the sides. */
   .plinth-list-row:focus-visible {
     outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
-    outline-offset: var(--plinth-focus-ring-offset);
+    outline-offset: var(--plinth-focus-ring-offset-inset);
   }
 
   .plinth-list-row-leading {

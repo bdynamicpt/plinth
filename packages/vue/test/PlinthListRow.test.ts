@@ -51,6 +51,12 @@ describe('PlinthListRow', () => {
     expect(
       mount(PlinthListRow, { props: { href: '/', current: true } }).attributes('aria-current'),
     ).toBe('page');
+    expect(mount(PlinthListRow, { props: { current: true } }).attributes('aria-current')).toBe(
+      'page',
+    );
+    expect(
+      mount(PlinthListRow, { props: { button: true, current: true } }).attributes('aria-current'),
+    ).toBeUndefined();
     expect(mount(PlinthListRow).attributes('aria-current')).toBeUndefined();
   });
 

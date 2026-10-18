@@ -40,9 +40,13 @@ it('is a link with an href, and a button with button', function () {
         ->toStartWith('<button class="plinth-list-row" type="button">');
 });
 
-it('marks the current row', function () {
+it('marks the current row, but never a button', function () {
     expect(Blade::render('<x-plinth::list-row href="/" current>Overview</x-plinth::list-row>'))
         ->toContain('aria-current="page"');
+    expect(Blade::render('<x-plinth::list-row current>Overview</x-plinth::list-row>'))
+        ->toContain('aria-current="page"');
+    expect(Blade::render('<x-plinth::list-row button current>Overview</x-plinth::list-row>'))
+        ->not->toContain('aria-current');
 });
 
 it('disables a button, a link, and leaves a static row alone', function () {

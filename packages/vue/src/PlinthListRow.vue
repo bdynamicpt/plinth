@@ -12,7 +12,7 @@ const props = withDefaults(
     href?: string;
     /** Renders the row as a button, when it has no href. */
     button?: boolean;
-    /** The row for the page being shown: aria-current="page". */
+    /** The row for the page being shown: aria-current="page", on a link or static row. */
     current?: boolean;
     /** Disables a link or button row. */
     disabled?: boolean;
@@ -36,7 +36,7 @@ const tag = computed(() => (props.href ? 'a' : props.button ? 'button' : 'div'))
     class="plinth-list-row"
     :type="tag === 'button' ? 'button' : undefined"
     :href="tag === 'a' && !disabled ? href : undefined"
-    :aria-current="current ? 'page' : undefined"
+    :aria-current="current && tag !== 'button' ? 'page' : undefined"
     :disabled="tag === 'button' && disabled ? true : undefined"
     :role="tag === 'a' && disabled ? 'link' : undefined"
     :aria-disabled="tag === 'a' && disabled ? 'true' : undefined"
@@ -46,6 +46,7 @@ const tag = computed(() => (props.href ? 'a' : props.button ? 'button' : 'div'))
       <span class="plinth-list-row-title"><slot /></span>
       <span v-if="description" class="plinth-list-row-description">{{ description }}</span>
     </span>
+    <!-- The chevron is listRowChevron (list-row.ts), written out; parity keeps the copies equal. -->
     <span v-if="$slots.trailing || chevron" class="plinth-list-row-trailing"
       ><slot name="trailing" /><span
         v-if="chevron"

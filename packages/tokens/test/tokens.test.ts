@@ -110,6 +110,7 @@ describe('tiers', () => {
     expect(token('focus-ring.width').value).toBe('2px');
     expect(token('focus-ring.offset').value).toBe('0');
     expect(token('focus-ring.offset-filled').value).toBe('2px');
+    expect(token('focus-ring.offset-inset').value).toBe('-2px');
   });
 
   it('defaults to Geist and Geist Mono, with system fonts behind them', () => {
