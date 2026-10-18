@@ -12,8 +12,10 @@ it('prints the count, zero included, and leaves out an empty one', function () {
         ->toContain('<span class="plinth-pill-label">Open</span><span class="plinth-pill-count">12</span>');
     expect(Blade::render('<x-plinth::pill :count="0">Archived</x-plinth::pill>'))
         ->toContain('<span class="plinth-pill-count">0</span>');
-    expect(Blade::render('<x-plinth::pill count="">Open</x-plinth::pill>'))
-        ->not->toContain('plinth-pill-count');
+    foreach (['', ' ', null] as $count) {
+        expect(Blade::render('<x-plinth::pill :count="$count">Open</x-plinth::pill>', ['count' => $count]))
+            ->not->toContain('plinth-pill-count');
+    }
 });
 
 it('marks a selected button as pressed', function () {

@@ -24,11 +24,11 @@ describe('PlinthPill', () => {
         .get('.plinth-pill-count')
         .text(),
     ).toBe('0');
-    expect(
-      mount(PlinthPill, { props: { count: '' } })
-        .find('.plinth-pill-count')
-        .exists(),
-    ).toBe(false);
+    for (const count of ['', ' ', null]) {
+      expect(mount(PlinthPill, { props: { count } }).find('.plinth-pill-count').exists()).toBe(
+        false,
+      );
+    }
   });
 
   it('marks a selected button as pressed', () => {

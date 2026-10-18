@@ -23,14 +23,15 @@ The row and each pill are their own components, so the app's attributes and list
   heading. One pill or several can be on: the app decides.
 - **Navigation** pills are links. Set **`nav`** on the row to make it a `<nav>`, give each pill
   an `href`, and set `selected` on the one for the page being shown, which prints
-  `aria-current="page"`.
+  `aria-current="page"`. Name the `<nav>` too, with a `label` that tells it apart from the
+  page's other navigation (_Project sections_).
 
 <Canvas of={PillRowStories.MultipleSelected} />
 <Canvas of={PillRowStories.Navigation} />
 
 Tab moves through the pills, and Space or Enter toggles a filter. The selected pill takes the
-selection tint and is filled, where the others are outlined, so it doesn't rely on colour alone;
-in forced colours it takes the system highlight.
+selection tint with an accent edge, where the others have a neutral one; in forced colours it
+takes the system highlight.
 
 ## Disabled
 
@@ -42,18 +43,20 @@ disabled link (`role="link"`, `aria-disabled="true"`).
 
 ## Many pills
 
-The row scrolls on a phone and snaps each pill to its start. Its own small padding keeps the
-focus ring and the 40px touch target of the first and last pill inside the scrolling area. To
-let the row run to the edges of the screen, give it the page's gutter as `padding-inline` and the
-same negative `margin-inline`.
+The row scrolls on a phone and snaps each pill to its start. It shows no scrollbar, so a cut-off
+pill at the edge is the hint that there are more; Tab, a swipe or Shift with the wheel scrolls it.
+Its own small padding keeps the focus ring and the 40px touch target of the pills inside the
+scrolling area. To let the row run to the edges of the screen, give it the page's gutter as
+`padding-inline` and the same negative `margin-inline`.
 
 <Canvas of={PillRowStories.Overflowing} />
 <Canvas of={PillRowStories.RightToLeft} />
 
 ## Tuning
 
-A pill is `--plinth-pill-height` (32px) tall, and keeps a 40px hit area on a touch screen. A
-project changes the height in its tokens.
+A pill is `--plinth-pill-height` (32px) tall and at least 40px wide, and keeps a 40px hit area on
+a touch screen; the row's padding grows to fit it when a project makes pills shorter. A project
+changes the height in its tokens.
 
 ## In Blade and Vue
 

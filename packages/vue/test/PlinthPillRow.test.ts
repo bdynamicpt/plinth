@@ -26,6 +26,14 @@ describe('PlinthPillRow', () => {
     expect(wrapper.attributes()).toEqual({ class: 'plinth-pill-row', 'aria-label': 'Sections' });
   });
 
+  it('escapes the label', () => {
+    const wrapper = mount(PlinthPillRow, { props: { label: '"><b>x</b>' } });
+
+    expect(wrapper.html()).toContain('aria-label="&quot;>');
+    expect(wrapper.find('b').exists()).toBe(false);
+    expect(wrapper.attributes('aria-label')).toBe('"><b>x</b>');
+  });
+
   it('passes extra attributes to its root', () => {
     const wrapper = mount(PlinthPillRow, {
       attrs: { class: 'mb-4', 'aria-labelledby': 'status-title' },

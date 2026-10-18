@@ -3,7 +3,7 @@ import { escape, rootAttributes, type Attributes } from './markup.ts';
 export interface PillArgs {
   label: string;
   /** A number after the label, such as how many items the filter shows. */
-  count?: string | number;
+  count?: string | number | null;
   /** Renders the pill as a link, for a row that navigates. */
   href?: string;
   /** The selected pill: aria-pressed="true" on a button, aria-current="page" on a link. */
@@ -19,6 +19,10 @@ export interface PillRowArgs {
   nav: boolean;
   pills: PillArgs[];
 }
+
+/** A count prints unless it is missing or blank, as Blade's filled() decides. */
+const hasCount = (count: PillArgs['count']): count is string | number =>
+  count !== undefined && count !== null && String(count).trim() !== '';
 
 /** A pill's markup contract. Blade and Vue must print exactly this (see parity.test.ts). */
 export function pill(
@@ -43,9 +47,7 @@ export function pill(
   return [
     open,
     `<span class="plinth-pill-label">${escape(label)}</span>`,
-    count !== undefined && count !== ''
-      ? `<span class="plinth-pill-count">${escape(String(count))}</span>`
-      : '',
+    hasCount(count) ? `<span class="plinth-pill-count">${escape(String(count))}</span>` : '',
     `</${tag}>`,
   ].join('');
 }

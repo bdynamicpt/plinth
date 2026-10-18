@@ -1018,18 +1018,20 @@
  * <a class="plinth-pill" href="…" aria-current="page"><span class="plinth-pill-label">…</span></a>
  *
  * Each pill is its own component (<x-plinth::pill>, PlinthPill), so the app's attributes and
- * listeners land on the pill (ADR 2). The count is optional.
+ * listeners land on the pill (ADR 2). The count is optional. plinth-pill-label has no rule of its
+ * own: it is a hook for a project's styles.
  *
  * States, set by the app:
  * - selected: a button pill always prints aria-pressed, "true" or "false"; a link pill prints
  *   aria-current="page" for the page being shown. Selected takes the selection tint
- *   (accent-subtle, accent-text) and fills the pill, where the others are outlined.
+ *   (accent-subtle, accent-text) and an accent edge, where the others have a neutral one.
  * - disabled: `disabled` on a <button>; on a link, no href, role="link" and aria-disabled="true".
  * - hover only where the device can hover; the focus ring on :focus-visible.
  *
  * Layout: on a phone the row scrolls sideways, with no visible scrollbar, and snaps to the pills;
  * from 768px it wraps. The row's padding keeps the focus ring and the 40px touch target of the
- * first and last pill inside the scrolling area. A pill is --plinth-pill-height (32px) tall.
+ * pills inside the scrolling area, whatever --plinth-pill-height is (32px by default). A pill is
+ * at least 40px wide.
  */
 
 @layer plinth {
@@ -1039,7 +1041,11 @@
     gap: var(--plinth-space-2);
     align-items: center;
     max-inline-size: 100%;
-    padding: var(--plinth-space-1);
+    padding-block: max(
+      var(--plinth-space-1),
+      (var(--plinth-touch-target) - var(--plinth-pill-height)) / 2
+    );
+    padding-inline: var(--plinth-space-1);
     margin: 0;
     overflow-x: auto;
     overscroll-behavior-inline: contain;
@@ -1055,6 +1061,8 @@
     flex: none;
     gap: var(--plinth-space-2);
     align-items: center;
+    justify-content: center;
+    min-inline-size: var(--plinth-touch-target);
     min-block-size: var(--plinth-pill-height);
     padding-block: 0;
     padding-inline: var(--plinth-space-3);
@@ -1105,7 +1113,7 @@
   .plinth-pill:is([aria-pressed='true'], [aria-current='page']) {
     color: var(--plinth-color-accent-text);
     background-color: var(--plinth-color-accent-subtle);
-    border-color: transparent;
+    border-color: var(--plinth-color-accent);
   }
 
   .plinth-pill:disabled,
@@ -1155,6 +1163,7 @@
     .plinth-pill:disabled,
     .plinth-pill[aria-disabled='true'] {
       color: GrayText;
+      background-color: Canvas;
       border-color: GrayText;
     }
   }

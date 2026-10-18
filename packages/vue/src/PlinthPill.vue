@@ -5,7 +5,7 @@ import { computed } from 'vue';
 const props = withDefaults(
   defineProps<{
     /** A number after the label, such as how many items the filter shows. */
-    count?: string | number;
+    count?: string | number | null;
     /** Renders the pill as a link, for a row that navigates. */
     href?: string;
     /** The selected pill: aria-pressed="true" on a button, aria-current="page" on a link. */
@@ -17,7 +17,8 @@ const props = withDefaults(
 );
 
 const tag = computed(() => (props.href ? 'a' : 'button'));
-const hasCount = computed(() => props.count !== undefined && props.count !== '');
+// Missing or blank prints no count, as Blade's filled() decides.
+const hasCount = computed(() => props.count != null && String(props.count).trim() !== '');
 </script>
 
 <template>
