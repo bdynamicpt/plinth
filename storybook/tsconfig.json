@@ -3,15 +3,7 @@
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "types": [
-      "node",
-      "vite/client"
-    ]
+    "types": ["node", "vite/client"]
   },
-  "include": [
-    ".storybook",
-    "stories",
-    "test",
-    "vitest.config.ts"
-  ]
+  "include": [".storybook", "stories", "test", "vitest.config.ts"]
 }

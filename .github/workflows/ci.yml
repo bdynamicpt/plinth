@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    # Playwright's image, so the Storybook screenshots render exactly as the committed baselines
+    # (made with `npm run test:visual` in the same image).
+    container: mcr.microsoft.com/playwright:v1.64.1-noble
+    env:
+      PLINTH_VISUAL: '1'
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          tools: composer
+          coverage: none
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Restore the Turborepo cache
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ github.sha }}
+          restore-keys: turbo-${{ runner.os }}-
+
+      # Also runs `composer install` in packages/blade (its postinstall).
+      - run: npm ci
+
+      - name: Lint, test and build what the pull request touches, and what depends on it
+        if: github.event_name == 'pull_request'
+        run: npx turbo run lint test build build-storybook --filter="...[origin/${{ github.base_ref }}]"
+
+      - name: Lint, test and build everything
+        if: github.event_name != 'pull_request'
+        run: npx turbo run lint test build build-storybook
+
+      - name: The CSS shipped in packages/blade is up to date
+        run: git diff --exit-code -- packages/blade/resources/dist
+
+      - name: Keep the screenshot diffs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshot-diffs
+          path: storybook/__screenshots__/__diff_output__/
+          if-no-files-found: ignore
