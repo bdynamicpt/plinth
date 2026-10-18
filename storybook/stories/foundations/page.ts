@@ -6,9 +6,12 @@ export function section(title: string, lead: string, body: string): string {
   return `<section><h2>${title}</h2>${lead ? `<p>${lead}</p>` : ''}${body}</section>`;
 }
 
-/** A table with a header row; cells are HTML. */
-export function table(head: string[], rows: string[][]): string {
-  return `<div class="sb-scroll"><table class="sb-table"><thead><tr>${head
+/**
+ * A table with a header row; cells are HTML. It scrolls sideways when it is wider than the screen,
+ * so its wrapper is a labelled region that can be focused (and scrolled) from the keyboard.
+ */
+export function table(head: string[], rows: string[][], label = 'Tokens'): string {
+  return `<div class="sb-scroll" role="region" aria-label="${label}" tabindex="0"><table class="sb-table"><thead><tr>${head
     .map((cell) => `<th scope="col">${cell}</th>`)
     .join('')}</tr></thead><tbody>${rows
     .map((row) => `<tr>${row.map((cell) => `<td>${cell}</td>`).join('')}</tr>`)
@@ -16,6 +19,13 @@ export function table(head: string[], rows: string[][]): string {
 }
 
 export const code = (text: string) => `<code>${text}</code>`;
+
+const escapeHtml = (text: string) =>
+  text.replace(/[&<>]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[char]!);
+
+/** A block of code: escaped, in the mono font, scrolling sideways on narrow screens. */
+export const codeBlock = (text: string, label: string) =>
+  `<pre class="sb-code" tabindex="0" aria-label="${label}"><code>${escapeHtml(text)}</code></pre>`;
 
 export const page = (...sections: string[]) => `<div class="sb-page">${sections.join('')}</div>`;
 
@@ -51,7 +61,10 @@ export function preview(token: Token): string {
 }
 
 /** Table of tokens: name, preview, value (light and dark when they differ) and what it uses. */
-export function tokenTable(list: Token[]): string {
+export function tokenTable(
+  list: Token[],
+  label = `${list[0]?.path.slice(0, -1).join('.') || 'Component'} tokens`,
+): string {
   const themed = list.some((t) => t.dark !== undefined);
   const head = ['Token', 'Preview', themed ? 'Light' : 'Value', ...(themed ? ['Dark'] : [])];
   return table(
@@ -62,5 +75,6 @@ export function tokenTable(list: Token[]): string {
       `${t.value}${t.ref ? `<br>${code(t.ref)}` : ''}`,
       ...(themed ? [`${t.dark ?? ''}${t.darkRef ? `<br>${code(t.darkRef)}` : ''}`] : []),
     ]),
+    label,
   );
 }

@@ -62,7 +62,8 @@ Change all four together so they keep printing the same markup:
 - **CSS:** the contract in the top comment, in the same shape as the badge's. Mobile first, the
   phone in the base rules, `@media (min-width: 768px)` and `(min-width: 1280px)` only adding.
   Tokens only, logical properties, touch targets at least `--plinth-touch-target`, transitions on
-  `--plinth-duration-*`, a visible `:focus-visible`, and a `forced-colors` rule for any edge or
+  `--plinth-duration-*`, the focus ring on every focusable element (`:focus-visible` with the
+  `--plinth-focus-ring-*` tokens, see CONTRIBUTING), and a `forced-colors` rule for any edge or
   dot that is only a colour.
 - **Blade:** `@props` with defaults, `$attributes->merge(['class' => …])` on the root, fallback
   to the default for an unknown variant, `{{ }}` (escaped) output. No styles, and no element or

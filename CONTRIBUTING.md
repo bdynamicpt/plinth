@@ -28,6 +28,13 @@ keep its own custom properties, named `--plinth-component-*`.
 depends on hover. Motion uses the `--plinth-duration-*` tokens, which drop to 0ms under
 `prefers-reduced-motion`. Colour is never the only signal. Text meets WCAG AA in light and dark.
 
+**The focus ring.** Every focusable element, links included, shows the ring on `:focus-visible`:
+`outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring)` with
+`outline-offset: var(--plinth-focus-ring-offset)`, so it sits on the element's edge. Solid filled
+controls use `--plinth-focus-ring-offset-filled` instead, so the ring doesn't merge with their fill.
+See **Foundations → Focus ring** in Storybook. The test runner tabs through every story and fails
+if a focused element doesn't show it.
+
 **Native behaviour first.** Interactive components get their behaviour from the platform:
 `<dialog>` for sheets, the `popover` attribute for menus, `<details>` for disclosure, and
 `command` / `commandfor` buttons to open and close them. Style the native open state

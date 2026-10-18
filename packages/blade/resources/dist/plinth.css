@@ -80,6 +80,9 @@
     --plinth-ref-radius-12: 0.75rem;
     --plinth-ref-radius-16: 1rem;
     --plinth-ref-radius-full: 9999px;
+    --plinth-ref-border-width-1: 1px;
+    --plinth-ref-border-width-2: 2px;
+    --plinth-ref-border-width-3: 3px;
     --plinth-ref-font-family-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     --plinth-ref-font-family-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
     --plinth-ref-font-size-12: 0.75rem;
@@ -118,6 +121,9 @@
     --plinth-radius-control: var(--plinth-ref-radius-6);
     --plinth-radius-container: var(--plinth-ref-radius-12);
     --plinth-radius-pill: var(--plinth-ref-radius-full);
+    --plinth-focus-ring-width: var(--plinth-ref-border-width-2);
+    --plinth-focus-ring-offset: 0;
+    --plinth-focus-ring-offset-filled: var(--plinth-ref-border-width-2);
     --plinth-font-family-body: var(--plinth-ref-font-family-sans);
     --plinth-font-family-mono: var(--plinth-ref-font-family-mono);
     --plinth-font-size-xs: var(--plinth-ref-font-size-12);

@@ -48,26 +48,30 @@ Check what Stylelint cannot:
    forced-colours mode.
 4. **Logical layout.** Beyond the property names: the layout still reads right to left
    (`flex-direction`, `transform`, background positions, icons that point a direction).
-5. **Touch targets.** Anything that can be tapped is at least `--plinth-touch-target` in both
+5. **Focus ring.** Every focusable element uses the focus ring tokens on `:focus-visible`
+   (`--plinth-focus-ring-offset`, or `-offset-filled` on a solid filled control), not a custom
+   outline or `box-shadow`, and nothing removes it with `outline: none`. The test runner checks
+   colour and width; check the offset fits the element.
+6. **Touch targets.** Anything that can be tapped is at least `--plinth-touch-target` in both
    directions, through its own size or its padding, at 390 px too.
-6. **Nothing hover-only.** Anything shown or revealed on hover is also reachable by focus and by
+7. **Nothing hover-only.** Anything shown or revealed on hover is also reachable by focus and by
    touch.
-7. **Motion.** Transitions and animations use the `--plinth-duration-*` tokens (which drop to
+8. **Motion.** Transitions and animations use the `--plinth-duration-*` tokens (which drop to
    0ms under `prefers-reduced-motion`), or the component has its own
    `@media (prefers-reduced-motion: reduce)` rule.
-8. **Colour is never the only signal.** Text or an icon carries the meaning, and the parts that
+9. **Colour is never the only signal.** Text or an icon carries the meaning, and the parts that
    need an edge keep one in forced-colours mode.
-9. **Mobile first.** Base rules are the phone; the 768 and 1280 px queries only add.
-10. **Parity.** The Blade and Vue components print the story's markup and nothing else: no
+10. **Mobile first.** Base rules are the phone; the 768 and 1280 px queries only add.
+11. **Parity.** The Blade and Vue components print the story's markup and nothing else: no
     extra elements, attributes, classes or inline styles. Defaults and fallbacks match between
     the two (an unknown variant falls back the same way), both escape text, both pass through
     extra classes and attributes on the root, and neither holds styles. Every story that takes
     args has a parity case, and the case list in `parity.test.ts` names it.
-11. **Shipping.** The Vue component is exported from `src/index.ts` and registered by the
+12. **Shipping.** The Vue component is exported from `src/index.ts` and registered by the
     plugin; Blade and Vue tests cover defaults, every variant, escaping and extra attributes;
     the story's docs description says what a user must know (including the ARIA they must add
     themselves).
-12. **No consumer.** No project names, brand colours or copy from a consumer anywhere,
+13. **No consumer.** No project names, brand colours or copy from a consumer anywhere,
     including story labels.
 
 If the tests are cheap to run, run them: `npx vitest run test/parity.test.ts` in `storybook/`,

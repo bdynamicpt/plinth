@@ -26,7 +26,7 @@ const preview: Preview = {
         order: [
           'Branding',
           'Foundations',
-          ['Colours', 'Typography', 'Spacing', 'Radii'],
+          ['Primitives', 'Semantic', 'Component tokens', 'Focus ring'],
           'Components',
         ],
       },

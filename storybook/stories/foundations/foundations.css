@@ -1,17 +1,34 @@
 /* Layout for the foundations pages. Not part of Plinth: only Storybook uses these. */
+
+/* One vertical rhythm: a fixed gap between sections, a smaller one inside them, no stray margins. */
 .sb-page {
   display: grid;
-  gap: var(--plinth-space-8);
+  gap: var(--plinth-space-10);
   max-inline-size: 72rem;
 }
 
+.sb-page section {
+  display: grid;
+  gap: var(--plinth-space-3);
+  justify-items: start;
+}
+
+.sb-page section > * {
+  margin: 0;
+}
+
+.sb-page section > .sb-scroll,
+.sb-page section > .sb-ramp,
+.sb-page section > .sb-swatches {
+  justify-self: stretch;
+}
+
 .sb-page h2 {
-  margin: 0 0 var(--plinth-space-3);
   font-size: var(--plinth-font-size-xl);
 }
 
 .sb-page p {
-  margin: 0 0 var(--plinth-space-4);
+  max-inline-size: 65ch;
   color: var(--plinth-color-text-muted);
 }
 
@@ -89,4 +106,80 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
   gap: var(--plinth-space-3);
+}
+
+/*
+ * Demonstration controls for the focus ring page; components repeat the same three lines.
+ * A text link gets no padding, so the ring hugs the words, and a ring per line when it wraps.
+ */
+.sb-demo-link {
+  color: var(--plinth-color-accent-text);
+  box-decoration-break: clone;
+}
+
+.sb-page .sb-demo-text {
+  max-inline-size: 22rem;
+  line-height: var(--plinth-font-leading-normal);
+}
+
+.sb-demo-button {
+  min-block-size: var(--plinth-touch-target);
+  padding: var(--plinth-space-2) var(--plinth-space-4);
+  font: inherit;
+  border-radius: var(--plinth-radius-control);
+  color: var(--plinth-color-on-accent);
+  background-color: var(--plinth-color-accent);
+  border: 0;
+}
+
+.sb-demo-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--plinth-space-4);
+  align-items: center;
+}
+
+.sb-demo-outline {
+  min-block-size: var(--plinth-touch-target);
+  padding: var(--plinth-space-2) var(--plinth-space-4);
+  font: inherit;
+  color: var(--plinth-color-text);
+  background-color: var(--plinth-color-surface-raised);
+  border: 1px solid var(--plinth-color-border-strong);
+  border-radius: var(--plinth-radius-control);
+}
+
+.sb-demo-outline:focus-visible,
+.sb-demo-link:focus-visible {
+  outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+  outline-offset: var(--plinth-focus-ring-offset);
+}
+
+.sb-demo-button:focus-visible {
+  outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+  outline-offset: var(--plinth-focus-ring-offset-filled);
+}
+
+.sb-code {
+  justify-self: stretch;
+  max-inline-size: 100%;
+  padding: var(--plinth-space-4);
+  overflow-x: auto;
+  font-family: var(--plinth-font-family-mono);
+  font-size: var(--plinth-font-size-sm);
+  line-height: var(--plinth-font-leading-normal);
+  color: var(--plinth-color-text);
+  background-color: var(--plinth-color-surface-sunken);
+  border: 1px solid var(--plinth-color-border);
+  border-radius: var(--plinth-radius-container);
+}
+
+.sb-code:focus-visible {
+  outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+  outline-offset: var(--plinth-focus-ring-offset);
+}
+
+.sb-scroll:focus-visible {
+  outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+  outline-offset: var(--plinth-focus-ring-offset);
 }

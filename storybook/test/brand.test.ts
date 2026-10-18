@@ -77,5 +77,12 @@ describe('the example brand', () => {
     ])('%s on %s meets WCAG AA (4.5:1)', (fg, bg) => {
       expect(contrast(color(fg), color(bg))).toBeGreaterThanOrEqual(4.5);
     });
+
+    it.each(['surface', 'surface-raised', 'surface-sunken'])(
+      'the focus ring stands out on %s (3:1)',
+      (bg) => {
+        expect(contrast(color('focus-ring'), color(bg))).toBeGreaterThanOrEqual(3);
+      },
+    );
   });
 });

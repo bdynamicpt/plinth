@@ -79,6 +79,13 @@ describe('tiers', () => {
     }
   });
 
+  it('has a focus ring: a colour, a width and an offset', () => {
+    expect(token('color.focus-ring').dark).toBeDefined();
+    expect(token('focus-ring.width').value).toBe('2px');
+    expect(token('focus-ring.offset').value).toBe('0');
+    expect(token('focus-ring.offset-filled').value).toBe('2px');
+  });
+
   it('has control sizes, the touch target, layers, elevation and breakpoints', () => {
     expect(['sm', 'md', 'lg'].map((s) => token(`control.${s}`).value)).toEqual([
       '2rem',
@@ -124,6 +131,14 @@ describe('contrast', () => {
     it.each(pairs)('%s on %s meets WCAG AA (4.5:1)', (fg, bg) => {
       expect(contrast(value(fg), value(bg))).toBeGreaterThanOrEqual(4.5);
     });
+
+    // WCAG 1.4.11: the focus indicator needs 3:1 against what it sits on.
+    it.each(['surface', 'surface-raised', 'surface-sunken'])(
+      'the focus ring stands out on %s (3:1)',
+      (bg) => {
+        expect(contrast(value('focus-ring'), value(bg))).toBeGreaterThanOrEqual(3);
+      },
+    );
   });
 });
 

@@ -73,6 +73,9 @@ storybook/  never published
 - Blade merges `$attributes` onto the documented root and Vue lets attributes fall through to it,
   so `wire:*`, `x-*`, `data-*` and `aria-*` reach it; Vue emits documented events. Each component
   has a parity case with extra attributes.
+- Every focusable element shows the focus ring on `:focus-visible` (outline in
+  `--plinth-color-focus-ring` at `--plinth-focus-ring-width`, offset `--plinth-focus-ring-offset`,
+  or `-offset-filled` on solid filled controls); the test runner checks it.
 - Logical properties; touch targets at least 40 × 40 px; nothing hover-only;
   `prefers-reduced-motion` respected.
 - Each component ships its story (every state, three widths, light and dark), Blade and Vue
