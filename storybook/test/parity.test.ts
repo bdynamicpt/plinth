@@ -425,7 +425,7 @@ function sheetCase(story: string, args: SheetArgs, attributes: Attributes = {}):
     closeLabel: args.closeLabel,
     placement: args.placement,
   };
-  const named = args.footer ? { footer: args.footer } : {};
+  const named: Record<string, string> = args.footer ? { footer: args.footer } : {};
   return {
     story,
     markup: sheet(args, attributes),
