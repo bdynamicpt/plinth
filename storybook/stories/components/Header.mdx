@@ -1,0 +1,122 @@
+import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
+import * as HeaderStories from './Header.stories';
+
+<Meta of={HeaderStories} />
+
+# Header
+
+The top bar of the phone shell: a leading action (back or the menu), the page's title, and a few
+trailing actions. It sticks to the top of the page while the content scrolls under it.
+
+<Canvas of={HeaderStories.Default} />
+<Controls of={HeaderStories.Default} />
+
+## Markup
+
+<Source
+  language="html"
+  dark
+  code={`<header class="plinth-header">
+  <div class="plinth-header-leading">
+    <button type="button" class="plinth-button plinth-icon-button" data-variant="ghost"
+      data-size="md" aria-label="Menu" commandfor="menu" command="show-modal">
+      <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
+    </button>
+  </div>
+  <h1 class="plinth-header-title">Inbox</h1>
+  <div class="plinth-header-actions">
+    <button type="button" class="plinth-button plinth-icon-button" data-variant="ghost"
+      data-size="md" aria-label="Search">…</button>
+    <button type="button" class="plinth-button plinth-icon-button" data-variant="ghost"
+      data-size="md" aria-label="More">…</button>
+  </div>
+</header>`}
+/>
+
+- **`plinth-header`**, the root, is a `<header>`; a project's classes and attributes land on it.
+  At the top of the page, outside `<main>`, `<article>` and `<section>`, it is the page's banner
+  landmark, so a page has one header.
+- **`plinth-header-leading`** is optional and holds one action, usually an
+  [icon button](?path=/docs/components-icon-button--docs): a **back** link (with `mirror`, so
+  its arrow points the other way in right-to-left text) or a **menu** button that opens the
+  app's menu sheet with `commandfor` and `command="show-modal"`. The app supplies that
+  [sheet](?path=/docs/components-sheet--docs); the On a page story below has one.
+- **`plinth-header-title`** is an `<h1>`, the page's heading, and is required. It stays on one
+  line and ends in an ellipsis when it doesn't fit.
+- **`plinth-header-actions`** is optional and holds the trailing actions: two or three icon
+  buttons at most. Put the rest behind a "More" button that opens a menu.
+
+The leading part and the actions are printed only when they have content. Every icon button needs
+its own name (`label`) in the page's language. The header needs `button.css` and `icon.css` for
+them.
+
+The header has no variants or states of its own: what its actions do is the app's, through a
+link, a `commandfor`, `wire:click` or `@click` on the icon button.
+
+<Canvas of={HeaderStories.WithBack} />
+<Canvas of={HeaderStories.WithoutLeading} />
+<Canvas of={HeaderStories.TitleOnly} />
+<Canvas of={HeaderStories.LongTitle} />
+
+## Blade and Vue
+
+<Source
+  language="html"
+  dark
+  code={`<x-plinth::header title="Message">
+<x-slot:leading>
+<x-plinth::icon-button label="Back" :href="route('inbox')" mirror>…</x-plinth::icon-button>
+</x-slot:leading>
+<x-slot:actions>
+<x-plinth::icon-button label="Archive" wire:click="archive">…</x-plinth::icon-button>
+</x-slot:actions>
+</x-plinth::header>`}
+/>
+
+<Source
+  language="html"
+  dark
+  code={`<PlinthHeader title="Message">
+  <template #leading>
+    <PlinthIconButton label="Back" href="/inbox" mirror>…</PlinthIconButton>
+  </template>
+  <template #actions>
+    <PlinthIconButton label="Archive" @click="archive">…</PlinthIconButton>
+  </template>
+</PlinthHeader>`}
+/>
+
+Both need a `title` and throw without one.
+
+## Size and the safe area
+
+The header is **`--plinth-header-height`** tall (56px), a component token a project can tune.
+On a phone that draws under the status bar and the notch (`viewport-fit=cover` in the viewport
+meta) it adds `env(safe-area-inset-top)` above that, and its inline padding clears the notch on a
+phone held sideways.
+
+## Sticky
+
+The header is `position: sticky` at the top, on the **`--plinth-layer-sticky`** z-index: above
+the page's content, below sheets and menus, which sit in the browser's top layer. It sticks
+within its scrolling parent, so put it at the top of the page, not inside a box that scrolls on
+its own.
+
+Content scrolls under the header, so a focused element or the target of an in-page link can land
+behind it. Set `scroll-padding-block-start` on the page's scrolling element to keep them clear:
+
+<Source
+  language="css"
+  dark
+  code={`html {
+  scroll-padding-block-start: calc(var(--plinth-header-height) + env(safe-area-inset-top));
+}`}
+/>
+
+<Canvas of={HeaderStories.OnAPage} />
+
+## Right to left
+
+The leading action and the actions swap sides, and a mirrored back arrow points right.
+
+<Canvas of={HeaderStories.RightToLeft} />

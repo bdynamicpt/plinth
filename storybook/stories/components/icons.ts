@@ -9,6 +9,9 @@ export const sampleIcons = {
   check: outline('<path d="M5 12l5 5L19 7"/>'),
   alert: outline('<circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.01"/>'),
   arrow: outline('<path d="M5 12h14M13 6l6 6-6 6"/>'),
+  back: outline('<path d="M19 12H5M11 6l-6 6 6 6"/>'),
+  menu: outline('<path d="M4 7h16M4 12h16M4 17h16"/>'),
+  search: outline('<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/>'),
   close: outline('<path d="M6 6l12 12M18 6L6 18"/>'),
   more: outline(
     '<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',

@@ -2,6 +2,7 @@ import type { App, Plugin } from 'vue';
 import PlinthAvatar from './PlinthAvatar.vue';
 import PlinthBadge from './PlinthBadge.vue';
 import PlinthButton from './PlinthButton.vue';
+import PlinthHeader from './PlinthHeader.vue';
 import PlinthIcon from './PlinthIcon.vue';
 import PlinthIconButton from './PlinthIconButton.vue';
 import PlinthListCard from './PlinthListCard.vue';
@@ -14,6 +15,7 @@ export {
   PlinthAvatar,
   PlinthBadge,
   PlinthButton,
+  PlinthHeader,
   PlinthIcon,
   PlinthIconButton,
   PlinthListCard,
@@ -37,6 +39,7 @@ export const Plinth: Plugin = {
     app.component('PlinthAvatar', PlinthAvatar);
     app.component('PlinthBadge', PlinthBadge);
     app.component('PlinthButton', PlinthButton);
+    app.component('PlinthHeader', PlinthHeader);
     app.component('PlinthIcon', PlinthIcon);
     app.component('PlinthIconButton', PlinthIconButton);
     app.component('PlinthListCard', PlinthListCard);

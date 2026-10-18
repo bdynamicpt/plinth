@@ -2,6 +2,7 @@ import {
   PlinthAvatar,
   PlinthBadge,
   PlinthButton,
+  PlinthHeader,
   PlinthIcon,
   PlinthIconButton,
   PlinthListCard,
@@ -19,6 +20,8 @@ import * as badgeStories from '../stories/components/Badge.stories.ts';
 import { badge, type Attributes, type BadgeArgs } from '../stories/components/badge.ts';
 import * as buttonStories from '../stories/components/Button.stories.ts';
 import { button, type ButtonArgs } from '../stories/components/button.ts';
+import * as headerStories from '../stories/components/Header.stories.ts';
+import { header, type HeaderArgs } from '../stories/components/header.ts';
 import * as iconButtonStories from '../stories/components/IconButton.stories.ts';
 import { iconButton, type IconButtonArgs } from '../stories/components/icon-button.ts';
 import * as iconStories from '../stories/components/Icon.stories.ts';
@@ -275,6 +278,15 @@ const cases: ParityCase[] = [
     ...sheetDefaults,
     placement: 'start' as SheetArgs['placement'],
   }),
+  ...storyArgs<HeaderArgs>(headerStories).map(([story, args]) =>
+    headerCase(`Header/${story}`, args),
+  ),
+  headerCase(
+    'Header/with extra attributes',
+    { title: 'Inbox', actions: '<button type="button">Search</button>' },
+    { class: 'app-header', id: 'top', 'data-testid': 'header', 'aria-label': 'Inbox' },
+  ),
+  headerCase('Header/blank slots', { title: 'Settings', leading: '  ', actions: ' ' }),
   iconCase(
     'Icon/with an aria-label attribute',
     { size: 'md', mirror: false, svg: sampleIcons.alert },
@@ -384,6 +396,20 @@ function listCardCase(story: string, args: ListCardArgs, attributes: Attributes 
     markup: listCard(args, attributes),
     vue: { component: PlinthListCard, props: { ...props, ...attributes }, slot, html: true },
     blade: { component: 'list-card', props, attributes, slot },
+  };
+}
+
+function headerCase(story: string, args: HeaderArgs, attributes: Attributes = {}): ParityCase {
+  const props = { title: args.title };
+  const named = {
+    ...(args.leading ? { leading: args.leading } : {}),
+    ...(args.actions ? { actions: args.actions } : {}),
+  };
+  return {
+    story,
+    markup: header(args, attributes),
+    vue: { component: PlinthHeader, props: { ...props, ...attributes }, slot: '', named },
+    blade: { component: 'header', props, attributes, slot: '', named },
   };
 }
 
@@ -608,6 +634,13 @@ describe('parity with the stories', () => {
       'Sheet/empty footer',
       'Sheet/id with spaces',
       'Sheet/unknown placement',
+      'Header/Default',
+      'Header/WithBack',
+      'Header/WithoutLeading',
+      'Header/TitleOnly',
+      'Header/LongTitle',
+      'Header/with extra attributes',
+      'Header/blank slots',
       'Icon/with an aria-label attribute',
     ]);
   });

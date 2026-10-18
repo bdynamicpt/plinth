@@ -693,6 +693,11 @@
       content: '';
       translate: 0 -50%;
     }
+
+    /* An icon button is narrower than 40px, so its hit area grows sideways too. */
+    .plinth-icon-button::before {
+      inset-inline: min(0%, 50% - var(--plinth-touch-target) / 2);
+    }
   }
 
   @media (hover: hover) {
@@ -783,6 +788,118 @@
 
     .plinth-button-spinner {
       forced-color-adjust: none;
+    }
+  }
+}
+
+/* header.css */
+/*
+ * Header: the top bar of the phone shell, with a leading action, the page's title and trailing
+ * actions. It sticks to the top of the page as the content scrolls under it.
+ *
+ * <header class="plinth-header">
+ *   <div class="plinth-header-leading">
+ *     <a class="plinth-button plinth-icon-button" href="/inbox" data-variant="ghost"
+ *       data-size="md" aria-label="Back">
+ *       <span class="plinth-icon" data-size="md" data-mirror aria-hidden="true"><svg>…</svg></span>
+ *     </a>
+ *   </div>
+ *   <h1 class="plinth-header-title">Inbox</h1>
+ *   <div class="plinth-header-actions">
+ *     <button type="button" class="plinth-button plinth-icon-button" data-variant="ghost"
+ *       data-size="md" aria-label="Search">…</button>
+ *   </div>
+ * </header>
+ *
+ * The root is a <header>: at the top of the page (not inside <main>, <article> or <section>) it is
+ * the page's banner landmark, so a page has one. The title is an <h1>, the page's heading, and is
+ * required. It stays on one line and ends in an ellipsis when it doesn't fit.
+ *
+ * The leading part holds one action, usually an icon button: back (a link, with data-mirror on
+ * its icon so it points the other way in right-to-left text) or a menu button that opens a sheet
+ * (commandfor and command="show-modal"). The actions part holds the trailing actions, at most two
+ * or three icon buttons; put the rest in a menu. Both are optional, and printed only when they
+ * have content. Every icon button needs its own name (label). The header needs button.css and
+ * icon.css for them.
+ *
+ * Its height is the header.height component token (56px), plus env(safe-area-inset-top), which
+ * pads it below the status bar and the notch on a phone that draws under them (viewport-fit=cover);
+ * the inline padding clears the notch on a phone held sideways. It is sticky on the
+ * layer.sticky z-index, so it sits above the page and below sheets and menus (the top layer).
+ * Content scrolls under it, so the app sets scroll-padding-block-start on its scrolling element
+ * (calc(var(--plinth-header-height) + env(safe-area-inset-top))) to keep a focused element or an
+ * anchor's target from landing under the header.
+ *
+ * The actions sit var(--plinth-space-2) apart, so on a touch screen the 40px hit areas of 32px
+ * icon buttons don't overlap.
+ *
+ * The app owns the state: the header has no variants or states of its own. What the actions do is
+ * the app's (a link, a commandfor, wire:click, @click on the icon button).
+ */
+
+@layer plinth {
+  .plinth-header {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: var(--plinth-layer-sticky);
+    box-sizing: border-box;
+    display: flex;
+    gap: var(--plinth-space-2);
+    align-items: center;
+    min-block-size: calc(var(--plinth-header-height) + env(safe-area-inset-top));
+    padding-block-start: env(safe-area-inset-top);
+    padding-inline: max(var(--plinth-space-2), env(safe-area-inset-left))
+      max(var(--plinth-space-2), env(safe-area-inset-right));
+    font-family: var(--plinth-font-family-body);
+    color: var(--plinth-color-text);
+    background-color: var(--plinth-color-surface);
+    border-block-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+  }
+
+  .plinth-header:dir(rtl) {
+    padding-inline: max(var(--plinth-space-2), env(safe-area-inset-right))
+      max(var(--plinth-space-2), env(safe-area-inset-left));
+  }
+
+  .plinth-header-leading,
+  .plinth-header-actions {
+    display: flex;
+    flex: none;
+    gap: var(--plinth-space-2);
+    align-items: center;
+  }
+
+  .plinth-header-title {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: var(--plinth-font-size-lg);
+    font-weight: var(--plinth-font-weight-semibold);
+    line-height: var(--plinth-font-leading-tight);
+    letter-spacing: var(--plinth-font-tracking-tight);
+    white-space: nowrap;
+  }
+
+  /* Without a leading action or trailing actions, the title keeps the text's distance from the edge. */
+  .plinth-header-title:first-child {
+    margin-inline-start: var(--plinth-space-2);
+  }
+
+  .plinth-header-title:last-child {
+    margin-inline-end: var(--plinth-space-2);
+  }
+
+  @media (min-width: 768px) {
+    .plinth-header {
+      padding-inline: max(var(--plinth-space-4), env(safe-area-inset-left))
+        max(var(--plinth-space-4), env(safe-area-inset-right));
+    }
+
+    .plinth-header:dir(rtl) {
+      padding-inline: max(var(--plinth-space-4), env(safe-area-inset-right))
+        max(var(--plinth-space-4), env(safe-area-inset-left));
     }
   }
 }
