@@ -4,6 +4,7 @@ import {
   PlinthButton,
   PlinthIcon,
   PlinthIconButton,
+  PlinthListRow,
 } from '@bdynamic/plinth-vue';
 import { createStaticVNode, h, type Component } from 'vue';
 import { renderToString } from 'vue/server-renderer';
@@ -18,6 +19,8 @@ import * as iconButtonStories from '../stories/components/IconButton.stories.ts'
 import { iconButton, type IconButtonArgs } from '../stories/components/icon-button.ts';
 import * as iconStories from '../stories/components/Icon.stories.ts';
 import { icon, type IconArgs } from '../stories/components/icon.ts';
+import * as listRowStories from '../stories/components/ListRow.stories.ts';
+import { listRow, type ListRowArgs } from '../stories/components/list-row.ts';
 import { sampleIcons } from '../stories/components/icons.ts';
 import { normalize, renderBlade } from './markup.ts';
 
@@ -65,6 +68,14 @@ const buttonDefaults: ButtonArgs = {
   size: 'md',
   disabled: false,
   busy: false,
+};
+
+const listRowDefaults: ListRowArgs = {
+  title: 'Notifications',
+  chevron: false,
+  button: false,
+  current: false,
+  disabled: false,
 };
 
 const cases: ParityCase[] = [
@@ -143,6 +154,28 @@ const cases: ParityCase[] = [
     { name: 'Élio Ramos', size: 'lg', status: 'warning', statusLabel: 'Away', decorative: false },
     { class: 'ms-2', id: 'me', 'data-testid': 'me' },
   ),
+  ...storyArgs<ListRowArgs>(listRowStories).map(([story, args]) =>
+    listRowCase(`List row/${story}`, args),
+  ),
+  listRowCase(
+    'List row/with extra attributes',
+    { ...listRowDefaults, button: true },
+    {
+      class: 'ms-2',
+      id: 'sign-out',
+      'data-testid': 'sign-out',
+      'aria-describedby': 'sign-out-help',
+      type: 'submit',
+    },
+  ),
+  listRowCase(
+    'List row/link with extra attributes',
+    { ...listRowDefaults, href: '#notifications', chevron: true },
+    { class: 'ms-2', 'data-testid': 'notifications', type: 'text/html' },
+  ),
+  listRowCase('List row/current button', { ...listRowDefaults, button: true, current: true }),
+  listRowCase('List row/current static row', { ...listRowDefaults, current: true }),
+  listRowCase('List row/disabled static row', { ...listRowDefaults, disabled: true }),
   iconCase(
     'Icon/with an aria-label attribute',
     { size: 'md', mirror: false, svg: sampleIcons.alert },
@@ -215,6 +248,27 @@ function avatarCase(story: string, args: AvatarArgs, attributes: Attributes = {}
     markup: avatar(args, attributes),
     vue: { component: PlinthAvatar, props: { ...props, ...attributes }, slot: '' },
     blade: { component: 'avatar', props, attributes, slot: '' },
+  };
+}
+
+function listRowCase(story: string, args: ListRowArgs, attributes: Attributes = {}): ParityCase {
+  const props = {
+    ...(args.description ? { description: args.description } : {}),
+    chevron: args.chevron,
+    ...(args.href ? { href: args.href } : {}),
+    button: args.button,
+    current: args.current,
+    disabled: args.disabled,
+  };
+  const named = {
+    ...(args.leading ? { leading: args.leading } : {}),
+    ...(args.trailing ? { trailing: args.trailing } : {}),
+  };
+  return {
+    story,
+    markup: listRow(args, attributes),
+    vue: { component: PlinthListRow, props: { ...props, ...attributes }, slot: args.title, named },
+    blade: { component: 'list-row', props, attributes, slot: args.title, named },
   };
 }
 
@@ -319,6 +373,24 @@ describe('parity with the stories', () => {
       'Avatar/WithStatus',
       'Avatar/Decorative',
       'Avatar/with extra attributes',
+      'List row/Default',
+      'List row/WithDescription',
+      'List row/WithIcon',
+      'List row/WithAvatar',
+      'List row/WithValue',
+      'List row/WithBadge',
+      'List row/Link',
+      'List row/Button',
+      'List row/Current',
+      'List row/Disabled',
+      'List row/DisabledLink',
+      'List row/WithAction',
+      'List row/LongText',
+      'List row/with extra attributes',
+      'List row/link with extra attributes',
+      'List row/current button',
+      'List row/current static row',
+      'List row/disabled static row',
       'Icon/with an aria-label attribute',
     ]);
   });

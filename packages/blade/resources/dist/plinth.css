@@ -84,6 +84,7 @@
     --plinth-ref-size-28: 1.75rem;
     --plinth-ref-size-32: 2rem;
     --plinth-ref-size-40: 2.5rem;
+    --plinth-ref-size-44: 2.75rem;
     --plinth-ref-size-56: 3.5rem;
     --plinth-ref-radius-0: 0;
     --plinth-ref-radius-2: 0.125rem;
@@ -146,6 +147,7 @@
     --plinth-focus-ring-width: var(--plinth-ref-border-width-2);
     --plinth-focus-ring-offset: 0;
     --plinth-focus-ring-offset-filled: var(--plinth-ref-border-width-2);
+    --plinth-focus-ring-offset-inset: -2px;
     --plinth-font-family-body: var(--plinth-ref-font-family-sans);
     --plinth-font-family-mono: var(--plinth-ref-font-family-mono);
     --plinth-font-size-xs: var(--plinth-ref-font-size-12);
@@ -179,6 +181,7 @@
     --plinth-size-icon-sm: var(--plinth-ref-size-16);
     --plinth-size-icon-md: var(--plinth-ref-size-20);
     --plinth-size-icon-lg: var(--plinth-ref-size-24);
+    --plinth-size-row: var(--plinth-ref-size-44);
     --plinth-size-avatar-sm: var(--plinth-ref-size-24);
     --plinth-size-avatar-md: var(--plinth-ref-size-32);
     --plinth-size-avatar-lg: var(--plinth-ref-size-40);
@@ -191,6 +194,7 @@
     --plinth-breakpoint-md: 768px;
     --plinth-breakpoint-lg: 1280px;
     --plinth-header-height: var(--plinth-space-14);
+    --plinth-list-row-height: var(--plinth-size-row);
   }
 
   :root,
@@ -825,5 +829,169 @@
 
   .plinth-icon[data-mirror]:dir(rtl) > svg {
     transform: scaleX(-1);
+  }
+}
+
+/* list-row.css */
+/*
+ * List row: one row of a list or a sheet, 44px tall at least.
+ *
+ * <div class="plinth-list-row">
+ *   <span class="plinth-list-row-leading">an icon or an avatar</span>
+ *   <span class="plinth-list-row-content">
+ *     <span class="plinth-list-row-title">Notifications</span>
+ *     <span class="plinth-list-row-description">Email and push</span>
+ *   </span>
+ *   <span class="plinth-list-row-trailing">
+ *     a value, a badge or a control
+ *     <span class="plinth-icon plinth-list-row-chevron" data-size="sm" data-mirror
+ *       aria-hidden="true"><svg>…</svg></span>
+ *   </span>
+ * </div>
+ *
+ * The leading slot, the description and the trailing slot are optional; the chevron is the
+ * row's own (chevron in Blade and Vue), and points the other way in right-to-left text.
+ *
+ * The root is the element the app talks to (ADR 2):
+ * - a static row is a <div>;
+ * - a row that navigates is <a class="plinth-list-row" href="…">;
+ * - a row that acts is <button type="button" class="plinth-list-row">.
+ * A link or button row holds no other control: a switch or an icon button in the trailing slot
+ * needs a static row, and its own accessible name.
+ *
+ * States:
+ * - current: aria-current="page" on a link row (or a static row) for the page being shown, set
+ *   by the app; the selection tint (accent-subtle, accent-text) and a heavier title. A button
+ *   row never prints it: a button is not a page.
+ * - disabled: `disabled` on a <button>; on a link, no href, role="link" and aria-disabled="true".
+ * - hover only where the device can hover; the focus ring on :focus-visible, drawn inside the
+ *   row (focus-ring.offset-inset).
+ *
+ * A hairline divider (color.divider) sits between two rows that follow each other, as siblings
+ * or each as the direct child of its own <li>; a wrapper element in between drops it. The app
+ * resets the list (margin, padding, list-style) and adds role="list", which Safari needs to keep
+ * announcing a list without bullets. The height is --plinth-list-row-height (44px); a description makes the
+ * row taller.
+ */
+
+@layer plinth {
+  .plinth-list-row {
+    box-sizing: border-box;
+    display: flex;
+    gap: var(--plinth-space-3);
+    align-items: center;
+    inline-size: 100%;
+    min-block-size: var(--plinth-list-row-height);
+    padding-block: var(--plinth-space-2);
+    padding-inline: var(--plinth-space-4);
+    margin: 0;
+    font-family: var(--plinth-font-family-body);
+    font-size: var(--plinth-font-size-md);
+    font-weight: var(--plinth-font-weight-regular);
+    line-height: var(--plinth-font-leading-tight);
+    color: var(--plinth-color-text);
+    text-align: start;
+    text-decoration: none;
+    background-color: transparent;
+    border: 0;
+    transition: background-color var(--plinth-duration-fast) var(--plinth-easing-standard);
+  }
+
+  :is(a, button).plinth-list-row {
+    cursor: pointer;
+  }
+
+  li + li > .plinth-list-row {
+    border-block-start: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+  }
+
+  .plinth-list-row + .plinth-list-row {
+    border-block-start: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+  }
+
+  @media (hover: hover) {
+    a.plinth-list-row[href]:not([aria-current='page']):hover,
+    button.plinth-list-row:enabled:not([aria-current='page']):hover {
+      background-color: var(--plinth-color-surface-hover);
+    }
+  }
+
+  a.plinth-list-row[href]:not([aria-current='page']):active,
+  button.plinth-list-row:enabled:not([aria-current='page']):active {
+    background-color: var(--plinth-color-surface-sunken);
+  }
+
+  .plinth-list-row[aria-current='page'] {
+    color: var(--plinth-color-accent-text);
+    background-color: var(--plinth-color-accent-subtle);
+  }
+
+  .plinth-list-row:disabled,
+  .plinth-list-row[aria-disabled='true'] {
+    cursor: not-allowed;
+    opacity: var(--plinth-opacity-disabled);
+  }
+
+  /* Inside the row, so a scrolling sheet or a card doesn't cut the ring off at the sides. */
+  .plinth-list-row:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset-inset);
+  }
+
+  .plinth-list-row-leading {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    color: var(--plinth-color-text-muted);
+  }
+
+  .plinth-list-row-content {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: var(--plinth-space-0-5);
+    min-inline-size: 0;
+  }
+
+  .plinth-list-row-title {
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-list-row-description {
+    font-size: var(--plinth-font-size-sm);
+    line-height: var(--plinth-font-leading-normal);
+    color: var(--plinth-color-text-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-list-row-trailing {
+    display: inline-flex;
+    flex: 0 1 auto;
+    gap: var(--plinth-space-2);
+    align-items: center;
+    max-inline-size: 50%;
+    color: var(--plinth-color-text-muted);
+    text-align: end;
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-list-row-chevron {
+    color: var(--plinth-color-text-subtle);
+  }
+
+  .plinth-list-row[aria-current='page'] .plinth-list-row-title {
+    font-weight: var(--plinth-font-weight-medium);
+  }
+
+  @media (forced-colors: active) {
+    .plinth-list-row[aria-current='page'] {
+      color: HighlightText;
+      background-color: Highlight;
+    }
+
+    .plinth-list-row:disabled,
+    .plinth-list-row[aria-disabled='true'] {
+      color: GrayText;
+    }
   }
 }

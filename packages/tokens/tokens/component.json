@@ -5,5 +5,12 @@
       "$type": "dimension",
       "$value": "{space.14}"
     }
+  },
+  "list-row": {
+    "height": {
+      "$type": "dimension",
+      "$value": "{size.row}",
+      "$description": "The list row's minimum height; a row with a description grows past it."
+    }
   }
 }

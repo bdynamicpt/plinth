@@ -9,4 +9,10 @@ export const focusRingRule = `/* Most focusable elements: the ring sits on the e
 .plinth-button[data-variant='primary']:focus-visible {
   outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
   outline-offset: var(--plinth-focus-ring-offset-filled);
+}
+
+/* Full-width rows in a scrolling container: the ring inside the edge, so it isn't cut off */
+.plinth-list-row:focus-visible {
+  outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+  outline-offset: var(--plinth-focus-ring-offset-inset);
 }`;

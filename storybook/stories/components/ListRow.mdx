@@ -1,0 +1,103 @@
+import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
+import * as ListRowStories from './ListRow.stories';
+
+<Meta of={ListRowStories} />
+
+# List row
+
+One row of a list or a sheet: a setting, a person, a section of the app. It has a title, an
+optional description under it, a leading slot for an icon or an avatar, and a trailing slot for a
+value, a badge or a control. It is 44px tall at least, and grows with a description.
+
+<Canvas of={ListRowStories.WithDescription} />
+<Controls of={ListRowStories.WithDescription} />
+
+## Static, link or button
+
+The row's root is the element the app talks to, so `href`, `wire:click` and `x-on:click` land on
+it (ADR 2):
+
+- a row that only shows something is a `<div>`;
+- a row that navigates gets an **`href`** and becomes an `<a>`;
+- a row that acts (sign out, open a sheet) gets **`button`** and becomes a `<button type="button">`.
+
+Set **`chevron`** on a row that opens another page or a sheet. It points the other way in
+right-to-left text.
+
+<Canvas of={ListRowStories.Link} />
+<Canvas of={ListRowStories.Button} />
+
+## Leading and trailing
+
+The leading slot takes an icon or an avatar. When the avatar shows the person in the title, make
+it **decorative**, so screen readers don't read the name twice. The trailing slot takes a value
+(_English_), a badge or, in a static row, a control.
+
+<Canvas of={ListRowStories.WithAvatar} />
+<Canvas of={ListRowStories.WithValue} />
+<Canvas of={ListRowStories.WithBadge} />
+
+A link or a button can't hold another control, so a row with a switch or an icon button in its
+trailing slot is a static row. Give that control its own accessible name, one that says which
+row it belongs to (_More actions for Ana Lima_).
+
+<Canvas of={ListRowStories.WithAction} />
+
+## States
+
+- **Current:** set `current` on the link row for the page being shown (it prints
+  `aria-current="page"`); the app decides which one it is. It takes the selection tint and a
+  heavier title. A button row doesn't print it, since a button is not a page.
+- **Disabled:** a disabled button row gets `disabled`; a disabled link row loses its `href` and
+  reads as a disabled link (`role="link"`, `aria-disabled="true"`).
+
+<Canvas of={ListRowStories.Current} />
+<Canvas of={ListRowStories.Disabled} />
+<Canvas of={ListRowStories.DisabledLink} />
+
+## In a list
+
+Put rows next to each other, or each as the direct child of its own `<li>` in a `<ul>`, and a
+hairline divider (`--plinth-color-divider`) sits between them; a wrapper element between the
+`<li>` and the row drops it. Reset the list yourself (`margin`, `padding`, `list-style: none`) and
+add `role="list"`, which Safari needs to keep announcing a list without bullets. Long titles and
+descriptions wrap.
+
+The focus ring is drawn inside the row, so a scrolling sheet or a card doesn't cut it off.
+
+<Canvas of={ListRowStories.List} />
+<Canvas of={ListRowStories.LongText} />
+<Canvas of={ListRowStories.RightToLeft} />
+
+## Routing
+
+Plinth never routes. A link row is a plain `<a href>`, so in a single-page app hand it your
+router's link: with Vue Router, `<RouterLink custom v-slot="{ href, navigate, isActive }">`
+around `<PlinthListRow :href="href" :current="isActive" @click="navigate">`; in Livewire, add
+`wire:navigate`. The listener and the attribute land on the row's root.
+
+## Tuning
+
+The minimum height is `--plinth-list-row-height` (44px). A project changes it in its tokens.
+
+## In Blade and Vue
+
+<Source
+  language="html"
+  dark
+  code={`<x-plinth::list-row :href="route('settings.language')" chevron>
+    <x-slot:leading><x-plinth::icon>…</x-plinth::icon></x-slot:leading>
+    Language
+    <x-slot:trailing>English</x-slot:trailing>
+</x-plinth::list-row>
+
+<x-plinth::list-row button wire:click="signOut">Sign out</x-plinth::list-row>
+
+<PlinthListRow href="/overview" :current="route.name === 'overview'">Overview</PlinthListRow>
+
+<PlinthListRow button description="Email and push" @click="openNotifications">
+  Notifications
+</PlinthListRow>`}
+/>
+
+The markup contract is at the top of `packages/css/src/components/list-row.css`.

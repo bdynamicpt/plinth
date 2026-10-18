@@ -57,7 +57,10 @@ describe('tiers', () => {
   it('has primitives, semantic and component tokens', () => {
     expect(tier('primitive').length).toBeGreaterThan(50);
     expect(tier('semantic').length).toBeGreaterThan(30);
-    expect(tier('component').map((t) => t.path.join('.'))).toEqual(['header.height']);
+    expect(tier('component').map((t) => t.path.join('.'))).toEqual([
+      'header.height',
+      'list-row.height',
+    ]);
   });
 
   it('names every primitive --plinth-ref-*, and nothing else', () => {
@@ -107,6 +110,7 @@ describe('tiers', () => {
     expect(token('focus-ring.width').value).toBe('2px');
     expect(token('focus-ring.offset').value).toBe('0');
     expect(token('focus-ring.offset-filled').value).toBe('2px');
+    expect(token('focus-ring.offset-inset').value).toBe('-2px');
   });
 
   it('defaults to Geist and Geist Mono, with system fonts behind them', () => {

@@ -32,6 +32,8 @@ depends on hover. Motion uses the `--plinth-duration-*` tokens, which drop to 0m
 `outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring)` with
 `outline-offset: var(--plinth-focus-ring-offset)`, so it sits on the element's edge. Solid filled
 controls use `--plinth-focus-ring-offset-filled` instead, so the ring doesn't merge with their fill.
+Full-width rows that sit in a scrolling container (list rows) use
+`--plinth-focus-ring-offset-inset`, so the container doesn't cut the ring off.
 See **Foundations → Focus ring** in Storybook. The test runner tabs through every story and fails
 if a focused element doesn't show it.
 

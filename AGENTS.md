@@ -83,7 +83,7 @@ storybook/  never published
   has a parity case with extra attributes.
 - Every focusable element shows the focus ring on `:focus-visible` (outline in
   `--plinth-color-focus-ring` at `--plinth-focus-ring-width`, offset `--plinth-focus-ring-offset`,
-  or `-offset-filled` on solid filled controls); the test runner checks it.
+  `-offset-filled` on solid filled controls, or `-offset-inset` on full-width rows); the test runner checks it.
 - Blade: choices are backed enums in `packages/blade/src/Enums/`; sizes use the one shared `Size`
   (xs to xl, icons included) with each component's supported subset. PHP classes are `final`.
 - Logical properties; touch targets at least 40 × 40 px; nothing hover-only;
