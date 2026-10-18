@@ -1,0 +1,111 @@
+/*
+ * Avatar: a person or an organisation, as an image, initials, or a person glyph.
+ *
+ * <span class="plinth-avatar" data-size="md" role="img" aria-label="Ana Lima, Online">
+ *   <img class="plinth-avatar-image" src="…" alt="">
+ *     or <span class="plinth-avatar-initials" aria-hidden="true">AL</span>
+ *     or <svg class="plinth-avatar-glyph" aria-hidden="true">…</svg>
+ *   <span class="plinth-avatar-status" data-tone="success" aria-hidden="true"></span>
+ * </span>
+ *
+ * The root carries the name (role="img", aria-label), with the status label after a comma. A
+ * decorative avatar, next to the name it shows, has aria-hidden="true" and no role or label.
+ * Image first, then initials (from the name, or given), then the glyph.
+ *
+ * Sizes (data-size): sm 24px, md 32px (default), lg 40px, xl 56px. Round by default
+ * (radius.pill), so a brand can square it. The status dot takes the badge's tones (data-tone:
+ * neutral, success, warning, danger) and a ring in the page colour.
+ */
+
+@layer plinth {
+  .plinth-avatar {
+    --plinth-avatar-size: var(--plinth-size-avatar-md);
+    --plinth-avatar-status: var(--plinth-color-text-subtle);
+
+    position: relative;
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--plinth-avatar-size);
+    block-size: var(--plinth-avatar-size);
+    font-family: var(--plinth-font-family-body);
+    font-size: var(--plinth-font-size-xs);
+    font-weight: var(--plinth-font-weight-medium);
+    line-height: 1;
+    vertical-align: middle;
+    color: var(--plinth-color-text-muted);
+    user-select: none;
+    background-color: var(--plinth-color-surface-hover);
+    border-radius: var(--plinth-radius-pill);
+  }
+
+  /* The hairline ring, drawn over an image too. */
+  .plinth-avatar::after {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: '';
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 var(--plinth-border-width-thin) var(--plinth-color-border);
+  }
+
+  .plinth-avatar[data-size='sm'] {
+    --plinth-avatar-size: var(--plinth-size-avatar-sm);
+
+    font-size: var(--plinth-font-size-xs);
+  }
+
+  .plinth-avatar[data-size='lg'] {
+    --plinth-avatar-size: var(--plinth-size-avatar-lg);
+
+    font-size: var(--plinth-font-size-md);
+  }
+
+  .plinth-avatar[data-size='xl'] {
+    --plinth-avatar-size: var(--plinth-size-avatar-xl);
+
+    font-size: var(--plinth-font-size-xl);
+  }
+
+  .plinth-avatar-image {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+  }
+
+  .plinth-avatar-glyph {
+    inline-size: 60%;
+    block-size: 60%;
+  }
+
+  .plinth-avatar-status {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-end: 0;
+    inline-size: calc(var(--plinth-avatar-size) * 0.3);
+    block-size: calc(var(--plinth-avatar-size) * 0.3);
+    background-color: var(--plinth-avatar-status);
+    border-radius: 50%;
+    box-shadow: 0 0 0 var(--plinth-border-width-thick) var(--plinth-color-surface);
+  }
+
+  .plinth-avatar-status[data-tone='success'] {
+    --plinth-avatar-status: var(--plinth-color-success);
+  }
+
+  .plinth-avatar-status[data-tone='warning'] {
+    --plinth-avatar-status: var(--plinth-color-warning);
+  }
+
+  .plinth-avatar-status[data-tone='danger'] {
+    --plinth-avatar-status: var(--plinth-color-danger);
+  }
+
+  @media (forced-colors: active) {
+    .plinth-avatar-status {
+      background-color: CanvasText;
+    }
+  }
+}
