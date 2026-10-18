@@ -1,6 +1,7 @@
 <?php
 
 use BDynamic\Plinth\Enums\ButtonVariant;
+use BDynamic\Plinth\Enums\HeadingLevel;
 use BDynamic\Plinth\Enums\Size;
 use BDynamic\Plinth\Enums\Tone;
 use Illuminate\Support\Facades\Blade;
@@ -15,7 +16,8 @@ it('resolves a case, its value, or nothing to a case', function () {
 it('defaults each choice the way the components do', function () {
     expect(Tone::default())->toBe(Tone::Neutral)
         ->and(ButtonVariant::default())->toBe(ButtonVariant::Primary)
-        ->and(Size::default())->toBe(Size::Medium);
+        ->and(Size::default())->toBe(Size::Medium)
+        ->and(HeadingLevel::default())->toBe(HeadingLevel::Two);
 });
 
 it('sizes a control\'s icons to the control', function () {
@@ -54,5 +56,8 @@ it('matches the lists the Vue layer and the stories use', function () {
     }
     foreach (Size::values() as $value) {
         expect($vue('size.ts'))->toContain("'{$value}'");
+    }
+    foreach (HeadingLevel::values() as $value) {
+        expect($vue('heading.ts'))->toContain("'{$value}'");
     }
 });
