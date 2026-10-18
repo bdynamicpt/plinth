@@ -12,5 +12,12 @@
       "$value": "{size.row}",
       "$description": "The list row's minimum height; a row with a description grows past it."
     }
+  },
+  "pill": {
+    "height": {
+      "$type": "dimension",
+      "$value": "{control.md}",
+      "$description": "A pill's height; on a touch screen it keeps a 40px hit area."
+    }
   }
 }

@@ -195,6 +195,7 @@
     --plinth-breakpoint-lg: 1280px;
     --plinth-header-height: var(--plinth-space-14);
     --plinth-list-row-height: var(--plinth-size-row);
+    --plinth-pill-height: var(--plinth-control-md);
   }
 
   :root,
@@ -992,6 +993,178 @@
     .plinth-list-row:disabled,
     .plinth-list-row[aria-disabled='true'] {
       color: GrayText;
+    }
+  }
+}
+
+/* pill-row.css */
+/*
+ * Pill row: a row of pills for filters, segments or sub-pages.
+ *
+ * <div class="plinth-pill-row" role="group" aria-label="Status">
+ *   <button type="button" class="plinth-pill" aria-pressed="true">
+ *     <span class="plinth-pill-label">Open</span>
+ *     <span class="plinth-pill-count">12</span>
+ *   </button>
+ *   <button type="button" class="plinth-pill" aria-pressed="false">
+ *     <span class="plinth-pill-label">Closed</span>
+ *   </button>
+ * </div>
+ *
+ * The root is a <div role="group">, named by aria-label (label in Blade and Vue) or by the app's
+ * own aria-labelledby. A row of links that navigates is <nav class="plinth-pill-row"> instead,
+ * with no role (nav in Blade and Vue), and its pills are links:
+ *
+ * <a class="plinth-pill" href="…" aria-current="page"><span class="plinth-pill-label">…</span></a>
+ *
+ * Each pill is its own component (<x-plinth::pill>, PlinthPill), so the app's attributes and
+ * listeners land on the pill (ADR 2). The count is optional. plinth-pill-label has no rule of its
+ * own: it is a hook for a project's styles.
+ *
+ * States, set by the app:
+ * - selected: a button pill always prints aria-pressed, "true" or "false"; a link pill prints
+ *   aria-current="page" for the page being shown. Selected takes the selection tint
+ *   (accent-subtle, accent-text) and an accent edge, where the others have a neutral one.
+ * - disabled: `disabled` on a <button>; on a link, no href, role="link" and aria-disabled="true".
+ * - hover only where the device can hover; the focus ring on :focus-visible.
+ *
+ * Layout: on a phone the row scrolls sideways, with no visible scrollbar, and snaps to the pills;
+ * from 768px it wraps. The row's padding keeps the focus ring and the 40px touch target of the
+ * pills inside the scrolling area, whatever --plinth-pill-height is (32px by default). A pill is
+ * at least 40px wide.
+ */
+
+@layer plinth {
+  .plinth-pill-row {
+    box-sizing: border-box;
+    display: flex;
+    gap: var(--plinth-space-2);
+    align-items: center;
+    max-inline-size: 100%;
+    padding-block: max(
+      var(--plinth-space-1),
+      (var(--plinth-touch-target) - var(--plinth-pill-height)) / 2
+    );
+    padding-inline: var(--plinth-space-1);
+    margin: 0;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: inline proximity;
+    scroll-padding-inline: var(--plinth-space-1);
+    scrollbar-width: none;
+  }
+
+  .plinth-pill {
+    position: relative;
+    box-sizing: border-box;
+    display: inline-flex;
+    flex: none;
+    gap: var(--plinth-space-2);
+    align-items: center;
+    justify-content: center;
+    min-inline-size: var(--plinth-touch-target);
+    min-block-size: var(--plinth-pill-height);
+    padding-block: 0;
+    padding-inline: var(--plinth-space-3);
+    margin: 0;
+    font-family: var(--plinth-font-family-body);
+    font-size: var(--plinth-font-size-sm);
+    font-weight: var(--plinth-font-weight-medium);
+    line-height: var(--plinth-font-leading-tight);
+    color: var(--plinth-color-text);
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    scroll-snap-align: start;
+    background-color: transparent;
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-border-strong);
+    border-radius: var(--plinth-radius-pill);
+    transition:
+      background-color var(--plinth-duration-fast) var(--plinth-easing-standard),
+      border-color var(--plinth-duration-fast) var(--plinth-easing-standard),
+      color var(--plinth-duration-fast) var(--plinth-easing-standard);
+  }
+
+  /* A 40px touch target through an invisible hit area, as on the button (ADR 3). */
+  @media (pointer: coarse) {
+    .plinth-pill::before {
+      position: absolute;
+      inset-block-start: 50%;
+      inset-inline: 0;
+      block-size: max(100%, var(--plinth-touch-target));
+      content: '';
+      translate: 0 -50%;
+    }
+  }
+
+  @media (hover: hover) {
+    a.plinth-pill[href]:not([aria-current='page']):hover,
+    button.plinth-pill:enabled:not([aria-pressed='true']):hover {
+      background-color: var(--plinth-color-surface-hover);
+    }
+  }
+
+  a.plinth-pill[href]:not([aria-current='page']):active,
+  button.plinth-pill:enabled:not([aria-pressed='true']):active {
+    background-color: var(--plinth-color-surface-sunken);
+  }
+
+  .plinth-pill:is([aria-pressed='true'], [aria-current='page']) {
+    color: var(--plinth-color-accent-text);
+    background-color: var(--plinth-color-accent-subtle);
+    border-color: var(--plinth-color-accent);
+  }
+
+  .plinth-pill:disabled,
+  .plinth-pill[aria-disabled='true'] {
+    cursor: not-allowed;
+    opacity: var(--plinth-opacity-disabled);
+  }
+
+  .plinth-pill:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset);
+  }
+
+  .plinth-pill-count {
+    font-weight: var(--plinth-font-weight-regular);
+    font-variant-numeric: tabular-nums;
+    color: var(--plinth-color-text-muted);
+  }
+
+  .plinth-pill:is([aria-pressed='true'], [aria-current='page']) .plinth-pill-count {
+    color: inherit;
+  }
+
+  /* Wider screens have room: the pills wrap onto more lines instead of scrolling. */
+  @media (min-width: 768px) {
+    .plinth-pill-row {
+      flex-wrap: wrap;
+      overflow-x: visible;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .plinth-pill {
+      border-color: ButtonText;
+    }
+
+    .plinth-pill:is([aria-pressed='true'], [aria-current='page']) {
+      color: HighlightText;
+      background-color: Highlight;
+      border-color: Highlight;
+    }
+
+    .plinth-pill:is([aria-pressed='true'], [aria-current='page']) .plinth-pill-count {
+      color: HighlightText;
+    }
+
+    .plinth-pill:disabled,
+    .plinth-pill[aria-disabled='true'] {
+      color: GrayText;
+      background-color: Canvas;
+      border-color: GrayText;
     }
   }
 }

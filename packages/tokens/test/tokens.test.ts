@@ -60,6 +60,7 @@ describe('tiers', () => {
     expect(tier('component').map((t) => t.path.join('.'))).toEqual([
       'header.height',
       'list-row.height',
+      'pill.height',
     ]);
   });
 
