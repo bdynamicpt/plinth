@@ -17,6 +17,13 @@ export function table(head: string[], rows: string[][]): string {
 
 export const code = (text: string) => `<code>${text}</code>`;
 
+const escapeHtml = (text: string) =>
+  text.replace(/[&<>]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[char]!);
+
+/** A block of code: escaped, in the mono font, scrolling sideways on narrow screens. */
+export const codeBlock = (text: string, label: string) =>
+  `<pre class="sb-code" tabindex="0" aria-label="${label}"><code>${escapeHtml(text)}</code></pre>`;
+
 export const page = (...sections: string[]) => `<div class="sb-page">${sections.join('')}</div>`;
 
 /** Foundations pages are one story each, shown on their own (no docs page). */
