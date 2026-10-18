@@ -68,7 +68,9 @@ storybook/  never published
 ## Working in this repo
 
 - Licence: MIT.
-- Commit to `main` directly (no stacked pull requests). Commit and push after each step.
+- `main` is protected: no direct pushes, every change goes through a pull request, and the `ci`
+  check must pass before it can be merged. Branch from `main` and target `main` (no stacked pull
+  requests). Commit and push after each step.
 - Commit and PR bodies are plain words explaining the change, with no session links or
   `Claude-Session` trailers.
 - UI pull requests include screenshots at 390, 768 and 1440 px, light and dark.
