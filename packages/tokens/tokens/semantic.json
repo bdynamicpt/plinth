@@ -246,6 +246,14 @@
       "xl": {
         "$value": "{ref.size.56}"
       }
+    },
+    "dialog": {
+      "$value": "{ref.size.480}",
+      "$description": "The width of a dialog or a centred sheet on a wider screen (480 px)."
+    },
+    "panel": {
+      "$value": "{ref.size.400}",
+      "$description": "The width of a side panel on a wider screen (400 px)."
     }
   },
   "layer": {
