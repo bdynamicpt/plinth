@@ -13,8 +13,7 @@ Planned commands (from issue #1): `npm ci`, `npx turbo run lint test build build
 
 ## What Plinth is
 
-The design system of BDynamic's projects. Nothing in Plinth may know about any one consumer project
-(the first is Agroglobal: a Filament panel in Blade and a public site in Inertia + Vue 3).
+The design system of BDynamic's projects. Nothing in Plinth may know about any one consumer project.
 
 - **Tokens are the source of truth:** colour (light and dark), type, spacing, radii, layers
   (z-index), breakpoints, motion. One source, built to CSS custom properties, a JS/TS export and a
