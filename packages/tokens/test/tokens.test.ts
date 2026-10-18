@@ -61,6 +61,8 @@ describe('tiers', () => {
       'header.height',
       'list-row.height',
       'pill.height',
+      'sheet.width',
+      'sheet.side-width',
     ]);
   });
 

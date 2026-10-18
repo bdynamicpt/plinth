@@ -1,0 +1,168 @@
+import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
+import * as SheetStories from './Sheet.stories';
+
+<Meta of={SheetStories} />
+
+# Sheet
+
+A modal panel for a task that sits on top of the page: filters, a short form, a confirmation, a
+list of options. On a phone it slides up from the bottom; from 768px up it shows as a dialog in
+the middle of the screen, or as a full-height panel on the side.
+
+The sheets on this page stay closed until you press their button; open a story on its own to see
+it open.
+
+<Canvas of={SheetStories.Default} />
+<Controls of={SheetStories.Default} />
+
+## Markup
+
+<Source
+  language="html"
+  dark
+  code={`<button type="button" class="plinth-button" data-variant="secondary" data-size="md"
+  commandfor="filters" command="show-modal">Filters</button>
+
+<dialog id="filters" class="plinth-sheet" data-placement="center" closedby="any"
+  aria-labelledby="filters-title" aria-describedby="filters-description">
+  <div class="plinth-sheet-header">
+    <h2 id="filters-title" class="plinth-sheet-title">Filters</h2>
+    <p id="filters-description" class="plinth-sheet-description">Only the items that match are shown.</p>
+    <button type="button" class="plinth-button plinth-icon-button plinth-sheet-close"
+      data-variant="ghost" data-size="md" aria-label="Close" commandfor="filters" command="close">
+      <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
+    </button>
+  </div>
+  <div class="plinth-sheet-body">…</div>
+  <div class="plinth-sheet-footer">…</div>
+</dialog>`}
+/>
+
+- **`plinth-sheet`**, the root, is a `<dialog>`; a project's classes and attributes land on it.
+  It needs an **`id`**: the close button's `commandfor` and the `aria-labelledby` point at it.
+  Blade and Vue generate one when you leave it out, but pass your own when a button elsewhere
+  opens the sheet.
+- **`plinth-sheet-title`** is an `<h2>` and the sheet's accessible name. It is required.
+- **`plinth-sheet-description`** is optional, and becomes the sheet's accessible description
+  (`aria-describedby`). Leave it out when the body says enough.
+- **`plinth-sheet-close`** is an [icon button](?path=/docs/components-icon-button--docs), and
+  is always there. Set its name with **`close-label`** (Blade) or **`closeLabel`** (Vue) in the
+  page's language; it is "Close" by default. The sheet needs `button.css` and `icon.css`.
+- **`plinth-sheet-body`** holds the content and scrolls when it is taller than the screen.
+- **`plinth-sheet-footer`** is optional, usually the sheet's actions. On a phone they share its
+  width; from 768px up they sit at the end.
+
+## Placement
+
+**`data-placement`** sets how the sheet shows from 768px up. On a phone every sheet is a bottom
+sheet.
+
+| Value              | From 768px up                                                         |
+| ------------------ | --------------------------------------------------------------------- |
+| `center` (default) | a dialog in the middle of the screen, `--plinth-sheet-width` wide     |
+| `end`              | a full-height panel on the end edge, `--plinth-sheet-side-width` wide |
+
+An unknown value falls back to `center`. The end edge is the right in left-to-right text and the
+left in right-to-left text.
+
+<Canvas of={SheetStories.SidePanel} />
+
+## Opening and closing
+
+The sheet is a native modal dialog (ADR 2), so the browser does the work: it puts the sheet above
+everything, dims the page behind it and makes it inert, keeps focus inside, closes on Escape and
+returns focus to the button that opened it. Open is the dialog's own `open` attribute, never a
+class.
+
+- **Open it** with a button that has `commandfor="<id>" command="show-modal"`, with no script, or
+  call `showModal()` on the dialog. Don't add `open` to the markup: that shows the dialog without
+  making it modal.
+- **Close it** with the close button, Escape, or any button with `command="close"` (an Apply or
+  Cancel in the footer). A `<form method="dialog">` inside closes it on submit too.
+- **Tapping the backdrop** closes it where the browser supports `closedby="any"`. Safari doesn't
+  yet, which is why the close button is always there. Set `closedby="closerequest"` on a sheet
+  that must not close on a stray tap, such as a form with unsaved changes.
+- When it closes, the dialog fires **`close`**.
+
+<Canvas of={SheetStories.NoBackdropClose} />
+
+In Blade, the same sheet with its footer, and a button that opens it:
+
+<Source
+  language="html"
+  dark
+  code={`<x-plinth::button variant="secondary" commandfor="filters" command="show-modal">Filters</x-plinth::button>
+
+<x-plinth::sheet id="filters" title="Filters" description="Only the items that match are shown.">
+…
+<x-slot:footer>
+<x-plinth::button variant="secondary" wire:click="resetFilters">Reset</x-plinth::button>
+<x-plinth::button commandfor="filters" command="close">Apply</x-plinth::button>
+</x-slot:footer>
+</x-plinth::sheet>`}
+/>
+
+From Alpine, `x-ref="filters"` on the sheet and `$refs.filters.showModal()`.
+
+**In Livewire,** a re-render would morph the open dialog back to the server's markup and drop its
+`open` attribute, closing it mid-task. Put `wire:ignore.self` on the sheet (or keep it outside
+the component that re-renders), and always pass an `id`: a generated one changes on every
+render. Blade needs a `title` and throws without one.
+
+In Vue, the component exposes **`showModal()`** and **`close()`**, and emits **`close`** (with
+the dialog's native event) whenever the dialog closes. It needs a `title` and throws without one:
+
+<Source
+  language="html"
+  dark
+  code={`<PlinthButton variant="secondary" @click="filters.showModal()">Filters</PlinthButton>
+
+<PlinthSheet ref="filters" id="filters" title="Filters" @close="applyFilters">
+  …
+  <template #footer>
+    <PlinthButton commandfor="filters" command="close">Apply</PlinthButton>
+  </template>
+</PlinthSheet>`}
+/>
+
+## Scrolling
+
+The body scrolls on its own, and scrolling past its end doesn't move the page
+(`overscroll-behavior: contain`). While a sheet is open the page under it doesn't scroll at all
+(`html:has(.plinth-sheet:modal)`), and `scrollbar-gutter: stable` keeps the page from shifting
+when its scrollbar goes. On a phone the sheet leaves a gap at the top, so it reads as a sheet
+over the page, and its last part clears the home indicator; a side panel clears it, and the
+notch on a phone held sideways, too.
+
+The body resets the margins of its first and last child, so its padding is its edge.
+
+## The on-screen keyboard
+
+On a phone the sheet sits on the bottom edge. Its height is capped by `100dvh`, but iOS lays the
+keyboard over the page instead of resizing it, so a field low in the sheet can end up under the
+keyboard. For a sheet with a form:
+
+- set `interactive-widget=resizes-content` in the page's viewport meta, where the browser
+  supports it, so the viewport (and the sheet) shrinks above the keyboard:
+  `<meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">`;
+- keep the fields near the top of the sheet, with its actions in the footer.
+
+<Canvas of={SheetStories.LongContent} />
+
+## Motion
+
+The sheet slides up on a phone, fades and rises a little as a dialog, and slides in from the side
+as a panel, on `--plinth-duration-normal` with the enter and exit easings. Under
+`prefers-reduced-motion` the durations drop to 0ms, so it simply appears.
+
+## Depth
+
+A sheet floats above the page, so it is one of the few places with a shadow (ADR 3):
+`--plinth-elevation-3`, on `--plinth-color-surface-raised` with a hairline edge, over a
+backdrop in `--plinth-color-overlay`.
+
+<Canvas of={SheetStories.WithDescription} />
+<Canvas of={SheetStories.WithoutFooter} />
+<Canvas of={SheetStories.Confirmation} />
+<Canvas of={SheetStories.LongTitle} />
+<Canvas of={SheetStories.RightToLeft} />
