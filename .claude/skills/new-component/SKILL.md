@@ -33,15 +33,15 @@ node .claude/skills/new-component/scaffold.ts <name>   # kebab case
 
 It writes a minimal component in every layer, all printing `<div class="plinth-<name>">…</div>`:
 
-| File                                                         | Holds                                     |
-| ------------------------------------------------------------ | ----------------------------------------- |
-| `packages/css/src/components/<name>.css`                     | the contract comment and `@layer plinth`  |
-| `storybook/stories/components/<name>.ts`                     | the markup function (the contract itself) |
-| `storybook/stories/components/<Name>.stories.ts`             | the stories and the docs description      |
-| `packages/blade/resources/views/components/<name>.blade.php` | `<x-plinth::<name>>`                      |
-| `packages/blade/tests/Feature/<Name>Test.php`                | Pest tests                                |
-| `packages/vue/src/Plinth<Name>.vue`                          | the Vue component                         |
-| `packages/vue/test/Plinth<Name>.test.ts`                     | Vitest tests                              |
+| File                                                         | Holds                                                                          |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| `packages/css/src/components/<name>.css`                     | the contract comment and `@layer plinth`                                       |
+| `storybook/stories/components/<name>.ts`                     | the markup function (the contract itself)                                      |
+| `storybook/stories/components/<Name>.stories.ts`             | the stories, the docs description and the import of the component's source CSS |
+| `packages/blade/resources/views/components/<name>.blade.php` | `<x-plinth::<name>>`                                                           |
+| `packages/blade/tests/Feature/<Name>Test.php`                | Pest tests                                                                     |
+| `packages/vue/src/Plinth<Name>.vue`                          | the Vue component                                                              |
+| `packages/vue/test/Plinth<Name>.test.ts`                     | Vitest tests                                                                   |
 
 Then by hand:
 

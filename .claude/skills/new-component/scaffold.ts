@@ -53,6 +53,7 @@ export function ${camel}({ label }: ${Name}Args): string {
 
   [`storybook/stories/components/${Name}.stories.ts`]: `import type { Meta, StoryObj } from '@storybook/html-vite';
 import { ${camel}, type ${Name}Args } from './${name}.ts';
+import '@bdynamic/plinth-css/src/components/${name}.css';
 
 const meta = {
   title: 'Components/${title}',

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
 import { badge, tones, type BadgeArgs } from './badge.ts';
+import '@bdynamic/plinth-css/src/components/badge.css';
 
 const meta = {
   title: 'Components/Badge',
