@@ -1,6 +1,6 @@
 import { withThemeByDataAttribute } from '@storybook/addon-themes';
 import type { Preview } from '@storybook/html-vite';
-import '@bdynamic/plinth-css/plinth.css';
+import '@bdynamic/plinth-css/tokens.css';
 import '../brands/example.css';
 import './preview.css';
 
