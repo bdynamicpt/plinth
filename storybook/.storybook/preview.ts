@@ -89,7 +89,7 @@ const preview: Preview = {
     // Sets data-theme on <html>; the tokens do the rest.
     withThemeByDataAttribute({
       themes: { light: 'light', dark: 'dark' },
-      defaultTheme: 'light',
+      defaultTheme: 'dark',
       attributeName: 'data-theme',
     }),
   ],

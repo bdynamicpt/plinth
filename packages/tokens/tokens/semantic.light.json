@@ -11,21 +11,46 @@
     "surface-sunken": {
       "$value": "{ref.color.neutral.100}"
     },
+    "surface-hover": {
+      "$value": "{ref.color.neutral.150}",
+      "$description": "A small surface step for hover, never a colour jump."
+    },
     "text": {
-      "$value": "{ref.color.neutral.900}"
+      "$value": "{ref.color.neutral.950}"
     },
     "text-muted": {
       "$value": "{ref.color.neutral.600}"
     },
+    "text-subtle": {
+      "$value": "{ref.color.neutral.500}",
+      "$description": "The third text level: placeholders, timestamps, disabled labels."
+    },
     "border": {
-      "$value": "{ref.color.black-alpha.8}",
+      "$value": "{ref.color.ink-alpha.10}",
       "$description": "Translucent, so it sits right on any surface."
     },
     "border-strong": {
-      "$value": "{ref.color.black-alpha.20}"
+      "$value": "{ref.color.ink-alpha.20}"
     },
     "divider": {
-      "$value": "{ref.color.black-alpha.5}"
+      "$value": "{ref.color.ink-alpha.6}"
+    },
+    "primary": {
+      "$value": "{ref.color.neutral.950}",
+      "$description": "The primary button: inverted neutral by default (ADR 3). A brand usually sets its own colour here, with primary-hover, primary-active, on-primary and primary-edge."
+    },
+    "primary-hover": {
+      "$value": "{ref.color.neutral.800}"
+    },
+    "primary-active": {
+      "$value": "{ref.color.neutral.700}"
+    },
+    "on-primary": {
+      "$value": "{ref.color.neutral.0}"
+    },
+    "primary-edge": {
+      "$value": "{ref.color.white-alpha.12}",
+      "$description": "A 1px inner edge on the primary button, instead of a shadow."
     },
     "accent": {
       "$value": "{ref.color.brand.600}"
@@ -98,7 +123,7 @@
     "$type": "shadow",
     "1": {
       "$value": {
-        "color": "{ref.color.black-alpha.5}",
+        "color": "{ref.color.black-alpha.10}",
         "offsetX": "0",
         "offsetY": "1px",
         "blur": "2px",
@@ -107,7 +132,7 @@
     },
     "2": {
       "$value": {
-        "color": "{ref.color.black-alpha.8}",
+        "color": "{ref.color.black-alpha.15}",
         "offsetX": "0",
         "offsetY": "4px",
         "blur": "12px",
@@ -116,7 +141,7 @@
     },
     "3": {
       "$value": {
-        "color": "{ref.color.black-alpha.12}",
+        "color": "{ref.color.black-alpha.15}",
         "offsetX": "0",
         "offsetY": "12px",
         "blur": "32px",

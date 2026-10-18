@@ -1,7 +1,8 @@
 /*
  * Tidewater: a made-up brand that shows how a project brings its own look to Plinth.
  *
- * It overrides semantic tokens only, outside any layer (Plinth's own tokens are in
+ * It overrides semantic tokens only, including a coloured primary button (Plinth's own is
+ * inverted neutral), outside any layer (Plinth's own tokens are in
  * @layer plinth, so these win). No component CSS is touched. A real project keeps a file like
  * this in its own repository and scopes it to :root instead of [data-brand].
  */
@@ -23,6 +24,10 @@
   --plinth-color-accent-hover: #115e59;
   --plinth-color-accent-active: #134e4a;
   --plinth-color-accent-subtle: #e6f4f1;
+  --plinth-color-primary: #0f766e;
+  --plinth-color-primary-hover: #115e59;
+  --plinth-color-primary-active: #134e4a;
+  --plinth-color-on-primary: #fff;
   --plinth-color-accent-text: #115e59;
   --plinth-color-on-accent: #fff;
   --plinth-color-focus-ring: #0f766e;
@@ -42,6 +47,10 @@
   --plinth-color-accent-hover: #115e59;
   --plinth-color-accent-active: #134e4a;
   --plinth-color-accent-subtle: #0f2e2b;
+  --plinth-color-primary: #2dd4bf;
+  --plinth-color-primary-hover: #5eead4;
+  --plinth-color-primary-active: #99f6e4;
+  --plinth-color-on-primary: #042f2e;
   --plinth-color-accent-text: #5eead4;
   --plinth-color-on-accent: #fff;
   --plinth-color-focus-ring: #5eead4;

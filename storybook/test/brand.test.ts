@@ -57,6 +57,7 @@ describe('the example brand', () => {
 
   it('changes colours, radii and the font', () => {
     expect(light).toHaveProperty('--plinth-color-accent');
+    expect(light).toHaveProperty('--plinth-color-primary');
     expect(light).toHaveProperty('--plinth-radius-pill');
     expect(light).toHaveProperty('--plinth-font-family-body');
   });
@@ -77,6 +78,9 @@ describe('the example brand', () => {
       ['on-accent', 'accent'],
       ['on-accent', 'accent-hover'],
       ['on-accent', 'accent-active'],
+      ['on-primary', 'primary'],
+      ['on-primary', 'primary-hover'],
+      ['on-primary', 'primary-active'],
     ])('%s on %s meets WCAG AA (4.5:1)', (fg, bg) => {
       expect(contrast(color(fg), color(bg))).toBeGreaterThanOrEqual(4.5);
     });

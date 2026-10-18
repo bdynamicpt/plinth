@@ -37,6 +37,6 @@ it('registers the fonts with Filament\'s asset manager', function () {
         ->and($fonts[0])->toBeInstanceOf(Font::class)
         ->and($fonts[0]->getPath())->toBe(Plinth::fontsPath())
         ->and(Plinth::fontsPath().'/index.css')->toBeFile()
-        ->and(Plinth::fontsPath().'/Geist-Variable.woff2')->toBeFile()
-        ->and(Plinth::fontsPath().'/OFL.txt')->toBeFile();
+        ->and(Plinth::fontsPath().'/geist/geist-latin-wght-normal.woff2')->toBeFile()
+        ->and(Plinth::fontsPath().'/geist/LICENSE')->toBeFile();
 });
