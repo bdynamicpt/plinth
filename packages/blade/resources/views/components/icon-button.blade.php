@@ -15,16 +15,16 @@
     if (blank($name)) {
         throw new InvalidArgumentException('<x-plinth::icon-button> needs a label: it is the only name the button has.');
     }
-    $variant = \BDynamic\Plinth\Plinth::buttonVariant($variant);
-    $size = \BDynamic\Plinth\Plinth::buttonSize($size);
+    $variant = \BDynamic\Plinth\Enums\ButtonVariant::resolve($variant ?? \BDynamic\Plinth\Enums\ButtonVariant::Ghost);
+    $size = \BDynamic\Plinth\Enums\ButtonSize::resolve($size);
     $isLink = filled($href);
     $isBusy = $busy && ! $disabled;
     $root = array_filter([
         'class' => 'plinth-button plinth-icon-button',
         'type' => $isLink ? null : 'button',
         'href' => $isLink && ! $disabled ? $href : null,
-        'data-variant' => $variant,
-        'data-size' => $size,
+        'data-variant' => $variant->value,
+        'data-size' => $size->value,
         'aria-label' => $name,
         'aria-pressed' => $pressed === null || $isLink ? null : ($pressed ? 'true' : 'false'),
         'disabled' => $disabled && ! $isLink ? '' : null,
@@ -37,6 +37,6 @@
     @if ($isBusy)
         <span class="plinth-button-spinner" aria-hidden="true"></span>
     @else
-        <span class="plinth-icon" data-size="{{ $size === 'sm' ? 'sm' : 'md' }}" @if ($mirror) data-mirror @endif aria-hidden="true">{{ $slot }}</span>
+        <span class="plinth-icon" data-size="{{ $size->iconSize()->value }}" @if ($mirror) data-mirror @endif aria-hidden="true">{{ $slot }}</span>
     @endif
 </{{ $isLink ? 'a' : 'button' }}>
