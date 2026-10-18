@@ -72,7 +72,8 @@ describe('PlinthListRow', () => {
       slots: { default: () => '<b>x</b>' },
     });
 
-    expect(wrapper.html()).toContain('&lt;b&gt;x&lt;/b&gt;').toContain('&lt;b&gt;y&lt;/b&gt;');
+    expect(wrapper.html()).toContain('&lt;b&gt;x&lt;/b&gt;');
+    expect(wrapper.html()).toContain('&lt;b&gt;y&lt;/b&gt;');
   });
 
   it('passes extra attributes and listeners to its root', async () => {
