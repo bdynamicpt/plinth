@@ -55,6 +55,16 @@ enum Size: string
         return [self::Small, self::Medium, self::Large];
     }
 
+    /**
+     * The avatar sizes (24, 32, 40 and 56 px).
+     *
+     * @return list<self>
+     */
+    public static function avatars(): array
+    {
+        return [self::Small, self::Medium, self::Large, self::ExtraLarge];
+    }
+
     /** The size of the icons inside a control of this size. */
     public function iconSize(): self
     {

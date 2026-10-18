@@ -223,6 +223,21 @@
       "lg": {
         "$value": "{ref.size.24}"
       }
+    },
+    "avatar": {
+      "$description": "Avatar sizes (24, 32, 40 and 56 px). md is the default.",
+      "sm": {
+        "$value": "{ref.size.24}"
+      },
+      "md": {
+        "$value": "{ref.size.32}"
+      },
+      "lg": {
+        "$value": "{ref.size.40}"
+      },
+      "xl": {
+        "$value": "{ref.size.56}"
+      }
     }
   },
   "layer": {

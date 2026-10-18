@@ -118,6 +118,15 @@ describe('tiers', () => {
     expect(token('font.tracking.tight').value).toBe('-0.02em');
   });
 
+  it('has avatar sizes of 24, 32, 40 and 56 px', () => {
+    expect(['sm', 'md', 'lg', 'xl'].map((s) => token(`size.avatar.${s}`).value)).toEqual([
+      '1.5rem',
+      '2rem',
+      '2.5rem',
+      '3.5rem',
+    ]);
+  });
+
   it('has icon sizes of 16, 20 and 24 px', () => {
     expect(['sm', 'md', 'lg'].map((s) => token(`size.icon.${s}`).value)).toEqual([
       '1rem',

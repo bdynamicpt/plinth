@@ -1,7 +1,15 @@
-import { PlinthBadge, PlinthButton, PlinthIcon, PlinthIconButton } from '@bdynamic/plinth-vue';
+import {
+  PlinthAvatar,
+  PlinthBadge,
+  PlinthButton,
+  PlinthIcon,
+  PlinthIconButton,
+} from '@bdynamic/plinth-vue';
 import { createStaticVNode, h, type Component } from 'vue';
 import { renderToString } from 'vue/server-renderer';
 import { describe, expect, it } from 'vitest';
+import * as avatarStories from '../stories/components/Avatar.stories.ts';
+import { avatar, type AvatarArgs } from '../stories/components/avatar.ts';
 import * as badgeStories from '../stories/components/Badge.stories.ts';
 import { badge, type Attributes, type BadgeArgs } from '../stories/components/badge.ts';
 import * as buttonStories from '../stories/components/Button.stories.ts';
@@ -127,6 +135,14 @@ const cases: ParityCase[] = [
     },
     { 'aria-label': 'More actions' },
   ),
+  ...storyArgs<AvatarArgs>(avatarStories).map(([story, args]) =>
+    avatarCase(`Avatar/${story}`, args),
+  ),
+  avatarCase(
+    'Avatar/with extra attributes',
+    { name: 'Élio Ramos', size: 'lg', status: 'warning', statusLabel: 'Away', decorative: false },
+    { class: 'ms-2', id: 'me', 'data-testid': 'me' },
+  ),
   iconCase(
     'Icon/with an aria-label attribute',
     { size: 'md', mirror: false, svg: sampleIcons.alert },
@@ -181,6 +197,24 @@ function iconButtonCase(
       html: true,
     },
     blade: { component: 'icon-button', props, attributes, slot: args.svg },
+  };
+}
+
+function avatarCase(story: string, args: AvatarArgs, attributes: Attributes = {}): ParityCase {
+  const props = {
+    ...(args.name !== undefined ? { name: args.name } : {}),
+    ...(args.src ? { src: args.src } : {}),
+    ...(args.initials ? { initials: args.initials } : {}),
+    size: args.size,
+    ...(args.status ? { status: args.status } : {}),
+    ...(args.statusLabel ? { statusLabel: args.statusLabel } : {}),
+    decorative: args.decorative,
+  };
+  return {
+    story,
+    markup: avatar(args, attributes),
+    vue: { component: PlinthAvatar, props: { ...props, ...attributes }, slot: '' },
+    blade: { component: 'avatar', props, attributes, slot: '' },
   };
 }
 
@@ -274,6 +308,17 @@ describe('parity with the stories', () => {
       'Icon button/Busy',
       'Icon button/with extra attributes',
       'Icon button/with an aria-label attribute',
+      'Avatar/Initials',
+      'Avatar/Image',
+      'Avatar/GivenInitials',
+      'Avatar/SingleName',
+      'Avatar/Glyph',
+      'Avatar/Small',
+      'Avatar/Large',
+      'Avatar/ExtraLarge',
+      'Avatar/WithStatus',
+      'Avatar/Decorative',
+      'Avatar/with extra attributes',
       'Icon/with an aria-label attribute',
     ]);
   });
