@@ -17,7 +17,7 @@ The design system of BDynamic's projects. Nothing in Plinth may know about any o
 
 - **Tokens are the source of truth:** colour (light and dark), type, spacing, radii, layers
   (z-index), breakpoints, motion. One source, built to CSS custom properties, a JS/TS export and a
-  Tailwind preset.
+  Tailwind v4 `@theme` CSS file (v4 has no JS presets).
 - **Components are plain HTML and CSS**, each with a documented markup contract (elements, classes,
   states, ARIA).
 - **Blade (with a Filament plugin) and Vue 3 layers are thin:** they print the contract and hold no
@@ -32,7 +32,7 @@ The design system of BDynamic's projects. Nothing in Plinth may know about any o
 
 ```
 packages/
-  tokens/   token source; builds CSS custom properties, JS/TS export, Tailwind preset
+  tokens/   token source; builds CSS custom properties, JS/TS export, Tailwind `@theme` CSS
   css/      one stylesheet per component, tokens only, mobile first
   vue/      Vue 3 components
   blade/    Composer package: Blade components (<x-plinth::name>) + Filament plugin;
@@ -56,6 +56,8 @@ storybook/  never published
 
 - Mobile first: base rules are the phone; `@media (min-width: 768px)` and `(min-width: 1280px)` add
   to them.
+- Plain CSS with semantic classes, never utility classes in the markup. Component CSS lives in
+  `@layer plinth` so a project's utilities can override it; no `@apply`.
 - Tokens only: no hex, raw pixel spacing or raw z-index in a component's CSS. No `!important`.
 - Classes `plinth-component` and `plinth-component-part`; state is an ARIA attribute or an `is-*`
   class.
