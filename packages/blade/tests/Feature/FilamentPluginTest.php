@@ -40,3 +40,9 @@ it('registers the fonts with Filament\'s asset manager', function () {
         ->and(Plinth::fontsPath().'/geist/geist-latin-wght-normal.woff2')->toBeFile()
         ->and(Plinth::fontsPath().'/geist/LICENSE')->toBeFile();
 });
+
+it('has nothing to do when the panel boots', function () {
+    $plugin = PlinthPlugin::make();
+
+    expect(fn () => $plugin->boot(Panel::make()->id('boot')))->not->toThrow(Throwable::class);
+});

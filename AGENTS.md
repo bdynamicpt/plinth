@@ -49,6 +49,11 @@ storybook/  never published
   story, both themes, three widths), Pest (Blade). Screenshot comparison is paused until the
   foundations settle (#9).
 - Lint: ESLint, Prettier, Stylelint (property order, no `!important`, no raw colours), Pint.
+- PHPStan (with Larastan) runs at `level: max` on `packages/blade/src`, as part of
+  `composer lint`. Fix the types; no baseline, no `@phpstan-ignore`.
+- Test coverage is 100% and the test scripts fail below it: Pest with `--coverage --min=100` for
+  the Blade package (needs pcov or Xdebug), Vitest coverage thresholds for the Vue package. New
+  code ships with the tests that cover it.
 - PHP classes are always `final`; Pint's `final_class` rule enforces it. Abstract base classes
   (such as the tests' `TestCase`) are the only exception.
 - CI: `npm ci`, then `turbo run lint test build build-storybook`, `.turbo` kept by the Actions
