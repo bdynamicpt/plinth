@@ -77,6 +77,11 @@ storybook/  never published
 - **Reviewing a component:** `.claude/agents/component-reviewer.md` checks one against its
   contract (ARIA, states, logical properties, touch targets, reduced motion, Blade and Vue
   parity). It leaves to Stylelint what Stylelint catches.
+- **Storybook MCP:** `.mcp.json` registers `@storybook/addon-mcp` at `http://127.0.0.1:6006/mcp`,
+  live while `npm run storybook` runs. Use it to find a component's stories and their preview
+  URLs. Its story-writing instructions are generic (play functions, `fn`, Vitest); Plinth's
+  component rules and the `new-component` skill win where they differ. The docs tools stay off
+  until the HTML renderer generates a components manifest (#7).
 - **After an edit:** `.claude/settings.json` runs Prettier on the edited file, and Stylelint on
   component CSS. An agent without that hook runs `npm run format` before committing.
 
