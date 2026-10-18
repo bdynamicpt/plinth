@@ -5,8 +5,19 @@ import PlinthButton from './PlinthButton.vue';
 import PlinthIcon from './PlinthIcon.vue';
 import PlinthIconButton from './PlinthIconButton.vue';
 import PlinthListRow from './PlinthListRow.vue';
+import PlinthPill from './PlinthPill.vue';
+import PlinthPillRow from './PlinthPillRow.vue';
 
-export { PlinthAvatar, PlinthBadge, PlinthButton, PlinthIcon, PlinthIconButton, PlinthListRow };
+export {
+  PlinthAvatar,
+  PlinthBadge,
+  PlinthButton,
+  PlinthIcon,
+  PlinthIconButton,
+  PlinthListRow,
+  PlinthPill,
+  PlinthPillRow,
+};
 export { avatarGlyph, avatarSizes, initialsFrom, type AvatarSize } from './avatar';
 export { buttonVariants, type ButtonVariant } from './button';
 export { controlSizes, iconSizeFor, resolveSize, sizes, type ControlSize, type Size } from './size';
@@ -23,5 +34,7 @@ export const Plinth: Plugin = {
     app.component('PlinthIcon', PlinthIcon);
     app.component('PlinthIconButton', PlinthIconButton);
     app.component('PlinthListRow', PlinthListRow);
+    app.component('PlinthPill', PlinthPill);
+    app.component('PlinthPillRow', PlinthPillRow);
   },
 };

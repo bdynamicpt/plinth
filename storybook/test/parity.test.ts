@@ -5,6 +5,8 @@ import {
   PlinthIcon,
   PlinthIconButton,
   PlinthListRow,
+  PlinthPill,
+  PlinthPillRow,
 } from '@bdynamic/plinth-vue';
 import { createStaticVNode, h, type Component } from 'vue';
 import { renderToString } from 'vue/server-renderer';
@@ -21,6 +23,8 @@ import * as iconStories from '../stories/components/Icon.stories.ts';
 import { icon, type IconArgs } from '../stories/components/icon.ts';
 import * as listRowStories from '../stories/components/ListRow.stories.ts';
 import { listRow, type ListRowArgs } from '../stories/components/list-row.ts';
+import * as pillRowStories from '../stories/components/PillRow.stories.ts';
+import { pill, pillRow, type PillArgs, type PillRowArgs } from '../stories/components/pill-row.ts';
 import { sampleIcons } from '../stories/components/icons.ts';
 import { normalize, renderBlade } from './markup.ts';
 
@@ -77,6 +81,8 @@ const listRowDefaults: ListRowArgs = {
   current: false,
   disabled: false,
 };
+
+const pillDefaults: PillArgs = { label: 'Open', selected: false, disabled: false };
 
 const cases: ParityCase[] = [
   ...storyArgs<BadgeArgs>(badgeStories).map(([story, args]) => ({
@@ -176,6 +182,38 @@ const cases: ParityCase[] = [
   listRowCase('List row/current button', { ...listRowDefaults, button: true, current: true }),
   listRowCase('List row/current static row', { ...listRowDefaults, current: true }),
   listRowCase('List row/disabled static row', { ...listRowDefaults, disabled: true }),
+  ...storyArgs<PillRowArgs>(pillRowStories).map(([story, args]) =>
+    pillRowCase(`Pill row/${story}`, args),
+  ),
+  pillRowCase(
+    'Pill row/with extra attributes',
+    { nav: false, pills: [pillDefaults] },
+    { class: 'mb-4', id: 'status', 'data-testid': 'status', 'aria-labelledby': 'status-title' },
+  ),
+  pillCase('Pill/Default', pillDefaults),
+  pillCase('Pill/Selected', { ...pillDefaults, selected: true }),
+  pillCase('Pill/WithCount', { ...pillDefaults, count: 12 }),
+  pillCase('Pill/ZeroCount', { ...pillDefaults, count: 0 }),
+  pillCase('Pill/Disabled', { ...pillDefaults, disabled: true }),
+  pillCase('Pill/Link', { ...pillDefaults, href: '#open' }),
+  pillCase('Pill/CurrentLink', { ...pillDefaults, href: '#open', selected: true, count: '3' }),
+  pillCase('Pill/DisabledLink', { ...pillDefaults, href: '#open', disabled: true }),
+  pillCase(
+    'Pill/with extra attributes',
+    { ...pillDefaults, count: 12 },
+    {
+      class: 'ms-2',
+      id: 'open',
+      'data-testid': 'open',
+      'aria-describedby': 'open-help',
+      type: 'submit',
+    },
+  ),
+  pillCase(
+    'Pill/link with extra attributes',
+    { ...pillDefaults, href: '#open' },
+    { class: 'ms-2', 'data-testid': 'open', type: 'text/html' },
+  ),
   iconCase(
     'Icon/with an aria-label attribute',
     { size: 'md', mirror: false, svg: sampleIcons.alert },
@@ -269,6 +307,37 @@ function listRowCase(story: string, args: ListRowArgs, attributes: Attributes = 
     markup: listRow(args, attributes),
     vue: { component: PlinthListRow, props: { ...props, ...attributes }, slot: args.title, named },
     blade: { component: 'list-row', props, attributes, slot: args.title, named },
+  };
+}
+
+function pillProps(args: PillArgs) {
+  return {
+    ...(args.count !== undefined ? { count: args.count } : {}),
+    ...(args.href ? { href: args.href } : {}),
+    selected: args.selected,
+    disabled: args.disabled,
+  };
+}
+
+function pillCase(story: string, args: PillArgs, attributes: Attributes = {}): ParityCase {
+  const props = pillProps(args);
+  return {
+    story,
+    markup: pill(args, attributes),
+    vue: { component: PlinthPill, props: { ...props, ...attributes }, slot: args.label },
+    blade: { component: 'pill', props, attributes, slot: args.label },
+  };
+}
+
+/** The row's own parity; its pills are each a pill case's markup, passed in as the slot. */
+function pillRowCase(story: string, args: PillRowArgs, attributes: Attributes = {}): ParityCase {
+  const props = { ...(args.label ? { label: args.label } : {}), nav: args.nav };
+  const slot = args.pills.map((p) => pill(p)).join('');
+  return {
+    story,
+    markup: pillRow(args, attributes),
+    vue: { component: PlinthPillRow, props: { ...props, ...attributes }, slot, html: true },
+    blade: { component: 'pill-row', props, attributes, slot },
   };
 }
 
@@ -391,6 +460,25 @@ describe('parity with the stories', () => {
       'List row/current button',
       'List row/current static row',
       'List row/disabled static row',
+      'Pill row/Filters',
+      'Pill row/WithoutCounts',
+      'Pill row/NoneSelected',
+      'Pill row/MultipleSelected',
+      'Pill row/Navigation',
+      'Pill row/Disabled',
+      'Pill row/DisabledLink',
+      'Pill row/Overflowing',
+      'Pill row/with extra attributes',
+      'Pill/Default',
+      'Pill/Selected',
+      'Pill/WithCount',
+      'Pill/ZeroCount',
+      'Pill/Disabled',
+      'Pill/Link',
+      'Pill/CurrentLink',
+      'Pill/DisabledLink',
+      'Pill/with extra attributes',
+      'Pill/link with extra attributes',
       'Icon/with an aria-label attribute',
     ]);
   });
