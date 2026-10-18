@@ -69,10 +69,12 @@
       "$value": "{ref.color.red.200}"
     },
     "accent-hover": {
-      "$value": "{ref.color.brand.700}"
+      "$value": "{ref.color.brand.700}",
+      "$description": "Override together with accent: a project that changes accent must change this too, or its buttons turn Plinth's blue on hover and press."
     },
     "accent-active": {
-      "$value": "{ref.color.brand.800}"
+      "$value": "{ref.color.brand.800}",
+      "$description": "Override together with accent: a project that changes accent must change this too, or its buttons turn Plinth's blue on hover and press."
     },
     "danger-solid": {
       "$value": "{ref.color.red.600}"

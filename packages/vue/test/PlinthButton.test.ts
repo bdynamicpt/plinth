@@ -57,6 +57,15 @@ describe('PlinthButton', () => {
     expect(icons.map((icon) => icon.attributes('data-size'))).toEqual(['sm', 'sm']);
   });
 
+  it('flips arrow icons in right-to-left text when asked', () => {
+    const wrapper = mount(PlinthButton, {
+      props: { mirrorTrailing: true },
+      slots: { default: 'Next', trailing: svg },
+    });
+
+    expect(wrapper.get('.plinth-icon').attributes('data-mirror')).toBe('');
+  });
+
   it('disables a button with disabled, and a link with aria-disabled and no href', () => {
     expect(mount(PlinthButton, { props: { disabled: true } }).attributes('disabled')).toBe('');
 

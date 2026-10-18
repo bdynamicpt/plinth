@@ -153,6 +153,8 @@ it with **Brand** in the toolbar.
 ```css
 :root {
   --plinth-color-accent: #0f766e;
+  --plinth-color-accent-hover: #115e59; /* override these two with accent */
+  --plinth-color-accent-active: #134e4a;
   --plinth-radius-pill: 0.25rem;
   --plinth-font-family-body: 'Your Font', system-ui, sans-serif;
 }

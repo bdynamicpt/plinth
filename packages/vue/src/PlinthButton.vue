@@ -16,8 +16,18 @@ const props = withDefaults(
     href?: string;
     disabled?: boolean;
     busy?: boolean;
+    mirrorIcon?: boolean;
+    mirrorTrailing?: boolean;
   }>(),
-  { variant: 'primary', size: 'md', href: undefined, disabled: false, busy: false },
+  {
+    variant: 'primary',
+    size: 'md',
+    href: undefined,
+    disabled: false,
+    busy: false,
+    mirrorIcon: false,
+    mirrorTrailing: false,
+  },
 );
 
 const dataVariant = computed(() => buttonVariant(props.variant));
@@ -38,11 +48,21 @@ const isBusy = computed(() => props.busy && !props.disabled);
     :aria-disabled="isBusy || disabled ? 'true' : undefined"
   >
     <span v-if="isBusy" class="plinth-button-spinner" aria-hidden="true"></span>
-    <span v-else-if="$slots.icon" class="plinth-icon" :data-size="iconSize" aria-hidden="true"
+    <span
+      v-else-if="$slots.icon"
+      class="plinth-icon"
+      :data-size="iconSize"
+      :data-mirror="mirrorIcon ? '' : undefined"
+      aria-hidden="true"
       ><slot name="icon"
     /></span>
     <span class="plinth-button-label"><slot /></span>
-    <span v-if="$slots.trailing" class="plinth-icon" :data-size="iconSize" aria-hidden="true"
+    <span
+      v-if="$slots.trailing"
+      class="plinth-icon"
+      :data-size="iconSize"
+      :data-mirror="mirrorTrailing ? '' : undefined"
+      aria-hidden="true"
       ><slot name="trailing"
     /></span>
   </a>
@@ -57,11 +77,21 @@ const isBusy = computed(() => props.busy && !props.disabled);
     :aria-disabled="isBusy ? 'true' : undefined"
   >
     <span v-if="isBusy" class="plinth-button-spinner" aria-hidden="true"></span>
-    <span v-else-if="$slots.icon" class="plinth-icon" :data-size="iconSize" aria-hidden="true"
+    <span
+      v-else-if="$slots.icon"
+      class="plinth-icon"
+      :data-size="iconSize"
+      :data-mirror="mirrorIcon ? '' : undefined"
+      aria-hidden="true"
       ><slot name="icon"
     /></span>
     <span class="plinth-button-label"><slot /></span>
-    <span v-if="$slots.trailing" class="plinth-icon" :data-size="iconSize" aria-hidden="true"
+    <span
+      v-if="$slots.trailing"
+      class="plinth-icon"
+      :data-size="iconSize"
+      :data-mirror="mirrorTrailing ? '' : undefined"
+      aria-hidden="true"
       ><slot name="trailing"
     /></span>
   </button>

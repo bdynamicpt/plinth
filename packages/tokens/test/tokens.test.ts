@@ -134,6 +134,8 @@ describe('contrast', () => {
     ['success-text', 'success-surface'],
     ['warning-text', 'warning-surface'],
     ['danger-text', 'danger-surface'],
+    ['danger-text', 'surface'],
+    ['danger-text', 'surface-raised'],
   ] as const;
 
   describe.each(['light', 'dark'] as const)('%s', (mode) => {

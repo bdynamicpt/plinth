@@ -22,14 +22,29 @@ export interface ButtonArgs {
   icon?: string;
   /** The project's own SVG for the trailing icon (trusted, not escaped). */
   trailingIcon?: string;
+  /** Flips the leading icon in right-to-left text, for icons that point a direction. */
+  mirrorIcon?: boolean;
+  /** Flips the trailing icon in right-to-left text, for an arrow such as Next. */
+  mirrorTrailing?: boolean;
 }
 
-const iconSpan = (svg: string, size: ButtonSize) =>
-  `<span class="plinth-icon" data-size="${buttonIconSize(size)}" aria-hidden="true">${svg}</span>`;
+const iconSpan = (svg: string, size: ButtonSize, mirror = false) =>
+  `<span class="plinth-icon" data-size="${buttonIconSize(size)}"${mirror ? ' data-mirror' : ''} aria-hidden="true">${svg}</span>`;
 
 /** The button's markup contract. Blade and Vue must print exactly this (see parity.test.ts). */
 export function button(
-  { label, variant, size, href, disabled, busy, icon, trailingIcon }: ButtonArgs,
+  {
+    label,
+    variant,
+    size,
+    href,
+    disabled,
+    busy,
+    icon,
+    trailingIcon,
+    mirrorIcon,
+    mirrorTrailing,
+  }: ButtonArgs,
   attributes: Attributes = {},
 ): string {
   // A button's type defaults to "button"; a project's own type (submit, reset) replaces it.
@@ -47,13 +62,13 @@ export function button(
   const lead = isBusy
     ? '<span class="plinth-button-spinner" aria-hidden="true"></span>'
     : icon
-      ? iconSpan(icon, size)
+      ? iconSpan(icon, size, mirrorIcon)
       : '';
   return [
     `${open} data-variant="${variant}" data-size="${size}"${state}${extra}>`,
     lead,
     `<span class="plinth-button-label">${escape(label)}</span>`,
-    trailingIcon ? iconSpan(trailingIcon, size) : '',
+    trailingIcon ? iconSpan(trailingIcon, size, mirrorTrailing) : '',
     href ? '</a>' : '</button>',
   ].join('');
 }

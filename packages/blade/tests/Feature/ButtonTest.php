@@ -39,6 +39,17 @@ it('prints the leading and trailing icons, sized to the button', function () use
     expect($html)->toBe('<button class="plinth-button" type="button" data-variant="primary" data-size="sm"><span class="plinth-icon" data-size="sm" aria-hidden="true">'.$svg.'</span><span class="plinth-button-label">Next</span><span class="plinth-icon" data-size="sm" aria-hidden="true">'.$svg.'</span></button>');
 });
 
+it('flips arrow icons in right-to-left text when asked', function () use ($svg) {
+    $html = Blade::render(<<<BLADE
+        <x-plinth::button mirror-trailing>
+            Next
+            <x-slot:trailing>{$svg}</x-slot:trailing>
+        </x-plinth::button>
+        BLADE);
+
+    expect($html)->toContain('data-mirror');
+});
+
 it('disables a button with disabled, and a link with aria-disabled and no href', function () {
     expect(Blade::render('<x-plinth::button disabled>Save</x-plinth::button>'))->toContain('disabled=""');
 

@@ -49,6 +49,14 @@ function storyArgs<Args>(stories: Record<string, unknown>): [string, Args][] {
     .map(([name, story]) => [name, { ...meta.args, ...story.args } as Args]);
 }
 
+const buttonDefaults: ButtonArgs = {
+  label: 'Save',
+  variant: 'primary',
+  size: 'md',
+  disabled: false,
+  busy: false,
+};
+
 const cases: ParityCase[] = [
   ...storyArgs<BadgeArgs>(badgeStories).map(([story, args]) => ({
     story: `Badge/${story}`,
@@ -77,6 +85,19 @@ const cases: ParityCase[] = [
       type: 'submit',
     },
   ),
+  buttonCase('Button/small with an icon', {
+    ...buttonDefaults,
+    size: 'sm',
+    icon: sampleIcons.check,
+    mirrorIcon: true,
+  }),
+  buttonCase('Button/busy with an icon', {
+    ...buttonDefaults,
+    busy: true,
+    icon: sampleIcons.check,
+  }),
+  buttonCase('Button/busy link', { ...buttonDefaults, href: '#orders', busy: true }),
+  buttonCase('Button/disabled and busy', { ...buttonDefaults, disabled: true, busy: true }),
   iconCase(
     'Icon/with an aria-label attribute',
     { size: 'md', mirror: false, svg: sampleIcons.alert },
@@ -90,6 +111,8 @@ function buttonCase(story: string, args: ButtonArgs, attributes: Attributes = {}
     size: args.size,
     disabled: args.disabled,
     busy: args.busy,
+    mirrorIcon: args.mirrorIcon ?? false,
+    mirrorTrailing: args.mirrorTrailing ?? false,
     ...(args.href ? { href: args.href } : {}),
   };
   const named = {
@@ -176,6 +199,10 @@ describe('parity with the stories', () => {
       'Button/DisabledLink',
       'Button/Busy',
       'Button/with extra attributes',
+      'Button/small with an icon',
+      'Button/busy with an icon',
+      'Button/busy link',
+      'Button/disabled and busy',
       'Icon/with an aria-label attribute',
     ]);
   });

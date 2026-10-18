@@ -16,12 +16,14 @@ const meta = {
     busy: { control: 'boolean' },
     icon: { control: 'text' },
     trailingIcon: { control: 'text' },
+    mirrorIcon: { control: 'boolean' },
+    mirrorTrailing: { control: 'boolean' },
   },
   parameters: {
     docs: {
       description: {
         component:
-          'The main action control. Use one primary button per view for the main action, secondary for the others, ghost for low-emphasis actions, danger for a destructive action, and danger-ghost for a low-emphasis destructive one (Remove next to an item). It renders a `<button type="button">`, or a link when given an `href`; `wire:click`, `x-on:click` and `@click` reach it. Disabled is `disabled` on a button and `aria-disabled` on a link. Busy shows a spinner and keeps focus, so a screen reader stays on it; the app ignores clicks while busy. The small size keeps a 40px touch target. For a button with only an icon, use the icon button.',
+          'The main action control. Use one primary button per view for the main action, secondary for the others, ghost for low-emphasis actions, danger for a destructive action, and danger-ghost for a low-emphasis destructive one (Remove next to an item). It renders a `<button type="button">`, or a link when given an `href`; a `type` you pass (submit, reset) replaces the default, and `wire:click`, `x-on:click` and `@click` reach it. Icons go in the `icon` (leading) and `trailing` slots, and are 16px on small buttons and 20px otherwise; set `mirror-icon` or `mirror-trailing` on arrows so they flip in right-to-left text (switch **Direction** in the toolbar). Disabled is `disabled` on a button and `aria-disabled` on a link. Busy shows a spinner and keeps focus; change the label too (Saving), since screen readers announce the busy state unreliably, and block the action yourself: a busy submit button still submits its form. The small size keeps a 40px touch target. A button with only an icon is the icon button (#18).',
       },
     },
   },
@@ -39,7 +41,12 @@ export const Small: Story = { args: { size: 'sm' } };
 export const Large: Story = { args: { size: 'lg' } };
 export const WithIcon: Story = { args: { icon: sampleIcons.check } };
 export const WithTrailingIcon: Story = {
-  args: { variant: 'secondary', label: 'Next', trailingIcon: sampleIcons.arrow },
+  args: {
+    variant: 'secondary',
+    label: 'Next',
+    trailingIcon: sampleIcons.arrow,
+    mirrorTrailing: true,
+  },
 };
 export const Link: Story = { args: { variant: 'secondary', label: 'Read more', href: '#more' } };
 export const Disabled: Story = { args: { disabled: true } };

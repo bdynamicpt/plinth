@@ -9,6 +9,9 @@
  *
  * With an href it is <a class="plinth-button" href="…"> instead; the icons are optional.
  *
+ * data-mirror on an icon flips it in right-to-left text, for arrows (mirror-icon and
+ * mirror-trailing in Blade and Vue).
+ *
  * Variants (data-variant): primary (default, also when missing), secondary, ghost, danger, and
  * danger-ghost for a low-emphasis destructive action (Remove next to an item).
  * Sizes (data-size): sm 32px, md 40px (default), lg 44px. The small size keeps a 40px touch
@@ -31,12 +34,14 @@
     --plinth-button-edge: transparent;
     --plinth-button-height: var(--plinth-control-md);
     --plinth-button-padding: var(--plinth-space-4);
+    --plinth-button-icon-size: var(--plinth-size-icon-md);
 
     position: relative;
     display: inline-flex;
     gap: var(--plinth-space-2);
     align-items: center;
     justify-content: center;
+    max-inline-size: 100%;
     min-block-size: var(--plinth-button-height);
     padding-block: 0;
     padding-inline: var(--plinth-button-padding);
@@ -51,7 +56,7 @@
     cursor: pointer;
     user-select: none;
     background-color: var(--plinth-button-surface);
-    border: 1px solid var(--plinth-button-edge);
+    border: var(--plinth-border-width-thin) solid var(--plinth-button-edge);
     border-radius: var(--plinth-radius-control);
     transition:
       background-color var(--plinth-duration-fast) var(--plinth-easing-standard),
@@ -90,6 +95,7 @@
   .plinth-button[data-size='sm'] {
     --plinth-button-height: var(--plinth-control-sm);
     --plinth-button-padding: var(--plinth-space-3);
+    --plinth-button-icon-size: var(--plinth-size-icon-sm);
   }
 
   .plinth-button[data-size='lg'] {
@@ -150,13 +156,14 @@
     text-overflow: ellipsis;
   }
 
+  /* The same size as the icon it replaces, so the button keeps its width when it goes busy. */
   .plinth-button-spinner {
     flex: none;
-    inline-size: var(--plinth-size-icon-sm);
-    block-size: var(--plinth-size-icon-sm);
-    border: var(--plinth-focus-ring-width) solid currentcolor;
+    inline-size: var(--plinth-button-icon-size);
+    block-size: var(--plinth-button-icon-size);
+    border: var(--plinth-border-width-thick) solid currentcolor;
     border-inline-end-color: transparent;
-    border-radius: var(--plinth-radius-pill);
+    border-radius: 50%;
     animation: plinth-button-spin calc(var(--plinth-duration-slow) * 3) linear infinite;
   }
 
@@ -169,6 +176,16 @@
   @media (forced-colors: active) {
     .plinth-button {
       border-color: ButtonText;
+    }
+
+    .plinth-button:disabled,
+    .plinth-button[aria-disabled='true']:not([aria-busy='true']) {
+      color: GrayText;
+      border-color: GrayText;
+    }
+
+    .plinth-button-spinner {
+      forced-color-adjust: none;
     }
   }
 }

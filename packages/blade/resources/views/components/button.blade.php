@@ -5,6 +5,8 @@
     'href' => null,
     'disabled' => false,
     'busy' => false,
+    'mirrorIcon' => false,
+    'mirrorTrailing' => false,
 ])
 @php
     $variant = \BDynamic\Plinth\Plinth::buttonVariant($variant);
@@ -28,10 +30,10 @@
     @if ($isBusy)
         <span class="plinth-button-spinner" aria-hidden="true"></span>
     @elseif (isset($icon))
-        <span class="plinth-icon" data-size="{{ $iconSize }}" aria-hidden="true">{{ $icon }}</span>
+        <span class="plinth-icon" data-size="{{ $iconSize }}" @if ($mirrorIcon) data-mirror @endif aria-hidden="true">{{ $icon }}</span>
     @endif
     <span class="plinth-button-label">{{ $slot }}</span>
     @isset($trailing)
-        <span class="plinth-icon" data-size="{{ $iconSize }}" aria-hidden="true">{{ $trailing }}</span>
+        <span class="plinth-icon" data-size="{{ $iconSize }}" @if ($mirrorTrailing) data-mirror @endif aria-hidden="true">{{ $trailing }}</span>
     @endisset
 </{{ $isLink ? 'a' : 'button' }}>
