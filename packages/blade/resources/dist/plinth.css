@@ -1402,17 +1402,21 @@
  * States, set by the app:
  * - current: a link prints aria-current="page" for the section being shown; a button always
  *   prints aria-pressed, "true" or "false". The current item takes the selection tint
- *   (accent-subtle, accent-text); the others are muted text on no surface, like a ghost button.
+ *   (accent-subtle, accent-text) with an accent edge, so colour is not its only cue; the others
+ *   are muted text on no surface, like a ghost button.
  * - disabled: `disabled` on a <button>; on a link, no href, role="link" and aria-disabled="true".
  * - hover only where the device can hover; the focus ring on :focus-visible.
  *
  * Layout: a row --plinth-section-menu-height (56px) tall, on the surface with a divider below,
  * the same inline padding as the header and clear of the notch on a phone held sideways. Its
- * items are --plinth-section-menu-item-height (40px) tall, their touch target, and at least 40px
- * wide. The row never wraps: when the items don't fit it scrolls sideways, with no visible
- * scrollbar, and snaps to them; the row's block padding keeps the focus ring inside it.
- * Placement is the app's: put it under the header, or make it sticky below the header with
- * position: sticky and inset-block-start: var(--plinth-header-height).
+ * items are --plinth-section-menu-item-height (40px) tall, never less than the 40px touch
+ * target, and at least 40px wide. The row never wraps: when the items don't fit it scrolls
+ * sideways and snaps to them, with a thin scrollbar for a mouse and none on a touch screen; the
+ * row's block padding keeps the focus ring inside it. The app scrolls a current item that starts
+ * out of view into view.
+ * Placement is the app's: put it under the header, or make it sticky below it with
+ * position: sticky, inset-block-start: calc(var(--plinth-header-height) +
+ * env(safe-area-inset-top)) and z-index: var(--plinth-layer-sticky).
  */
 
 @layer plinth {
@@ -1422,7 +1426,15 @@
     gap: var(--plinth-space-1);
     align-items: center;
     min-block-size: var(--plinth-section-menu-height);
-    padding-block: var(--plinth-space-2);
+
+    /* What the item and the divider leave of the row's height, so the row is exactly its token. */
+    padding-block: calc(
+      (
+          var(--plinth-section-menu-height) - var(--plinth-section-menu-item-height) -
+            var(--plinth-border-width-thin)
+        ) /
+        2
+    );
     padding-inline: max(var(--plinth-space-2), env(safe-area-inset-left))
       max(var(--plinth-space-2), env(safe-area-inset-right));
     margin: 0;
@@ -1430,7 +1442,8 @@
     overscroll-behavior-inline: contain;
     font-family: var(--plinth-font-family-body);
     scroll-snap-type: inline proximity;
-    scroll-padding-inline: var(--plinth-space-2);
+    scroll-padding-inline: max(var(--plinth-space-2), env(safe-area-inset-left))
+      max(var(--plinth-space-2), env(safe-area-inset-right));
     scrollbar-width: none;
     background-color: var(--plinth-color-surface);
     border-block-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
@@ -1439,6 +1452,15 @@
   .plinth-section-menu:dir(rtl) {
     padding-inline: max(var(--plinth-space-2), env(safe-area-inset-right))
       max(var(--plinth-space-2), env(safe-area-inset-left));
+    scroll-padding-inline: max(var(--plinth-space-2), env(safe-area-inset-right))
+      max(var(--plinth-space-2), env(safe-area-inset-left));
+  }
+
+  /* A mouse without a sideways wheel needs a scrollbar to reach the items that don't fit. */
+  @media (hover: hover) and (pointer: fine) {
+    .plinth-section-menu {
+      scrollbar-width: thin;
+    }
   }
 
   .plinth-section-menu-item {
@@ -1449,7 +1471,7 @@
     align-items: center;
     justify-content: center;
     min-inline-size: var(--plinth-touch-target);
-    min-block-size: var(--plinth-section-menu-item-height);
+    min-block-size: max(var(--plinth-section-menu-item-height), var(--plinth-touch-target));
     padding-block: 0;
     padding-inline: var(--plinth-space-3);
     margin: 0;
@@ -1488,6 +1510,7 @@
   .plinth-section-menu-item:is([aria-pressed='true'], [aria-current='page']) {
     color: var(--plinth-color-accent-text);
     background-color: var(--plinth-color-accent-subtle);
+    border-color: var(--plinth-color-accent);
   }
 
   .plinth-section-menu-item:disabled,
@@ -1518,11 +1541,14 @@
     .plinth-section-menu {
       padding-inline: max(var(--plinth-space-4), env(safe-area-inset-left))
         max(var(--plinth-space-4), env(safe-area-inset-right));
-      scroll-padding-inline: var(--plinth-space-4);
+      scroll-padding-inline: max(var(--plinth-space-4), env(safe-area-inset-left))
+        max(var(--plinth-space-4), env(safe-area-inset-right));
     }
 
     .plinth-section-menu:dir(rtl) {
       padding-inline: max(var(--plinth-space-4), env(safe-area-inset-right))
+        max(var(--plinth-space-4), env(safe-area-inset-left));
+      scroll-padding-inline: max(var(--plinth-space-4), env(safe-area-inset-right))
         max(var(--plinth-space-4), env(safe-area-inset-left));
     }
   }

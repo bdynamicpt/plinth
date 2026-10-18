@@ -1,5 +1,6 @@
 <script setup lang="ts">
 // Markup contract: packages/css/src/components/section-menu.css
+// A blank label counts as missing, as Blade's filled() decides.
 withDefaults(
   defineProps<{
     /** The menu's accessible name (aria-label). */
@@ -16,7 +17,7 @@ withDefaults(
     :is="nav ? 'nav' : 'div'"
     class="plinth-section-menu"
     :role="nav ? undefined : 'group'"
-    :aria-label="label || undefined"
+    :aria-label="label?.trim() ? label : undefined"
     ><slot
   /></component>
 </template>

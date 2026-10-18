@@ -16,7 +16,8 @@ const props = withDefaults(
   { count: undefined, href: undefined, current: false, disabled: false },
 );
 
-const tag = computed(() => (props.href ? 'a' : 'button'));
+// A blank href counts as missing, as Blade's filled() decides.
+const tag = computed(() => (props.href?.trim() ? 'a' : 'button'));
 // Missing or blank prints no count, as Blade's filled() decides.
 const hasCount = computed(() => props.count != null && String(props.count).trim() !== '');
 </script>

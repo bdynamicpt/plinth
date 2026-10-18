@@ -279,6 +279,8 @@ const cases: ParityCase[] = [
     { nav: true, items: [sectionMenuItemDefaults] },
     { class: 'sticky', id: 'sections', 'data-testid': 'sections', 'aria-labelledby': 'title' },
   ),
+  sectionMenuCase('Section menu/blank label', { label: ' ', nav: true, items: [] }),
+  sectionMenuItemCase('Section menu item/blank href', { ...sectionMenuItemDefaults, href: ' ' }),
   sectionMenuItemCase('Section menu item/Default', sectionMenuItemDefaults),
   sectionMenuItemCase('Section menu item/Current', { ...sectionMenuItemDefaults, current: true }),
   sectionMenuItemCase('Section menu item/WithCount', { ...sectionMenuItemDefaults, count: 8 }),
@@ -497,7 +499,7 @@ function pillRowCase(story: string, args: PillRowArgs, attributes: Attributes = 
 function sectionMenuItemProps(args: SectionMenuItemArgs) {
   return {
     ...(args.count !== undefined ? { count: args.count } : {}),
-    ...(args.href ? { href: args.href } : {}),
+    ...(args.href !== undefined ? { href: args.href } : {}),
     current: args.current,
     disabled: args.disabled,
   };
@@ -523,7 +525,7 @@ function sectionMenuCase(
   args: SectionMenuArgs,
   attributes: Attributes = {},
 ): ParityCase {
-  const props = { ...(args.label ? { label: args.label } : {}), nav: args.nav };
+  const props = { ...(args.label !== undefined ? { label: args.label } : {}), nav: args.nav };
   const slot = args.items.map((item) => sectionMenuItem(item)).join('');
   return {
     story,
@@ -719,6 +721,8 @@ describe('parity with the stories', () => {
       'Section menu/DisabledButton',
       'Section menu/Overflowing',
       'Section menu/with extra attributes',
+      'Section menu/blank label',
+      'Section menu item/blank href',
       'Section menu item/Default',
       'Section menu item/Current',
       'Section menu item/WithCount',

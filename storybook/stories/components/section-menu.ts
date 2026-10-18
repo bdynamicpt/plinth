@@ -29,7 +29,8 @@ export function sectionMenuItem(
   { label, count, href, current, disabled }: SectionMenuItemArgs,
   attributes: Attributes = {},
 ): string {
-  const tag = href ? 'a' : 'button';
+  // A blank href or label counts as missing, as Blade's filled() decides.
+  const tag = href?.trim() ? 'a' : 'button';
   // A button's type defaults to "button"; a project's own type (submit) replaces it.
   const { type = 'button', ...others } = attributes;
   const { classes, extra } = rootAttributes(
@@ -39,7 +40,7 @@ export function sectionMenuItem(
   const open = [
     tag === 'button' ? `<button type="${escape(type)}"` : '<a',
     ` class="${classes}"`,
-    href && !disabled ? ` href="${escape(href)}"` : '',
+    tag === 'a' && !disabled ? ` href="${escape(href ?? '')}"` : '',
     tag === 'button' ? ` aria-pressed="${current}"` : '',
     current && tag === 'a' ? ' aria-current="page"' : '',
     disabled && tag === 'button' ? ' disabled' : '',
@@ -67,7 +68,7 @@ export function sectionMenu(
   return [
     `<${tag} class="${classes}"`,
     nav ? '' : ' role="group"',
-    label ? ` aria-label="${escape(label)}"` : '',
+    label?.trim() ? ` aria-label="${escape(label)}"` : '',
     extra,
     '>',
     items.map((item) => sectionMenuItem(item)).join(''),

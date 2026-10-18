@@ -50,6 +50,10 @@ describe('PlinthSectionMenuItem', () => {
     expect(current.attributes('aria-pressed')).toBeUndefined();
   });
 
+  it('is a button with a blank href', () => {
+    expect(mount(PlinthSectionMenuItem, { props: { href: ' ' } }).element.tagName).toBe('BUTTON');
+  });
+
   it('disables a button and a link', () => {
     expect(mount(PlinthSectionMenuItem, { props: { disabled: true } }).attributes('disabled')).toBe(
       '',

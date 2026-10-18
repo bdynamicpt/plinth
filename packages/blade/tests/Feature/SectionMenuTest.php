@@ -10,6 +10,8 @@ it('prints a named nav with its items', function () {
 it('leaves out an empty label', function () {
     expect(squish(Blade::render('<x-plinth::section-menu label="">x</x-plinth::section-menu>')))
         ->toBe('<nav class="plinth-section-menu">x</nav>');
+    expect(squish(Blade::render('<x-plinth::section-menu label=" ">x</x-plinth::section-menu>')))
+        ->toBe('<nav class="plinth-section-menu">x</nav>');
 });
 
 it('is a group without nav', function () {

@@ -32,6 +32,11 @@ it('is a link with an href, marked current when current', function () {
         ->not->toContain('aria-pressed');
 });
 
+it('is a button with a blank href', function () {
+    expect(Blade::render('<x-plinth::section-menu-item href=" ">Tasks</x-plinth::section-menu-item>'))
+        ->toStartWith('<button class="plinth-section-menu-item" type="button" aria-pressed="false">');
+});
+
 it('disables a button and a link', function () {
     expect(Blade::render('<x-plinth::section-menu-item disabled>Archived</x-plinth::section-menu-item>'))
         ->toStartWith('<button class="plinth-section-menu-item" type="button" aria-pressed="false" disabled="">');

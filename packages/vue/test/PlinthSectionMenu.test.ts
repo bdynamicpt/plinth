@@ -19,6 +19,9 @@ describe('PlinthSectionMenu', () => {
     expect(
       mount(PlinthSectionMenu, { props: { label: '' } }).attributes('aria-label'),
     ).toBeUndefined();
+    expect(
+      mount(PlinthSectionMenu, { props: { label: ' ' } }).attributes('aria-label'),
+    ).toBeUndefined();
   });
 
   it('is a group without nav', () => {
