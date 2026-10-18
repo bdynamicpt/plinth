@@ -17,7 +17,7 @@ class Plinth
     }
 
     /** The button's variants. The first one is the default. */
-    public const BUTTON_VARIANTS = ['primary', 'secondary', 'ghost', 'danger', 'danger-ghost'];
+    public const BUTTON_VARIANTS = ['primary', 'accent', 'secondary', 'ghost', 'danger', 'danger-ghost'];
 
     /** The button's sizes (32, 40 and 44 px tall). */
     public const BUTTON_SIZES = ['sm', 'md', 'lg'];

@@ -1,10 +1,15 @@
 import type { StorybookConfig } from '@storybook/html-vite';
+import remarkGfm from 'remark-gfm';
 
 const config: StorybookConfig = {
   framework: '@storybook/html-vite',
   stories: ['../stories/**/*.mdx', '../stories/**/*.stories.ts'],
   addons: [
-    '@storybook/addon-docs',
+    // remark-gfm: Markdown tables in the MDX docs pages.
+    {
+      name: '@storybook/addon-docs',
+      options: { mdxPluginOptions: { mdxCompileOptions: { remarkPlugins: [remarkGfm] } } },
+    },
     '@storybook/addon-a11y',
     '@storybook/addon-themes',
     '@storybook/addon-mcp',

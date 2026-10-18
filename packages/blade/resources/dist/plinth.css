@@ -423,7 +423,7 @@
  * mirror-trailing in Blade and Vue).
  *
  * Variants (data-variant): primary (default, also when missing; inverted neutral unless a brand
- * colours it), secondary, ghost, danger, and
+ * colours it), accent (the brand's colour, for marketing and brand moments), secondary, ghost, danger, and
  * danger-ghost for a low-emphasis destructive action (Remove next to an item).
  * Sizes (data-size): sm 28px, md 32px (default), lg 40px. On a touch screen every size keeps a
  * 40px touch target through an invisible hit area. Icons inside are 16px on sm and 20px otherwise.
@@ -474,6 +474,14 @@
     transition:
       background-color var(--plinth-duration-fast) var(--plinth-easing-standard),
       border-color var(--plinth-duration-fast) var(--plinth-easing-standard);
+  }
+
+  /* The brand's colour, for marketing and brand moments (Upgrade plan): at most one per screen. */
+  .plinth-button[data-variant='accent'] {
+    --plinth-button-surface: var(--plinth-color-accent);
+    --plinth-button-surface-hover: var(--plinth-color-accent-hover);
+    --plinth-button-surface-active: var(--plinth-color-accent-active);
+    --plinth-button-text: var(--plinth-color-on-accent);
   }
 
   .plinth-button[data-variant='secondary'] {
