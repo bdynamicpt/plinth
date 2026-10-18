@@ -340,6 +340,10 @@ const cases: ParityCase[] = [
   }),
   sheetCase('Sheet/empty footer', { ...sheetDefaults, footer: '  ' }),
   sheetCase('Sheet/id with spaces', { ...sheetDefaults, id: 'filters' }, {}, ' filters '),
+  sheetCase('Sheet/unknown placement', {
+    ...sheetDefaults,
+    placement: 'start' as SheetArgs['placement'],
+  }),
   ...storyArgs<MenuSheetArgs>(menuSheetStories).map(([story, args]) =>
     menuSheetCase(`Menu sheet/${story}`, args),
   ),
@@ -356,10 +360,6 @@ const cases: ParityCase[] = [
     account: '  ',
   }),
   menuSheetCase('Menu sheet/blank user name', { ...menuSheetDefaults, userName: '  ' }),
-  sheetCase('Sheet/unknown placement', {
-    ...sheetDefaults,
-    placement: 'start' as SheetArgs['placement'],
-  }),
   ...storyArgs<HeaderArgs>(headerStories).map(([story, args]) =>
     headerCase(`Header/${story}`, args),
   ),

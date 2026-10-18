@@ -1202,6 +1202,87 @@
   }
 }
 
+/* menu-sheet.css */
+/*
+ * Menu sheet: the app shell's menu, a sheet with the signed-in user, the navigation and the
+ * account actions. A side panel from 768px up, a bottom sheet on a phone.
+ *
+ * <dialog id="menu" class="plinth-sheet plinth-menu-sheet" data-placement="end" closedby="any"
+ *   aria-labelledby="menu-title">
+ *   <div class="plinth-sheet-header">
+ *     <h2 id="menu-title" class="plinth-sheet-title">Menu</h2>
+ *     <button … class="plinth-button plinth-icon-button plinth-sheet-close" commandfor="menu"
+ *       command="close">…</button>
+ *   </div>
+ *   <div class="plinth-sheet-body">
+ *     <a class="plinth-list-row plinth-menu-sheet-user" href="/profile">
+ *       <span class="plinth-list-row-leading">
+ *         <span class="plinth-avatar" data-size="lg" aria-hidden="true">…</span>
+ *       </span>
+ *       <span class="plinth-list-row-content">
+ *         <span class="plinth-list-row-title">Sam Lee</span>
+ *         <span class="plinth-list-row-description">sam@example.com</span>
+ *       </span>
+ *       <span class="plinth-list-row-trailing">…chevron…</span>
+ *     </a>
+ *     <nav class="plinth-menu-sheet-nav" aria-labelledby="menu-title">
+ *       <div class="plinth-list-card">…link rows, one with aria-current="page"…</div>
+ *     </nav>
+ *     <div class="plinth-menu-sheet-account">
+ *       <div class="plinth-list-card">…Settings, Sign out…</div>
+ *     </div>
+ *   </div>
+ * </dialog>
+ *
+ * It is a sheet (sheet.css), always data-placement="end", with no footer; everything the sheet's
+ * contract says holds, and it needs sheet.css, list-row.css, list-card.css, avatar.css,
+ * button.css and icon.css. The root's id is required in practice: the header's menu button opens
+ * it with <button commandfor="menu" command="show-modal">, and the nav and the title point at it.
+ *
+ * The parts, in the body:
+ * - the user row (optional): a list row with a decorative avatar (lg), the name and an optional
+ *   detail (an email or a role); a static <div>, or a link to the profile with a chevron when it
+ *   has an href. The avatar is decorative because the name is printed next to it.
+ * - the nav (always there): a <nav> named by the sheet's title (aria-labelledby), holding list
+ *   cards of link rows. The app marks the row of the page being shown with aria-current="page"
+ *   (current on the list row) and keeps it up to date; the menu remembers nothing.
+ * - the account (optional): a list card of account actions, such as Settings and Sign out (a
+ *   button row, or a form's submit button in a static row).
+ *
+ * The parts stack with a gap between them. In the full-height side panel the account sits on the
+ * bottom edge (margin-block-start: auto) and rises with the content when the nav is long; the
+ * body scrolls as one.
+ */
+
+@layer plinth {
+  .plinth-menu-sheet > .plinth-sheet-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--plinth-space-5);
+  }
+
+  .plinth-menu-sheet-nav,
+  .plinth-menu-sheet-account {
+    display: flex;
+    flex-direction: column;
+    gap: var(--plinth-space-5);
+  }
+
+  .plinth-menu-sheet-account {
+    margin-block-start: auto;
+  }
+
+  /* The name reads as the row's heading. */
+  .plinth-menu-sheet-user .plinth-list-row-title {
+    font-weight: var(--plinth-font-weight-medium);
+  }
+
+  /* A link to the profile is one tap target: its tint stays inside the sheet's rounded edge. */
+  a.plinth-menu-sheet-user {
+    border-radius: var(--plinth-radius-container);
+  }
+}
+
 /* pill-row.css */
 /*
  * Pill row: a row of pills for filters, segments or sub-pages.
