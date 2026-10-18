@@ -17,9 +17,6 @@ storybook-static/
 .phpunit.result.cache
 .pint.cache
 
-# Storybook test runner: failed screenshot diffs (baselines are committed)
-**/__image_snapshots__/__diff_output__/
-**/__image_snapshots__/__received_output__/
 test-results/
 playwright-report/
 coverage/

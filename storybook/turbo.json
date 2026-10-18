@@ -3,8 +3,7 @@
   "extends": ["//"],
   "tasks": {
     "test": {
-      "dependsOn": ["^build", "build-storybook"],
-      "env": ["PLINTH_VISUAL"]
+      "dependsOn": ["^build", "build-storybook"]
     }
   }
 }

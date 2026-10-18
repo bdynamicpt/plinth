@@ -9,7 +9,7 @@ thin Blade and Vue layers that print the same markup, documented and tested in S
 - **Components are plain HTML and CSS.** Each one has a markup contract (its elements, classes,
   states and ARIA) that every framework layer prints.
 - **Blade and Vue layers** print that markup and hold no styles of their own.
-- **Storybook** documents the plain HTML and tests it: accessibility, screenshots, and parity
+- **Storybook** documents the plain HTML and tests it: accessibility and parity
   between the story, Blade and Vue.
 - **Each project brings its brand through the tokens.** Plinth ships neutral defaults; a project
   overrides the custom properties and never forks a component.
@@ -67,19 +67,8 @@ What the tests cover:
   Vue component, and compare them ignoring whitespace and attribute order. Then the Storybook
   test runner opens every story in light and dark at 390, 768 and 1440 px and checks it with axe.
 
-### Screenshots
-
-Screenshots depend on the fonts and renderer of the machine, so the baselines in
-`storybook/__screenshots__/` are made in Playwright's container image, the same one CI uses. Run
-the comparison with Podman or Docker (after `npm run build-storybook`):
-
-```bash
-npm run test:visual -w @bdynamic/plinth-storybook               # compare
-npm run test:visual -w @bdynamic/plinth-storybook -- --update   # write new baselines
-```
-
-Locally, `npx turbo run test` skips the pixel comparison (it still renders and checks every
-story); CI sets `PLINTH_VISUAL=1` and compares.
+Screenshot comparison is paused until the foundations settle
+([#9](https://github.com/bdynamicpt/plinth/issues/9)).
 
 ## Using Plinth from a project while you work on it
 

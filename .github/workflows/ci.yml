@@ -12,19 +12,10 @@ concurrency:
 jobs:
   ci:
     runs-on: ubuntu-latest
-    # Playwright's image, so the Storybook screenshots render exactly as the committed baselines
-    # (made with `npm run test:visual` in the same image).
-    container: mcr.microsoft.com/playwright:v1.64.1-noble
-    env:
-      PLINTH_VISUAL: '1'
-      # The image ships its browsers here; the job's HOME (/github/home) would hide them.
-      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     steps:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-
-      - run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - uses: shivammathur/setup-php@v2
         with:
@@ -47,6 +38,9 @@ jobs:
       # Also runs `composer install` in packages/blade (its postinstall).
       - run: npm ci
 
+      - name: Install Chromium for the Storybook test runner
+        run: npx playwright install --with-deps chromium
+
       - name: Lint, test and build what the pull request touches, and what depends on it
         if: github.event_name == 'pull_request'
         run: npx turbo run lint test build build-storybook --filter="...[origin/${{ github.base_ref }}]"
@@ -57,11 +51,3 @@ jobs:
 
       - name: The CSS shipped in packages/blade is up to date
         run: git diff --exit-code -- packages/blade/resources/dist
-
-      - name: Keep the screenshot diffs
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: screenshot-diffs
-          path: storybook/__screenshots__/__diff_output__/
-          if-no-files-found: ignore

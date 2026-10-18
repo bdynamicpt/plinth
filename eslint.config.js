@@ -12,7 +12,6 @@ export default tseslint.config(
       '**/storybook-static/**',
       '**/vendor/**',
       '**/node_modules/**',
-      '**/__screenshots__/**',
       '**/.turbo/**',
     ],
   },

@@ -45,9 +45,7 @@ Every component ships all of these in the same pull request:
 5. **Parity test**: a case in `storybook/test/parity.test.ts`, so the Blade and Vue output must
    match the story's markup.
 6. **Docs**: the story's docs page (description, and anything a user must know).
-7. **Screenshots**: new baselines, reviewed before committing:
-   `npm run test:visual -w @bdynamic/plinth-storybook -- --update`. Pull requests that change the
-   UI include screenshots at 390, 768 and 1440 px in light and dark.
+7. **Screenshots** in the pull request, at 390, 768 and 1440 px in light and dark.
 
 The Blade and Vue layers only print markup. They hold no styles, and they do not add elements or
 attributes that the story does not have.

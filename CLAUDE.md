@@ -4,12 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Status
 
-Only the README exists so far. The setup is tracked in https://github.com/bdynamicpt/plinth/issues/1,
-which proves the whole path with one component (`badge`). Add the real commands here once the
-workspace exists.
-
-Planned commands (from issue #1): `npm ci`, `npx turbo run lint test build build-storybook`,
-`npm run storybook`, `npm run build-storybook`, and `composer test` in `packages/blade`.
+The workspace is set up (issue #1) with one component end to end, `badge`. Commands: `npm ci`
+(also runs `composer install` in `packages/blade`), `npm run check` (= `turbo run lint test build
+build-storybook`), `npm run storybook`, `npm run build-storybook`, and `composer test` in
+`packages/blade`. See README.md for details.
 
 ## What Plinth is
 
@@ -43,8 +41,9 @@ storybook/  never published
 - npm workspaces, Node 22, Vite, TypeScript. Not Bun or pnpm.
 - Turborepo with no remote cache. Task order: `tokens` → `css` → `vue` and `blade` → `storybook`;
   outputs declared in `turbo.json`.
-- Tests: Vitest (tokens build, Vue), Storybook test runner with Playwright (including screenshot
-  comparison), Pest (Blade).
+- Tests: Vitest (tokens build, Vue), Storybook test runner with Playwright and axe (every
+  story, both themes, three widths), Pest (Blade). Screenshot comparison is paused until the
+  foundations settle (#9).
 - Lint: ESLint, Prettier, Stylelint (property order, no `!important`, no raw colours), Pint.
 - CI: `npm ci`, then `turbo run lint test build build-storybook`, `.turbo` kept by the Actions
   cache; pull requests use `--filter=...[origin/main]`.
@@ -68,7 +67,7 @@ storybook/  never published
 
 ## Working in this repo
 
-- Licence: MIT is proposed but not confirmed. Ask the owner before adding it.
+- Licence: MIT.
 - Commit to `main` directly (no stacked pull requests). Commit and push after each step.
 - Commit and PR bodies are plain words explaining the change, with no session links or
   `Claude-Session` trailers.
