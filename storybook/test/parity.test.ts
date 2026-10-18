@@ -1,4 +1,4 @@
-import { PlinthBadge, PlinthButton, PlinthIcon } from '@bdynamic/plinth-vue';
+import { PlinthBadge, PlinthButton, PlinthIcon, PlinthIconButton } from '@bdynamic/plinth-vue';
 import { createStaticVNode, h, type Component } from 'vue';
 import { renderToString } from 'vue/server-renderer';
 import { describe, expect, it } from 'vitest';
@@ -6,6 +6,8 @@ import * as badgeStories from '../stories/components/Badge.stories.ts';
 import { badge, type Attributes, type BadgeArgs } from '../stories/components/badge.ts';
 import * as buttonStories from '../stories/components/Button.stories.ts';
 import { button, type ButtonArgs } from '../stories/components/button.ts';
+import * as iconButtonStories from '../stories/components/IconButton.stories.ts';
+import { iconButton, type IconButtonArgs } from '../stories/components/icon-button.ts';
 import * as iconStories from '../stories/components/Icon.stories.ts';
 import { icon, type IconArgs } from '../stories/components/icon.ts';
 import { sampleIcons } from '../stories/components/icons.ts';
@@ -98,6 +100,33 @@ const cases: ParityCase[] = [
   }),
   buttonCase('Button/busy link', { ...buttonDefaults, href: '#orders', busy: true }),
   buttonCase('Button/disabled and busy', { ...buttonDefaults, disabled: true, busy: true }),
+  ...storyArgs<IconButtonArgs>(iconButtonStories).map(([story, args]) =>
+    iconButtonCase(`Icon button/${story}`, args),
+  ),
+  iconButtonCase(
+    'Icon button/with extra attributes',
+    {
+      label: 'Close',
+      variant: 'secondary',
+      size: 'md',
+      disabled: false,
+      busy: false,
+      svg: sampleIcons.close,
+    },
+    { class: 'ms-2', id: 'close', 'data-testid': 'close', title: 'Close', type: 'submit' },
+  ),
+  iconButtonCase(
+    'Icon button/with an aria-label attribute',
+    {
+      label: '',
+      variant: 'ghost',
+      size: 'sm',
+      disabled: false,
+      busy: false,
+      svg: sampleIcons.more,
+    },
+    { 'aria-label': 'More actions' },
+  ),
   iconCase(
     'Icon/with an aria-label attribute',
     { size: 'md', mirror: false, svg: sampleIcons.alert },
@@ -124,6 +153,34 @@ function buttonCase(story: string, args: ButtonArgs, attributes: Attributes = {}
     markup: button(args, attributes),
     vue: { component: PlinthButton, props: { ...props, ...attributes }, slot: args.label, named },
     blade: { component: 'button', props, attributes, slot: args.label, named },
+  };
+}
+
+function iconButtonCase(
+  story: string,
+  args: IconButtonArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = {
+    ...(args.label ? { label: args.label } : {}),
+    variant: args.variant,
+    size: args.size,
+    disabled: args.disabled,
+    busy: args.busy,
+    mirror: args.mirror ?? false,
+    ...(args.pressed !== undefined ? { pressed: args.pressed } : {}),
+    ...(args.href ? { href: args.href } : {}),
+  };
+  return {
+    story,
+    markup: iconButton(args, attributes),
+    vue: {
+      component: PlinthIconButton,
+      props: { ...props, ...attributes },
+      slot: args.svg,
+      html: true,
+    },
+    blade: { component: 'icon-button', props, attributes, slot: args.svg },
   };
 }
 
@@ -204,6 +261,19 @@ describe('parity with the stories', () => {
       'Button/busy with an icon',
       'Button/busy link',
       'Button/disabled and busy',
+      'Icon button/Ghost',
+      'Icon button/Secondary',
+      'Icon button/Primary',
+      'Icon button/DangerGhost',
+      'Icon button/Small',
+      'Icon button/Large',
+      'Icon button/Pressed',
+      'Icon button/NotPressed',
+      'Icon button/Link',
+      'Icon button/Disabled',
+      'Icon button/Busy',
+      'Icon button/with extra attributes',
+      'Icon button/with an aria-label attribute',
       'Icon/with an aria-label attribute',
     ]);
   });

@@ -1,0 +1,77 @@
+import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
+import * as IconButtonStories from './IconButton.stories';
+
+<Meta of={IconButtonStories} />
+
+# Icon button
+
+A button with only an icon, for places where space is tight and the action is familiar: a toolbar,
+a header, the end of a table row, closing a sheet. It is a button in every way (variants, sizes,
+states), just square and without visible text.
+
+<Canvas of={IconButtonStories.Ghost} />
+<Controls of={IconButtonStories.Ghost} />
+
+## When to use it, and when not
+
+Use an icon button only when the icon is **universally understood** in its place: close (×),
+more (⋯), search, edit, a star for favourite. If people would have to guess, use a button with
+a label, or a button with a leading icon and a label. A guessed icon costs more time than the
+space it saves.
+
+Every icon button needs a **`label`**. It is the button's only name: screen readers read it, voice
+control uses it, and it is the text to show in a tooltip (pass it as `title` too if you want the
+browser's). Blade refuses to render an icon button without one, and Vue warns.
+
+## Variants
+
+**ghost** is the default, because icon buttons usually come in groups and repeat (toolbars,
+rows), and quiet ones keep a dense screen calm. The other variants mean what they mean on a
+[button](?path=/docs/components-button--docs): **secondary** for an icon action that needs an edge,
+such as closing a dialog; **primary** or **accent** rarely, for the one main action in a compact
+place; **danger-ghost** for removing an item from a row.
+
+<Canvas of={IconButtonStories.Ghost} />
+<Canvas of={IconButtonStories.Secondary} />
+<Canvas of={IconButtonStories.DangerGhost} />
+
+## Toggles
+
+Set `pressed` to make it a toggle, such as favourite, bold, or mute: `true` or `false` prints
+`aria-pressed`, so screen readers announce the state, and pressed shows the selection tint. Keep
+the label the same in both states (_Favourite_), since `aria-pressed` already says whether it is
+on.
+
+<Canvas of={IconButtonStories.NotPressed} />
+<Canvas of={IconButtonStories.Pressed} />
+
+## Sizes and touch
+
+28, 32 (the default) and 40px squares. On a touch screen every size keeps a 40px touch target, so
+small icon buttons in a row are still easy to hit; leave a little space between them all the same.
+
+<Canvas of={IconButtonStories.Gallery} />
+
+## Links, states and direction
+
+With an `href` it is a link (for example _Next page_). `disabled` and `busy` work as on the
+button. Set `mirror` on an icon that points a direction, so it flips in right-to-left text.
+
+<Canvas of={IconButtonStories.Link} />
+<Canvas of={IconButtonStories.Busy} />
+
+## In Blade and Vue
+
+<Source
+  language="html"
+  dark
+  code={`<x-plinth::icon-button label="Close" variant="secondary" wire:click="close">
+    <svg>…</svg>
+</x-plinth::icon-button>
+
+<PlinthIconButton label="Favourite" :pressed="isFavourite" @click="toggle">
+  <svg>…</svg>
+</PlinthIconButton>`}
+/>
+
+The markup contract is in `packages/css/src/components/button.css`, under the icon button.
