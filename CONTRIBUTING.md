@@ -28,6 +28,13 @@ keep its own custom properties, named `--plinth-component-*`.
 depends on hover. Motion uses the `--plinth-duration-*` tokens, which drop to 0ms under
 `prefers-reduced-motion`. Colour is never the only signal. Text meets WCAG AA in light and dark.
 
+**Native behaviour first.** Interactive components get their behaviour from the platform:
+`<dialog>` for sheets, the `popover` attribute for menus, `<details>` for disclosure, and
+`command` / `commandfor` buttons to open and close them. Style the native open state
+(`[open]`, `:popover-open`) rather than adding a class. See
+[ADR 2](docs/adr/0002-interactive-components-use-native-elements.md) for what to do when the
+platform is not enough.
+
 **In `@layer plinth`.** Wrap a component's rules in `@layer plinth { … }`, so a project's
 utilities can override them without `!important`; the CSS build refuses a file that doesn't.
 Plain modern CSS, no `@apply`.
