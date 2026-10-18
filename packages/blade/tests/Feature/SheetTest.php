@@ -105,3 +105,18 @@ it('passes extra attributes to its root, and lets a project replace closedby', f
         ->toContain('x-ref="sheet"')
         ->toContain('data-testid="filters"');
 });
+
+it('leaves out a footer slot with nothing in it', function () {
+    $html = Blade::render(
+        '<x-plinth::sheet id="filters" title="Filters">Body<x-slot:footer>@if ($show) <button type="button">Apply</button> @endif <!-- none --></x-slot:footer></x-plinth::sheet>',
+        ['show' => false],
+    );
+
+    expect($html)->not->toContain('plinth-sheet-footer');
+});
+
+it('trims the id it is given', function () {
+    expect(Blade::render('<x-plinth::sheet id=" filters " title="Filters">Body</x-plinth::sheet>'))
+        ->toContain('<dialog id="filters"')
+        ->toContain('aria-labelledby="filters-title"');
+});

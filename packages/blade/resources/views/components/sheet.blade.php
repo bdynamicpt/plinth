@@ -10,7 +10,7 @@
     if (blank($title)) {
         throw new InvalidArgumentException('<x-plinth::sheet> needs a title: it is the sheet\'s accessible name.');
     }
-    $id = filled($id) ? $id : 'plinth-sheet-'.\Illuminate\Support\Str::lower(\Illuminate\Support\Str::random(8));
+    $id = filled($id) ? trim($id) : 'plinth-sheet-'.\Illuminate\Support\Str::lower(\Illuminate\Support\Str::random(8));
     $hasDescription = filled($description);
     $root = array_filter([
         'id' => $id,
@@ -30,7 +30,7 @@
         <x-plinth::icon-button class="plinth-sheet-close" :label="$closeLabel" variant="ghost" :commandfor="$id" command="close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></x-plinth::icon-button>
     </div>
     <div class="plinth-sheet-body">{{ $slot }}</div>
-    @isset($footer)
+    @if (isset($footer) && $footer->hasActualContent())
         <div class="plinth-sheet-footer">{{ $footer }}</div>
-    @endisset
+    @endif
 </dialog>

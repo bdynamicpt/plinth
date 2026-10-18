@@ -269,6 +269,8 @@ const cases: ParityCase[] = [
     description: '  ',
     footer: undefined,
   }),
+  sheetCase('Sheet/empty footer', { ...sheetDefaults, footer: '  ' }),
+  sheetCase('Sheet/id with spaces', { ...sheetDefaults, id: 'filters' }, {}, ' filters '),
   sheetCase('Sheet/unknown placement', {
     ...sheetDefaults,
     placement: 'start' as SheetArgs['placement'],
@@ -417,9 +419,14 @@ function pillRowCase(story: string, args: PillRowArgs, attributes: Attributes = 
 }
 
 /** The sheet's own parity; its body and footer are markup, passed in as the slots. */
-function sheetCase(story: string, args: SheetArgs, attributes: Attributes = {}): ParityCase {
+function sheetCase(
+  story: string,
+  args: SheetArgs,
+  attributes: Attributes = {},
+  id: string = args.id,
+): ParityCase {
   const props = {
-    id: args.id,
+    id,
     title: args.title,
     ...(args.description ? { description: args.description } : {}),
     closeLabel: args.closeLabel,
@@ -598,6 +605,8 @@ describe('parity with the stories', () => {
       'Sheet/LongTitle',
       'Sheet/with extra attributes',
       'Sheet/blank description, no footer',
+      'Sheet/empty footer',
+      'Sheet/id with spaces',
       'Sheet/unknown placement',
       'Icon/with an aria-label attribute',
     ]);

@@ -52,7 +52,7 @@ export function sheet(
     close,
     '</div>',
     `<div class="plinth-sheet-body">${body}</div>`,
-    footer ? `<div class="plinth-sheet-footer">${footer}</div>` : '',
+    footer?.trim() ? `<div class="plinth-sheet-footer">${footer}</div>` : '',
     '</dialog>',
   ].join('');
 }

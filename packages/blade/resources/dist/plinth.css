@@ -1290,10 +1290,23 @@
  * the middle of the screen, sheet.width wide; end is a full-height panel on the inline-end edge,
  * sheet.side-width wide. On a phone both are a bottom sheet.
  *
- * The body scrolls, with overscroll-behavior: contain; the header and footer stay put. While a
+ * The description is a secondary line, at the size of a list row's description.
+ *
+ * The body scrolls, with overscroll-behavior: contain; the header and footer stay put; the
+ * margins of its first and last child are reset, so its padding is its edge. While a
  * sheet is open the page under it doesn't scroll (html:has(.plinth-sheet:modal)), and
  * scrollbar-gutter: stable keeps it from shifting. The sheet slides (and the centred one fades)
  * in and out on the motion tokens, which drop to 0ms under prefers-reduced-motion.
+ *
+ * On a phone the sheet sits on the bottom edge and its height is capped by 100dvh, which clears
+ * the home indicator (env(safe-area-inset-bottom)) but not, on its own, the on-screen keyboard:
+ * iOS lays the keyboard over the page. A page with a form in a sheet sets
+ * <meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
+ * where the browser supports it, and keeps the sheet's fields near its top.
+ *
+ * In Livewire, a re-render would morph the open dialog back to the server's markup and drop its
+ * open attribute: put wire:ignore.self on the sheet (or keep it outside the component that
+ * re-renders), and always pass an id, since a generated one changes on every render.
  */
 
 @layer plinth {
@@ -1382,7 +1395,7 @@
     font-size: var(--plinth-font-size-lg);
     font-weight: var(--plinth-font-weight-semibold);
     line-height: var(--plinth-font-leading-tight);
-    letter-spacing: var(--plinth-font-tracking-snug);
+    letter-spacing: var(--plinth-font-tracking-tight);
     overflow-wrap: anywhere;
   }
 
@@ -1408,6 +1421,15 @@
     overscroll-behavior: contain;
     font-size: var(--plinth-font-size-md);
     line-height: var(--plinth-font-leading-normal);
+  }
+
+  /* The body's padding is its edge: the first and last child's margins don't add to it. */
+  .plinth-sheet-body > :first-child {
+    margin-block-start: 0;
+  }
+
+  .plinth-sheet-body > :last-child {
+    margin-block-end: 0;
   }
 
   /* A browser can focus a scrolling area that has nothing focusable in it. */
@@ -1442,7 +1464,7 @@
 
       inset: 0;
       inline-size: min(100% - 2 * var(--plinth-space-8), var(--plinth-sheet-width));
-      max-block-size: calc(100dvh - 2 * var(--plinth-space-16));
+      max-block-size: calc(100dvh - 2 * var(--plinth-space-8));
       margin: auto;
       border-block-end-width: var(--plinth-border-width-thin);
       border-radius: var(--plinth-radius-container);
@@ -1467,6 +1489,9 @@
       inline-size: min(100%, var(--plinth-sheet-side-width));
       block-size: auto;
       max-block-size: none;
+
+      /* Clears the notch on a phone held sideways. */
+      padding-inline-end: env(safe-area-inset-right);
       margin: 0;
       border-width: 0;
       border-inline-start-width: var(--plinth-border-width-thin);
@@ -1476,17 +1501,20 @@
 
     .plinth-sheet[data-placement='end']:dir(rtl) {
       --plinth-sheet-offset: -100% 0;
+
+      padding-inline-end: env(safe-area-inset-left);
     }
 
     .plinth-sheet-footer > * {
       flex: none;
     }
 
-    .plinth-sheet-body:last-child {
+    /* Only a full-height panel still reaches the bottom edge and keeps the safe-area padding. */
+    .plinth-sheet:not([data-placement='end']) > .plinth-sheet-body:last-child {
       padding-block-end: var(--plinth-space-4);
     }
 
-    .plinth-sheet-footer {
+    .plinth-sheet:not([data-placement='end']) > .plinth-sheet-footer {
       padding-block-end: var(--plinth-space-3);
     }
   }

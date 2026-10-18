@@ -1,4 +1,5 @@
 import { mount } from '@vue/test-utils';
+import { Comment, createStaticVNode, Fragment, h } from 'vue';
 import { describe, expect, it, vi } from 'vitest';
 import { PlinthSheet, sheetCloseIcon, sheetPlacement } from '../src/index.ts';
 
@@ -77,18 +78,54 @@ describe('PlinthSheet', () => {
     expect(wrapper.html()).toContain('&lt;i&gt;y&lt;/i&gt;');
   });
 
-  it('passes extra attributes and listeners to its root, and lets a project replace closedby', async () => {
-    const onClose = vi.fn();
+  it('passes extra attributes to its root, and lets a project replace closedby', () => {
     const wrapper = mount(PlinthSheet, {
       props: { id: 'filters', title: 'Filters' },
-      attrs: { class: 'is-busy', closedby: 'closerequest', 'data-testid': 'filters', onClose },
+      attrs: { class: 'is-busy', closedby: 'closerequest', 'data-testid': 'filters' },
     });
 
     expect(wrapper.classes()).toEqual(['plinth-sheet', 'is-busy']);
     expect(wrapper.attributes('closedby')).toBe('closerequest');
     expect(wrapper.attributes('data-testid')).toBe('filters');
+  });
+
+  it('emits close when the dialog closes', async () => {
+    const wrapper = sheetWith();
+
     await wrapper.trigger('close');
-    expect(onClose).toHaveBeenCalledOnce();
+
+    expect(wrapper.emitted('close')).toHaveLength(1);
+    expect(wrapper.emitted('close')![0]![0]).toBeInstanceOf(Event);
+  });
+
+  it('needs a title', () => {
+    expect(() => mount(PlinthSheet, { props: { title: ' ' } })).toThrow('needs a title');
+  });
+
+  it('trims the id it is given', () => {
+    const wrapper = sheetWith({ id: ' filters ' });
+
+    expect(wrapper.attributes('id')).toBe('filters');
+    expect(wrapper.attributes('aria-labelledby')).toBe('filters-title');
+  });
+
+  it('leaves out a footer slot with nothing in it, and keeps one with content', () => {
+    const footer = (content: () => unknown) =>
+      mount(PlinthSheet, {
+        props: { id: 'filters', title: 'Filters' },
+        slots: { footer: content as () => never },
+      })
+        .find('.plinth-sheet-footer')
+        .exists();
+
+    expect(footer(() => [])).toBe(false);
+    expect(footer(() => ' ')).toBe(false);
+    expect(footer(() => [h(Comment)])).toBe(false);
+    expect(footer(() => [h(Fragment, [h(Comment)])])).toBe(false);
+    expect(footer(() => [h(Fragment, [h('button', 'Apply')])])).toBe(true);
+    expect(footer(() => [createStaticVNode('  ', 1)])).toBe(false);
+    expect(footer(() => [createStaticVNode('<b>x</b>', 1)])).toBe(true);
+    expect(footer(() => 'Apply')).toBe(true);
   });
 
   it('opens and closes the dialog through showModal() and close()', () => {

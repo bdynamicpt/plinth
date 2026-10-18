@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Markup contract: packages/css/src/components/sheet.css
-import { computed, ref, useId } from 'vue';
+import { Comment, computed, Fragment, ref, Static, Text, useId, useSlots, type VNode } from 'vue';
 import PlinthIconButton from './PlinthIconButton.vue';
 import { sheetPlacement, type SheetPlacement } from './sheet';
 
@@ -20,10 +20,29 @@ const props = withDefaults(
   { id: undefined, description: undefined, closeLabel: 'Close', placement: 'center' },
 );
 
+const emit = defineEmits<{
+  /** The dialog closed: the close button, Escape, the backdrop or close(). */
+  close: [event: Event];
+}>();
+
+if (!props.title?.trim()) {
+  throw new Error("<PlinthSheet> needs a title: it is the sheet's accessible name.");
+}
+
+const slots = useSlots();
 const generatedId = useId();
-const sheetId = computed(() => props.id || `plinth-sheet-${generatedId}`);
+const sheetId = computed(() => props.id?.trim() || `plinth-sheet-${generatedId}`);
 const dataPlacement = computed(() => sheetPlacement(props.placement));
 const hasDescription = computed(() => Boolean(props.description?.trim()));
+
+/** A footer slot that renders nothing (a v-if that is false) prints no footer. */
+const hasContent = (nodes: VNode[]): boolean =>
+  nodes.some((node) => {
+    if (node.type === Comment) return false;
+    if (node.type === Text || node.type === Static) return String(node.children).trim() !== '';
+    if (node.type === Fragment) return hasContent(node.children as VNode[]);
+    return true;
+  });
 
 const dialog = ref<HTMLDialogElement>();
 
@@ -44,6 +63,7 @@ defineExpose({
     closedby="any"
     :aria-labelledby="`${sheetId}-title`"
     :aria-describedby="hasDescription ? `${sheetId}-description` : undefined"
+    @close="emit('close', $event)"
   >
     <div class="plinth-sheet-header">
       <h2 :id="`${sheetId}-title`" class="plinth-sheet-title">{{ title }}</h2>
@@ -68,6 +88,8 @@ defineExpose({
       ></PlinthIconButton>
     </div>
     <div class="plinth-sheet-body"><slot /></div>
-    <div v-if="$slots.footer" class="plinth-sheet-footer"><slot name="footer" /></div>
+    <div v-if="slots.footer && hasContent(slots.footer())" class="plinth-sheet-footer">
+      <slot name="footer" />
+    </div>
   </dialog>
 </template>

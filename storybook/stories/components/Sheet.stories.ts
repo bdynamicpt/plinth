@@ -115,7 +115,7 @@ export const Confirmation: Story = {
     id: 'delete-item',
     title: 'Delete this item?',
     description: 'It is removed for everyone in the workspace. This cannot be undone.',
-    body: '<p style="margin: 0;">Its history and comments are deleted with it.</p>',
+    body: '<p>Its history and comments are deleted with it.</p>',
     footer:
       action('Cancel', 'secondary', { commandfor: 'delete-item', command: 'close' }) +
       action('Delete', 'danger'),
@@ -128,7 +128,8 @@ export const LongContent: Story = {
     id: 'long',
     title: 'Notifications',
     footer: footer('long'),
-    body: [1, 2, 3]
+    // Spacing between the cards is the page's layout, not the sheet's.
+    body: `<div style="display: grid; gap: var(--plinth-space-4);">${[1, 2, 3]
       .map((n) =>
         listCard({
           heading: `Group ${n}`,
@@ -138,7 +139,7 @@ export const LongContent: Story = {
           ),
         }),
       )
-      .join('<div style="block-size: var(--plinth-space-4);"></div>'),
+      .join('')}</div>`,
   },
 };
 
@@ -153,6 +154,25 @@ export const LongTitle: Story = {
 };
 
 /** Right-to-left text: the close button sits on the left, and a side panel opens on the left. */
+/**
+ * closedby="closerequest" on the root: Escape and the buttons close it, a tap on the backdrop
+ * doesn't. For a form with unsaved changes.
+ */
+export const NoBackdropClose: Story = {
+  render: (args) => {
+    const strict = {
+      ...args,
+      id: 'rename',
+      title: 'Rename',
+      body: '<p>A tap outside the sheet leaves it open.</p>',
+      footer:
+        action('Cancel', 'secondary', { commandfor: 'rename', command: 'close' }) +
+        action('Save', 'primary'),
+    };
+    return opener(strict) + sheet(strict, { closedby: 'closerequest' });
+  },
+};
+
 export const RightToLeft: Story = {
   render: (args) => {
     const rtl = {
