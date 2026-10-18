@@ -25,6 +25,10 @@ keep its own custom properties, named `--plinth-component-*`.
 depends on hover. Motion uses the `--plinth-duration-*` tokens, which drop to 0ms under
 `prefers-reduced-motion`. Colour is never the only signal. Text meets WCAG AA in light and dark.
 
+**In `@layer plinth`.** Wrap a component's rules in `@layer plinth { … }`, so a project's
+utilities can override them without `!important`; the CSS build refuses a file that doesn't.
+Plain modern CSS, no `@apply`.
+
 **No `!important`.**
 
 Stylelint enforces most of these (`stylelint.config.js`), along with property order.

@@ -22,10 +22,6 @@
       "default": "./packages/tokens/dist/index.js"
     },
     "./tokens.css": "./packages/tokens/dist/tokens.css",
-    "./tailwind": {
-      "types": "./packages/tokens/dist/tailwind-preset.d.ts",
-      "default": "./packages/tokens/dist/tailwind-preset.js"
-    },
     "./tailwind.css": "./packages/tokens/dist/tailwind-theme.css",
     "./css": "./packages/css/dist/plinth.css",
     "./css/*": "./packages/css/dist/*",

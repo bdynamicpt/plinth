@@ -47,7 +47,7 @@ storybook/  never published
 - Lint: ESLint, Prettier, Stylelint (property order, no `!important`, no raw colours), Pint.
 - CI: `npm ci`, then `turbo run lint test build build-storybook`, `.turbo` kept by the Actions
   cache; pull requests use `--filter=...[origin/main]`.
-- Published as npm `@bdynamic/plinth` (subpaths `tokens`, `tokens.css`, `css`, `vue`, `tailwind`)
+- Published as npm `@bdynamic/plinth` (subpaths `tokens`, `tokens.css`, `css`, `vue`, `tailwind.css`)
   and Packagist `bdynamicpt/plinth` (Blade, Filament plugin, built CSS so Laravel needs no Node
   build). One version, one tag. Storybook, tests, token sources and tooling are not published.
 

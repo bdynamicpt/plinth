@@ -10,64 +10,66 @@
  * The label carries the meaning; the tone and the dot only reinforce it.
  */
 
-.plinth-badge {
-  --plinth-badge-surface: var(--plinth-color-neutral-surface);
-  --plinth-badge-text: var(--plinth-color-neutral-text);
-  --plinth-badge-accent: var(--plinth-color-neutral-accent);
+@layer plinth {
+  .plinth-badge {
+    --plinth-badge-surface: var(--plinth-color-neutral-surface);
+    --plinth-badge-text: var(--plinth-color-neutral-text);
+    --plinth-badge-accent: var(--plinth-color-neutral-accent);
 
-  display: inline-flex;
-  gap: var(--plinth-space-1);
-  align-items: center;
-  max-inline-size: 100%;
-  padding-block: var(--plinth-space-0-5);
-  padding-inline: var(--plinth-space-2);
-  font-family: var(--plinth-font-sans);
-  font-size: var(--plinth-font-size-xs);
-  font-weight: var(--plinth-font-weight-medium);
-  line-height: var(--plinth-leading-normal);
-  vertical-align: middle;
-  color: var(--plinth-badge-text);
-  white-space: nowrap;
-  background-color: var(--plinth-badge-surface);
+    display: inline-flex;
+    gap: var(--plinth-space-1);
+    align-items: center;
+    max-inline-size: 100%;
+    padding-block: var(--plinth-space-0-5);
+    padding-inline: var(--plinth-space-2);
+    font-family: var(--plinth-font-sans);
+    font-size: var(--plinth-font-size-xs);
+    font-weight: var(--plinth-font-weight-medium);
+    line-height: var(--plinth-leading-normal);
+    vertical-align: middle;
+    color: var(--plinth-badge-text);
+    white-space: nowrap;
+    background-color: var(--plinth-badge-surface);
 
-  /* Invisible normally; drawn by the system in forced-colours mode so the badge keeps its edge. */
-  border: 1px solid transparent;
-  border-radius: var(--plinth-radius-full);
-}
+    /* Invisible normally; drawn by the system in forced-colours mode so the badge keeps its edge. */
+    border: 1px solid transparent;
+    border-radius: var(--plinth-radius-full);
+  }
 
-.plinth-badge[data-tone='success'] {
-  --plinth-badge-surface: var(--plinth-color-success-surface);
-  --plinth-badge-text: var(--plinth-color-success-text);
-  --plinth-badge-accent: var(--plinth-color-success-accent);
-}
+  .plinth-badge[data-tone='success'] {
+    --plinth-badge-surface: var(--plinth-color-success-surface);
+    --plinth-badge-text: var(--plinth-color-success-text);
+    --plinth-badge-accent: var(--plinth-color-success-accent);
+  }
 
-.plinth-badge[data-tone='warning'] {
-  --plinth-badge-surface: var(--plinth-color-warning-surface);
-  --plinth-badge-text: var(--plinth-color-warning-text);
-  --plinth-badge-accent: var(--plinth-color-warning-accent);
-}
+  .plinth-badge[data-tone='warning'] {
+    --plinth-badge-surface: var(--plinth-color-warning-surface);
+    --plinth-badge-text: var(--plinth-color-warning-text);
+    --plinth-badge-accent: var(--plinth-color-warning-accent);
+  }
 
-.plinth-badge[data-tone='danger'] {
-  --plinth-badge-surface: var(--plinth-color-danger-surface);
-  --plinth-badge-text: var(--plinth-color-danger-text);
-  --plinth-badge-accent: var(--plinth-color-danger-accent);
-}
+  .plinth-badge[data-tone='danger'] {
+    --plinth-badge-surface: var(--plinth-color-danger-surface);
+    --plinth-badge-text: var(--plinth-color-danger-text);
+    --plinth-badge-accent: var(--plinth-color-danger-accent);
+  }
 
-.plinth-badge-dot {
-  flex: none;
-  inline-size: var(--plinth-space-2);
-  block-size: var(--plinth-space-2);
-  background-color: var(--plinth-badge-accent);
-  border-radius: var(--plinth-radius-full);
-}
-
-.plinth-badge-label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-@media (forced-colors: active) {
   .plinth-badge-dot {
-    background-color: currentcolor;
+    flex: none;
+    inline-size: var(--plinth-space-2);
+    block-size: var(--plinth-space-2);
+    background-color: var(--plinth-badge-accent);
+    border-radius: var(--plinth-radius-full);
+  }
+
+  .plinth-badge-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  @media (forced-colors: active) {
+    .plinth-badge-dot {
+      background-color: currentcolor;
+    }
   }
 }

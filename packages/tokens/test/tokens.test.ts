@@ -1,5 +1,8 @@
+import { compile } from '@tailwindcss/node';
+import { createRequire } from 'node:module';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { buildCss, buildTailwindPreset, buildTailwindTheme } from '../src/generate.ts';
+import { buildCss, buildTailwindTheme } from '../src/generate.ts';
 import {
   color,
   cssVar,
@@ -94,15 +97,21 @@ describe('CSS custom properties', () => {
     }
   });
 
+  it("puts everything in @layer plinth, so a project's overrides win", () => {
+    expect(css).toMatch(/^\/\*.*\*\/\n\n@layer plinth \{\n/);
+    expect(css.trimEnd().endsWith('}')).toBe(true);
+    expect(css.match(/@layer/g)).toHaveLength(1);
+  });
+
   it('switches to dark with data-theme, the .dark class or the system preference', () => {
-    expect(css).toMatch(/\[data-theme="dark"\],\n\.dark \{\n {2}color-scheme: dark;/);
+    expect(css).toMatch(/\[data-theme="dark"\],\n {2}\.dark \{\n {4}color-scheme: dark;/);
     expect(css).toContain('@media (prefers-color-scheme: dark)');
     expect(css).toContain(':root:not([data-theme="light"], .light)');
   });
 
   it('turns motion off when the user asks for reduced motion', () => {
     expect(css).toMatch(
-      /@media \(prefers-reduced-motion: reduce\) \{\n {2}:root \{\n {4}--plinth-duration-fast: 0ms;/,
+      /@media \(prefers-reduced-motion: reduce\) \{\n {4}:root \{\n {6}--plinth-duration-fast: 0ms;/,
     );
   });
 
@@ -117,22 +126,37 @@ describe('CSS custom properties', () => {
 });
 
 describe('Tailwind', () => {
-  it('exports the tokens as theme values that read the custom properties', () => {
-    const { extend } = buildTailwindPreset().theme;
-    expect(extend.colors.plinth.surface).toBe('var(--plinth-color-surface)');
-    expect(extend.colors.plinth.palette.brand[600]).toBe('var(--plinth-palette-brand-600)');
-    expect(extend.spacing['plinth-4']).toBe('var(--plinth-space-4)');
-    expect(extend.borderRadius['plinth-md']).toBe('var(--plinth-radius-md)');
-    expect(extend.zIndex['plinth-modal']).toBe('var(--plinth-layer-modal)');
-    expect(extend.screens['plinth-md']).toBe('768px');
-    expect(Object.keys(extend.colors.plinth)).toEqual([...Object.keys(color.light), 'palette']);
+  const theme = buildTailwindTheme();
+
+  it('exposes the tokens as Tailwind v4 theme variables that read the custom properties', () => {
+    expect(theme).toContain('@theme inline {');
+    expect(theme).toContain('--color-surface: var(--plinth-color-surface);');
+    expect(theme).toContain('--color-text-muted: var(--plinth-color-text-muted);');
+    expect(theme).toContain('--spacing: var(--plinth-space-1);');
+    expect(theme).toContain('--radius-md: var(--plinth-radius-md);');
+    expect(theme).toContain('--text-sm: var(--plinth-font-size-sm);');
+    expect(theme).toContain('--font-sans: var(--plinth-font-sans);');
+    expect(theme).toContain('--breakpoint-md: 768px;');
+    for (const name of Object.keys(color.light)) {
+      expect(theme).toContain(`--color-${name}: var(--plinth-color-${name});`);
+    }
   });
 
-  it('builds a Tailwind v4 @theme', () => {
-    const theme = buildTailwindTheme();
-    expect(theme).toContain('@theme inline {');
-    expect(theme).toContain('--color-plinth-surface: var(--plinth-color-surface);');
-    expect(theme).toContain('--spacing-plinth-4: var(--plinth-space-4);');
-    expect(theme).toContain('--breakpoint-plinth-md: 768px;');
+  it('gives a project the utilities, built by Tailwind itself', async () => {
+    const base = path.dirname(createRequire(import.meta.url).resolve('tailwindcss/package.json'));
+    const compiler = await compile(
+      `@import 'tailwindcss/theme';\n@import 'tailwindcss/utilities';\n${theme}`,
+      {
+        base,
+        onDependency: () => {},
+      },
+    );
+    const css = compiler.build(['bg-surface', 'text-text-muted', 'p-4', 'rounded-md', 'md:p-8']);
+
+    expect(css).toMatch(/\.bg-surface \{\s*background-color: var\(--plinth-color-surface\);/);
+    expect(css).toMatch(/\.text-text-muted \{\s*color: var\(--plinth-color-text-muted\);/);
+    expect(css).toMatch(/\.p-4 \{\s*padding: calc\(var\(--plinth-space-1\) \* 4\);/);
+    expect(css).toMatch(/\.rounded-md \{\s*border-radius: var\(--plinth-radius-md\);/);
+    expect(css).toContain('@media (width >= 768px)');
   });
 });

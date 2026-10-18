@@ -5,7 +5,7 @@ thin Blade and Vue layers that print the same markup, documented and tested in S
 
 - **Tokens** are the source of truth: colour (light and dark), type, spacing, radii, layers,
   breakpoints and motion. They are written once and built to CSS custom properties, a JS/TS
-  export and a Tailwind preset.
+  export and a Tailwind v4 theme file.
 - **Components are plain HTML and CSS.** Each one has a markup contract (its elements, classes,
   states and ARIA) that every framework layer prints.
 - **Blade and Vue layers** print that markup and hold no styles of their own.
@@ -18,7 +18,7 @@ thin Blade and Vue layers that print the same markup, documented and tested in S
 
 ```
 packages/
-  tokens/     the tokens (src/tokens.ts); builds CSS custom properties, a JS/TS export, a Tailwind preset
+  tokens/     the tokens (src/tokens.ts); builds CSS custom properties, a JS/TS export, a Tailwind theme
   css/        one stylesheet per component, tokens only, mobile first; builds dist/plinth.css
   vue/        Vue 3 components that print the markup contract
   blade/      Composer package: Blade components, a Filament plugin, and the built CSS
@@ -30,7 +30,7 @@ package (nothing is published yet):
 
 | Package             | Registry  | Holds                                                                                      |
 | ------------------- | --------- | ------------------------------------------------------------------------------------------ |
-| `@bdynamic/plinth`  | npm       | `./tokens`, `./tokens.css`, `./css`, `./vue`, `./tailwind` and `./tailwind.css`            |
+| `@bdynamic/plinth`  | npm       | `./tokens`, `./tokens.css`, `./css`, `./vue` and `./tailwind.css`                          |
 | `bdynamicpt/plinth` | Packagist | `<x-plinth::…>` Blade components, `PlinthPlugin` for Filament, `resources/dist/plinth.css` |
 
 ## Working on Plinth
@@ -119,11 +119,20 @@ import '@bdynamic/plinth/css';
 import { PlinthBadge } from '@bdynamic/plinth/vue';
 ```
 
-For Tailwind v4, `@import '@bdynamic/plinth/tailwind.css';` adds the tokens as theme values
-(`bg-plinth-surface`, `p-plinth-4`, `rounded-plinth-md`); for a JS config, use the preset from
-`@bdynamic/plinth/tailwind`.
+**Tailwind v4**: Plinth's CSS is in `@layer plinth`. Place that layer after Tailwind's reset and
+before its utilities, so a utility class can adjust a component without `!important`. Then import
+the theme file, so page code gets the tokens as utilities (`bg-surface`, `text-text-muted`, `p-4`,
+`rounded-md`):
 
-**Your brand**: after Plinth's CSS, override the custom properties:
+```css
+@layer theme, base, plinth, components, utilities;
+@import 'tailwindcss';
+@import '@bdynamic/plinth/css';
+@import '@bdynamic/plinth/tailwind.css';
+```
+
+**Your brand**: override the custom properties after Plinth's CSS, outside any layer (Plinth's
+own are inside `@layer plinth`, so yours win):
 
 ```css
 :root {

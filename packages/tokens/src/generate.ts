@@ -39,8 +39,9 @@ function themeDeclarations(theme: Theme): Declarations {
 }
 
 /**
- * The custom properties. Light is the default; dark applies with `data-theme="dark"` (or the
- * `.dark` class) on any ancestor, and follows the system when no theme is set.
+ * The custom properties, inside `@layer plinth` like the components, so a project's own overrides
+ * win however they are layered. Light is the default; dark applies with `data-theme="dark"` (or
+ * the `.dark` class) on any ancestor, and follows the system when no theme is set.
  */
 export function buildCss(): string {
   const root: Declarations = [
@@ -60,8 +61,7 @@ export function buildCss(): string {
     ...declarations(motion.easing, 'easing'),
   ];
 
-  return [
-    banner,
+  const blocks = [
     block(':root', root),
     block(':root,\n[data-theme="light"]', themeDeclarations('light')),
     block('[data-theme="dark"],\n.dark', themeDeclarations('dark')),
@@ -75,73 +75,31 @@ export function buildCss(): string {
       Object.keys(motion.duration).map((key) => [cssVarName('duration', key), '0ms']),
       '  ',
     )}\n}`,
-  ]
-    .join('\n\n')
-    .concat('\n');
+  ];
+
+  const body = blocks.join('\n\n').replace(/^(?=.)/gm, '  ');
+  return `${banner}\n\n@layer plinth {\n${body}\n}\n`;
 }
 
 /**
- * A Tailwind preset (v3, or v4 through `@config`). Values are the custom properties, so a
- * project's overrides and the dark theme apply to the utilities too.
- */
-export function buildTailwindPreset() {
-  return {
-    theme: {
-      extend: {
-        colors: { plinth: { ...vars.color, palette: vars.palette } },
-        fontFamily: { plinth: vars.font.family.sans, 'plinth-mono': vars.font.family.mono },
-        fontSize: prefixKeys(vars.font.size),
-        fontWeight: prefixKeys(vars.font.weight),
-        lineHeight: prefixKeys(vars.font.leading),
-        spacing: prefixKeys(vars.space),
-        borderRadius: prefixKeys(vars.radius),
-        zIndex: prefixKeys(vars.layer),
-        transitionDuration: prefixKeys(vars.motion.duration),
-        transitionTimingFunction: prefixKeys(vars.motion.easing),
-        screens: prefixKeys(breakpoint),
-      },
-    },
-  };
-}
-
-function prefixKeys<T extends Record<string, string>>(group: T): Record<string, string> {
-  return Object.fromEntries(Object.entries(group).map(([key, value]) => [`plinth-${key}`, value]));
-}
-
-/** The Tailwind preset as an ES module with its type declaration. */
-export function buildTailwindPresetModule(): { js: string; dts: string } {
-  const json = JSON.stringify(buildTailwindPreset(), null, 2);
-  return {
-    js: `${banner}\nexport default ${json};\n`,
-    dts: `declare const preset: ${json};\nexport default preset;\n`,
-  };
-}
-
-/**
- * The tokens as a Tailwind v4 `@theme`, for projects that configure Tailwind in CSS. Utilities
- * are namespaced: `bg-plinth-surface`, `p-plinth-4`, `rounded-plinth-md`, `plinth-md:…`.
+ * The tokens as Tailwind v4 theme variables (v4 has no JS presets). A project imports this after
+ * `@import "tailwindcss"`, and its page code gets the same values as the components: `bg-surface`,
+ * `text-text-muted`, `p-4`, `rounded-md`, `text-sm`, `md:…`. Values are the custom properties, so
+ * a project's overrides and the dark theme apply to the utilities too.
  */
 export function buildTailwindTheme(): string {
   const lines: Declarations = [
-    ...Object.entries(vars.color).map(([key, value]): [string, string] => [
-      `--color-plinth-${key}`,
-      value,
-    ]),
-    ...Object.entries(vars.palette).flatMap(([scale, steps]) =>
-      Object.entries(steps as Record<string, string>).map(([step, value]): [string, string] => [
-        `--color-plinth-palette-${scale}-${step}`,
-        value,
-      ]),
-    ),
-    ['--font-plinth', vars.font.family.sans],
-    ['--font-plinth-mono', vars.font.family.mono],
-    ...themeEntries('text-plinth', vars.font.size),
-    ...themeEntries('font-weight-plinth', vars.font.weight),
-    ...themeEntries('leading-plinth', vars.font.leading),
-    ...themeEntries('spacing-plinth', vars.space),
-    ...themeEntries('radius-plinth', vars.radius),
-    ...themeEntries('breakpoint-plinth', breakpoint),
-    ...themeEntries('ease-plinth', vars.motion.easing),
+    ...themeEntries('color', vars.color),
+    ['--font-sans', vars.font.family.sans],
+    ['--font-mono', vars.font.family.mono],
+    ...themeEntries('text', vars.font.size),
+    ...themeEntries('font-weight', vars.font.weight),
+    ...themeEntries('leading', vars.font.leading),
+    // Tailwind multiplies one spacing unit (p-4 is 4 units); Plinth's is the 4px step.
+    ['--spacing', vars.space[1]],
+    ...themeEntries('radius', vars.radius),
+    ...themeEntries('breakpoint', breakpoint),
+    ...themeEntries('ease', vars.motion.easing),
   ];
   return `${banner}\n@theme inline {\n${lines.map(([n, v]) => `  ${n}: ${v};`).join('\n')}\n}\n`;
 }

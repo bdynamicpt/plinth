@@ -10,10 +10,6 @@
       "default": "./dist/index.js"
     },
     "./tokens.css": "./dist/tokens.css",
-    "./tailwind": {
-      "types": "./dist/tailwind-preset.d.ts",
-      "default": "./dist/tailwind-preset.js"
-    },
     "./tailwind.css": "./dist/tailwind-theme.css",
     "./tokens.json": "./dist/tokens.json"
   },
@@ -21,5 +17,9 @@
     "build": "tsc -p tsconfig.build.json && node scripts/build.ts",
     "lint": "tsc --noEmit",
     "test": "vitest run"
+  },
+  "devDependencies": {
+    "@tailwindcss/node": "^4.3.3",
+    "tailwindcss": "^4.3.3"
   }
 }

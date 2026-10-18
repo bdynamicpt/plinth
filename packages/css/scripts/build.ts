@@ -21,6 +21,10 @@ const names = readdirSync(components)
 const parts = [readFileSync(tokensCss, 'utf8')];
 for (const name of names) {
   const css = readFileSync(new URL(name, components), 'utf8');
+  // Component CSS lives in @layer plinth, so a project's utilities can override it.
+  if (!/^@layer plinth \{$/m.test(css)) {
+    throw new Error(`${name}: wrap the component's rules in @layer plinth { … }`);
+  }
   writeFileSync(new URL(name, dist), css);
   parts.push(`/* ${name} */\n${css}`);
 }
