@@ -44,7 +44,7 @@ npx playwright install chromium   # once, for the Storybook test runner
 
 npm run storybook                 # http://127.0.0.1:6006 (builds the tokens and CSS first)
 npm run build-storybook           # static build in storybook/storybook-static
-npx turbo run lint test build build-storybook   # everything CI runs
+npm run check                     # everything CI runs (turbo run lint test build build-storybook)
 ```
 
 [Turborepo](https://turborepo.com) runs each task in the order the packages depend on each other

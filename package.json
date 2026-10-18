@@ -48,9 +48,9 @@
     }
   },
   "scripts": {
+    "check": "turbo run lint test build build-storybook",
     "build": "turbo run build",
-    "lint": "turbo run lint",
-    "lint:root": "eslint --cache --cache-location node_modules/.cache/eslint . && prettier --check --cache .",
+    "lint": "eslint --cache --cache-location node_modules/.cache/eslint . && prettier --check --cache .",
     "format": "prettier --write --cache . && stylelint --fix \"packages/css/src/**/*.css\" && composer --working-dir=packages/blade format",
     "test": "turbo run test",
     "storybook": "turbo run storybook",

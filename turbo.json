@@ -15,7 +15,7 @@
       "outputs": ["dist/**"]
     },
     "lint": {
-      "dependsOn": ["^build", "//#lint:root"]
+      "dependsOn": ["^build"]
     },
     "test": {
       "dependsOn": ["build"]
@@ -29,8 +29,6 @@
       "cache": false,
       "persistent": true
     },
-    "//#lint:root": {
-      "inputs": ["$TURBO_DEFAULT$", "!packages/blade/**/*.php"]
-    }
+    "//#lint": {}
   }
 }

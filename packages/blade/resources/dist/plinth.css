@@ -213,9 +213,9 @@
   font-size: var(--plinth-font-size-xs);
   font-weight: var(--plinth-font-weight-medium);
   line-height: var(--plinth-leading-normal);
+  vertical-align: middle;
   color: var(--plinth-badge-text);
   white-space: nowrap;
-  vertical-align: middle;
   background-color: var(--plinth-badge-surface);
 
   /* Invisible normally; drawn by the system in forced-colours mode so the badge keeps its edge. */
@@ -223,19 +223,19 @@
   border-radius: var(--plinth-radius-full);
 }
 
-.plinth-badge[data-tone="success"] {
+.plinth-badge[data-tone='success'] {
   --plinth-badge-surface: var(--plinth-color-success-surface);
   --plinth-badge-text: var(--plinth-color-success-text);
   --plinth-badge-accent: var(--plinth-color-success-accent);
 }
 
-.plinth-badge[data-tone="warning"] {
+.plinth-badge[data-tone='warning'] {
   --plinth-badge-surface: var(--plinth-color-warning-surface);
   --plinth-badge-text: var(--plinth-color-warning-text);
   --plinth-badge-accent: var(--plinth-color-warning-accent);
 }
 
-.plinth-badge[data-tone="danger"] {
+.plinth-badge[data-tone='danger'] {
   --plinth-badge-surface: var(--plinth-color-danger-surface);
   --plinth-badge-text: var(--plinth-color-danger-text);
   --plinth-badge-accent: var(--plinth-color-danger-accent);
