@@ -86,6 +86,14 @@ describe('tiers', () => {
     expect(token('focus-ring.offset-filled').value).toBe('2px');
   });
 
+  it('has icon sizes of 16, 20 and 24 px', () => {
+    expect(['sm', 'md', 'lg'].map((s) => token(`size.icon.${s}`).value)).toEqual([
+      '1rem',
+      '1.25rem',
+      '1.5rem',
+    ]);
+  });
+
   it('has control sizes, the touch target, layers, elevation and breakpoints', () => {
     expect(['sm', 'md', 'lg'].map((s) => token(`control.${s}`).value)).toEqual([
       '2rem',

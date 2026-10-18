@@ -223,6 +223,15 @@
     },
     "size": {
       "$type": "dimension",
+      "16": {
+        "$value": "1rem"
+      },
+      "20": {
+        "$value": "1.25rem"
+      },
+      "24": {
+        "$value": "1.5rem"
+      },
       "32": {
         "$value": "2rem"
       },

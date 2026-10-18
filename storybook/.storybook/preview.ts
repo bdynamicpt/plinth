@@ -33,6 +33,18 @@ const preview: Preview = {
     },
   },
   globalTypes: {
+    dir: {
+      description: 'Text direction: left to right, or right to left (Arabic, Hebrew)',
+      toolbar: {
+        title: 'Direction',
+        icon: 'transfer',
+        items: [
+          { value: 'ltr', title: 'Left to right' },
+          { value: 'rtl', title: 'Right to left' },
+        ],
+        dynamicTitle: true,
+      },
+    },
     brand: {
       description: "Plinth's neutral defaults, or the made-up example brand (brands/example.css)",
       toolbar: {
@@ -46,8 +58,13 @@ const preview: Preview = {
       },
     },
   },
-  initialGlobals: { brand: 'default' },
+  initialGlobals: { brand: 'default', dir: 'ltr' },
   decorators: [
+    // Sets dir on <html>, so logical properties and mirrored icons can be checked right to left.
+    (story, context) => {
+      document.documentElement.dir = context.globals.dir === 'rtl' ? 'rtl' : 'ltr';
+      return story();
+    },
     // Sets data-brand on <html>; the example brand overrides tokens under [data-brand='example'].
     (story, context) => {
       const root = document.documentElement;

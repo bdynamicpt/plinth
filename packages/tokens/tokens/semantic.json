@@ -175,6 +175,21 @@
     "$value": "{ref.size.40}",
     "$description": "The smallest touch target any component may have."
   },
+  "size": {
+    "$type": "dimension",
+    "icon": {
+      "$description": "Icon sizes (16, 20 and 24 px). md is the default.",
+      "sm": {
+        "$value": "{ref.size.16}"
+      },
+      "md": {
+        "$value": "{ref.size.20}"
+      },
+      "lg": {
+        "$value": "{ref.size.24}"
+      }
+    }
+  },
   "layer": {
     "$type": "number",
     "$description": "Stacking order. Components use these, never a raw z-index.",

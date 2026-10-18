@@ -1,0 +1,50 @@
+/*
+ * Icon: a project's own SVG, sized by Plinth.
+ *
+ * Decorative (the default), hidden from assistive technology:
+ * <span class="plinth-icon" data-size="md" aria-hidden="true">
+ *   <svg viewBox="0 0 24 24">…</svg>
+ * </span>
+ *
+ * Meaningful, with a label (an img role makes the SVG inside presentational). Blade and Vue take
+ * it as `label`, or as an `aria-label` attribute; a blank label leaves the icon decorative:
+ * <span class="plinth-icon" data-size="md" role="img" aria-label="Warning">
+ *   <svg viewBox="0 0 24 24">…</svg>
+ * </span>
+ *
+ * Sizes (data-size): sm 16px, md 20px (default, also when the attribute is missing or unknown),
+ * lg 24px. data-mirror flips the icon in right-to-left text, for icons that point a direction.
+ *
+ * The SVG comes from the project, inline or as <use href="sprite.svg#name">. It should draw with
+ * currentColor; Plinth sets no fill or stroke, so outline and filled icon sets both keep theirs.
+ * The icon takes its colour from the text around it.
+ */
+
+@layer plinth {
+  .plinth-icon {
+    --plinth-icon-current-size: var(--plinth-size-icon-md);
+
+    display: inline-flex;
+    flex: none;
+    inline-size: var(--plinth-icon-current-size);
+    block-size: var(--plinth-icon-current-size);
+    vertical-align: middle;
+  }
+
+  .plinth-icon[data-size='sm'] {
+    --plinth-icon-current-size: var(--plinth-size-icon-sm);
+  }
+
+  .plinth-icon[data-size='lg'] {
+    --plinth-icon-current-size: var(--plinth-size-icon-lg);
+  }
+
+  .plinth-icon > svg {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .plinth-icon[data-mirror]:dir(rtl) > svg {
+    transform: scaleX(-1);
+  }
+}
