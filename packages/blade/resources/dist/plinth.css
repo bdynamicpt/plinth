@@ -1,0 +1,261 @@
+/* Built from packages/tokens/src/tokens.ts. Do not edit by hand. */
+
+:root {
+  --plinth-palette-neutral-0: #ffffff;
+  --plinth-palette-neutral-50: #fafafa;
+  --plinth-palette-neutral-100: #f4f4f5;
+  --plinth-palette-neutral-200: #e4e4e7;
+  --plinth-palette-neutral-300: #d4d4d8;
+  --plinth-palette-neutral-400: #a1a1aa;
+  --plinth-palette-neutral-500: #71717a;
+  --plinth-palette-neutral-600: #52525b;
+  --plinth-palette-neutral-700: #3f3f46;
+  --plinth-palette-neutral-800: #27272a;
+  --plinth-palette-neutral-900: #18181b;
+  --plinth-palette-neutral-950: #09090b;
+  --plinth-palette-brand-50: #eff6ff;
+  --plinth-palette-brand-100: #dbeafe;
+  --plinth-palette-brand-300: #93c5fd;
+  --plinth-palette-brand-500: #3b82f6;
+  --plinth-palette-brand-600: #2563eb;
+  --plinth-palette-brand-700: #1d4ed8;
+  --plinth-palette-brand-900: #1e3a8a;
+  --plinth-palette-success-100: #dcfce7;
+  --plinth-palette-success-200: #bbf7d0;
+  --plinth-palette-success-400: #4ade80;
+  --plinth-palette-success-600: #16a34a;
+  --plinth-palette-success-800: #166534;
+  --plinth-palette-success-950: #052e16;
+  --plinth-palette-warning-100: #fef3c7;
+  --plinth-palette-warning-200: #fde68a;
+  --plinth-palette-warning-400: #fbbf24;
+  --plinth-palette-warning-500: #f59e0b;
+  --plinth-palette-warning-800: #92400e;
+  --plinth-palette-warning-950: #451a03;
+  --plinth-palette-danger-100: #fee2e2;
+  --plinth-palette-danger-200: #fecaca;
+  --plinth-palette-danger-400: #f87171;
+  --plinth-palette-danger-600: #dc2626;
+  --plinth-palette-danger-800: #991b1b;
+  --plinth-palette-danger-950: #450a0a;
+  --plinth-font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --plinth-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --plinth-font-size-xs: 0.75rem;
+  --plinth-font-size-sm: 0.875rem;
+  --plinth-font-size-md: 1rem;
+  --plinth-font-size-lg: 1.125rem;
+  --plinth-font-size-xl: 1.25rem;
+  --plinth-font-size-2xl: 1.5rem;
+  --plinth-font-size-3xl: 1.875rem;
+  --plinth-font-size-4xl: 2.25rem;
+  --plinth-font-weight-regular: 400;
+  --plinth-font-weight-medium: 500;
+  --plinth-font-weight-semibold: 600;
+  --plinth-font-weight-bold: 700;
+  --plinth-leading-tight: 1.25;
+  --plinth-leading-snug: 1.375;
+  --plinth-leading-normal: 1.5;
+  --plinth-space-0: 0;
+  --plinth-space-1: 0.25rem;
+  --plinth-space-2: 0.5rem;
+  --plinth-space-3: 0.75rem;
+  --plinth-space-4: 1rem;
+  --plinth-space-5: 1.25rem;
+  --plinth-space-6: 1.5rem;
+  --plinth-space-8: 2rem;
+  --plinth-space-10: 2.5rem;
+  --plinth-space-12: 3rem;
+  --plinth-space-16: 4rem;
+  --plinth-space-0-5: 0.125rem;
+  --plinth-size-touch: 2.5rem;
+  --plinth-radius-none: 0;
+  --plinth-radius-sm: 0.25rem;
+  --plinth-radius-md: 0.5rem;
+  --plinth-radius-lg: 0.75rem;
+  --plinth-radius-xl: 1rem;
+  --plinth-radius-full: 9999px;
+  --plinth-layer-base: 0;
+  --plinth-layer-raised: 10;
+  --plinth-layer-dropdown: 100;
+  --plinth-layer-sticky: 200;
+  --plinth-layer-overlay: 300;
+  --plinth-layer-modal: 400;
+  --plinth-layer-toast: 500;
+  --plinth-layer-tooltip: 600;
+  --plinth-breakpoint-md: 768px;
+  --plinth-breakpoint-lg: 1280px;
+  --plinth-duration-fast: 120ms;
+  --plinth-duration-normal: 200ms;
+  --plinth-duration-slow: 320ms;
+  --plinth-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --plinth-easing-enter: cubic-bezier(0, 0, 0, 1);
+  --plinth-easing-exit: cubic-bezier(0.3, 0, 1, 1);
+}
+
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+  --plinth-color-background: var(--plinth-palette-neutral-50);
+  --plinth-color-surface: var(--plinth-palette-neutral-0);
+  --plinth-color-surface-muted: var(--plinth-palette-neutral-100);
+  --plinth-color-text: var(--plinth-palette-neutral-900);
+  --plinth-color-text-muted: var(--plinth-palette-neutral-600);
+  --plinth-color-border: var(--plinth-palette-neutral-200);
+  --plinth-color-border-strong: var(--plinth-palette-neutral-400);
+  --plinth-color-brand: var(--plinth-palette-brand-600);
+  --plinth-color-brand-text: var(--plinth-palette-brand-700);
+  --plinth-color-on-brand: var(--plinth-palette-neutral-0);
+  --plinth-color-focus: var(--plinth-palette-brand-600);
+  --plinth-color-neutral-surface: var(--plinth-palette-neutral-100);
+  --plinth-color-neutral-text: var(--plinth-palette-neutral-700);
+  --plinth-color-neutral-accent: var(--plinth-palette-neutral-500);
+  --plinth-color-success-surface: var(--plinth-palette-success-100);
+  --plinth-color-success-text: var(--plinth-palette-success-800);
+  --plinth-color-success-accent: var(--plinth-palette-success-600);
+  --plinth-color-warning-surface: var(--plinth-palette-warning-100);
+  --plinth-color-warning-text: var(--plinth-palette-warning-800);
+  --plinth-color-warning-accent: var(--plinth-palette-warning-500);
+  --plinth-color-danger-surface: var(--plinth-palette-danger-100);
+  --plinth-color-danger-text: var(--plinth-palette-danger-800);
+  --plinth-color-danger-accent: var(--plinth-palette-danger-600);
+}
+
+[data-theme="dark"],
+.dark {
+  color-scheme: dark;
+  --plinth-color-background: var(--plinth-palette-neutral-950);
+  --plinth-color-surface: var(--plinth-palette-neutral-900);
+  --plinth-color-surface-muted: var(--plinth-palette-neutral-800);
+  --plinth-color-text: var(--plinth-palette-neutral-50);
+  --plinth-color-text-muted: var(--plinth-palette-neutral-400);
+  --plinth-color-border: var(--plinth-palette-neutral-800);
+  --plinth-color-border-strong: var(--plinth-palette-neutral-600);
+  --plinth-color-brand: var(--plinth-palette-brand-600);
+  --plinth-color-brand-text: var(--plinth-palette-brand-300);
+  --plinth-color-on-brand: var(--plinth-palette-neutral-0);
+  --plinth-color-focus: var(--plinth-palette-brand-300);
+  --plinth-color-neutral-surface: var(--plinth-palette-neutral-800);
+  --plinth-color-neutral-text: var(--plinth-palette-neutral-200);
+  --plinth-color-neutral-accent: var(--plinth-palette-neutral-400);
+  --plinth-color-success-surface: var(--plinth-palette-success-950);
+  --plinth-color-success-text: var(--plinth-palette-success-200);
+  --plinth-color-success-accent: var(--plinth-palette-success-400);
+  --plinth-color-warning-surface: var(--plinth-palette-warning-950);
+  --plinth-color-warning-text: var(--plinth-palette-warning-200);
+  --plinth-color-warning-accent: var(--plinth-palette-warning-400);
+  --plinth-color-danger-surface: var(--plinth-palette-danger-950);
+  --plinth-color-danger-text: var(--plinth-palette-danger-200);
+  --plinth-color-danger-accent: var(--plinth-palette-danger-400);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"], .light) {
+    color-scheme: dark;
+    --plinth-color-background: var(--plinth-palette-neutral-950);
+    --plinth-color-surface: var(--plinth-palette-neutral-900);
+    --plinth-color-surface-muted: var(--plinth-palette-neutral-800);
+    --plinth-color-text: var(--plinth-palette-neutral-50);
+    --plinth-color-text-muted: var(--plinth-palette-neutral-400);
+    --plinth-color-border: var(--plinth-palette-neutral-800);
+    --plinth-color-border-strong: var(--plinth-palette-neutral-600);
+    --plinth-color-brand: var(--plinth-palette-brand-600);
+    --plinth-color-brand-text: var(--plinth-palette-brand-300);
+    --plinth-color-on-brand: var(--plinth-palette-neutral-0);
+    --plinth-color-focus: var(--plinth-palette-brand-300);
+    --plinth-color-neutral-surface: var(--plinth-palette-neutral-800);
+    --plinth-color-neutral-text: var(--plinth-palette-neutral-200);
+    --plinth-color-neutral-accent: var(--plinth-palette-neutral-400);
+    --plinth-color-success-surface: var(--plinth-palette-success-950);
+    --plinth-color-success-text: var(--plinth-palette-success-200);
+    --plinth-color-success-accent: var(--plinth-palette-success-400);
+    --plinth-color-warning-surface: var(--plinth-palette-warning-950);
+    --plinth-color-warning-text: var(--plinth-palette-warning-200);
+    --plinth-color-warning-accent: var(--plinth-palette-warning-400);
+    --plinth-color-danger-surface: var(--plinth-palette-danger-950);
+    --plinth-color-danger-text: var(--plinth-palette-danger-200);
+    --plinth-color-danger-accent: var(--plinth-palette-danger-400);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --plinth-duration-fast: 0ms;
+    --plinth-duration-normal: 0ms;
+    --plinth-duration-slow: 0ms;
+  }
+}
+
+/* badge.css */
+/*
+ * Badge: a short label with an optional dot and a tone.
+ *
+ * <span class="plinth-badge" data-tone="success">
+ *   <span class="plinth-badge-dot" aria-hidden="true"></span>
+ *   <span class="plinth-badge-label">Paid</span>
+ * </span>
+ *
+ * Tones: neutral (default, also when data-tone is missing), success, warning, danger.
+ * The label carries the meaning; the tone and the dot only reinforce it.
+ */
+
+.plinth-badge {
+  --plinth-badge-surface: var(--plinth-color-neutral-surface);
+  --plinth-badge-text: var(--plinth-color-neutral-text);
+  --plinth-badge-accent: var(--plinth-color-neutral-accent);
+
+  display: inline-flex;
+  gap: var(--plinth-space-1);
+  align-items: center;
+  max-inline-size: 100%;
+  padding-block: var(--plinth-space-0-5);
+  padding-inline: var(--plinth-space-2);
+  font-family: var(--plinth-font-sans);
+  font-size: var(--plinth-font-size-xs);
+  font-weight: var(--plinth-font-weight-medium);
+  line-height: var(--plinth-leading-normal);
+  color: var(--plinth-badge-text);
+  white-space: nowrap;
+  vertical-align: middle;
+  background-color: var(--plinth-badge-surface);
+
+  /* Invisible normally; drawn by the system in forced-colours mode so the badge keeps its edge. */
+  border: 1px solid transparent;
+  border-radius: var(--plinth-radius-full);
+}
+
+.plinth-badge[data-tone="success"] {
+  --plinth-badge-surface: var(--plinth-color-success-surface);
+  --plinth-badge-text: var(--plinth-color-success-text);
+  --plinth-badge-accent: var(--plinth-color-success-accent);
+}
+
+.plinth-badge[data-tone="warning"] {
+  --plinth-badge-surface: var(--plinth-color-warning-surface);
+  --plinth-badge-text: var(--plinth-color-warning-text);
+  --plinth-badge-accent: var(--plinth-color-warning-accent);
+}
+
+.plinth-badge[data-tone="danger"] {
+  --plinth-badge-surface: var(--plinth-color-danger-surface);
+  --plinth-badge-text: var(--plinth-color-danger-text);
+  --plinth-badge-accent: var(--plinth-color-danger-accent);
+}
+
+.plinth-badge-dot {
+  flex: none;
+  inline-size: var(--plinth-space-2);
+  block-size: var(--plinth-space-2);
+  background-color: var(--plinth-badge-accent);
+  border-radius: var(--plinth-radius-full);
+}
+
+.plinth-badge-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (forced-colors: active) {
+  .plinth-badge-dot {
+    background-color: currentcolor;
+  }
+}

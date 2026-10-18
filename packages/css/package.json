@@ -1,0 +1,18 @@
+{
+  "name": "@bdynamic/plinth-css",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./dist/plinth.css",
+    "./*": "./dist/*"
+  },
+  "scripts": {
+    "build": "node scripts/build.ts",
+    "lint": "stylelint --cache --cache-location node_modules/.cache/stylelint \"src/**/*.css\""
+  },
+  "dependencies": {
+    "@bdynamic/plinth-tokens": "*"
+  }
+}

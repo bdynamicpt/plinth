@@ -1,0 +1,15 @@
+/* The canvas follows the theme, so stories show components on the right background. */
+body {
+  font-family: var(--plinth-font-sans);
+  color: var(--plinth-color-text);
+  background-color: var(--plinth-color-background);
+}
+
+/* The b.dynamic wordmark on the Branding page, until the logo files arrive. */
+.sb-wordmark {
+  font-family: var(--plinth-font-sans);
+  font-size: var(--plinth-font-size-4xl);
+  font-weight: var(--plinth-font-weight-bold);
+  line-height: var(--plinth-leading-tight);
+  letter-spacing: -0.02em;
+}

@@ -1,0 +1,68 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Branding" />
+
+# Plinth
+
+_This page is a placeholder. Each section below gets its real content in its own issue._
+
+## What Plinth is
+
+Plinth is the design system of **b.dynamic**'s projects. It is design tokens, components written as
+plain HTML and CSS, and thin Blade and Vue layers that print the same markup. A project brings its
+brand through the tokens and never forks a component.
+
+## The logo
+
+<div className="sb-unstyled sb-wordmark">b.dynamic</div>
+
+_To come: the logo files, clear space, minimum sizes and what not to do._
+
+## Colours, and how a project brings its own
+
+_To come: the palette and the semantic colours, and how a project overrides them. In short, a
+project sets the `--plinth-palette-*` or `--plinth-color-*` custom properties after Plinth's CSS:_
+
+```css
+:root {
+  --plinth-palette-brand-600: #0f766e;
+  --plinth-color-brand: var(--plinth-palette-brand-600);
+}
+```
+
+See **Foundations → Colours** for the tokens as they are today.
+
+## Typography
+
+_To come: the typefaces, the scale and how to use it. See **Foundations → Typography**._
+
+## Principles
+
+_To come._
+
+## Installing it in a Laravel app
+
+_To come. In short:_
+
+```bash
+composer require bdynamicpt/plinth
+```
+
+```blade
+<x-plinth::badge tone="success" dot>Paid</x-plinth::badge>
+```
+
+_In a Filament panel, add `PlinthPlugin::make()` to the panel and run `php artisan filament:assets`._
+
+## Installing it in a Vue app
+
+_To come. In short:_
+
+```bash
+npm install @bdynamic/plinth
+```
+
+```ts
+import '@bdynamic/plinth/css';
+import { PlinthBadge } from '@bdynamic/plinth/vue';
+```
