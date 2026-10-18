@@ -1,0 +1,83 @@
+import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
+import * as ListCardStories from './ListCard.stories';
+
+<Meta of={ListCardStories} />
+
+# List card
+
+A group of list rows on a raised surface, with an optional heading above it and a footer note
+below it. Use it to group related rows on a settings page, in a sheet or on a detail screen.
+
+<Canvas of={ListCardStories.Default} />
+<Controls of={ListCardStories.Default} />
+
+## Markup
+
+<Source
+  language="html"
+  dark
+  code={`<div class="plinth-list-card">
+  <h2 class="plinth-list-card-heading">Preferences</h2>
+  <ul class="plinth-list-card-list" role="list">
+    <li><a class="plinth-list-row" href="/notifications">…</a></li>
+    <li><a class="plinth-list-row" href="/language">…</a></li>
+  </ul>
+  <p class="plinth-list-card-footer">Changes apply on every device you are signed in on.</p>
+</div>`}
+/>
+
+- **`plinth-list-card`**, the root, is a `<div>`; a project's classes and attributes land on it.
+- **`plinth-list-card-heading`** is optional. It is an `<h2>` by default; set
+  **`heading-level`** (Blade) or **`headingLevel`** (Vue) to `h3`–`h6` to fit the page's outline.
+  An unknown level falls back to `h2`.
+- **`plinth-list-card-list`** is the raised surface: `color.surface-raised`, `radius.container`
+  and a hairline edge. The card resets the list's margin, padding and bullets itself and prints
+  `role="list"`, which Safari needs to keep announcing a list without bullets.
+- **`plinth-list-card-footer`** is an optional note under the surface.
+
+## Rows
+
+The slot holds the rows, each [list row](?path=/docs/components-list-row--docs) in its own
+`<li>`. Rows keep their own roots, states and dividers: links, buttons, the current page and
+disabled rows all work as they do on their own. The surface clips their hover and selection tints
+to its rounded corners, and their focus ring is drawn inside the row, so it is never cut off.
+
+<Source
+  language="html"
+  dark
+  code={`<x-plinth::list-card heading="Account" footer="Signing out ends the session on this device only.">
+  <li><x-plinth::list-row>Email<x-slot:trailing>ana@example.com</x-slot:trailing></x-plinth::list-row></li>
+  <li><x-plinth::list-row button wire:click="signOut">Sign out</x-plinth::list-row></li>
+</x-plinth::list-card>`}
+/>
+
+In Vue, the same:
+
+<Source
+  language="html"
+  dark
+  code={`<PlinthListCard heading="Account" footer="Signing out ends the session on this device only.">
+  <li><PlinthListRow>Email<template #trailing>ana@example.com</template></PlinthListRow></li>
+  <li><PlinthListRow button @click="signOut">Sign out</PlinthListRow></li>
+</PlinthListCard>`}
+/>
+
+<Canvas of={ListCardStories.MixedRows} />
+<Canvas of={ListCardStories.WithFooter} />
+
+## Naming the group
+
+The heading is a real heading, so a screen reader user can jump to it from the page's outline.
+To make the card a landmark as well, wrap it in a `<section>` with the same name
+(`<section aria-label="Preferences">`), and keep that label the same as the heading's text when
+either changes.
+
+## Depth
+
+The card sits in the page, so it has a hairline edge and a surface step and no shadow (ADR 3:
+shadows are for what floats, such as sheets and menus). A project that wants another look
+overrides `--plinth-color-surface-raised`, `--plinth-color-border` or `--plinth-radius-container`.
+
+<Canvas of={ListCardStories.Stacked} />
+<Canvas of={ListCardStories.LongText} />
+<Canvas of={ListCardStories.RightToLeft} />

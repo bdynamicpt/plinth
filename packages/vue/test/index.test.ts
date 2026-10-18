@@ -7,6 +7,7 @@ import {
   PlinthButton,
   PlinthIcon,
   PlinthIconButton,
+  PlinthListCard,
   PlinthListRow,
   PlinthPill,
   PlinthPillRow,
@@ -22,6 +23,7 @@ describe('the Plinth plugin', () => {
     expect(app.component('PlinthButton')).toBe(PlinthButton);
     expect(app.component('PlinthIcon')).toBe(PlinthIcon);
     expect(app.component('PlinthIconButton')).toBe(PlinthIconButton);
+    expect(app.component('PlinthListCard')).toBe(PlinthListCard);
     expect(app.component('PlinthListRow')).toBe(PlinthListRow);
     expect(app.component('PlinthPill')).toBe(PlinthPill);
     expect(app.component('PlinthPillRow')).toBe(PlinthPillRow);

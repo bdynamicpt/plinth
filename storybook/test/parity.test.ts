@@ -4,6 +4,7 @@ import {
   PlinthButton,
   PlinthIcon,
   PlinthIconButton,
+  PlinthListCard,
   PlinthListRow,
   PlinthPill,
   PlinthPillRow,
@@ -21,6 +22,8 @@ import * as iconButtonStories from '../stories/components/IconButton.stories.ts'
 import { iconButton, type IconButtonArgs } from '../stories/components/icon-button.ts';
 import * as iconStories from '../stories/components/Icon.stories.ts';
 import { icon, type IconArgs } from '../stories/components/icon.ts';
+import * as listCardStories from '../stories/components/ListCard.stories.ts';
+import { listCard, listCardRows, type ListCardArgs } from '../stories/components/list-card.ts';
 import * as listRowStories from '../stories/components/ListRow.stories.ts';
 import { listRow, type ListRowArgs } from '../stories/components/list-row.ts';
 import * as pillRowStories from '../stories/components/PillRow.stories.ts';
@@ -182,6 +185,30 @@ const cases: ParityCase[] = [
   listRowCase('List row/current button', { ...listRowDefaults, button: true, current: true }),
   listRowCase('List row/current static row', { ...listRowDefaults, current: true }),
   listRowCase('List row/disabled static row', { ...listRowDefaults, disabled: true }),
+  ...storyArgs<ListCardArgs>(listCardStories).map(([story, args]) =>
+    listCardCase(`List card/${story}`, args),
+  ),
+  listCardCase(
+    'List card/with extra attributes',
+    {
+      heading: 'Account',
+      headingLevel: 'h3',
+      footer: 'On this device only.',
+      rows: [listRowDefaults],
+    },
+    { class: 'mb-4', id: 'account', 'data-testid': 'account', 'aria-describedby': 'account-help' },
+  ),
+  listCardCase('List card/blank heading and footer', {
+    heading: '  ',
+    headingLevel: 'h2',
+    footer: ' ',
+    rows: [listRowDefaults],
+  }),
+  listCardCase('List card/unknown heading level', {
+    heading: 'Account',
+    headingLevel: 'h1' as ListCardArgs['headingLevel'],
+    rows: [listRowDefaults],
+  }),
   ...storyArgs<PillRowArgs>(pillRowStories).map(([story, args]) =>
     pillRowCase(`Pill row/${story}`, args),
   ),
@@ -307,6 +334,22 @@ function listRowCase(story: string, args: ListRowArgs, attributes: Attributes = 
     markup: listRow(args, attributes),
     vue: { component: PlinthListRow, props: { ...props, ...attributes }, slot: args.title, named },
     blade: { component: 'list-row', props, attributes, slot: args.title, named },
+  };
+}
+
+/** The card's own parity; its rows are each a list row's markup in an <li>, passed in as the slot. */
+function listCardCase(story: string, args: ListCardArgs, attributes: Attributes = {}): ParityCase {
+  const props = {
+    ...(args.heading ? { heading: args.heading } : {}),
+    headingLevel: args.headingLevel,
+    ...(args.footer ? { footer: args.footer } : {}),
+  };
+  const slot = listCardRows(args.rows);
+  return {
+    story,
+    markup: listCard(args, attributes),
+    vue: { component: PlinthListCard, props: { ...props, ...attributes }, slot, html: true },
+    blade: { component: 'list-card', props, attributes, slot },
   };
 }
 
@@ -460,6 +503,16 @@ describe('parity with the stories', () => {
       'List row/current button',
       'List row/current static row',
       'List row/disabled static row',
+      'List card/Default',
+      'List card/WithoutHeading',
+      'List card/WithFooter',
+      'List card/HeadingLevel',
+      'List card/SingleRow',
+      'List card/MixedRows',
+      'List card/LongText',
+      'List card/with extra attributes',
+      'List card/blank heading and footer',
+      'List card/unknown heading level',
       'Pill row/Filters',
       'Pill row/WithoutCounts',
       'Pill row/NoneSelected',
