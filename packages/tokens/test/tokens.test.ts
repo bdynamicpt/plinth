@@ -57,7 +57,7 @@ describe('tiers', () => {
   it('has primitives, semantic and component tokens', () => {
     expect(tier('primitive').length).toBeGreaterThan(50);
     expect(tier('semantic').length).toBeGreaterThan(30);
-    expect(tier('component').map((t) => t.path.join('.'))).toEqual(['header.height']);
+    expect(tier('component').map((t) => t.path.join('.'))).toEqual(['header.height', 'list-row.height']);
   });
 
   it('names every primitive --plinth-ref-*, and nothing else', () => {
