@@ -51,8 +51,12 @@ Then by hand:
   `storyArgs<<Name>Args>(…)` block mapping each story's args to Vue and Blade props, a case with
   extra attributes (like `badgeWithAttributes`: a class, an id, `data-*`, `aria-*`), and every
   case's name to the "has a case for every story" list. See docs/adr/0002 on forwarding.
-- If Blade and Vue share a list of variants (as `tones` does), keep it in one place: Vue's in
-  `packages/vue/src/`, Blade's in `packages/blade/src/Plinth.php`, the story importing Vue's.
+- A component's choices (variants, sizes, tones) are a list in Vue (`packages/vue/src/`) and a
+  backed enum in Blade (`packages/blade/src/Enums/`, using `ResolvesToDefault`, with a
+  `default()` case), the story importing Vue's list. The Blade view resolves the prop with
+  `Enum::resolve($prop)->value`, so a project can pass the enum or its string, and an unknown
+  value falls back to the default. Add the enum to the list check in
+  `packages/blade/tests/Feature/EnumsTest.php`.
 
 ## 3. Shape it into the real component
 

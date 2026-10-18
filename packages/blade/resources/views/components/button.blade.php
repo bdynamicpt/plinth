@@ -9,17 +9,17 @@
     'mirrorTrailing' => false,
 ])
 @php
-    $variant = \BDynamic\Plinth\Plinth::buttonVariant($variant);
-    $size = \BDynamic\Plinth\Plinth::buttonSize($size);
-    $iconSize = $size === 'sm' ? 'sm' : 'md';
+    $variant = \BDynamic\Plinth\Enums\ButtonVariant::resolve($variant);
+    $size = \BDynamic\Plinth\Enums\ButtonSize::resolve($size);
+    $iconSize = $size->iconSize()->value;
     $isLink = filled($href);
     $isBusy = $busy && ! $disabled;
     $root = array_filter([
         'class' => 'plinth-button',
         'type' => $isLink ? null : 'button',
         'href' => $isLink && ! $disabled ? $href : null,
-        'data-variant' => $variant,
-        'data-size' => $size,
+        'data-variant' => $variant->value,
+        'data-size' => $size->value,
         'disabled' => $disabled && ! $isLink ? '' : null,
         'role' => $disabled && $isLink ? 'link' : null,
         'aria-busy' => $isBusy ? 'true' : null,

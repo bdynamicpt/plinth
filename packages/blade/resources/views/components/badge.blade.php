@@ -3,7 +3,7 @@
     'tone' => 'neutral',
     'dot' => false,
 ])
-<span {{ $attributes->merge(['class' => 'plinth-badge', 'data-tone' => \BDynamic\Plinth\Plinth::tone($tone)]) }}>
+<span {{ $attributes->merge(['class' => 'plinth-badge', 'data-tone' => \BDynamic\Plinth\Enums\Tone::resolve($tone)->value]) }}>
     @if ($dot)
         <span class="plinth-badge-dot" aria-hidden="true"></span>
     @endif
