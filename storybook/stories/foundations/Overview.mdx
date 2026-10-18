@@ -1,0 +1,31 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Foundations/Overview" />
+
+# Foundations
+
+The tokens every component is built from: colour, type, spacing, sizes, radii, elevation, layers,
+breakpoints and motion. They are written once in `packages/tokens/tokens/` and built to CSS custom
+properties, a JS export and a Tailwind theme (ADR 1 in `docs/adr/`).
+
+## Three tiers
+
+| Tier      | Custom properties               | Used by                                                |
+| --------- | ------------------------------- | ------------------------------------------------------ |
+| Primitive | `--plinth-ref-color-neutral-50` | semantic tokens only: the raw scales, named by value   |
+| Semantic  | `--plinth-color-surface`        | components, named by role; **projects override these** |
+| Component | `--plinth-header-height`        | one component, for values a project may tune           |
+
+Components use semantic and component tokens only. Stylelint rejects primitives in component CSS,
+and the CSS build rejects any `--plinth-*` that isn't a token.
+
+## Bringing a brand
+
+A project overrides semantic tokens after Plinth's CSS, outside any layer. Switch **Brand** in the
+toolbar to see the made-up example brand restyle every component, and read
+`storybook/brands/example.css` for how it does it.
+
+## The pages
+
+Each page shows the semantic tokens first (what components use, in light and dark), then the
+primitives they are built from.

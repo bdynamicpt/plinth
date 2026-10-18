@@ -1,0 +1,23 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { group, TokenTable } from './blocks';
+
+<Meta title="Foundations/Motion" />
+
+# Motion
+
+Durations drop to 0ms when someone asks for reduced motion (`prefers-reduced-motion: reduce`), so a
+component that uses them needs no media query of its own.
+
+## Durations
+
+<TokenTable list={group('semantic', 'duration')} />
+
+## Easing
+
+<TokenTable list={group('semantic', 'easing')} />
+
+## Built from
+
+<TokenTable
+  list={[...group('primitive', 'ref', 'duration'), ...group('primitive', 'ref', 'easing')]}
+/>
