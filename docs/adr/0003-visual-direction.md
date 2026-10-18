@@ -62,9 +62,19 @@ the visible size no longer has to match it.
   surface.
 - Text has three levels: `text`, `text-muted` and a new `text-subtle` (placeholders, timestamps,
   disabled labels).
-- The **primary button is inverted neutral**: light on dark, dark on light. The accent is kept
-  for focus, links, the selected item and status, and it is what a project's brand changes.
-  Storybook's example brand shows a coloured accent and primary, so the override is visible.
+- The **accent is a modern blue** in oklch, around hue 255–260, replacing the hex ramp from #1:
+  - on dark, about `oklch(0.72 0.15 255)`;
+  - on light, about `oklch(0.54 0.2 260)`.
+
+  A project's brand replaces it.
+
+- Inside an app the **primary button is inverted neutral**: light on dark, dark on light. There
+  the accent marks state, never the main action: focus, links, the active nav item, the selected
+  row or filter, mentions, progress and the active mode of a switch or tab.
+- **Marketing pages use the accent for their primary action** (sign up, start a trial, the
+  pricing tier to pick). The button gets an `accent` variant for this, and it is the only place a
+  solid accent fill is the default.
+- Storybook's example brand shows a coloured accent and primary, so the override is visible.
 - Status colours (success, warning, danger) stay, toned down to sit on the new surfaces.
 
 ### 5. Depth from borders, not shadows
@@ -92,8 +102,10 @@ light and dark, and screenshots in pull requests still cover both.
 - Projects load two font files from the package. The Laravel and Vue install docs say how; a
   project that sets its own families loads nothing from Plinth.
 - Visual comparison screenshots are re-baselined once, in the pull request that applies this.
-- A project that wants a coloured primary (most brands) sets it in its overrides, as the example
-  brand does. Plinth's own defaults stay neutral.
+- A project that wants a coloured primary inside its app sets it in its overrides, as the example
+  brand does. Plinth's own defaults stay neutral in the app and use the accent on marketing pages.
+- Amended 2026-10-18: the accent's hue and where a solid accent fill is used (marketing pages,
+  through the button's `accent` variant) were settled after reviewing a mood board.
 - The values in the table above are a reference for the feel, not for copying: Plinth takes the
   pattern, not another product's palette or typeface choices beyond what is open source.
 
