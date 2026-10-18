@@ -75,7 +75,8 @@ component; `.claude/skills/new-component/SKILL.md` walks through the rest.
    function (`<name>.ts`) and a story for each state. The test runner checks it in light and dark
    at 390, 768 and 1440 px.
 3. **Blade**: `packages/blade/resources/views/components/<name>.blade.php`
-   (`<x-plinth::name>`), with Pest tests.
+   (`<x-plinth::name>`), with Pest tests. Its choices (variants, sizes,
+   tones) are backed enums in `packages/blade/src/Enums/`, resolved with `Enum::resolve()`.
 4. **Vue**: `packages/vue/src/Plinth<Name>.vue`, exported from `src/index.ts` and registered by
    the plugin, with Vitest tests.
 5. **Parity test**: cases in `storybook/test/parity.test.ts`, one per story and one with extra
