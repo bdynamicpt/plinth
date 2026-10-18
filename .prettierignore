@@ -1,0 +1,9 @@
+dist/
+storybook-static/
+vendor/
+node_modules/
+__screenshots__/
+.turbo/
+package-lock.json
+packages/blade/resources/dist/
+*.php

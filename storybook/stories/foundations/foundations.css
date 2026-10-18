@@ -1,0 +1,79 @@
+/* Layout for the foundations pages. Not part of Plinth: only Storybook uses these. */
+.sb-page {
+  display: grid;
+  gap: var(--plinth-space-8);
+  max-inline-size: 72rem;
+}
+
+.sb-page h2 {
+  margin: 0 0 var(--plinth-space-3);
+  font-size: var(--plinth-font-size-xl);
+}
+
+.sb-page p {
+  margin: 0 0 var(--plinth-space-4);
+  color: var(--plinth-color-text-muted);
+}
+
+.sb-table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: var(--plinth-font-size-sm);
+}
+
+.sb-table th,
+.sb-table td {
+  padding: var(--plinth-space-2) var(--plinth-space-3);
+  text-align: start;
+  vertical-align: middle;
+  border-block-end: 1px solid var(--plinth-color-border);
+}
+
+.sb-table th {
+  font-weight: var(--plinth-font-weight-semibold);
+}
+
+.sb-table code {
+  font-family: var(--plinth-font-mono);
+  font-size: var(--plinth-font-size-xs);
+  overflow-wrap: anywhere;
+}
+
+.sb-scroll {
+  overflow-x: auto;
+}
+
+.sb-swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+  gap: var(--plinth-space-3);
+}
+
+.sb-swatch {
+  display: grid;
+  gap: var(--plinth-space-1);
+  font-size: var(--plinth-font-size-xs);
+}
+
+.sb-chip {
+  block-size: var(--plinth-space-12);
+  border: 1px solid var(--plinth-color-border);
+  border-radius: var(--plinth-radius-md);
+}
+
+.sb-chip-small {
+  inline-size: var(--plinth-space-8);
+  block-size: var(--plinth-space-8);
+}
+
+.sb-bar {
+  block-size: var(--plinth-space-4);
+  background-color: var(--plinth-color-brand);
+}
+
+.sb-radius {
+  inline-size: var(--plinth-space-16);
+  block-size: var(--plinth-space-12);
+  background-color: var(--plinth-color-surface-muted);
+  border: 1px solid var(--plinth-color-border-strong);
+}

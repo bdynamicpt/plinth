@@ -1,0 +1,25 @@
+{
+  "name": "@bdynamic/plinth-tokens",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./tokens.css": "./dist/tokens.css",
+    "./tailwind": {
+      "types": "./dist/tailwind-preset.d.ts",
+      "default": "./dist/tailwind-preset.js"
+    },
+    "./tailwind.css": "./dist/tailwind-theme.css",
+    "./tokens.json": "./dist/tokens.json"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && node scripts/build.ts",
+    "lint": "tsc --noEmit",
+    "test": "vitest run"
+  }
+}
