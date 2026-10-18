@@ -178,3 +178,8 @@
   outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
   outline-offset: var(--plinth-focus-ring-offset);
 }
+
+.sb-scroll:focus-visible {
+  outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+  outline-offset: var(--plinth-focus-ring-offset);
+}
