@@ -1,8 +1,9 @@
 <script setup lang="ts">
 // Markup contract: packages/css/src/components/sheet.css
-import { Comment, computed, Fragment, ref, Static, Text, useId, useSlots, type VNode } from 'vue';
+import { computed, ref, useId, useSlots } from 'vue';
 import PlinthIconButton from './PlinthIconButton.vue';
 import { sheetPlacement, type SheetPlacement } from './sheet';
+import { hasContent } from './slots';
 
 const props = withDefaults(
   defineProps<{
@@ -34,15 +35,6 @@ const generatedId = useId();
 const sheetId = computed(() => props.id?.trim() || `plinth-sheet-${generatedId}`);
 const dataPlacement = computed(() => sheetPlacement(props.placement));
 const hasDescription = computed(() => Boolean(props.description?.trim()));
-
-/** A footer slot that renders nothing (a v-if that is false) prints no footer. */
-const hasContent = (nodes: VNode[]): boolean =>
-  nodes.some((node) => {
-    if (node.type === Comment) return false;
-    if (node.type === Text || node.type === Static) return String(node.children).trim() !== '';
-    if (node.type === Fragment) return hasContent(node.children as VNode[]);
-    return true;
-  });
 
 const dialog = ref<HTMLDialogElement>();
 
@@ -88,7 +80,7 @@ defineExpose({
       ></PlinthIconButton>
     </div>
     <div class="plinth-sheet-body"><slot /></div>
-    <div v-if="slots.footer && hasContent(slots.footer())" class="plinth-sheet-footer">
+    <div v-if="hasContent(slots.footer?.())" class="plinth-sheet-footer">
       <slot name="footer" />
     </div>
   </dialog>
