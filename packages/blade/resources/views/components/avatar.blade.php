@@ -12,8 +12,11 @@
     if (! $decorative && blank($name)) {
         throw new InvalidArgumentException('<x-plinth::avatar> needs a name, or decorative when the name is shown next to it.');
     }
-    $size = \BDynamic\Plinth\Enums\AvatarSize::resolve($size);
-    $tone = $status === null ? null : \BDynamic\Plinth\Enums\Tone::resolve($status);
+    if (! $decorative && filled($status) && blank($statusLabel)) {
+        throw new InvalidArgumentException('<x-plinth::avatar> needs a status-label with a status: colour alone does not say what it means.');
+    }
+    $size = \BDynamic\Plinth\Enums\Size::resolve($size, \BDynamic\Plinth\Enums\Size::avatars());
+    $tone = blank($status) ? null : \BDynamic\Plinth\Enums\Tone::resolve($status);
     $label = $decorative ? null : ($tone && filled($statusLabel) ? "{$name}, {$statusLabel}" : $name);
     $letters = $initials ?? \BDynamic\Plinth\Support\Initials::from($name);
 @endphp

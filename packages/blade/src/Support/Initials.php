@@ -2,7 +2,7 @@
 
 namespace BDynamic\Plinth\Support;
 
-class Initials
+final class Initials
 {
     /**
      * The first letter of the first and the last word, upper case. The Vue layer's initialsFrom()

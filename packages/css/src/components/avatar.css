@@ -14,13 +14,16 @@
  *
  * Sizes (data-size): sm 24px, md 32px (default), lg 40px, xl 56px. Round by default
  * (radius.pill), so a brand can square it. The status dot takes the badge's tones (data-tone:
- * neutral, success, warning, danger) and a ring in the page colour.
+ * neutral, success, warning, danger) and a ring in the page colour; on another surface, set
+ * --plinth-avatar-ring on the container (a card: --plinth-color-surface-raised).
  */
 
 @layer plinth {
   .plinth-avatar {
     --plinth-avatar-size: var(--plinth-size-avatar-md);
+    --plinth-avatar-surface: var(--plinth-color-surface-sunken);
     --plinth-avatar-status: var(--plinth-color-text-subtle);
+    --plinth-avatar-ring: var(--plinth-color-surface);
 
     position: relative;
     display: inline-flex;
@@ -36,24 +39,26 @@
     vertical-align: middle;
     color: var(--plinth-color-text-muted);
     user-select: none;
-    background-color: var(--plinth-color-surface-hover);
+    background-color: var(--plinth-avatar-surface);
     border-radius: var(--plinth-radius-pill);
   }
 
-  /* The hairline ring, drawn over an image too. */
-  .plinth-avatar::after {
+  /*
+   * The hairline ring: over an image (positioned boxes paint after in-flow ones) and under the
+   * status dot (which comes later). A border, so forced-colours mode keeps the circle.
+   */
+  .plinth-avatar::before {
     position: absolute;
     inset: 0;
+    box-sizing: border-box;
     pointer-events: none;
     content: '';
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
     border-radius: inherit;
-    box-shadow: inset 0 0 0 var(--plinth-border-width-thin) var(--plinth-color-border);
   }
 
   .plinth-avatar[data-size='sm'] {
     --plinth-avatar-size: var(--plinth-size-avatar-sm);
-
-    font-size: var(--plinth-font-size-xs);
   }
 
   .plinth-avatar[data-size='lg'] {
@@ -75,6 +80,10 @@
     border-radius: inherit;
   }
 
+  .plinth-avatar-initials {
+    letter-spacing: var(--plinth-font-tracking-snug);
+  }
+
   .plinth-avatar-glyph {
     inline-size: 60%;
     block-size: 60%;
@@ -87,8 +96,10 @@
     inline-size: calc(var(--plinth-avatar-size) * 0.3);
     block-size: calc(var(--plinth-avatar-size) * 0.3);
     background-color: var(--plinth-avatar-status);
+
+    /* Stays round when a brand squares the avatar. */
     border-radius: 50%;
-    box-shadow: 0 0 0 var(--plinth-border-width-thick) var(--plinth-color-surface);
+    box-shadow: 0 0 0 var(--plinth-border-width-thick) var(--plinth-avatar-ring);
   }
 
   .plinth-avatar-status[data-tone='success'] {

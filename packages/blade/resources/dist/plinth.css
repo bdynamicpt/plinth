@@ -84,6 +84,7 @@
     --plinth-ref-size-28: 1.75rem;
     --plinth-ref-size-32: 2rem;
     --plinth-ref-size-40: 2.5rem;
+    --plinth-ref-size-56: 3.5rem;
     --plinth-ref-radius-0: 0;
     --plinth-ref-radius-2: 0.125rem;
     --plinth-ref-radius-4: 0.25rem;
@@ -178,6 +179,10 @@
     --plinth-size-icon-sm: var(--plinth-ref-size-16);
     --plinth-size-icon-md: var(--plinth-ref-size-20);
     --plinth-size-icon-lg: var(--plinth-ref-size-24);
+    --plinth-size-avatar-sm: var(--plinth-ref-size-24);
+    --plinth-size-avatar-md: var(--plinth-ref-size-32);
+    --plinth-size-avatar-lg: var(--plinth-ref-size-40);
+    --plinth-size-avatar-xl: var(--plinth-ref-size-56);
     --plinth-layer-base: 0;
     --plinth-layer-sticky: 100;
     --plinth-layer-overlay: 200;
@@ -326,6 +331,130 @@
       --plinth-duration-fast: 0ms;
       --plinth-duration-normal: 0ms;
       --plinth-duration-slow: 0ms;
+    }
+  }
+}
+
+/* avatar.css */
+/*
+ * Avatar: a person or an organisation, as an image, initials, or a person glyph.
+ *
+ * <span class="plinth-avatar" data-size="md" role="img" aria-label="Ana Lima, Online">
+ *   <img class="plinth-avatar-image" src="…" alt="">
+ *     or <span class="plinth-avatar-initials" aria-hidden="true">AL</span>
+ *     or <svg class="plinth-avatar-glyph" aria-hidden="true">…</svg>
+ *   <span class="plinth-avatar-status" data-tone="success" aria-hidden="true"></span>
+ * </span>
+ *
+ * The root carries the name (role="img", aria-label), with the status label after a comma. A
+ * decorative avatar, next to the name it shows, has aria-hidden="true" and no role or label.
+ * Image first, then initials (from the name, or given), then the glyph.
+ *
+ * Sizes (data-size): sm 24px, md 32px (default), lg 40px, xl 56px. Round by default
+ * (radius.pill), so a brand can square it. The status dot takes the badge's tones (data-tone:
+ * neutral, success, warning, danger) and a ring in the page colour; on another surface, set
+ * --plinth-avatar-ring on the container (a card: --plinth-color-surface-raised).
+ */
+
+@layer plinth {
+  .plinth-avatar {
+    --plinth-avatar-size: var(--plinth-size-avatar-md);
+    --plinth-avatar-surface: var(--plinth-color-surface-sunken);
+    --plinth-avatar-status: var(--plinth-color-text-subtle);
+    --plinth-avatar-ring: var(--plinth-color-surface);
+
+    position: relative;
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--plinth-avatar-size);
+    block-size: var(--plinth-avatar-size);
+    font-family: var(--plinth-font-family-body);
+    font-size: var(--plinth-font-size-xs);
+    font-weight: var(--plinth-font-weight-medium);
+    line-height: 1;
+    vertical-align: middle;
+    color: var(--plinth-color-text-muted);
+    user-select: none;
+    background-color: var(--plinth-avatar-surface);
+    border-radius: var(--plinth-radius-pill);
+  }
+
+  /*
+   * The hairline ring: over an image (positioned boxes paint after in-flow ones) and under the
+   * status dot (which comes later). A border, so forced-colours mode keeps the circle.
+   */
+  .plinth-avatar::before {
+    position: absolute;
+    inset: 0;
+    box-sizing: border-box;
+    pointer-events: none;
+    content: '';
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+    border-radius: inherit;
+  }
+
+  .plinth-avatar[data-size='sm'] {
+    --plinth-avatar-size: var(--plinth-size-avatar-sm);
+  }
+
+  .plinth-avatar[data-size='lg'] {
+    --plinth-avatar-size: var(--plinth-size-avatar-lg);
+
+    font-size: var(--plinth-font-size-md);
+  }
+
+  .plinth-avatar[data-size='xl'] {
+    --plinth-avatar-size: var(--plinth-size-avatar-xl);
+
+    font-size: var(--plinth-font-size-xl);
+  }
+
+  .plinth-avatar-image {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+  }
+
+  .plinth-avatar-initials {
+    letter-spacing: var(--plinth-font-tracking-snug);
+  }
+
+  .plinth-avatar-glyph {
+    inline-size: 60%;
+    block-size: 60%;
+  }
+
+  .plinth-avatar-status {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-end: 0;
+    inline-size: calc(var(--plinth-avatar-size) * 0.3);
+    block-size: calc(var(--plinth-avatar-size) * 0.3);
+    background-color: var(--plinth-avatar-status);
+
+    /* Stays round when a brand squares the avatar. */
+    border-radius: 50%;
+    box-shadow: 0 0 0 var(--plinth-border-width-thick) var(--plinth-avatar-ring);
+  }
+
+  .plinth-avatar-status[data-tone='success'] {
+    --plinth-avatar-status: var(--plinth-color-success);
+  }
+
+  .plinth-avatar-status[data-tone='warning'] {
+    --plinth-avatar-status: var(--plinth-color-warning);
+  }
+
+  .plinth-avatar-status[data-tone='danger'] {
+    --plinth-avatar-status: var(--plinth-color-danger);
+  }
+
+  @media (forced-colors: active) {
+    .plinth-avatar-status {
+      background-color: CanvasText;
     }
   }
 }

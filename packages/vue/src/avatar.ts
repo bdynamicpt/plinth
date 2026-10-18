@@ -1,11 +1,13 @@
-/** The avatar sizes (24, 32, 40 and 56 px). `md` is the default. */
-export const avatarSizes = ['sm', 'md', 'lg', 'xl'] as const;
+import { resolveSize, type Size } from './size';
+
+/** The avatar sizes (24, 32, 40 and 56 px), from the shared size scale. `md` is the default. */
+export const avatarSizes = ['sm', 'md', 'lg', 'xl'] as const satisfies readonly Size[];
 
 export type AvatarSize = (typeof avatarSizes)[number];
 
 /** A size from the list, or `md` when it is not one of them. */
 export function avatarSize(value: string | undefined): AvatarSize {
-  return avatarSizes.includes(value as AvatarSize) ? (value as AvatarSize) : 'md';
+  return resolveSize(value, avatarSizes, 'md');
 }
 
 /**
@@ -15,9 +17,10 @@ export function avatarSize(value: string | undefined): AvatarSize {
 export function initialsFrom(name: string): string {
   const words = name.trim().split(/\s+/).filter(Boolean);
   if (words.length === 0) return '';
-  const first = [...words[0]!][0] ?? '';
-  const last = words.length > 1 ? ([...words.at(-1)!][0] ?? '') : '';
-  return (first + last).toLocaleUpperCase();
+  // Whole code points, so a letter outside the basic plane isn't split in half.
+  const first = [...words[0]!][0]!;
+  const last = words.length > 1 ? [...words.at(-1)!][0]! : '';
+  return (first + last).toUpperCase();
 }
 
 /** The person shown when there is neither an image nor a name to take initials from. */
