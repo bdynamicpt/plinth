@@ -107,4 +107,50 @@ describe('PlinthButton', () => {
     await wrapper.trigger('click');
     expect(clicks).toBe(1);
   });
+
+  it('prints the icons, flips them and shows busy on a link too', () => {
+    const link = mount(PlinthButton, {
+      props: { href: '/next', mirrorIcon: true, mirrorTrailing: true },
+      slots: { default: 'Next', icon: svg, trailing: svg },
+    });
+    const icons = link.findAll('.plinth-icon');
+
+    expect(icons).toHaveLength(2);
+    expect(icons.map((icon) => icon.attributes('data-mirror'))).toEqual(['', '']);
+    expect(icons.map((icon) => icon.attributes('data-size'))).toEqual(['md', 'md']);
+
+    const busy = mount(PlinthButton, {
+      props: { href: '/next', busy: true },
+      slots: { default: 'Next', icon: svg },
+    });
+
+    expect(busy.find('.plinth-button-spinner').exists()).toBe(true);
+    expect(busy.find('.plinth-icon').exists()).toBe(false);
+    expect(busy.attributes()).toMatchObject({ 'aria-busy': 'true', 'aria-disabled': 'true' });
+    expect(busy.attributes('href')).toBe('/next');
+  });
+
+  it('flips the leading icon on a button without flipping the trailing one', () => {
+    const wrapper = mount(PlinthButton, {
+      props: { mirrorIcon: true },
+      slots: { default: 'Back', icon: svg, trailing: svg },
+    });
+
+    expect(wrapper.findAll('.plinth-icon').map((icon) => icon.attributes('data-mirror'))).toEqual([
+      '',
+      undefined,
+    ]);
+  });
+
+  it('leaves the icons on a link unflipped unless asked', () => {
+    const wrapper = mount(PlinthButton, {
+      props: { href: '/next' },
+      slots: { default: 'Next', icon: svg, trailing: svg },
+    });
+
+    expect(wrapper.findAll('.plinth-icon').map((icon) => icon.attributes('data-mirror'))).toEqual([
+      undefined,
+      undefined,
+    ]);
+  });
 });

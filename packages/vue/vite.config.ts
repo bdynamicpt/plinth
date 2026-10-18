@@ -16,5 +16,11 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     include: ['test/**/*.test.ts'],
+    coverage: {
+      provider: 'v8',
+      include: ['src/**'],
+      reporter: ['text-summary'],
+      thresholds: { 100: true },
+    },
   },
 });

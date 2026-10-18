@@ -75,4 +75,34 @@ describe('PlinthIconButton', () => {
     await wrapper.trigger('click');
     expect(clicks).toBe(1);
   });
+
+  it('shows busy and flips as a link too', () => {
+    const busy = mount(PlinthIconButton, {
+      props: { href: '/next', label: 'Next', busy: true },
+      slots: { default: svg },
+    });
+
+    expect(busy.find('.plinth-button-spinner').exists()).toBe(true);
+    expect(busy.find('.plinth-icon').exists()).toBe(false);
+    expect(busy.attributes()).toMatchObject({ 'aria-busy': 'true', 'aria-disabled': 'true' });
+
+    const flipped = mount(PlinthIconButton, {
+      props: { href: '/next', label: 'Next', mirror: true },
+      slots: { default: svg },
+    });
+
+    expect(flipped.find('.plinth-icon').attributes('data-mirror')).toBe('');
+  });
+
+  it('disables a link with aria-disabled and no href', () => {
+    const wrapper = mount(PlinthIconButton, {
+      props: { href: '/next', label: 'Next', disabled: true },
+      slots: { default: svg },
+    });
+
+    expect(wrapper.element.tagName).toBe('A');
+    expect(wrapper.attributes('href')).toBeUndefined();
+    expect(wrapper.attributes()).toMatchObject({ role: 'link', 'aria-disabled': 'true' });
+    expect(wrapper.attributes('aria-busy')).toBeUndefined();
+  });
 });

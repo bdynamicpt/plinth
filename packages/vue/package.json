@@ -13,7 +13,7 @@
   "scripts": {
     "build": "vite build && vue-tsc -p tsconfig.build.json",
     "lint": "vue-tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run --coverage"
   },
   "dependencies": {
     "@bdynamic/plinth-css": "*"
