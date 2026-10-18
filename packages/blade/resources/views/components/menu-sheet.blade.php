@@ -15,7 +15,7 @@
 <x-plinth::sheet :attributes="$attributes->merge(['class' => 'plinth-menu-sheet'])" :id="$id" :title="$title" :close-label="$closeLabel" placement="end">
     @if (filled($userName))
         <x-plinth::list-row class="plinth-menu-sheet-user" :description="filled($userDetail) ? $userDetail : null" :href="$userHref" :chevron="$userHref !== null">
-            <x-slot:leading><x-plinth::avatar :name="$userName" :src="$userSrc" size="lg" decorative /></x-slot:leading>
+            <x-slot:leading><x-plinth::avatar :name="$userName" :src="filled($userSrc) ? $userSrc : null" size="lg" decorative /></x-slot:leading>
             {{ $userName }}
         </x-plinth::list-row>
     @endif

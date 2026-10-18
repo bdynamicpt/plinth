@@ -63,7 +63,8 @@ it open.
   Give it a **`user-href`** and it links to the profile, with a chevron.
 - **`plinth-menu-sheet-nav`** is a `<nav>` named by the title. It holds
   [list cards](?path=/docs/components-list-card--docs) of link rows, one card or several with
-  headings.
+  headings. The sheet's title is an `<h2>`, so the cards' headings are `<h3>`
+  (`heading-level="h3"`).
 - **`plinth-menu-sheet-account`** is optional: a list card of account actions, such as
   _Settings_ and _Sign out_. In the full-height panel it sits on the bottom edge.
 
@@ -84,8 +85,8 @@ link) closes it with `close()` or `command="close"`.
 
 ## Signing out
 
-Signing out changes state, so it is a button row (a `POST` from the app) or a form's submit
-button, never a link.
+Signing out changes state, so it is a button row, never a link: one with `wire:click` or
+`@click`, or one with `type="submit"` and `form="…"` that posts a form elsewhere on the page.
 
 ## Long menus
 

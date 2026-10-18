@@ -53,6 +53,13 @@ describe('PlinthMenuSheet', () => {
     }
   });
 
+  it('ignores a blank picture', () => {
+    const wrapper = menuWith({ userName: 'Sam Lee', userSrc: ' ' });
+
+    expect(wrapper.find('.plinth-avatar-image').exists()).toBe(false);
+    expect(wrapper.find('.plinth-avatar-initials').text()).toBe('SL');
+  });
+
   it("shows the user's picture", () => {
     const wrapper = menuWith({ userName: 'Sam Lee', userSrc: '/sam.jpg' });
 
@@ -96,8 +103,10 @@ describe('PlinthMenuSheet', () => {
     expect(wrapper.find('nav').attributes('aria-labelledby')).toBe('menu-title');
   });
 
-  it("escapes the user's name and detail", () => {
-    const wrapper = menuWith({ userName: '<b>Sam</b>', userDetail: '<i>x</i>' });
+  it("escapes the user's name and detail, and the id", () => {
+    const wrapper = menuWith({ id: 'a"b', userName: '<b>Sam</b>', userDetail: '<i>x</i>' });
+
+    expect(wrapper.html()).toContain('aria-labelledby="a&quot;b-title"');
 
     expect(wrapper.find('b').exists()).toBe(false);
     expect(wrapper.find('i').exists()).toBe(false);

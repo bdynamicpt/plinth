@@ -129,6 +129,7 @@ export const LongNavigation: Story = {
   },
 };
 
+/** A long name and detail wrap inside the row. */
 export const LongName: Story = {
   args: {
     id: 'menu-long-name',

@@ -44,6 +44,7 @@ const generatedId = useId();
 const menuId = computed(() => props.id?.trim() || `plinth-menu-sheet-${generatedId}`);
 const hasUser = computed(() => Boolean(props.userName?.trim()));
 const userHref = computed(() => (props.userHref?.trim() ? props.userHref : undefined));
+const userSrc = computed(() => (props.userSrc?.trim() ? props.userSrc : undefined));
 const userDetail = computed(() => (props.userDetail?.trim() ? props.userDetail : undefined));
 
 const sheet = ref<InstanceType<typeof PlinthSheet>>();

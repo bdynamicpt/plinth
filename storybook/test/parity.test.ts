@@ -357,9 +357,11 @@ const cases: ParityCase[] = [
     ...menuSheetDefaults,
     userDetail: ' ',
     userHref: ' ',
+    userSrc: ' ',
     account: '  ',
   }),
   menuSheetCase('Menu sheet/blank user name', { ...menuSheetDefaults, userName: '  ' }),
+  menuSheetCase('Menu sheet/id with spaces', menuSheetDefaults, {}, ' menu '),
   ...storyArgs<HeaderArgs>(headerStories).map(([story, args]) =>
     headerCase(`Header/${story}`, args),
   ),
@@ -570,9 +572,10 @@ function menuSheetCase(
   story: string,
   args: MenuSheetArgs,
   attributes: Attributes = {},
+  id: string = args.id,
 ): ParityCase {
   const props = {
-    id: args.id,
+    id,
     title: args.title,
     closeLabel: args.closeLabel,
     ...Object.fromEntries(
@@ -817,6 +820,7 @@ describe('parity with the stories', () => {
       'Menu sheet/with extra attributes',
       'Menu sheet/blank user parts and account',
       'Menu sheet/blank user name',
+      'Menu sheet/id with spaces',
       'Header/Default',
       'Header/WithBack',
       'Header/WithoutLeading',

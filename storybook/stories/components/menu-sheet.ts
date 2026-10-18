@@ -35,7 +35,12 @@ export function menuSheet(
         {
           title: userName,
           description: userDetail?.trim() ? userDetail : undefined,
-          leading: avatar({ name: userName, src: userSrc, size: 'lg', decorative: true }),
+          leading: avatar({
+            name: userName,
+            src: userSrc?.trim() ? userSrc : undefined,
+            size: 'lg',
+            decorative: true,
+          }),
           href: userHref?.trim() ? userHref : undefined,
           chevron: Boolean(userHref?.trim()),
           button: false,
