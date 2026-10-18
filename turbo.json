@@ -8,7 +8,7 @@
     ".prettierignore",
     "stylelint.config.js"
   ],
-  "globalPassThroughEnv": ["__MISE_*", "MISE_*", "LERD_*"],
+  "globalPassThroughEnv": ["__MISE_*", "MISE_*", "LERD_*", "PLAYWRIGHT_*", "CI"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
