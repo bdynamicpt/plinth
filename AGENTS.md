@@ -78,7 +78,7 @@ storybook/  never published
   `--plinth-color-focus-ring` at `--plinth-focus-ring-width`, offset `--plinth-focus-ring-offset`,
   or `-offset-filled` on solid filled controls); the test runner checks it.
 - Blade: choices are backed enums in `packages/blade/src/Enums/`; sizes use the one shared `Size`
-  (xs to xl, as in Filament) with each component's supported subset. PHP classes are `final`.
+  (xs to xl, icons included) with each component's supported subset. PHP classes are `final`.
 - Logical properties; touch targets at least 40 × 40 px; nothing hover-only;
   `prefers-reduced-motion` respected.
 - Each component ships its story (every state, three widths, light and dark), Blade and Vue

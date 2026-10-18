@@ -3,7 +3,7 @@
 namespace BDynamic\Plinth\Enums;
 
 /**
- * One size scale for every component, as Filament has. Each component supports the sizes that
+ * One size scale for every component, icons included. Each component supports the sizes that
  * make sense for it and falls back to its default for the rest.
  */
 enum Size: string
@@ -45,12 +45,22 @@ enum Size: string
         return [self::Small, self::Medium, self::Large];
     }
 
+    /**
+     * The icon sizes (16, 20 and 24 px).
+     *
+     * @return list<self>
+     */
+    public static function icons(): array
+    {
+        return [self::Small, self::Medium, self::Large];
+    }
+
     /** The size of the icons inside a control of this size. */
-    public function iconSize(): IconSize
+    public function iconSize(): self
     {
         return match ($this) {
-            self::ExtraSmall, self::Small => IconSize::Small,
-            default => IconSize::Medium,
+            self::ExtraSmall, self::Small => self::Small,
+            default => self::Medium,
         };
     }
 }

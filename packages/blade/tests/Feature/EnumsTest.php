@@ -1,7 +1,6 @@
 <?php
 
 use BDynamic\Plinth\Enums\ButtonVariant;
-use BDynamic\Plinth\Enums\IconSize;
 use BDynamic\Plinth\Enums\Size;
 use BDynamic\Plinth\Enums\Tone;
 use Illuminate\Support\Facades\Blade;
@@ -15,15 +14,14 @@ it('resolves a case, its value, or nothing to a case', function () {
 
 it('defaults each choice the way the components do', function () {
     expect(Tone::default())->toBe(Tone::Neutral)
-        ->and(IconSize::default())->toBe(IconSize::Medium)
         ->and(ButtonVariant::default())->toBe(ButtonVariant::Primary)
         ->and(Size::default())->toBe(Size::Medium);
 });
 
 it('sizes a control\'s icons to the control', function () {
-    expect(Size::Small->iconSize())->toBe(IconSize::Small)
-        ->and(Size::Medium->iconSize())->toBe(IconSize::Medium)
-        ->and(Size::Large->iconSize())->toBe(IconSize::Medium);
+    expect(Size::Small->iconSize())->toBe(Size::Small)
+        ->and(Size::Medium->iconSize())->toBe(Size::Medium)
+        ->and(Size::Large->iconSize())->toBe(Size::Medium);
 });
 
 it('resolves a size among the ones a component supports', function () {
@@ -53,9 +51,6 @@ it('matches the lists the Vue layer and the stories use', function () {
     }
     foreach (Tone::values() as $value) {
         expect($vue('tones.ts'))->toContain("'{$value}'");
-    }
-    foreach (IconSize::values() as $value) {
-        expect($vue('icon.ts'))->toContain("'{$value}'");
     }
     foreach (Size::values() as $value) {
         expect($vue('size.ts'))->toContain("'{$value}'");

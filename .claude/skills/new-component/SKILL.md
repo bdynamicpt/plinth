@@ -55,7 +55,7 @@ Then by hand:
   (`packages/blade/src/Enums/`, using `ResolvesToDefault`, with a `default()` case), the story
   importing Vue's list; the Blade view resolves the prop with `Enum::resolve($prop)->value`, so a
   project can pass the enum or its string. **Sizes don't get their own enum:** use the shared
-  `Size` (xs to xl, as in Filament) and pass the sizes the component supports,
+  `Size` (xs to xl, icons included) and pass the sizes the component supports,
   `Size::resolve($size, [Size::Small, …])`, with `sizes` and `resolveSize()` on the Vue side.
   Add new enums to the list check in `packages/blade/tests/Feature/EnumsTest.php`. PHP classes
   are `final`.

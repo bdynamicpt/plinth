@@ -77,7 +77,7 @@ component; `.claude/skills/new-component/SKILL.md` walks through the rest.
 3. **Blade**: `packages/blade/resources/views/components/<name>.blade.php`
    (`<x-plinth::name>`), with Pest tests. Its choices (variants,
    tones) are backed enums in `packages/blade/src/Enums/`, resolved with `Enum::resolve()`. Sizes
-   share one scale, `Size` (xs to xl, as in Filament); a component passes the sizes it supports
+   share one scale, `Size` (xs to xl, icons included); a component passes the sizes it supports
    (`Size::resolve($size, Size::controls())`). PHP classes are `final` (Pint checks).
 4. **Vue**: `packages/vue/src/Plinth<Name>.vue`, exported from `src/index.ts` and registered by
    the plugin, with Vitest tests.
