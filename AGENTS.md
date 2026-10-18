@@ -49,6 +49,8 @@ storybook/  never published
   story, both themes, three widths), Pest (Blade). Screenshot comparison is paused until the
   foundations settle (#9).
 - Lint: ESLint, Prettier, Stylelint (property order, no `!important`, no raw colours), Pint.
+- PHP classes are always `final`; Pint's `final_class` rule enforces it. Abstract base classes
+  (such as the tests' `TestCase`) are the only exception.
 - CI: `npm ci`, then `turbo run lint test build build-storybook`, `.turbo` kept by the Actions
   cache; pull requests use `--filter=...[origin/main]`.
 - Published as npm `@bdynamic/plinth` (subpaths `tokens`, `tokens.css`, `css`, `vue`, `tailwind.css`)
