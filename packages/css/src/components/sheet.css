@@ -1,0 +1,241 @@
+/*
+ * Sheet: a modal panel that slides up from the bottom on a phone, and shows as a centred dialog
+ * or a side panel from 768px up.
+ *
+ * <dialog id="filters" class="plinth-sheet" data-placement="center" closedby="any"
+ *   aria-labelledby="filters-title" aria-describedby="filters-description">
+ *   <div class="plinth-sheet-header">
+ *     <h2 id="filters-title" class="plinth-sheet-title">Filters</h2>
+ *     <p id="filters-description" class="plinth-sheet-description">Narrow the list down.</p>
+ *     <button type="button" class="plinth-button plinth-icon-button plinth-sheet-close"
+ *       data-variant="ghost" data-size="md" aria-label="Close" commandfor="filters"
+ *       command="close">
+ *       <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
+ *     </button>
+ *   </div>
+ *   <div class="plinth-sheet-body">…</div>
+ *   <div class="plinth-sheet-footer">…</div>
+ * </dialog>
+ *
+ * The root is the <dialog>, and it needs an id: commandfor and aria-labelledby point at it, and
+ * the title's and description's ids are the root's id with -title and -description. The title is
+ * required; the description (and its aria-describedby) and the footer are optional. The close
+ * button is an icon button (button.css and icon.css) and is always there: closedby="any" (tap the
+ * backdrop) is an enhancement Safari doesn't have yet. A project may set closedby="closerequest"
+ * on a sheet that must not close on a stray tap.
+ *
+ * Open it with showModal() or a <button commandfor="filters" command="show-modal">. Open is the
+ * native state, [open]; the browser puts the sheet in the top layer, makes the page inert, traps
+ * focus, closes on Escape and returns focus. The dialog fires close when it closes.
+ *
+ * Placement (data-placement), from 768px up: center (default, also when missing) is a dialog in
+ * the middle of the screen, sheet.width wide; end is a full-height panel on the inline-end edge,
+ * sheet.side-width wide. On a phone both are a bottom sheet.
+ *
+ * The body scrolls, with overscroll-behavior: contain; the header and footer stay put. While a
+ * sheet is open the page under it doesn't scroll (html:has(.plinth-sheet:modal)), and
+ * scrollbar-gutter: stable keeps it from shifting. The sheet slides (and the centred one fades)
+ * in and out on the motion tokens, which drop to 0ms under prefers-reduced-motion.
+ */
+
+@layer plinth {
+  html:has(.plinth-sheet) {
+    scrollbar-gutter: stable;
+  }
+
+  html:has(.plinth-sheet:modal) {
+    overflow: hidden;
+  }
+
+  .plinth-sheet {
+    --plinth-sheet-offset: 0 100%;
+
+    position: fixed;
+    inset-block: auto 0;
+    inset-inline: 0;
+    box-sizing: border-box;
+    flex-direction: column;
+    inline-size: 100%;
+    max-inline-size: 100%;
+    max-block-size: calc(100dvh - var(--plinth-space-12));
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    font-family: var(--plinth-font-family-body);
+    color: var(--plinth-color-text);
+    background-color: var(--plinth-color-surface-raised);
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+    border-block-end-width: 0;
+    border-start-start-radius: var(--plinth-radius-container);
+    border-start-end-radius: var(--plinth-radius-container);
+    box-shadow: var(--plinth-elevation-3);
+    translate: var(--plinth-sheet-offset);
+    transition:
+      translate var(--plinth-duration-normal) var(--plinth-easing-exit),
+      opacity var(--plinth-duration-normal) var(--plinth-easing-exit),
+      overlay var(--plinth-duration-normal) allow-discrete,
+      display var(--plinth-duration-normal) allow-discrete;
+  }
+
+  .plinth-sheet[open] {
+    display: flex;
+    translate: 0 0;
+    transition-timing-function: var(--plinth-easing-enter);
+  }
+
+  @starting-style {
+    .plinth-sheet[open] {
+      translate: var(--plinth-sheet-offset);
+    }
+  }
+
+  .plinth-sheet::backdrop {
+    background-color: var(--plinth-color-overlay);
+    opacity: 0;
+    transition:
+      opacity var(--plinth-duration-normal) var(--plinth-easing-standard),
+      overlay var(--plinth-duration-normal) allow-discrete,
+      display var(--plinth-duration-normal) allow-discrete;
+  }
+
+  .plinth-sheet[open]::backdrop {
+    opacity: 1;
+  }
+
+  @starting-style {
+    .plinth-sheet[open]::backdrop {
+      opacity: 0;
+    }
+  }
+
+  .plinth-sheet-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--plinth-space-1) var(--plinth-space-3);
+    align-items: center;
+    padding-block: var(--plinth-space-3);
+    padding-inline: var(--plinth-space-4) var(--plinth-space-3);
+    border-block-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+  }
+
+  .plinth-sheet-title {
+    grid-column: 1;
+    margin: 0;
+    font-size: var(--plinth-font-size-lg);
+    font-weight: var(--plinth-font-weight-semibold);
+    line-height: var(--plinth-font-leading-tight);
+    letter-spacing: var(--plinth-font-tracking-snug);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-sheet-description {
+    grid-column: 1;
+    margin: 0;
+    font-size: var(--plinth-font-size-sm);
+    line-height: var(--plinth-font-leading-normal);
+    color: var(--plinth-color-text-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-sheet-close {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  .plinth-sheet-body {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    padding: var(--plinth-space-4);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    font-size: var(--plinth-font-size-md);
+    line-height: var(--plinth-font-leading-normal);
+  }
+
+  /* A browser can focus a scrolling area that has nothing focusable in it. */
+  .plinth-sheet-body:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset-inset);
+  }
+
+  .plinth-sheet-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--plinth-space-2);
+    justify-content: flex-end;
+    padding-block: var(--plinth-space-3) max(var(--plinth-space-3), env(safe-area-inset-bottom));
+    padding-inline: var(--plinth-space-4);
+    border-block-start: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+  }
+
+  /* On a phone the footer's actions share its width. */
+  .plinth-sheet-footer > * {
+    flex: 1 1 0;
+  }
+
+  /* On a phone the last part clears the home indicator (the footer does it too). */
+  .plinth-sheet-body:last-child {
+    padding-block-end: max(var(--plinth-space-4), env(safe-area-inset-bottom));
+  }
+
+  @media (min-width: 768px) {
+    .plinth-sheet {
+      --plinth-sheet-offset: 0 var(--plinth-space-4);
+
+      inset: 0;
+      inline-size: min(100% - 2 * var(--plinth-space-8), var(--plinth-sheet-width));
+      max-block-size: calc(100dvh - 2 * var(--plinth-space-16));
+      margin: auto;
+      border-block-end-width: var(--plinth-border-width-thin);
+      border-radius: var(--plinth-radius-container);
+      opacity: 0;
+    }
+
+    .plinth-sheet[open] {
+      opacity: 1;
+    }
+
+    @starting-style {
+      .plinth-sheet[open] {
+        opacity: 0;
+      }
+    }
+
+    .plinth-sheet[data-placement='end'] {
+      --plinth-sheet-offset: 100% 0;
+
+      inset-block: 0;
+      inset-inline: auto 0;
+      inline-size: min(100%, var(--plinth-sheet-side-width));
+      block-size: auto;
+      max-block-size: none;
+      margin: 0;
+      border-width: 0;
+      border-inline-start-width: var(--plinth-border-width-thin);
+      border-radius: 0;
+      opacity: 1;
+    }
+
+    .plinth-sheet[data-placement='end']:dir(rtl) {
+      --plinth-sheet-offset: -100% 0;
+    }
+
+    .plinth-sheet-footer > * {
+      flex: none;
+    }
+
+    .plinth-sheet-body:last-child {
+      padding-block-end: var(--plinth-space-4);
+    }
+
+    .plinth-sheet-footer {
+      padding-block-end: var(--plinth-space-3);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .plinth-sheet {
+      border-width: var(--plinth-border-width-thin);
+    }
+  }
+}

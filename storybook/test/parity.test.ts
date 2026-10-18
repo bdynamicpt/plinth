@@ -8,6 +8,7 @@ import {
   PlinthListRow,
   PlinthPill,
   PlinthPillRow,
+  PlinthSheet,
 } from '@bdynamic/plinth-vue';
 import { createStaticVNode, h, type Component } from 'vue';
 import { renderToString } from 'vue/server-renderer';
@@ -28,6 +29,8 @@ import * as listRowStories from '../stories/components/ListRow.stories.ts';
 import { listRow, type ListRowArgs } from '../stories/components/list-row.ts';
 import * as pillRowStories from '../stories/components/PillRow.stories.ts';
 import { pill, pillRow, type PillArgs, type PillRowArgs } from '../stories/components/pill-row.ts';
+import * as sheetStories from '../stories/components/Sheet.stories.ts';
+import { sheet, type SheetArgs } from '../stories/components/sheet.ts';
 import { sampleIcons } from '../stories/components/icons.ts';
 import { normalize, renderBlade } from './markup.ts';
 
@@ -83,6 +86,15 @@ const listRowDefaults: ListRowArgs = {
   button: false,
   current: false,
   disabled: false,
+};
+
+const sheetDefaults: SheetArgs = {
+  id: 'filters',
+  title: 'Filters',
+  closeLabel: 'Close',
+  placement: 'center',
+  body: '<p>Body</p>',
+  footer: '<button type="button">Apply</button>',
 };
 
 const pillDefaults: PillArgs = { label: 'Open', selected: false, disabled: false };
@@ -241,6 +253,26 @@ const cases: ParityCase[] = [
     { ...pillDefaults, href: '#open' },
     { class: 'ms-2', 'data-testid': 'open', type: 'text/html' },
   ),
+  ...storyArgs<SheetArgs>(sheetStories).map(([story, args]) => sheetCase(`Sheet/${story}`, args)),
+  sheetCase(
+    'Sheet/with extra attributes',
+    { ...sheetDefaults, description: 'Narrow the list down.' },
+    {
+      class: 'is-busy',
+      'data-testid': 'filters',
+      'aria-busy': 'true',
+      closedby: 'closerequest',
+    },
+  ),
+  sheetCase('Sheet/blank description, no footer', {
+    ...sheetDefaults,
+    description: '  ',
+    footer: undefined,
+  }),
+  sheetCase('Sheet/unknown placement', {
+    ...sheetDefaults,
+    placement: 'start' as SheetArgs['placement'],
+  }),
   iconCase(
     'Icon/with an aria-label attribute',
     { size: 'md', mirror: false, svg: sampleIcons.alert },
@@ -381,6 +413,30 @@ function pillRowCase(story: string, args: PillRowArgs, attributes: Attributes = 
     markup: pillRow(args, attributes),
     vue: { component: PlinthPillRow, props: { ...props, ...attributes }, slot, html: true },
     blade: { component: 'pill-row', props, attributes, slot },
+  };
+}
+
+/** The sheet's own parity; its body and footer are markup, passed in as the slots. */
+function sheetCase(story: string, args: SheetArgs, attributes: Attributes = {}): ParityCase {
+  const props = {
+    id: args.id,
+    title: args.title,
+    ...(args.description ? { description: args.description } : {}),
+    closeLabel: args.closeLabel,
+    placement: args.placement,
+  };
+  const named = args.footer ? { footer: args.footer } : {};
+  return {
+    story,
+    markup: sheet(args, attributes),
+    vue: {
+      component: PlinthSheet,
+      props: { ...props, ...attributes },
+      slot: args.body,
+      html: true,
+      named,
+    },
+    blade: { component: 'sheet', props, attributes, slot: args.body, named },
   };
 }
 
@@ -533,6 +589,16 @@ describe('parity with the stories', () => {
       'Pill/DisabledLink',
       'Pill/with extra attributes',
       'Pill/link with extra attributes',
+      'Sheet/Default',
+      'Sheet/WithDescription',
+      'Sheet/SidePanel',
+      'Sheet/WithoutFooter',
+      'Sheet/Confirmation',
+      'Sheet/LongContent',
+      'Sheet/LongTitle',
+      'Sheet/with extra attributes',
+      'Sheet/blank description, no footer',
+      'Sheet/unknown placement',
       'Icon/with an aria-label attribute',
     ]);
   });
