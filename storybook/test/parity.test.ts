@@ -9,6 +9,8 @@ import {
   PlinthListRow,
   PlinthPill,
   PlinthPillRow,
+  PlinthSectionMenu,
+  PlinthSectionMenuItem,
   PlinthSheet,
 } from '@bdynamic/plinth-vue';
 import { createStaticVNode, h, type Component } from 'vue';
@@ -32,6 +34,13 @@ import * as listRowStories from '../stories/components/ListRow.stories.ts';
 import { listRow, type ListRowArgs } from '../stories/components/list-row.ts';
 import * as pillRowStories from '../stories/components/PillRow.stories.ts';
 import { pill, pillRow, type PillArgs, type PillRowArgs } from '../stories/components/pill-row.ts';
+import * as sectionMenuStories from '../stories/components/SectionMenu.stories.ts';
+import {
+  sectionMenu,
+  sectionMenuItem,
+  type SectionMenuArgs,
+  type SectionMenuItemArgs,
+} from '../stories/components/section-menu.ts';
 import * as sheetStories from '../stories/components/Sheet.stories.ts';
 import { sheet, type SheetArgs } from '../stories/components/sheet.ts';
 import { sampleIcons } from '../stories/components/icons.ts';
@@ -101,6 +110,12 @@ const sheetDefaults: SheetArgs = {
 };
 
 const pillDefaults: PillArgs = { label: 'Open', selected: false, disabled: false };
+const sectionMenuItemDefaults: SectionMenuItemArgs = {
+  label: 'Tasks',
+  href: '#tasks',
+  current: false,
+  disabled: false,
+};
 
 const cases: ParityCase[] = [
   ...storyArgs<BadgeArgs>(badgeStories).map(([story, args]) => ({
@@ -255,6 +270,43 @@ const cases: ParityCase[] = [
     'Pill/link with extra attributes',
     { ...pillDefaults, href: '#open' },
     { class: 'ms-2', 'data-testid': 'open', type: 'text/html' },
+  ),
+  ...storyArgs<SectionMenuArgs>(sectionMenuStories).map(([story, args]) =>
+    sectionMenuCase(`Section menu/${story}`, args),
+  ),
+  sectionMenuCase(
+    'Section menu/with extra attributes',
+    { nav: true, items: [sectionMenuItemDefaults] },
+    { class: 'sticky', id: 'sections', 'data-testid': 'sections', 'aria-labelledby': 'title' },
+  ),
+  sectionMenuCase('Section menu/blank label', { label: ' ', nav: true, items: [] }),
+  sectionMenuItemCase('Section menu item/blank href', { ...sectionMenuItemDefaults, href: ' ' }),
+  sectionMenuItemCase('Section menu item/Default', sectionMenuItemDefaults),
+  sectionMenuItemCase('Section menu item/Current', { ...sectionMenuItemDefaults, current: true }),
+  sectionMenuItemCase('Section menu item/WithCount', { ...sectionMenuItemDefaults, count: 8 }),
+  sectionMenuItemCase('Section menu item/ZeroCount', { ...sectionMenuItemDefaults, count: 0 }),
+  sectionMenuItemCase('Section menu item/Disabled', { ...sectionMenuItemDefaults, disabled: true }),
+  sectionMenuItemCase('Section menu item/Button', { ...sectionMenuItemDefaults, href: undefined }),
+  sectionMenuItemCase('Section menu item/CurrentButton', {
+    ...sectionMenuItemDefaults,
+    href: undefined,
+    current: true,
+    count: '3',
+  }),
+  sectionMenuItemCase('Section menu item/DisabledButton', {
+    ...sectionMenuItemDefaults,
+    href: undefined,
+    disabled: true,
+  }),
+  sectionMenuItemCase(
+    'Section menu item/with extra attributes',
+    { ...sectionMenuItemDefaults, count: 8 },
+    { class: 'ms-2', id: 'tasks', 'data-testid': 'tasks', 'aria-describedby': 'tasks-help' },
+  ),
+  sectionMenuItemCase(
+    'Section menu item/button with extra attributes',
+    { ...sectionMenuItemDefaults, href: undefined },
+    { class: 'ms-2', 'data-testid': 'week', type: 'submit' },
   ),
   ...storyArgs<SheetArgs>(sheetStories).map(([story, args]) => sheetCase(`Sheet/${story}`, args)),
   sheetCase(
@@ -444,6 +496,45 @@ function pillRowCase(story: string, args: PillRowArgs, attributes: Attributes = 
   };
 }
 
+function sectionMenuItemProps(args: SectionMenuItemArgs) {
+  return {
+    ...(args.count !== undefined ? { count: args.count } : {}),
+    ...(args.href !== undefined ? { href: args.href } : {}),
+    current: args.current,
+    disabled: args.disabled,
+  };
+}
+
+function sectionMenuItemCase(
+  story: string,
+  args: SectionMenuItemArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = sectionMenuItemProps(args);
+  return {
+    story,
+    markup: sectionMenuItem(args, attributes),
+    vue: { component: PlinthSectionMenuItem, props: { ...props, ...attributes }, slot: args.label },
+    blade: { component: 'section-menu-item', props, attributes, slot: args.label },
+  };
+}
+
+/** The menu's own parity; its items are each an item case's markup, passed in as the slot. */
+function sectionMenuCase(
+  story: string,
+  args: SectionMenuArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = { ...(args.label !== undefined ? { label: args.label } : {}), nav: args.nav };
+  const slot = args.items.map((item) => sectionMenuItem(item)).join('');
+  return {
+    story,
+    markup: sectionMenu(args, attributes),
+    vue: { component: PlinthSectionMenu, props: { ...props, ...attributes }, slot, html: true },
+    blade: { component: 'section-menu', props, attributes, slot },
+  };
+}
+
 /** The sheet's own parity; its body and footer are markup, passed in as the slots. */
 function sheetCase(
   story: string,
@@ -622,6 +713,26 @@ describe('parity with the stories', () => {
       'Pill/DisabledLink',
       'Pill/with extra attributes',
       'Pill/link with extra attributes',
+      'Section menu/Default',
+      'Section menu/WithCounts',
+      'Section menu/Buttons',
+      'Section menu/NoneCurrent',
+      'Section menu/DisabledLink',
+      'Section menu/DisabledButton',
+      'Section menu/Overflowing',
+      'Section menu/with extra attributes',
+      'Section menu/blank label',
+      'Section menu item/blank href',
+      'Section menu item/Default',
+      'Section menu item/Current',
+      'Section menu item/WithCount',
+      'Section menu item/ZeroCount',
+      'Section menu item/Disabled',
+      'Section menu item/Button',
+      'Section menu item/CurrentButton',
+      'Section menu item/DisabledButton',
+      'Section menu item/with extra attributes',
+      'Section menu item/button with extra attributes',
       'Sheet/Default',
       'Sheet/WithDescription',
       'Sheet/SidePanel',

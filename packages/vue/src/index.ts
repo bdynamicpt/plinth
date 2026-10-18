@@ -9,6 +9,8 @@ import PlinthListCard from './PlinthListCard.vue';
 import PlinthListRow from './PlinthListRow.vue';
 import PlinthPill from './PlinthPill.vue';
 import PlinthPillRow from './PlinthPillRow.vue';
+import PlinthSectionMenu from './PlinthSectionMenu.vue';
+import PlinthSectionMenuItem from './PlinthSectionMenuItem.vue';
 import PlinthSheet from './PlinthSheet.vue';
 
 export {
@@ -22,6 +24,8 @@ export {
   PlinthListRow,
   PlinthPill,
   PlinthPillRow,
+  PlinthSectionMenu,
+  PlinthSectionMenuItem,
   PlinthSheet,
 };
 export { avatarGlyph, avatarSizes, initialsFrom, type AvatarSize } from './avatar';
@@ -46,6 +50,8 @@ export const Plinth: Plugin = {
     app.component('PlinthListRow', PlinthListRow);
     app.component('PlinthPill', PlinthPill);
     app.component('PlinthPillRow', PlinthPillRow);
+    app.component('PlinthSectionMenu', PlinthSectionMenu);
+    app.component('PlinthSectionMenuItem', PlinthSectionMenuItem);
     app.component('PlinthSheet', PlinthSheet);
   },
 };

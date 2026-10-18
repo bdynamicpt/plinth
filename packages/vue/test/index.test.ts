@@ -12,6 +12,8 @@ import {
   PlinthListRow,
   PlinthPill,
   PlinthPillRow,
+  PlinthSectionMenu,
+  PlinthSectionMenuItem,
   PlinthSheet,
 } from '../src/index.ts';
 
@@ -30,6 +32,8 @@ describe('the Plinth plugin', () => {
     expect(app.component('PlinthListRow')).toBe(PlinthListRow);
     expect(app.component('PlinthPill')).toBe(PlinthPill);
     expect(app.component('PlinthPillRow')).toBe(PlinthPillRow);
+    expect(app.component('PlinthSectionMenu')).toBe(PlinthSectionMenu);
+    expect(app.component('PlinthSectionMenuItem')).toBe(PlinthSectionMenuItem);
     expect(app.component('PlinthSheet')).toBe(PlinthSheet);
   });
 });

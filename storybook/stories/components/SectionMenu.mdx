@@ -1,0 +1,86 @@
+import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
+import * as SectionMenuStories from './SectionMenu.stories';
+
+<Meta of={SectionMenuStories} />
+
+# Section menu
+
+The 56px row under the header that switches between the sections of a page: _Overview_,
+_Tasks_, _Files_, _Settings_. Its items are 40px tall, quiet muted text until one is current,
+which takes the selection tint and an accent edge. It never wraps: when the items don't fit, it scrolls sideways.
+
+<Canvas of={SectionMenuStories.Default} />
+<Controls of={SectionMenuStories.Default} />
+
+## Links or buttons
+
+The menu and each item are their own components, so the app's attributes and listeners
+(`wire:click`, `x-on:click`, `@click`) land on the item (ADR 2). The app owns which section is
+current and sets it.
+
+- **Links** (the default) navigate. The menu is a `<nav>`; name it with **`label`** so it reads
+  apart from the page's other navigation (_Project_), or point `aria-labelledby` at a heading.
+  Give each item the `href` of the section's own page, and set `current` on the section being
+  shown, which prints `aria-current="page"`.
+- **Buttons** switch the view in place, with no navigation (_Day_, _Week_, _Month_). Set
+  **`nav`** to false: the menu becomes a `<div role="group">`, and each item a toggle button
+  that always prints `aria-pressed`, `"true"` or `"false"`.
+
+<Canvas of={SectionMenuStories.WithCounts} />
+<Canvas of={SectionMenuStories.Buttons} />
+
+An item takes an optional **`count`**, in the mono face. The current item takes the selection
+tint (`accent-subtle`, `accent-text`) and an accent edge, so colour is not its only cue; in forced colours it takes the system highlight.
+
+## Disabled
+
+A disabled button gets `disabled`; a disabled link loses its `href` and reads as a disabled link
+(`role="link"`, `aria-disabled="true"`).
+
+<Canvas of={SectionMenuStories.DisabledLink} />
+<Canvas of={SectionMenuStories.DisabledButton} />
+
+## Many sections
+
+The row scrolls at every width and snaps each item to its start. On a touch screen it shows no
+scrollbar, so a cut-off item at the edge is the hint that there are more; with a mouse it shows a
+thin one. Tab and a swipe scroll it too. Its block padding keeps the focus ring inside the
+scrolling area. When the current section starts out of view, the app scrolls its item into view
+(`scrollIntoView({ inline: 'nearest', block: 'nearest' })`); Plinth ships no script for it.
+
+<Canvas of={SectionMenuStories.Overflowing} />
+<Canvas of={SectionMenuStories.RightToLeft} />
+
+## Under the header
+
+The menu sits under the header and shares its inline padding, so their content lines up. Where
+it sits is the app's: to keep it in view as the page scrolls, make it sticky below the header
+(`position: sticky`, `inset-block-start: calc(var(--plinth-header-height) +
+env(safe-area-inset-top))`, `z-index: var(--plinth-layer-sticky)`), and add its height to the
+app's `scroll-padding-block-start`.
+
+<Canvas of={SectionMenuStories.UnderHeader} />
+
+## Tuning
+
+The row is `--plinth-section-menu-height` (56px) and its items
+`--plinth-section-menu-item-height` (40px). An item never gets shorter than the 40px touch
+target, whatever the token says. A project changes them in its tokens.
+
+## In Blade and Vue
+
+<Source
+  language="html"
+  dark
+  code={`<x-plinth::section-menu label="Project">
+    <x-plinth::section-menu-item href="/overview" :current="request()->routeIs('overview')">Overview</x-plinth::section-menu-item>
+    <x-plinth::section-menu-item href="/tasks" :count="$openTasks" :current="request()->routeIs('tasks')">Tasks</x-plinth::section-menu-item>
+</x-plinth::section-menu>
+
+<PlinthSectionMenu label="View" :nav="false">
+  <PlinthSectionMenuItem :current="view === 'day'" @click="view = 'day'">Day</PlinthSectionMenuItem>
+  <PlinthSectionMenuItem :current="view === 'week'" @click="view = 'week'">Week</PlinthSectionMenuItem>
+</PlinthSectionMenu>`}
+/>
+
+The markup contract is at the top of `packages/css/src/components/section-menu.css`.
