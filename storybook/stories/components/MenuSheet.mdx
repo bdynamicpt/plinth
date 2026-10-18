@@ -1,0 +1,131 @@
+import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
+import * as MenuSheetStories from './MenuSheet.stories';
+
+<Meta of={MenuSheetStories} />
+
+# Menu sheet
+
+The app shell's menu: a [sheet](?path=/docs/components-sheet--docs) with the signed-in user, the
+navigation and the account actions. The header's menu button opens it. On a phone it slides up
+from the bottom; from 768px up it is a full-height panel on the inline-end edge.
+
+The menus on this page stay closed until you press their button; open a story on its own to see
+it open.
+
+<Canvas of={MenuSheetStories.Default} />
+<Controls of={MenuSheetStories.Default} />
+
+## Markup
+
+<Source
+  language="html"
+  dark
+  code={`<button type="button" class="plinth-button plinth-icon-button" data-variant="ghost"
+  data-size="md" aria-label="Menu" commandfor="menu" command="show-modal">…</button>
+
+<dialog id="menu" class="plinth-sheet plinth-menu-sheet" data-placement="end" closedby="any"
+  aria-labelledby="menu-title">
+  <div class="plinth-sheet-header">
+    <h2 id="menu-title" class="plinth-sheet-title">Menu</h2>
+    <button type="button" class="plinth-button plinth-icon-button plinth-sheet-close" …
+      commandfor="menu" command="close">…</button>
+  </div>
+  <div class="plinth-sheet-body">
+    <a class="plinth-list-row plinth-menu-sheet-user" href="/profile">
+      <span class="plinth-list-row-leading">
+        <span class="plinth-avatar" data-size="lg" aria-hidden="true">…</span>
+      </span>
+      <span class="plinth-list-row-content">
+        <span class="plinth-list-row-title">Sam Lee</span>
+        <span class="plinth-list-row-description">sam@example.com</span>
+      </span>
+      <span class="plinth-list-row-trailing">…</span>
+    </a>
+    <nav class="plinth-menu-sheet-nav" aria-labelledby="menu-title">
+      <div class="plinth-list-card">…</div>
+    </nav>
+    <div class="plinth-menu-sheet-account">
+      <div class="plinth-list-card">…</div>
+    </div>
+  </div>
+</dialog>`}
+/>
+
+- **`plinth-menu-sheet`** sits on a sheet's root, always `data-placement="end"`, with no
+  footer. Everything the sheet does holds: the browser traps focus, closes it on Escape or a tap
+  on the backdrop, and returns focus to the menu button. Give it an **`id`** and point the
+  header's menu button at it with `commandfor` and `command="show-modal"`; Blade and Vue
+  generate one when you leave it out, but the button needs to know it.
+- The **title** is _Menu_ by default; set it, and **`close-label`** (Blade) or
+  **`closeLabel`** (Vue), in the page's language. It names the sheet and the navigation.
+- **`plinth-menu-sheet-user`** is optional: a [list row](?path=/docs/components-list-row--docs)
+  with a decorative avatar, the user's name and an optional detail line (an email or a role).
+  Give it a **`user-href`** and it links to the profile, with a chevron.
+- **`plinth-menu-sheet-nav`** is a `<nav>` named by the title. It holds
+  [list cards](?path=/docs/components-list-card--docs) of link rows, one card or several with
+  headings. The sheet's title is an `<h2>`, so the cards' headings are `<h3>`
+  (`heading-level="h3"`).
+- **`plinth-menu-sheet-account`** is optional: a list card of account actions, such as
+  _Settings_ and _Sign out_. In the full-height panel it sits on the bottom edge.
+
+The menu needs `sheet.css`, `list-row.css`, `list-card.css`, `avatar.css`, `button.css` and
+`icon.css`.
+
+<Canvas of={MenuSheetStories.StaticUser} />
+<Canvas of={MenuSheetStories.WithoutUser} />
+
+## The current page
+
+The app marks the row of the page being shown as current (`current` on the list row, which
+prints `aria-current="page"`) and keeps it up to date. The menu remembers nothing. A link that
+navigates closes the menu with the page; one that stays on the page (a Livewire or Vue router
+link) closes it with `close()` or `command="close"`.
+
+<Canvas of={MenuSheetStories.Grouped} />
+
+## Signing out
+
+Signing out changes state, so it is a button row, never a link: one with `wire:click` or
+`@click`, or one with `type="submit"` and `form="…"` that posts a form elsewhere on the page.
+
+## Long menus
+
+The body scrolls as one, and the account follows the navigation.
+
+<Canvas of={MenuSheetStories.LongNavigation} />
+<Canvas of={MenuSheetStories.RightToLeft} />
+
+## In Blade and Vue
+
+<Source
+  language="html"
+  dark
+  code={`<x-plinth::menu-sheet id="menu" :user-name="$user->name" :user-detail="$user->email" user-href="/profile">
+    <x-plinth::list-card heading-level="h3">
+        <li><x-plinth::list-row href="/inbox" :current="request()->routeIs('inbox')">Inbox</x-plinth::list-row></li>
+        <li><x-plinth::list-row href="/projects" :current="request()->routeIs('projects*')">Projects</x-plinth::list-row></li>
+    </x-plinth::list-card>
+    <x-slot:account>
+        <x-plinth::list-card heading-level="h3">
+            <li><x-plinth::list-row href="/settings">Settings</x-plinth::list-row></li>
+            <li><x-plinth::list-row button wire:click="signOut">Sign out</x-plinth::list-row></li>
+        </x-plinth::list-card>
+    </x-slot:account>
+</x-plinth::menu-sheet>
+
+<PlinthMenuSheet id="menu" :user-name="user.name" :user-detail="user.email" @close="onClose">
+  <PlinthListCard heading-level="h3">
+    <li><PlinthListRow href="/inbox" :current="route.name === 'inbox'">Inbox</PlinthListRow></li>
+  </PlinthListCard>
+  <template #account>
+    <PlinthListCard heading-level="h3">
+      <li><PlinthListRow button @click="signOut">Sign out</PlinthListRow></li>
+    </PlinthListCard>
+  </template>
+</PlinthMenuSheet>`}
+/>
+
+In Livewire, put `wire:ignore.self` on the menu sheet, as on any sheet, so a re-render keeps it
+open. In Vue, a ref's `showModal()` and `close()` open and close it, and it emits `close`.
+
+The markup contract is at the top of `packages/css/src/components/menu-sheet.css`.
