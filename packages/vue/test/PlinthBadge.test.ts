@@ -1,7 +1,6 @@
 import { mount } from '@vue/test-utils';
-import { createApp } from 'vue';
 import { describe, expect, it } from 'vitest';
-import { Plinth, PlinthBadge, tones } from '../src/index.ts';
+import { PlinthBadge, tones } from '../src/index.ts';
 
 describe('PlinthBadge', () => {
   it('prints the badge markup contract', () => {
@@ -50,12 +49,5 @@ describe('PlinthBadge', () => {
 
     expect(badge.classes()).toEqual(['plinth-badge', 'ms-2']);
     expect(badge.attributes('id')).toBe('status');
-  });
-
-  it('registers every component with the plugin', () => {
-    const app = createApp({});
-    app.use(Plinth);
-
-    expect(app.component('PlinthBadge')).toBe(PlinthBadge);
   });
 });

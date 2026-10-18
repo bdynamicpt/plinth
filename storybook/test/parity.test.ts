@@ -1,9 +1,12 @@
-import { PlinthBadge } from '@bdynamic/plinth-vue';
-import { h, type Component } from 'vue';
+import { PlinthBadge, PlinthIcon } from '@bdynamic/plinth-vue';
+import { createStaticVNode, h, type Component } from 'vue';
 import { renderToString } from 'vue/server-renderer';
 import { describe, expect, it } from 'vitest';
 import * as badgeStories from '../stories/components/Badge.stories.ts';
 import { badge, type Attributes, type BadgeArgs } from '../stories/components/badge.ts';
+import * as iconStories from '../stories/components/Icon.stories.ts';
+import { icon, type IconArgs } from '../stories/components/icon.ts';
+import { sampleIcons } from '../stories/components/icons.ts';
 import { normalize, renderBlade } from './markup.ts';
 
 /**
@@ -17,7 +20,8 @@ import { normalize, renderBlade } from './markup.ts';
 interface ParityCase {
   story: string;
   markup: string;
-  vue: { component: Component; props: Record<string, unknown>; slot: string };
+  /** `html: true` when the slot is markup (an icon's SVG) rather than text. */
+  vue: { component: Component; props: Record<string, unknown>; slot: string; html?: boolean };
   blade: {
     component: string;
     props: Record<string, unknown>;
@@ -43,7 +47,32 @@ const cases: ParityCase[] = [
     blade: { component: 'badge', props: { tone: args.tone, dot: args.dot }, slot: args.label },
   })),
   badgeWithAttributes(),
+  ...storyArgs<IconArgs>(iconStories).map(([story, args]) => iconCase(`Icon/${story}`, args)),
+  iconCase(
+    'Icon/with extra attributes',
+    { size: 'lg', label: 'Done', mirror: false, svg: sampleIcons.check },
+    { class: 'ms-2', id: 'saved-icon', 'data-testid': 'saved-icon', title: 'Saved' },
+  ),
+  iconCase(
+    'Icon/with an aria-label attribute',
+    { size: 'md', mirror: false, svg: sampleIcons.alert },
+    { 'aria-label': 'Warning' },
+  ),
 ];
+
+function iconCase(story: string, args: IconArgs, attributes: Attributes = {}): ParityCase {
+  const props = {
+    size: args.size,
+    mirror: args.mirror,
+    ...(args.label ? { label: args.label } : {}),
+  };
+  return {
+    story,
+    markup: icon(args, attributes),
+    vue: { component: PlinthIcon, props: { ...props, ...attributes }, slot: args.svg, html: true },
+    blade: { component: 'icon', props, attributes, slot: args.svg },
+  };
+}
 
 function badgeWithAttributes(): ParityCase {
   const args: BadgeArgs = { label: 'Paid', tone: 'success', dot: true };
@@ -82,12 +111,21 @@ describe('parity with the stories', () => {
       'Badge/Danger',
       'Badge/WithDot',
       'Badge/with extra attributes',
+      'Icon/Default',
+      'Icon/Small',
+      'Icon/Large',
+      'Icon/Labelled',
+      'Icon/Filled',
+      'Icon/Mirrored',
+      'Icon/with extra attributes',
+      'Icon/with an aria-label attribute',
     ]);
   });
 
   describe.each(cases.map((c, i) => [c.story, c, i] as const))('%s', (_story, c, i) => {
     it('Vue prints the story markup', async () => {
-      const html = await renderToString(h(c.vue.component, c.vue.props, () => c.vue.slot));
+      const slot = () => (c.vue.html ? createStaticVNode(c.vue.slot, 1) : c.vue.slot);
+      const html = await renderToString(h(c.vue.component, c.vue.props, slot));
       expect(normalize(html)).toBe(normalize(c.markup));
     });
 

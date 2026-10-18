@@ -69,6 +69,9 @@
     --plinth-ref-space-14: 3.5rem;
     --plinth-ref-space-16: 4rem;
     --plinth-ref-space-0-5: 0.125rem;
+    --plinth-ref-size-16: 1rem;
+    --plinth-ref-size-20: 1.25rem;
+    --plinth-ref-size-24: 1.5rem;
     --plinth-ref-size-32: 2rem;
     --plinth-ref-size-40: 2.5rem;
     --plinth-ref-size-44: 2.75rem;
@@ -150,6 +153,9 @@
     --plinth-control-md: var(--plinth-ref-size-40);
     --plinth-control-lg: var(--plinth-ref-size-44);
     --plinth-touch-target: var(--plinth-ref-size-40);
+    --plinth-size-icon-sm: var(--plinth-ref-size-16);
+    --plinth-size-icon-md: var(--plinth-ref-size-20);
+    --plinth-size-icon-lg: var(--plinth-ref-size-24);
     --plinth-layer-base: 0;
     --plinth-layer-sticky: 100;
     --plinth-layer-overlay: 200;
@@ -334,5 +340,57 @@
     .plinth-badge-dot {
       background-color: currentcolor;
     }
+  }
+}
+
+/* icon.css */
+/*
+ * Icon: a project's own SVG, sized by Plinth.
+ *
+ * Decorative (the default), hidden from assistive technology:
+ * <span class="plinth-icon" data-size="md" aria-hidden="true">
+ *   <svg viewBox="0 0 24 24">…</svg>
+ * </span>
+ *
+ * Meaningful, with a label (an img role makes the SVG inside presentational). Blade and Vue take
+ * it as `label`, or as an `aria-label` attribute; a blank label leaves the icon decorative:
+ * <span class="plinth-icon" data-size="md" role="img" aria-label="Warning">
+ *   <svg viewBox="0 0 24 24">…</svg>
+ * </span>
+ *
+ * Sizes (data-size): sm 16px, md 20px (default, also when the attribute is missing or unknown),
+ * lg 24px. data-mirror flips the icon in right-to-left text, for icons that point a direction.
+ *
+ * The SVG comes from the project, inline or as <use href="sprite.svg#name">. It should draw with
+ * currentColor; Plinth sets no fill or stroke, so outline and filled icon sets both keep theirs.
+ * The icon takes its colour from the text around it.
+ */
+
+@layer plinth {
+  .plinth-icon {
+    --plinth-icon-current-size: var(--plinth-size-icon-md);
+
+    display: inline-flex;
+    flex: none;
+    inline-size: var(--plinth-icon-current-size);
+    block-size: var(--plinth-icon-current-size);
+    vertical-align: middle;
+  }
+
+  .plinth-icon[data-size='sm'] {
+    --plinth-icon-current-size: var(--plinth-size-icon-sm);
+  }
+
+  .plinth-icon[data-size='lg'] {
+    --plinth-icon-current-size: var(--plinth-size-icon-lg);
+  }
+
+  .plinth-icon > svg {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .plinth-icon[data-mirror]:dir(rtl) > svg {
+    transform: scaleX(-1);
   }
 }

@@ -13,3 +13,12 @@ body {
   line-height: var(--plinth-font-leading-tight);
   letter-spacing: -0.02em;
 }
+
+/*
+ * Docs pages draw each story in a white box whatever the theme. Give it the theme's surface and
+ * text colour, so a component that takes the text colour (an icon) doesn't vanish in dark.
+ */
+.docs-story {
+  color: var(--plinth-color-text);
+  background-color: var(--plinth-color-surface);
+}

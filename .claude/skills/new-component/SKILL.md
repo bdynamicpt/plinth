@@ -46,7 +46,7 @@ It writes a minimal component in every layer, all printing `<div class="plinth-<
 Then by hand:
 
 - `packages/vue/src/index.ts`: export `Plinth<Name>` and register it in the `Plinth` plugin;
-  add it to the "registers every component" test in `packages/vue/test/PlinthBadge.test.ts`.
+  add it to the plugin test in `packages/vue/test/index.test.ts`.
 - `storybook/test/parity.test.ts`: import the stories and the markup function, add a
   `storyArgs<<Name>Args>(…)` block mapping each story's args to Vue and Blade props, a case with
   extra attributes (like `badgeWithAttributes`: a class, an id, `data-*`, `aria-*`), and every
