@@ -12,9 +12,9 @@
 
 @layer plinth {
   .plinth-badge {
-    --plinth-badge-surface: var(--plinth-color-neutral-surface);
-    --plinth-badge-text: var(--plinth-color-neutral-text);
-    --plinth-badge-accent: var(--plinth-color-neutral-accent);
+    --plinth-badge-surface: var(--plinth-color-surface-sunken);
+    --plinth-badge-text: var(--plinth-color-text-muted);
+    --plinth-badge-accent: var(--plinth-color-text-muted);
 
     display: inline-flex;
     gap: var(--plinth-space-1);
@@ -22,10 +22,10 @@
     max-inline-size: 100%;
     padding-block: var(--plinth-space-0-5);
     padding-inline: var(--plinth-space-2);
-    font-family: var(--plinth-font-sans);
+    font-family: var(--plinth-font-family-body);
     font-size: var(--plinth-font-size-xs);
     font-weight: var(--plinth-font-weight-medium);
-    line-height: var(--plinth-leading-normal);
+    line-height: var(--plinth-font-leading-normal);
     vertical-align: middle;
     color: var(--plinth-badge-text);
     white-space: nowrap;
@@ -33,25 +33,25 @@
 
     /* Invisible normally; drawn by the system in forced-colours mode so the badge keeps its edge. */
     border: 1px solid transparent;
-    border-radius: var(--plinth-radius-full);
+    border-radius: var(--plinth-radius-pill);
   }
 
   .plinth-badge[data-tone='success'] {
     --plinth-badge-surface: var(--plinth-color-success-surface);
     --plinth-badge-text: var(--plinth-color-success-text);
-    --plinth-badge-accent: var(--plinth-color-success-accent);
+    --plinth-badge-accent: var(--plinth-color-success);
   }
 
   .plinth-badge[data-tone='warning'] {
     --plinth-badge-surface: var(--plinth-color-warning-surface);
     --plinth-badge-text: var(--plinth-color-warning-text);
-    --plinth-badge-accent: var(--plinth-color-warning-accent);
+    --plinth-badge-accent: var(--plinth-color-warning);
   }
 
   .plinth-badge[data-tone='danger'] {
     --plinth-badge-surface: var(--plinth-color-danger-surface);
     --plinth-badge-text: var(--plinth-color-danger-text);
-    --plinth-badge-accent: var(--plinth-color-danger-accent);
+    --plinth-badge-accent: var(--plinth-color-danger);
   }
 
   .plinth-badge-dot {
@@ -59,7 +59,7 @@
     inline-size: var(--plinth-space-2);
     block-size: var(--plinth-space-2);
     background-color: var(--plinth-badge-accent);
-    border-radius: var(--plinth-radius-full);
+    border-radius: var(--plinth-radius-pill);
   }
 
   .plinth-badge-label {

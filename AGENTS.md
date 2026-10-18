@@ -15,8 +15,10 @@ build-storybook`), `npm run storybook`, `npm run build-storybook`, and `composer
 The design system of BDynamic's projects. Nothing in Plinth may know about any one consumer project.
 
 - **Tokens are the source of truth:** colour (light and dark), type, spacing, radii, layers
-  (z-index), breakpoints, motion. One source, built to CSS custom properties, a JS/TS export and a
-  Tailwind v4 `@theme` CSS file (v4 has no JS presets).
+  (z-index), breakpoints, motion. DTCG JSON in `packages/tokens/tokens/`, built with Style
+  Dictionary to CSS custom properties, a JS/TS export and a Tailwind v4 `@theme` CSS file (v4 has
+  no JS presets). Three tiers (docs/adr/0001): primitives `--plinth-ref-*`, semantic (what
+  components use and projects override, light and dark), component (per-component tuning).
 - **Components are plain HTML and CSS**, each with a documented markup contract (elements, classes,
   states, ARIA).
 - **Blade (with a Filament plugin) and Vue 3 layers are thin:** they print the contract and hold no
@@ -31,7 +33,7 @@ The design system of BDynamic's projects. Nothing in Plinth may know about any o
 
 ```
 packages/
-  tokens/   token source; builds CSS custom properties, JS/TS export, Tailwind `@theme` CSS
+  tokens/   DTCG token source; builds CSS custom properties, JS/TS export, Tailwind `@theme` CSS
   css/      one stylesheet per component, tokens only, mobile first
   vue/      Vue 3 components
   blade/    Composer package: Blade components (<x-plinth::name>) + Filament plugin;
@@ -58,7 +60,8 @@ storybook/  never published
   to them.
 - Plain CSS with semantic classes, never utility classes in the markup. Component CSS lives in
   `@layer plinth` so a project's utilities can override it; no `@apply`.
-- Tokens only: no hex, raw pixel spacing or raw z-index in a component's CSS. No `!important`.
+- Tokens only: no hex, raw pixel spacing or raw z-index in a component's CSS, and semantic or
+  component tokens only, never primitives (`--plinth-ref-*`). No `!important`.
 - Classes `plinth-component` and `plinth-component-part`; state is an ARIA attribute or an `is-*`
   class.
 - Logical properties; touch targets at least 40 × 40 px; nothing hover-only;

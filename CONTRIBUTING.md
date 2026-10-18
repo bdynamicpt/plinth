@@ -10,7 +10,10 @@ project names, colours or copy. A project brings its brand by overriding the tok
 
 **Tokens only.** No hex values, named colours or colour functions, no raw lengths for spacing,
 font sizes or radii, and no raw z-index in a component's CSS. Use the `--plinth-*` custom
-properties. If a value is missing, add a token in `packages/tokens/src/tokens.ts` first.
+properties, and only **semantic or component** tokens: primitives (`--plinth-ref-*`) are for
+building semantic tokens, and Stylelint rejects them in component CSS. The CSS build also rejects
+any `var(--plinth-*)` that is not a token. If a value is missing, add a token in
+`packages/tokens/tokens/` first (see ADR 1 in `docs/adr/`).
 
 **Class names.** `plinth-component` for the root and `plinth-component-part` for its parts
 (`plinth-badge`, `plinth-badge-dot`). State is an ARIA attribute (`aria-expanded`,
@@ -21,7 +24,7 @@ keep its own custom properties, named `--plinth-component-*`.
 **Logical properties.** `margin-inline`, `padding-block`, `inset-inline-end`, `inline-size`, and
 `text-align: start`, so right-to-left works.
 
-**Usable by everyone.** Touch targets are at least 40 × 40 px (`--plinth-size-touch`). Nothing
+**Usable by everyone.** Touch targets are at least 40 × 40 px (`--plinth-touch-target`). Nothing
 depends on hover. Motion uses the `--plinth-duration-*` tokens, which drop to 0ms under
 `prefers-reduced-motion`. Colour is never the only signal. Text meets WCAG AA in light and dark.
 

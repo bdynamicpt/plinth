@@ -1,21 +1,21 @@
 import { compile } from '@tailwindcss/node';
+import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { buildCss, buildTailwindTheme } from '../src/generate.ts';
-import {
-  color,
-  cssVar,
-  palette,
-  parseRef,
-  resolveRef,
-  resolvedColors,
-  space,
-  vars,
-  type Theme,
-} from '../src/index.ts';
+import { tokens, vars, type Token } from '../dist/index.js';
 
-const themes: Theme[] = ['light', 'dark'];
+// These run against dist/, which Turborepo builds before the tests.
+const css = readFileSync(new URL('../dist/tokens.css', import.meta.url), 'utf8');
+const theme = readFileSync(new URL('../dist/tailwind-theme.css', import.meta.url), 'utf8');
+
+const byPath = new Map(tokens.map((t) => [t.path.join('.'), t]));
+const token = (path: string): Token => {
+  const found = byPath.get(path);
+  if (!found) throw new Error(`No token ${path}`);
+  return found;
+};
+const tier = (name: Token['tier']) => tokens.filter((t) => t.tier === name);
 
 /** WCAG 2 contrast ratio between two hex colours. */
 function contrast(a: string, b: string): number {
@@ -30,81 +30,124 @@ function contrast(a: string, b: string): number {
   return (light + 0.05) / (dark + 0.05);
 }
 
-describe('palette references', () => {
-  it('resolves a reference to its hex value', () => {
-    expect(resolveRef('{neutral.900}')).toBe(palette.neutral[900]);
+describe('tiers', () => {
+  it('has primitives, semantic and component tokens', () => {
+    expect(tier('primitive').length).toBeGreaterThan(50);
+    expect(tier('semantic').length).toBeGreaterThan(30);
+    expect(tier('component').map((t) => t.path.join('.'))).toEqual([
+      'header.height',
+      'bottom-bar.height',
+    ]);
   });
 
-  it('rejects references that do not exist', () => {
-    expect(() => parseRef('{neutral.123}')).toThrow('Unknown palette step');
-    expect(() => parseRef('{nope.100}')).toThrow('Not a palette reference');
-    expect(() => parseRef('#ffffff')).toThrow('Not a palette reference');
-  });
-
-  it.each(themes)('resolves every %s colour', (theme) => {
-    for (const ref of Object.values(color[theme])) {
-      expect(() => parseRef(ref)).not.toThrow();
+  it('names every primitive --plinth-ref-*, and nothing else', () => {
+    for (const t of tokens) {
+      expect(t.name.startsWith('--plinth-ref-')).toBe(t.tier === 'primitive');
     }
   });
 
-  it('gives light and dark the same colour names', () => {
-    expect(Object.keys(color.dark).sort()).toEqual(Object.keys(color.light).sort());
+  it('has the neutrals from 0 to 1000, one brand ramp, and the scales', () => {
+    expect(token('ref.color.neutral.0').value).toBe('#ffffff');
+    expect(token('ref.color.neutral.1000').value).toBe('#000000');
+    expect(token('ref.color.brand.600').value).toBe('#2563eb');
+    expect(token('ref.space.1').value).toBe('0.25rem');
+    expect(token('ref.space.4').value).toBe('1rem');
+  });
+
+  it('has the semantic colours the issue names, in light and dark', () => {
+    for (const name of [
+      'surface',
+      'surface-raised',
+      'text',
+      'text-muted',
+      'border',
+      'divider',
+      'accent',
+      'success',
+      'warning',
+      'danger',
+      'focus-ring',
+      'overlay',
+    ]) {
+      const t = token(`color.${name}`);
+      expect(t.dark, name).toBeDefined();
+      expect(t.darkCss, name).toBeDefined();
+    }
+  });
+
+  it('builds semantic colours from primitives, so a primitive change flows through', () => {
+    for (const t of tier('semantic').filter((t) => t.type === 'color')) {
+      expect(t.ref, t.name).toMatch(/^ref\.color\./);
+      expect(t.darkRef, t.name).toMatch(/^ref\.color\./);
+    }
+  });
+
+  it('has control sizes, the touch target, layers, elevation and breakpoints', () => {
+    expect(['sm', 'md', 'lg'].map((s) => token(`control.${s}`).value)).toEqual([
+      '2rem',
+      '2.5rem',
+      '2.75rem',
+    ]);
+    expect(token('touch-target').value).toBe('2.5rem');
+    expect(
+      ['base', 'sticky', 'overlay', 'sheet', 'toast'].map((l) => token(`layer.${l}`).value),
+    ).toEqual(['0', '100', '200', '300', '400']);
+    expect(token('elevation.2').dark).toBeDefined();
+    expect(token('breakpoint.md').value).toBe('768px');
+    expect(token('breakpoint.lg').value).toBe('1280px');
+  });
+
+  it('builds component tokens from semantic tokens', () => {
+    for (const t of tier('component')) {
+      expect(byPath.get(t.ref!)?.tier, t.name).toBe('semantic');
+    }
   });
 });
 
 describe('contrast', () => {
-  const textPairs = [
-    ['text', 'background'],
+  const pairs = [
     ['text', 'surface'],
-    ['text', 'surface-muted'],
+    ['text', 'surface-raised'],
+    ['text', 'surface-sunken'],
     ['text-muted', 'surface'],
-    ['brand-text', 'surface'],
-    ['on-brand', 'brand'],
-    ['neutral-text', 'neutral-surface'],
+    ['text-muted', 'surface-raised'],
+    ['text-muted', 'surface-sunken'],
+    ['accent-text', 'surface'],
+    ['on-accent', 'accent'],
     ['success-text', 'success-surface'],
     ['warning-text', 'warning-surface'],
     ['danger-text', 'danger-surface'],
   ] as const;
 
-  describe.each(themes)('%s', (theme) => {
-    const colors = resolvedColors(theme);
-    it.each(textPairs)('%s on %s meets WCAG AA (4.5:1)', (fg, bg) => {
-      expect(contrast(colors[fg], colors[bg])).toBeGreaterThanOrEqual(4.5);
+  describe.each(['light', 'dark'] as const)('%s', (mode) => {
+    const value = (name: string) => {
+      const t = token(`color.${name}`);
+      return mode === 'light' ? t.value : t.dark!;
+    };
+    it.each(pairs)('%s on %s meets WCAG AA (4.5:1)', (fg, bg) => {
+      expect(contrast(value(fg), value(bg))).toBeGreaterThanOrEqual(4.5);
     });
   });
 });
 
 describe('CSS custom properties', () => {
-  const css = buildCss();
-
-  it('defines every palette step and points semantic colours at it', () => {
-    expect(css).toContain('--plinth-palette-neutral-900: #18181b;');
-    expect(css).toContain('--plinth-color-text: var(--plinth-palette-neutral-900);');
-  });
-
-  it('defines spacing, radii, layers, type, breakpoints and motion', () => {
-    for (const name of [
-      '--plinth-space-4: 1rem;',
-      '--plinth-radius-full: 9999px;',
-      '--plinth-layer-modal: 400;',
-      '--plinth-font-size-md: 1rem;',
-      '--plinth-font-sans:',
-      '--plinth-breakpoint-md: 768px;',
-      '--plinth-duration-fast: 120ms;',
-      '--plinth-size-touch: 2.5rem;',
-    ]) {
-      expect(css).toContain(name);
-    }
-  });
-
-  it("puts everything in @layer plinth, so a project's overrides win", () => {
+  it('puts everything in @layer plinth, so a project’s overrides win', () => {
     expect(css).toMatch(/^\/\*.*\*\/\n\n@layer plinth \{\n/);
     expect(css.trimEnd().endsWith('}')).toBe(true);
     expect(css.match(/@layer/g)).toHaveLength(1);
   });
 
+  it('defines every token, pointing references at the token they use', () => {
+    for (const t of tokens) {
+      expect(css).toContain(`${t.name}: ${t.css};`);
+    }
+    expect(css).toContain('--plinth-color-text: var(--plinth-ref-color-neutral-900);');
+    expect(css).toContain('--plinth-header-height: var(--plinth-space-14);');
+  });
+
   it('switches to dark with data-theme, the .dark class or the system preference', () => {
     expect(css).toMatch(/\[data-theme="dark"\],\n {2}\.dark \{\n {4}color-scheme: dark;/);
+    expect(css).toContain('--plinth-color-text: var(--plinth-ref-color-neutral-50);');
     expect(css).toContain('@media (prefers-color-scheme: dark)');
     expect(css).toContain(':root:not([data-theme="light"], .light)');
   });
@@ -114,31 +157,29 @@ describe('CSS custom properties', () => {
       /@media \(prefers-reduced-motion: reduce\) \{\n {4}:root \{\n {6}--plinth-duration-fast: 0ms;/,
     );
   });
+});
 
-  it('has one var() per token in the JS export', () => {
-    expect(vars.space[4]).toBe('var(--plinth-space-4)');
-    expect(vars.color.text).toBe(cssVar('color', 'text'));
-    for (const value of Object.values(vars.space)) {
-      expect(css).toContain(`${value.slice(4, -1)}:`);
-    }
-    expect(Object.keys(vars.space)).toEqual(Object.keys(space));
+describe('JS export', () => {
+  it('exposes the semantic and component tokens as var()s', () => {
+    expect(vars.color.surface).toBe('var(--plinth-color-surface)');
+    expect(vars.space['4']).toBe('var(--plinth-space-4)');
+    expect(vars.header.height).toBe('var(--plinth-header-height)');
+    expect(vars).not.toHaveProperty('ref');
   });
 });
 
 describe('Tailwind', () => {
-  const theme = buildTailwindTheme();
-
-  it('exposes the tokens as Tailwind v4 theme variables that read the custom properties', () => {
+  it('exposes the semantic tokens as Tailwind v4 theme variables', () => {
     expect(theme).toContain('@theme inline {');
-    expect(theme).toContain('--color-surface: var(--plinth-color-surface);');
-    expect(theme).toContain('--color-text-muted: var(--plinth-color-text-muted);');
     expect(theme).toContain('--spacing: var(--plinth-space-1);');
-    expect(theme).toContain('--radius-md: var(--plinth-radius-md);');
+    expect(theme).toContain('--radius-control: var(--plinth-radius-control);');
     expect(theme).toContain('--text-sm: var(--plinth-font-size-sm);');
-    expect(theme).toContain('--font-sans: var(--plinth-font-sans);');
-    expect(theme).toContain('--breakpoint-md: 768px;');
-    for (const name of Object.keys(color.light)) {
-      expect(theme).toContain(`--color-${name}: var(--plinth-color-${name});`);
+    expect(theme).toContain('--font-sans: var(--plinth-font-family-body);');
+    expect(theme).toContain('--shadow-1: var(--plinth-elevation-1);');
+    expect(theme).toContain('--breakpoint-md: var(--plinth-breakpoint-md);');
+    expect(theme).not.toContain('--plinth-ref-');
+    for (const t of tier('semantic').filter((t) => t.type === 'color')) {
+      expect(theme).toContain(`--color-${t.path[1]}: ${t.cssVar};`);
     }
   });
 
@@ -146,17 +187,13 @@ describe('Tailwind', () => {
     const base = path.dirname(createRequire(import.meta.url).resolve('tailwindcss/package.json'));
     const compiler = await compile(
       `@import 'tailwindcss/theme';\n@import 'tailwindcss/utilities';\n${theme}`,
-      {
-        base,
-        onDependency: () => {},
-      },
+      { base, onDependency: () => {} },
     );
-    const css = compiler.build(['bg-surface', 'text-text-muted', 'p-4', 'rounded-md', 'md:p-8']);
+    const out = compiler.build(['bg-surface', 'text-text-muted', 'p-4', 'rounded-control']);
 
-    expect(css).toMatch(/\.bg-surface \{\s*background-color: var\(--plinth-color-surface\);/);
-    expect(css).toMatch(/\.text-text-muted \{\s*color: var\(--plinth-color-text-muted\);/);
-    expect(css).toMatch(/\.p-4 \{\s*padding: calc\(var\(--plinth-space-1\) \* 4\);/);
-    expect(css).toMatch(/\.rounded-md \{\s*border-radius: var\(--plinth-radius-md\);/);
-    expect(css).toContain('@media (width >= 768px)');
+    expect(out).toMatch(/\.bg-surface \{\s*background-color: var\(--plinth-color-surface\);/);
+    expect(out).toMatch(/\.text-text-muted \{\s*color: var\(--plinth-color-text-muted\);/);
+    expect(out).toMatch(/\.p-4 \{\s*padding: calc\(var\(--plinth-space-1\) \* 4\);/);
+    expect(out).toMatch(/\.rounded-control \{\s*border-radius: var\(--plinth-radius-control\);/);
   });
 });

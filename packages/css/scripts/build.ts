@@ -8,6 +8,13 @@ import { createRequire } from 'node:module';
  */
 const require = createRequire(import.meta.url);
 const tokensCss = require.resolve('@bdynamic/plinth-tokens/tokens.css');
+const tokenNames = new Set(
+  (
+    JSON.parse(readFileSync(require.resolve('@bdynamic/plinth-tokens/tokens.json'), 'utf8')) as {
+      name: string;
+    }[]
+  ).map((token) => token.name),
+);
 const components = new URL('../src/components/', import.meta.url);
 const dist = new URL('../dist/', import.meta.url);
 
@@ -24,6 +31,15 @@ for (const name of names) {
   // Component CSS lives in @layer plinth, so a project's utilities can override it.
   if (!/^@layer plinth \{$/m.test(css)) {
     throw new Error(`${name}: wrap the component's rules in @layer plinth { … }`);
+  }
+  // Every var(--plinth-…) must be a token or one of the component's own custom properties
+  // (--plinth-<component>-…, defined in the same file).
+  const component = name.replace(/\.css$/, '');
+  for (const [, used] of css.matchAll(/var\((--plinth-[a-z0-9-]+)/g)) {
+    const own = used!.startsWith(`--plinth-${component}-`) && css.includes(`${used}:`);
+    if (!tokenNames.has(used!) && !own) {
+      throw new Error(`${name}: ${used} is not a Plinth token`);
+    }
   }
   writeFileSync(new URL(name, dist), css);
   parts.push(`/* ${name} */\n${css}`);

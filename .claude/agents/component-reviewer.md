@@ -48,7 +48,7 @@ Check what Stylelint cannot:
    forced-colours mode.
 4. **Logical layout.** Beyond the property names: the layout still reads right to left
    (`flex-direction`, `transform`, background positions, icons that point a direction).
-5. **Touch targets.** Anything that can be tapped is at least `--plinth-size-touch` in both
+5. **Touch targets.** Anything that can be tapped is at least `--plinth-touch-target` in both
    directions, through its own size or its padding, at 390 px too.
 6. **Nothing hover-only.** Anything shown or revealed on hover is also reachable by focus and by
    touch.

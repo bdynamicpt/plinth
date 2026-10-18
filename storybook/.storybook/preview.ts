@@ -1,6 +1,7 @@
 import { withThemeByDataAttribute } from '@storybook/addon-themes';
 import type { Preview } from '@storybook/html-vite';
 import '@bdynamic/plinth-css/plinth.css';
+import '../brands/example.css';
 import './preview.css';
 
 /** The widths every component is checked at: a phone, a tablet and a desktop. */
@@ -31,7 +32,29 @@ const preview: Preview = {
       },
     },
   },
+  globalTypes: {
+    brand: {
+      description: "Plinth's neutral defaults, or the made-up example brand (brands/example.css)",
+      toolbar: {
+        title: 'Brand',
+        icon: 'paintbrush',
+        items: [
+          { value: 'default', title: 'Plinth defaults' },
+          { value: 'example', title: 'Example brand (Tidewater)' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+  },
+  initialGlobals: { brand: 'default' },
   decorators: [
+    // Sets data-brand on <html>; the example brand overrides tokens under [data-brand='example'].
+    (story, context) => {
+      const root = document.documentElement;
+      if (context.globals.brand === 'example') root.dataset.brand = 'example';
+      else delete root.dataset.brand;
+      return story();
+    },
     // Sets data-theme on <html>; the tokens do the rest.
     withThemeByDataAttribute({
       themes: { light: 'light', dark: 'dark' },

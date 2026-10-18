@@ -34,7 +34,7 @@
 }
 
 .sb-table code {
-  font-family: var(--plinth-font-mono);
+  font-family: var(--plinth-font-family-mono);
   font-size: var(--plinth-font-size-xs);
   overflow-wrap: anywhere;
 }
@@ -58,7 +58,7 @@
 .sb-chip {
   block-size: var(--plinth-space-12);
   border: 1px solid var(--plinth-color-border);
-  border-radius: var(--plinth-radius-md);
+  border-radius: var(--plinth-radius-control);
 }
 
 .sb-chip-small {
@@ -68,12 +68,25 @@
 
 .sb-bar {
   block-size: var(--plinth-space-4);
-  background-color: var(--plinth-color-brand);
+  background-color: var(--plinth-color-accent);
 }
 
 .sb-radius {
   inline-size: var(--plinth-space-16);
   block-size: var(--plinth-space-12);
-  background-color: var(--plinth-color-surface-muted);
+  background-color: var(--plinth-color-surface-sunken);
   border: 1px solid var(--plinth-color-border-strong);
+}
+
+.sb-shadow {
+  inline-size: var(--plinth-space-16);
+  block-size: var(--plinth-space-10);
+  background-color: var(--plinth-color-surface-raised);
+  border-radius: var(--plinth-radius-control);
+}
+
+.sb-ramp {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
+  gap: var(--plinth-space-3);
 }

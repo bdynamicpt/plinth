@@ -1,0 +1,15 @@
+{
+  "$description": "Component tokens: only values a project may need to tune per component.",
+  "header": {
+    "height": {
+      "$type": "dimension",
+      "$value": "{space.14}"
+    }
+  },
+  "bottom-bar": {
+    "height": {
+      "$type": "dimension",
+      "$value": "{space.16}"
+    }
+  }
+}

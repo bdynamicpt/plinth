@@ -1,7 +1,7 @@
 /**
  * Stylelint for packages/css, the component stylesheets. Beyond the standard config and the
  * property order, it enforces Plinth's rules: tokens only (no raw colours, spacing, radii or
- * z-index), no !important, logical properties, mobile-first media queries and plinth-* classes.
+ * z-index, and no primitives), no !important, logical properties, mobile-first media queries and plinth-* classes.
  */
 const lengthUnits = ['px', 'rem', 'em', 'vw', 'vh'];
 
@@ -46,6 +46,8 @@ export default {
       'max-height',
     ],
     'declaration-property-value-disallowed-list': {
+      // Components use semantic and component tokens, never primitives (--plinth-ref-*).
+      '/.*/': ['/var\\(--plinth-ref-/'],
       'text-align': ['left', 'right'],
       float: ['left', 'right'],
       clear: ['left', 'right'],
