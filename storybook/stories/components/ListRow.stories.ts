@@ -88,6 +88,14 @@ export const LongText: Story = {
     href: '#summary',
   },
 };
+export const LongValue: Story = {
+  args: {
+    title: 'Billing contact',
+    trailing: 'Accounts payable, second floor, north building',
+    chevron: true,
+    href: '#billing',
+  },
+};
 
 const settings = [
   listRow({

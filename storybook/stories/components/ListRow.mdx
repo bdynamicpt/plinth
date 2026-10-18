@@ -61,12 +61,14 @@ Put rows next to each other, or each as the direct child of its own `<li>` in a 
 hairline divider (`--plinth-color-divider`) sits between them; a wrapper element between the
 `<li>` and the row drops it. Reset the list yourself (`margin`, `padding`, `list-style: none`) and
 add `role="list"`, which Safari needs to keep announcing a list without bullets. Long titles and
-descriptions wrap.
+descriptions wrap. The trailing slot keeps its width up to half the row, so a long title wraps
+before a short value does; only a value longer than half the row wraps.
 
 The focus ring is drawn inside the row, so a scrolling sheet or a card doesn't cut it off.
 
 <Canvas of={ListRowStories.List} />
 <Canvas of={ListRowStories.LongText} />
+<Canvas of={ListRowStories.LongValue} />
 <Canvas of={ListRowStories.RightToLeft} />
 
 ## Routing
