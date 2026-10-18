@@ -1,0 +1,12 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { group, TokenTable } from './blocks';
+
+<Meta title="Foundations/Breakpoints" />
+
+# Breakpoints
+
+Mobile first: base rules are the phone, and these add to them. Custom properties can't be used in
+media queries, so CSS writes the values: `@media (min-width: 768px)` and `(min-width: 1280px)`.
+There are no `max-width` queries.
+
+<TokenTable list={group('semantic', 'breakpoint')} />

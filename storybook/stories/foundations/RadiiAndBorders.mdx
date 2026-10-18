@@ -1,0 +1,18 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { group, TokenTable } from './blocks';
+
+<Meta title="Foundations/Radii and borders" />
+
+# Radii and borders
+
+## Radii
+
+Named by what they round, so a brand can square controls without touching pills.
+
+<TokenTable list={group('semantic', 'radius')} />
+
+## Built from
+
+<TokenTable
+  list={[...group('primitive', 'ref', 'radius'), ...group('primitive', 'ref', 'border-width')]}
+/>

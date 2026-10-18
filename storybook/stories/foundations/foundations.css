@@ -1,111 +1,8 @@
-/* Layout for the foundations pages. Not part of Plinth: only Storybook uses these. */
+/* The live demonstration on the Focus ring page. Not part of Plinth: only Storybook uses it. */
 
-/* One vertical rhythm: a fixed gap between sections, a smaller one inside them, no stray margins. */
-.sb-page {
+.sb-demo {
   display: grid;
-  gap: var(--plinth-space-10);
-  max-inline-size: 72rem;
-}
-
-.sb-page section {
-  display: grid;
-  gap: var(--plinth-space-3);
-  justify-items: start;
-}
-
-.sb-page section > * {
-  margin: 0;
-}
-
-.sb-page section > .sb-scroll,
-.sb-page section > .sb-ramp,
-.sb-page section > .sb-swatches {
-  justify-self: stretch;
-}
-
-.sb-page h2 {
-  font-size: var(--plinth-font-size-xl);
-}
-
-.sb-page p {
-  max-inline-size: 65ch;
-  color: var(--plinth-color-text-muted);
-}
-
-.sb-table {
-  inline-size: 100%;
-  border-collapse: collapse;
-  font-size: var(--plinth-font-size-sm);
-}
-
-.sb-table th,
-.sb-table td {
-  padding: var(--plinth-space-2) var(--plinth-space-3);
-  text-align: start;
-  vertical-align: middle;
-  border-block-end: 1px solid var(--plinth-color-border);
-}
-
-.sb-table th {
-  font-weight: var(--plinth-font-weight-semibold);
-}
-
-.sb-table code {
-  font-family: var(--plinth-font-family-mono);
-  font-size: var(--plinth-font-size-xs);
-  overflow-wrap: anywhere;
-}
-
-.sb-scroll {
-  overflow-x: auto;
-}
-
-.sb-swatches {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
-  gap: var(--plinth-space-3);
-}
-
-.sb-swatch {
-  display: grid;
-  gap: var(--plinth-space-1);
-  font-size: var(--plinth-font-size-xs);
-}
-
-.sb-chip {
-  block-size: var(--plinth-space-12);
-  border: 1px solid var(--plinth-color-border);
-  border-radius: var(--plinth-radius-control);
-}
-
-.sb-chip-small {
-  inline-size: var(--plinth-space-8);
-  block-size: var(--plinth-space-8);
-}
-
-.sb-bar {
-  block-size: var(--plinth-space-4);
-  background-color: var(--plinth-color-accent);
-}
-
-.sb-radius {
-  inline-size: var(--plinth-space-16);
-  block-size: var(--plinth-space-12);
-  background-color: var(--plinth-color-surface-sunken);
-  border: 1px solid var(--plinth-color-border-strong);
-}
-
-.sb-shadow {
-  inline-size: var(--plinth-space-16);
-  block-size: var(--plinth-space-10);
-  background-color: var(--plinth-color-surface-raised);
-  border-radius: var(--plinth-radius-control);
-}
-
-.sb-ramp {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
-  gap: var(--plinth-space-3);
+  gap: var(--plinth-space-4);
 }
 
 /*
@@ -117,7 +14,8 @@
   box-decoration-break: clone;
 }
 
-.sb-page .sb-demo-text {
+.sb-demo-text {
+  margin: 0;
   max-inline-size: 22rem;
   line-height: var(--plinth-font-leading-normal);
 }
@@ -158,28 +56,4 @@
 .sb-demo-button:focus-visible {
   outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
   outline-offset: var(--plinth-focus-ring-offset-filled);
-}
-
-.sb-code {
-  justify-self: stretch;
-  max-inline-size: 100%;
-  padding: var(--plinth-space-4);
-  overflow-x: auto;
-  font-family: var(--plinth-font-family-mono);
-  font-size: var(--plinth-font-size-sm);
-  line-height: var(--plinth-font-leading-normal);
-  color: var(--plinth-color-text);
-  background-color: var(--plinth-color-surface-sunken);
-  border: 1px solid var(--plinth-color-border);
-  border-radius: var(--plinth-radius-container);
-}
-
-.sb-code:focus-visible {
-  outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
-  outline-offset: var(--plinth-focus-ring-offset);
-}
-
-.sb-scroll:focus-visible {
-  outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
-  outline-offset: var(--plinth-focus-ring-offset);
 }

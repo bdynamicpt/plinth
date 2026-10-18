@@ -1,0 +1,31 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { group, TokenTable, TypeScale } from './blocks';
+
+<Meta title="Foundations/Typography" />
+
+export const body = group('semantic', 'font', 'family', 'body')[0];
+
+# Typography
+
+Neutral system fonts by default. A project sets its own typefaces by overriding
+`--plinth-font-family-body` and `--plinth-font-family-mono`.
+
+## Families
+
+<TokenTable list={group('semantic', 'font', 'family')} />
+
+## Scale
+
+<TypeScale list={group('semantic', 'font', 'size')} family={body.cssVar} />
+
+## Weights
+
+<TokenTable list={group('semantic', 'font', 'weight')} />
+
+## Line heights
+
+<TokenTable list={group('semantic', 'font', 'leading')} />
+
+## Built from
+
+<TokenTable list={group('primitive', 'ref', 'font')} />

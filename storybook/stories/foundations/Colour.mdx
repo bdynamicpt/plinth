@@ -1,0 +1,41 @@
+import { ColorItem, ColorPalette, Meta } from '@storybook/addon-docs/blocks';
+import { group } from './blocks';
+
+<Meta title="Foundations/Colour" />
+
+export const ramps = [...new Set(group('primitive', 'ref', 'color').map((t) => t.path[2]))];
+
+# Colour
+
+## Semantic colours
+
+What components use. Each has a light and a dark value; text colours meet WCAG AA (4.5:1) on the
+surfaces in both themes, which the token tests check.
+
+<ColorPalette>
+  {group('semantic', 'color').map((t) => (
+    <ColorItem
+      key={t.name}
+      title={t.path[1]}
+      subtitle={t.name}
+      colors={{ [`Light · ${t.ref}`]: t.value, [`Dark · ${t.darkRef}`]: t.dark }}
+    />
+  ))}
+</ColorPalette>
+
+## Built from
+
+The primitive ramps, named by step (`--plinth-ref-color-*`). Components never use these directly.
+
+<ColorPalette>
+  {ramps.map((ramp) => (
+    <ColorItem
+      key={ramp}
+      title={ramp}
+      subtitle={`--plinth-ref-color-${ramp}-*`}
+      colors={Object.fromEntries(
+        group('primitive', 'ref', 'color', ramp).map((t) => [t.path.at(-1), t.value]),
+      )}
+    />
+  ))}
+</ColorPalette>

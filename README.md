@@ -82,7 +82,7 @@ The tokens are in `packages/tokens/tokens/`, in three tiers ([ADR 1](docs/adr/00
 | Semantic  | `semantic.json`, `semantic.light.json`, `.dark.json` | `--plinth-color-surface`        | components; projects override these |
 | Component | `component.json`                                     | `--plinth-header-height`        | one component                       |
 
-Storybook has a page for each tier under **Foundations**.
+Storybook has a page for each under **Foundations** (colour, typography, spacing, sizes, radii, elevation, layers, breakpoints, motion, the focus ring and component tokens), each showing the semantic tokens and the primitives they are built from.
 
 ## Using Plinth from a project while you work on it
 
