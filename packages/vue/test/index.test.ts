@@ -7,6 +7,7 @@ import {
   PlinthButton,
   PlinthIcon,
   PlinthIconButton,
+  PlinthListRow,
 } from '../src/index.ts';
 
 describe('the Plinth plugin', () => {
@@ -19,5 +20,6 @@ describe('the Plinth plugin', () => {
     expect(app.component('PlinthButton')).toBe(PlinthButton);
     expect(app.component('PlinthIcon')).toBe(PlinthIcon);
     expect(app.component('PlinthIconButton')).toBe(PlinthIconButton);
+    expect(app.component('PlinthListRow')).toBe(PlinthListRow);
   });
 });
