@@ -2,8 +2,9 @@ import type { App, Plugin } from 'vue';
 import PlinthBadge from './PlinthBadge.vue';
 import PlinthButton from './PlinthButton.vue';
 import PlinthIcon from './PlinthIcon.vue';
+import PlinthIconButton from './PlinthIconButton.vue';
 
-export { PlinthBadge, PlinthButton, PlinthIcon };
+export { PlinthBadge, PlinthButton, PlinthIcon, PlinthIconButton };
 export {
   buttonSizes,
   buttonVariants,
@@ -20,5 +21,6 @@ export const Plinth: Plugin = {
     app.component('PlinthBadge', PlinthBadge);
     app.component('PlinthButton', PlinthButton);
     app.component('PlinthIcon', PlinthIcon);
+    app.component('PlinthIconButton', PlinthIconButton);
   },
 };

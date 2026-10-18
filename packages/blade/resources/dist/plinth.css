@@ -434,6 +434,16 @@
  *   <span class="plinth-button-spinner" aria-hidden="true"></span> in the leading icon's place.
  *   It keeps focus; the app ignores activation while busy.
  * - hover only where the device can hover; the focus ring on :focus-visible.
+ *
+ * Icon button: a button with only an icon, square at the button's height.
+ *
+ * <button type="button" class="plinth-button plinth-icon-button" data-variant="ghost"
+ *   data-size="md" aria-label="More actions">
+ *   <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
+ * </button>
+ *
+ * aria-label is required: it is the only name the button has. A toggle has aria-pressed
+ * ("true" or "false"), and pressed shows the selection tint (accent-subtle, accent-text).
  */
 
 @layer plinth {
@@ -581,6 +591,21 @@
       [data-variant='danger-ghost']
     ):focus-visible {
     outline-offset: var(--plinth-focus-ring-offset);
+  }
+
+  .plinth-icon-button {
+    flex: none;
+    inline-size: var(--plinth-button-height);
+    padding-inline: 0;
+  }
+
+  .plinth-icon-button[aria-pressed='true'] {
+    --plinth-button-surface: var(--plinth-color-accent-subtle);
+    --plinth-button-surface-hover: var(--plinth-color-accent-subtle);
+    --plinth-button-surface-active: var(--plinth-color-accent-subtle);
+    --plinth-button-text: var(--plinth-color-accent-text);
+    --plinth-button-edge: transparent;
+    --plinth-button-inner-edge: none;
   }
 
   .plinth-button-label {
