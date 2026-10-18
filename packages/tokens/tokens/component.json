@@ -31,5 +31,17 @@
       "$value": "{size.panel}",
       "$description": "A side sheet's width (data-placement=\"end\") from 768 px up."
     }
+  },
+  "section-menu": {
+    "height": {
+      "$type": "dimension",
+      "$value": "{space.14}",
+      "$description": "The section menu's row height (56px)."
+    },
+    "item-height": {
+      "$type": "dimension",
+      "$value": "{control.lg}",
+      "$description": "An item's height (40px), its touch target too."
+    }
   }
 }

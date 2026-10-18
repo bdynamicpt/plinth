@@ -1,0 +1,171 @@
+/*
+ * Section menu: the row under the header that switches between the sections of a page.
+ *
+ * <nav class="plinth-section-menu" aria-label="Project">
+ *   <a class="plinth-section-menu-item" href="/overview" aria-current="page">
+ *     <span class="plinth-section-menu-label">Overview</span>
+ *   </a>
+ *   <a class="plinth-section-menu-item" href="/tasks">
+ *     <span class="plinth-section-menu-label">Tasks</span>
+ *     <span class="plinth-section-menu-count">8</span>
+ *   </a>
+ * </nav>
+ *
+ * The root is a <nav>, named by aria-label (label in Blade and Vue) or by the app's own
+ * aria-labelledby, so it reads apart from the page's other navigation. Its items are links. A
+ * menu that switches views in place, without navigating, has buttons instead, and its root is
+ * <div class="plinth-section-menu" role="group"> (nav set to false in Blade and Vue):
+ *
+ * <button type="button" class="plinth-section-menu-item" aria-pressed="true">…</button>
+ *
+ * Each item is its own component (<x-plinth::section-menu-item>, PlinthSectionMenuItem), so the
+ * app's attributes and listeners land on the item (ADR 2). The count is optional.
+ * plinth-section-menu-label has no rule of its own: it is a hook for a project's styles.
+ *
+ * States, set by the app:
+ * - current: a link prints aria-current="page" for the section being shown; a button always
+ *   prints aria-pressed, "true" or "false". The current item takes the selection tint
+ *   (accent-subtle, accent-text); the others are muted text on no surface, like a ghost button.
+ * - disabled: `disabled` on a <button>; on a link, no href, role="link" and aria-disabled="true".
+ * - hover only where the device can hover; the focus ring on :focus-visible.
+ *
+ * Layout: a row --plinth-section-menu-height (56px) tall, on the surface with a divider below,
+ * the same inline padding as the header and clear of the notch on a phone held sideways. Its
+ * items are --plinth-section-menu-item-height (40px) tall, their touch target, and at least 40px
+ * wide. The row never wraps: when the items don't fit it scrolls sideways, with no visible
+ * scrollbar, and snaps to them; the row's block padding keeps the focus ring inside it.
+ * Placement is the app's: put it under the header, or make it sticky below the header with
+ * position: sticky and inset-block-start: var(--plinth-header-height).
+ */
+
+@layer plinth {
+  .plinth-section-menu {
+    box-sizing: border-box;
+    display: flex;
+    gap: var(--plinth-space-1);
+    align-items: center;
+    min-block-size: var(--plinth-section-menu-height);
+    padding-block: var(--plinth-space-2);
+    padding-inline: max(var(--plinth-space-2), env(safe-area-inset-left))
+      max(var(--plinth-space-2), env(safe-area-inset-right));
+    margin: 0;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    font-family: var(--plinth-font-family-body);
+    scroll-snap-type: inline proximity;
+    scroll-padding-inline: var(--plinth-space-2);
+    scrollbar-width: none;
+    background-color: var(--plinth-color-surface);
+    border-block-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+  }
+
+  .plinth-section-menu:dir(rtl) {
+    padding-inline: max(var(--plinth-space-2), env(safe-area-inset-right))
+      max(var(--plinth-space-2), env(safe-area-inset-left));
+  }
+
+  .plinth-section-menu-item {
+    box-sizing: border-box;
+    display: inline-flex;
+    flex: none;
+    gap: var(--plinth-space-2);
+    align-items: center;
+    justify-content: center;
+    min-inline-size: var(--plinth-touch-target);
+    min-block-size: var(--plinth-section-menu-item-height);
+    padding-block: 0;
+    padding-inline: var(--plinth-space-3);
+    margin: 0;
+    font-family: inherit;
+    font-size: var(--plinth-font-size-md);
+    font-weight: var(--plinth-font-weight-medium);
+    line-height: var(--plinth-font-leading-tight);
+    color: var(--plinth-color-text-muted);
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    scroll-snap-align: start;
+    background-color: transparent;
+    border: var(--plinth-border-width-thin) solid transparent;
+    border-radius: var(--plinth-radius-control);
+    transition:
+      background-color var(--plinth-duration-fast) var(--plinth-easing-standard),
+      color var(--plinth-duration-fast) var(--plinth-easing-standard);
+  }
+
+  @media (hover: hover) {
+    a.plinth-section-menu-item[href]:not([aria-current='page']):hover,
+    button.plinth-section-menu-item:enabled:not([aria-pressed='true']):hover {
+      color: var(--plinth-color-text);
+      background-color: var(--plinth-color-surface-hover);
+    }
+  }
+
+  a.plinth-section-menu-item[href]:not([aria-current='page']):active,
+  button.plinth-section-menu-item:enabled:not([aria-pressed='true']):active {
+    color: var(--plinth-color-text);
+    background-color: var(--plinth-color-surface-sunken);
+  }
+
+  .plinth-section-menu-item:is([aria-pressed='true'], [aria-current='page']) {
+    color: var(--plinth-color-accent-text);
+    background-color: var(--plinth-color-accent-subtle);
+  }
+
+  .plinth-section-menu-item:disabled,
+  .plinth-section-menu-item[aria-disabled='true'] {
+    cursor: not-allowed;
+    opacity: var(--plinth-opacity-disabled);
+  }
+
+  .plinth-section-menu-item:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset);
+  }
+
+  .plinth-section-menu-count {
+    font-family: var(--plinth-font-family-mono);
+    font-size: var(--plinth-font-size-xs);
+    font-weight: var(--plinth-font-weight-regular);
+    font-variant-numeric: tabular-nums;
+    color: var(--plinth-color-text-muted);
+  }
+
+  .plinth-section-menu-item:is([aria-pressed='true'], [aria-current='page'])
+    .plinth-section-menu-count {
+    color: inherit;
+  }
+
+  @media (min-width: 768px) {
+    .plinth-section-menu {
+      padding-inline: max(var(--plinth-space-4), env(safe-area-inset-left))
+        max(var(--plinth-space-4), env(safe-area-inset-right));
+      scroll-padding-inline: var(--plinth-space-4);
+    }
+
+    .plinth-section-menu:dir(rtl) {
+      padding-inline: max(var(--plinth-space-4), env(safe-area-inset-right))
+        max(var(--plinth-space-4), env(safe-area-inset-left));
+    }
+  }
+
+  /* The current item is only a surface tint: in forced colours it takes the system highlight. */
+  @media (forced-colors: active) {
+    .plinth-section-menu-item:is([aria-pressed='true'], [aria-current='page']) {
+      color: HighlightText;
+      background-color: Highlight;
+      border-color: Highlight;
+    }
+
+    .plinth-section-menu-item:is([aria-pressed='true'], [aria-current='page'])
+      .plinth-section-menu-count {
+      color: HighlightText;
+    }
+
+    .plinth-section-menu-item:disabled,
+    .plinth-section-menu-item[aria-disabled='true'] {
+      color: GrayText;
+    }
+  }
+}
