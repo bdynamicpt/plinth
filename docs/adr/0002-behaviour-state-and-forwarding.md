@@ -122,23 +122,12 @@ With `scrollbar-gutter: stable` on `html`, so the page doesn't shift when the sc
 and `overscroll-behavior: contain` on the sheet's scrolling area, so scrolling past its end
 doesn't move the page. This ships with the sheet.
 
-### 8. The bottom bar and the on-screen keyboard
+### 8. No bottom bar
 
-The bottom bar is laid out in the normal flow, at the end of a shell that is `100dvh` tall, not
-`position: fixed`. It keeps clear of the home indicator with `env(safe-area-inset-bottom)`.
-Plinth's install docs ask projects to use
-`<meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">`:
-
-- Chrome and Firefox on Android then shrink the layout above the keyboard, and the bar stays usable
-  above it.
-- Safari on iOS doesn't support `interactive-widget` yet. The keyboard covers the bar while
-  someone types, and the focused field scrolls into view. Because the bar isn't fixed, it never
-  floats over the content in the middle of the screen. We accept the covered bar rather than ship
-  a `visualViewport` script.
-
-The bottom bar's own issue tests this on an iPhone and an Android phone. If the covered bar turns
-out to be a real problem, a project can add a `visualViewport` script; Plinth still won't ship
-one.
+This ADR first decided how a bottom bar would stay usable with the on-screen keyboard. The phone
+shell has since dropped the bottom bar ([#25](https://github.com/bdynamicpt/plinth/issues/25)), so
+that decision no longer applies. A component that later sits at the bottom of the screen
+revisits the keyboard question in its own issue.
 
 ## Consequences
 
@@ -150,4 +139,3 @@ one.
 - Components stay stateless and reusable across projects; each app decides where its state lives.
 - Livewire, Alpine and Vue apps reach every component through its root, and a parity case per
   component keeps Blade and Vue forwarding the same attributes.
-- On iOS the keyboard covers the bottom bar while someone types.

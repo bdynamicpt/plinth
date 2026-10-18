@@ -152,7 +152,6 @@
     --plinth-breakpoint-md: 768px;
     --plinth-breakpoint-lg: 1280px;
     --plinth-header-height: var(--plinth-space-14);
-    --plinth-bottom-bar-height: var(--plinth-space-16);
   }
 
   :root,
