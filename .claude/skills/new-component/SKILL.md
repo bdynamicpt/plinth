@@ -48,8 +48,9 @@ Then by hand:
 - `packages/vue/src/index.ts`: export `Plinth<Name>` and register it in the `Plinth` plugin;
   add it to the "registers every component" test in `packages/vue/test/PlinthBadge.test.ts`.
 - `storybook/test/parity.test.ts`: import the stories and the markup function, add a
-  `storyArgs<<Name>Args>(…)` block mapping each story's args to Vue and Blade props, and add
-  every story's name to the "has a case for every story" list.
+  `storyArgs<<Name>Args>(…)` block mapping each story's args to Vue and Blade props, a case with
+  extra attributes (like `badgeWithAttributes`: a class, an id, `data-*`, `aria-*`), and every
+  case's name to the "has a case for every story" list. See docs/adr/0002 on forwarding.
 - If Blade and Vue share a list of variants (as `tones` does), keep it in one place: Vue's in
   `packages/vue/src/`, Blade's in `packages/blade/src/Plinth.php`, the story importing Vue's.
 

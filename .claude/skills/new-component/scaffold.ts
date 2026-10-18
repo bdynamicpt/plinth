@@ -46,8 +46,13 @@ const files: Record<string, string> = {
 const escape = (text: string) => text.replace(/[&<>"']/g, (char) => \`&#\${char.charCodeAt(0)};\`);
 
 /** The ${title.toLowerCase()}'s markup contract. Blade and Vue must print exactly this (see parity.test.ts). */
-export function ${camel}({ label }: ${Name}Args): string {
-  return \`<div class="plinth-${name}">\${escape(label)}</div>\`;
+export function ${camel}({ label }: ${Name}Args, attributes: Record<string, string> = {}): string {
+  const { class: extraClass, ...rest } = attributes;
+  const extra = Object.entries(rest)
+    .map(([name, value]) => \` \${name}="\${escape(value)}"\`)
+    .join('');
+  const classes = ['plinth-${name}', extraClass].filter(Boolean).join(' ');
+  return \`<div class="\${classes}"\${extra}>\${escape(label)}</div>\`;
 }
 `,
 
@@ -56,7 +61,7 @@ import { ${camel}, type ${Name}Args } from './${name}.ts';
 
 const meta = {
   title: 'Components/${title}',
-  render: ${camel},
+  render: (args) => ${camel}(args),
   args: { label: 'Content' },
   parameters: {
     docs: {
