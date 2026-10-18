@@ -950,7 +950,8 @@
  * or each as the direct child of its own <li>; a wrapper element in between drops it. The app
  * resets the list (margin, padding, list-style) and adds role="list", which Safari needs to keep
  * announcing a list without bullets. The height is --plinth-list-row-height (44px); a description makes the
- * row taller.
+ * row taller. Long titles and descriptions wrap; the trailing slot keeps its width up to half the
+ * row, and only a value longer than that wraps.
  */
 
 @layer plinth {
@@ -1043,9 +1044,10 @@
     overflow-wrap: anywhere;
   }
 
+  /* Keeps its width up to half the row, so a long title wraps before a short value does. */
   .plinth-list-row-trailing {
     display: inline-flex;
-    flex: 0 1 auto;
+    flex: none;
     gap: var(--plinth-space-2);
     align-items: center;
     max-inline-size: 50%;
