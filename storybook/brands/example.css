@@ -20,6 +20,8 @@
   --plinth-color-border-strong: #a8a29e;
   --plinth-color-divider: #f3ece1;
   --plinth-color-accent: #0f766e;
+  --plinth-color-accent-hover: #115e59;
+  --plinth-color-accent-active: #134e4a;
   --plinth-color-accent-text: #115e59;
   --plinth-color-on-accent: #fff;
   --plinth-color-focus-ring: #0f766e;
@@ -36,6 +38,8 @@
   --plinth-color-border-strong: #57534e;
   --plinth-color-divider: #1c1917;
   --plinth-color-accent: #0f766e;
+  --plinth-color-accent-hover: #115e59;
+  --plinth-color-accent-active: #134e4a;
   --plinth-color-accent-text: #5eead4;
   --plinth-color-on-accent: #fff;
   --plinth-color-focus-ring: #5eead4;

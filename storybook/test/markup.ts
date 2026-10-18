@@ -35,6 +35,8 @@ export interface BladeCase {
   props: Record<string, unknown>;
   attributes?: Record<string, string>;
   slot: string;
+  /** Named slots, as markup: `{ icon: '<svg>…</svg>' }`. */
+  named?: Record<string, string>;
 }
 
 const renderScript = fileURLToPath(

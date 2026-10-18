@@ -67,6 +67,24 @@
     },
     "danger-text": {
       "$value": "{ref.color.red.200}"
+    },
+    "accent-hover": {
+      "$value": "{ref.color.brand.700}"
+    },
+    "accent-active": {
+      "$value": "{ref.color.brand.800}"
+    },
+    "danger-solid": {
+      "$value": "{ref.color.red.600}"
+    },
+    "danger-solid-hover": {
+      "$value": "{ref.color.red.700}"
+    },
+    "danger-solid-active": {
+      "$value": "{ref.color.red.800}"
+    },
+    "on-danger": {
+      "$value": "{ref.color.neutral.0}"
     }
   },
   "elevation": {

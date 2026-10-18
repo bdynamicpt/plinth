@@ -124,6 +124,7 @@
     --plinth-radius-control: var(--plinth-ref-radius-6);
     --plinth-radius-container: var(--plinth-ref-radius-12);
     --plinth-radius-pill: var(--plinth-ref-radius-full);
+    --plinth-opacity-disabled: 0.5;
     --plinth-focus-ring-width: var(--plinth-ref-border-width-2);
     --plinth-focus-ring-offset: 0;
     --plinth-focus-ring-offset-filled: var(--plinth-ref-border-width-2);
@@ -191,6 +192,12 @@
     --plinth-color-danger: var(--plinth-ref-color-red-600);
     --plinth-color-danger-surface: var(--plinth-ref-color-red-100);
     --plinth-color-danger-text: var(--plinth-ref-color-red-800);
+    --plinth-color-accent-hover: var(--plinth-ref-color-brand-700);
+    --plinth-color-accent-active: var(--plinth-ref-color-brand-800);
+    --plinth-color-danger-solid: var(--plinth-ref-color-red-600);
+    --plinth-color-danger-solid-hover: var(--plinth-ref-color-red-700);
+    --plinth-color-danger-solid-active: var(--plinth-ref-color-red-800);
+    --plinth-color-on-danger: var(--plinth-ref-color-neutral-0);
     --plinth-elevation-1: 0 1px 2px 0 #0000001a;
     --plinth-elevation-2: 0 4px 12px 0 #00000026;
     --plinth-elevation-3: 0 12px 32px 0 #00000026;
@@ -221,6 +228,12 @@
     --plinth-color-danger: var(--plinth-ref-color-red-400);
     --plinth-color-danger-surface: var(--plinth-ref-color-red-950);
     --plinth-color-danger-text: var(--plinth-ref-color-red-200);
+    --plinth-color-accent-hover: var(--plinth-ref-color-brand-700);
+    --plinth-color-accent-active: var(--plinth-ref-color-brand-800);
+    --plinth-color-danger-solid: var(--plinth-ref-color-red-600);
+    --plinth-color-danger-solid-hover: var(--plinth-ref-color-red-700);
+    --plinth-color-danger-solid-active: var(--plinth-ref-color-red-800);
+    --plinth-color-on-danger: var(--plinth-ref-color-neutral-0);
     --plinth-elevation-1: 0 1px 2px 0 #0000004d;
     --plinth-elevation-2: 0 4px 12px 0 #00000080;
     --plinth-elevation-3: 0 12px 32px 0 #00000099;
@@ -251,6 +264,12 @@
       --plinth-color-danger: var(--plinth-ref-color-red-400);
       --plinth-color-danger-surface: var(--plinth-ref-color-red-950);
       --plinth-color-danger-text: var(--plinth-ref-color-red-200);
+      --plinth-color-accent-hover: var(--plinth-ref-color-brand-700);
+      --plinth-color-accent-active: var(--plinth-ref-color-brand-800);
+      --plinth-color-danger-solid: var(--plinth-ref-color-red-600);
+      --plinth-color-danger-solid-hover: var(--plinth-ref-color-red-700);
+      --plinth-color-danger-solid-active: var(--plinth-ref-color-red-800);
+      --plinth-color-on-danger: var(--plinth-ref-color-neutral-0);
       --plinth-elevation-1: 0 1px 2px 0 #0000004d;
       --plinth-elevation-2: 0 4px 12px 0 #00000080;
       --plinth-elevation-3: 0 12px 32px 0 #00000099;
@@ -339,6 +358,182 @@
   @media (forced-colors: active) {
     .plinth-badge-dot {
       background-color: currentcolor;
+    }
+  }
+}
+
+/* button.css */
+/*
+ * Button: the main action control.
+ *
+ * <button type="button" class="plinth-button" data-variant="primary" data-size="md">
+ *   <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
+ *   <span class="plinth-button-label">Save</span>
+ *   <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
+ * </button>
+ *
+ * With an href it is <a class="plinth-button" href="…"> instead; the icons are optional.
+ *
+ * Variants (data-variant): primary (default, also when missing), secondary, ghost, danger, and
+ * danger-ghost for a low-emphasis destructive action (Remove next to an item).
+ * Sizes (data-size): sm 32px, md 40px (default), lg 44px. The small size keeps a 40px touch
+ * target through an invisible hit area. Icons inside are 16px on sm and 20px otherwise.
+ *
+ * States:
+ * - disabled: `disabled` on a <button>; on a link, no href, role="link" and aria-disabled="true".
+ * - busy: aria-busy="true" and aria-disabled="true", with
+ *   <span class="plinth-button-spinner" aria-hidden="true"></span> in the leading icon's place.
+ *   It keeps focus; the app ignores activation while busy.
+ * - hover only where the device can hover; the focus ring on :focus-visible.
+ */
+
+@layer plinth {
+  .plinth-button {
+    --plinth-button-surface: var(--plinth-color-accent);
+    --plinth-button-surface-hover: var(--plinth-color-accent-hover);
+    --plinth-button-surface-active: var(--plinth-color-accent-active);
+    --plinth-button-text: var(--plinth-color-on-accent);
+    --plinth-button-edge: transparent;
+    --plinth-button-height: var(--plinth-control-md);
+    --plinth-button-padding: var(--plinth-space-4);
+
+    position: relative;
+    display: inline-flex;
+    gap: var(--plinth-space-2);
+    align-items: center;
+    justify-content: center;
+    min-block-size: var(--plinth-button-height);
+    padding-block: 0;
+    padding-inline: var(--plinth-button-padding);
+    font-family: var(--plinth-font-family-body);
+    font-size: var(--plinth-font-size-sm);
+    font-weight: var(--plinth-font-weight-medium);
+    line-height: var(--plinth-font-leading-tight);
+    vertical-align: middle;
+    color: var(--plinth-button-text);
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    background-color: var(--plinth-button-surface);
+    border: 1px solid var(--plinth-button-edge);
+    border-radius: var(--plinth-radius-control);
+    transition:
+      background-color var(--plinth-duration-fast) var(--plinth-easing-standard),
+      border-color var(--plinth-duration-fast) var(--plinth-easing-standard);
+  }
+
+  .plinth-button[data-variant='secondary'] {
+    --plinth-button-surface: var(--plinth-color-surface-raised);
+    --plinth-button-surface-hover: var(--plinth-color-surface-sunken);
+    --plinth-button-surface-active: var(--plinth-color-surface-sunken);
+    --plinth-button-text: var(--plinth-color-text);
+    --plinth-button-edge: var(--plinth-color-border-strong);
+  }
+
+  .plinth-button[data-variant='ghost'] {
+    --plinth-button-surface: transparent;
+    --plinth-button-surface-hover: var(--plinth-color-surface-sunken);
+    --plinth-button-surface-active: var(--plinth-color-surface-sunken);
+    --plinth-button-text: var(--plinth-color-text);
+  }
+
+  .plinth-button[data-variant='danger'] {
+    --plinth-button-surface: var(--plinth-color-danger-solid);
+    --plinth-button-surface-hover: var(--plinth-color-danger-solid-hover);
+    --plinth-button-surface-active: var(--plinth-color-danger-solid-active);
+    --plinth-button-text: var(--plinth-color-on-danger);
+  }
+
+  .plinth-button[data-variant='danger-ghost'] {
+    --plinth-button-surface: transparent;
+    --plinth-button-surface-hover: var(--plinth-color-danger-surface);
+    --plinth-button-surface-active: var(--plinth-color-danger-surface);
+    --plinth-button-text: var(--plinth-color-danger-text);
+  }
+
+  .plinth-button[data-size='sm'] {
+    --plinth-button-height: var(--plinth-control-sm);
+    --plinth-button-padding: var(--plinth-space-3);
+  }
+
+  .plinth-button[data-size='lg'] {
+    --plinth-button-height: var(--plinth-control-lg);
+    --plinth-button-padding: var(--plinth-space-5);
+
+    font-size: var(--plinth-font-size-md);
+  }
+
+  /* The small button is 32px tall; this keeps its touch target at 40px without changing its look. */
+  .plinth-button[data-size='sm']::before {
+    position: absolute;
+    inset-block: calc((var(--plinth-control-sm) - var(--plinth-touch-target)) / 2);
+    inset-inline: 0;
+    content: '';
+  }
+
+  @media (hover: hover) {
+    .plinth-button:hover {
+      background-color: var(--plinth-button-surface-hover);
+    }
+  }
+
+  .plinth-button:active {
+    background-color: var(--plinth-button-surface-active);
+  }
+
+  .plinth-button:disabled,
+  .plinth-button[aria-disabled='true'] {
+    cursor: not-allowed;
+    background-color: var(--plinth-button-surface);
+  }
+
+  .plinth-button:disabled,
+  .plinth-button[aria-disabled='true']:not([aria-busy='true']) {
+    opacity: var(--plinth-opacity-disabled);
+  }
+
+  .plinth-button[aria-busy='true'] {
+    cursor: progress;
+  }
+
+  .plinth-button:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset-filled);
+  }
+
+  .plinth-button:is(
+      [data-variant='secondary'],
+      [data-variant='ghost'],
+      [data-variant='danger-ghost']
+    ):focus-visible {
+    outline-offset: var(--plinth-focus-ring-offset);
+  }
+
+  .plinth-button-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .plinth-button-spinner {
+    flex: none;
+    inline-size: var(--plinth-size-icon-sm);
+    block-size: var(--plinth-size-icon-sm);
+    border: var(--plinth-focus-ring-width) solid currentcolor;
+    border-inline-end-color: transparent;
+    border-radius: var(--plinth-radius-pill);
+    animation: plinth-button-spin calc(var(--plinth-duration-slow) * 3) linear infinite;
+  }
+
+  @keyframes plinth-button-spin {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .plinth-button {
+      border-color: ButtonText;
     }
   }
 }

@@ -57,6 +57,13 @@
       "$description": "Badges and other pill shapes."
     }
   },
+  "opacity": {
+    "$type": "number",
+    "disabled": {
+      "$value": 0.5,
+      "$description": "Disabled controls. WCAG exempts disabled controls from contrast, but they still read as controls."
+    }
+  },
   "focus-ring": {
     "$type": "dimension",
     "$description": "The focus indicator every focusable element shows on :focus-visible, in color.focus-ring. It sits on the element's edge (offset); solid filled controls use offset-filled, so the ring does not merge with their fill.",

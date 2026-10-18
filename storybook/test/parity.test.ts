@@ -1,9 +1,11 @@
-import { PlinthBadge, PlinthIcon } from '@bdynamic/plinth-vue';
+import { PlinthBadge, PlinthButton, PlinthIcon } from '@bdynamic/plinth-vue';
 import { createStaticVNode, h, type Component } from 'vue';
 import { renderToString } from 'vue/server-renderer';
 import { describe, expect, it } from 'vitest';
 import * as badgeStories from '../stories/components/Badge.stories.ts';
 import { badge, type Attributes, type BadgeArgs } from '../stories/components/badge.ts';
+import * as buttonStories from '../stories/components/Button.stories.ts';
+import { button, type ButtonArgs } from '../stories/components/button.ts';
 import * as iconStories from '../stories/components/Icon.stories.ts';
 import { icon, type IconArgs } from '../stories/components/icon.ts';
 import { sampleIcons } from '../stories/components/icons.ts';
@@ -21,12 +23,20 @@ interface ParityCase {
   story: string;
   markup: string;
   /** `html: true` when the slot is markup (an icon's SVG) rather than text. */
-  vue: { component: Component; props: Record<string, unknown>; slot: string; html?: boolean };
+  vue: {
+    component: Component;
+    props: Record<string, unknown>;
+    slot: string;
+    html?: boolean;
+    /** Named slots, as markup. */
+    named?: Record<string, string>;
+  };
   blade: {
     component: string;
     props: Record<string, unknown>;
     attributes?: Attributes;
     slot: string;
+    named?: Record<string, string>;
   };
 }
 
@@ -53,12 +63,46 @@ const cases: ParityCase[] = [
     { size: 'lg', label: 'Done', mirror: false, svg: sampleIcons.check },
     { class: 'ms-2', id: 'saved-icon', 'data-testid': 'saved-icon', title: 'Saved' },
   ),
+  ...storyArgs<ButtonArgs>(buttonStories).map(([story, args]) =>
+    buttonCase(`Button/${story}`, args),
+  ),
+  buttonCase(
+    'Button/with extra attributes',
+    { label: 'Save', variant: 'primary', size: 'md', disabled: false, busy: false },
+    {
+      class: 'ms-2',
+      id: 'save',
+      'data-testid': 'save',
+      'aria-describedby': 'save-help',
+      type: 'submit',
+    },
+  ),
   iconCase(
     'Icon/with an aria-label attribute',
     { size: 'md', mirror: false, svg: sampleIcons.alert },
     { 'aria-label': 'Warning' },
   ),
 ];
+
+function buttonCase(story: string, args: ButtonArgs, attributes: Attributes = {}): ParityCase {
+  const props = {
+    variant: args.variant,
+    size: args.size,
+    disabled: args.disabled,
+    busy: args.busy,
+    ...(args.href ? { href: args.href } : {}),
+  };
+  const named = {
+    ...(args.icon ? { icon: args.icon } : {}),
+    ...(args.trailingIcon ? { trailing: args.trailingIcon } : {}),
+  };
+  return {
+    story,
+    markup: button(args, attributes),
+    vue: { component: PlinthButton, props: { ...props, ...attributes }, slot: args.label, named },
+    blade: { component: 'button', props, attributes, slot: args.label, named },
+  };
+}
 
 function iconCase(story: string, args: IconArgs, attributes: Attributes = {}): ParityCase {
   const props = {
@@ -118,14 +162,36 @@ describe('parity with the stories', () => {
       'Icon/Filled',
       'Icon/Mirrored',
       'Icon/with extra attributes',
+      'Button/Primary',
+      'Button/Secondary',
+      'Button/Ghost',
+      'Button/Danger',
+      'Button/DangerGhost',
+      'Button/Small',
+      'Button/Large',
+      'Button/WithIcon',
+      'Button/WithTrailingIcon',
+      'Button/Link',
+      'Button/Disabled',
+      'Button/DisabledLink',
+      'Button/Busy',
+      'Button/with extra attributes',
       'Icon/with an aria-label attribute',
     ]);
   });
 
   describe.each(cases.map((c, i) => [c.story, c, i] as const))('%s', (_story, c, i) => {
     it('Vue prints the story markup', async () => {
-      const slot = () => (c.vue.html ? createStaticVNode(c.vue.slot, 1) : c.vue.slot);
-      const html = await renderToString(h(c.vue.component, c.vue.props, slot));
+      const slots = {
+        default: () => (c.vue.html ? createStaticVNode(c.vue.slot, 1) : c.vue.slot),
+        ...Object.fromEntries(
+          Object.entries(c.vue.named ?? {}).map(([name, html]) => [
+            name,
+            () => createStaticVNode(html, 1),
+          ]),
+        ),
+      };
+      const html = await renderToString(h(c.vue.component, c.vue.props, slots));
       expect(normalize(html)).toBe(normalize(c.markup));
     });
 

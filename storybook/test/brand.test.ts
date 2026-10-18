@@ -74,6 +74,8 @@ describe('the example brand', () => {
       ['text-muted', 'surface-sunken'],
       ['accent-text', 'surface'],
       ['on-accent', 'accent'],
+      ['on-accent', 'accent-hover'],
+      ['on-accent', 'accent-active'],
     ])('%s on %s meets WCAG AA (4.5:1)', (fg, bg) => {
       expect(contrast(color(fg), color(bg))).toBeGreaterThanOrEqual(4.5);
     });
