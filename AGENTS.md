@@ -108,6 +108,16 @@ storybook/  never published
   requests). Commit and push after each step.
 - Commit and PR bodies are plain words explaining the change, with no session links or
   `Claude-Session` trailers.
+- Commit messages and pull request titles follow [Conventional Commits](https://www.conventionalcommits.org):
+  `type(scope): description`. Pull requests are squash-merged, so the title becomes the commit on
+  `main`.
+  - Types: `feat`, `fix`, `docs`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`.
+  - Scope: the component for component work (`button`, `icon-button`), otherwise the area
+    (`tokens`, `css`, `vue`, `blade`, `storybook`, `adr`, `agents`, `deps`). Leave it out when a
+    change spans the whole repository.
+  - Description: lowercase, imperative, no full stop (`feat(badge): add a dot option`).
+  - A breaking change adds `!` after the scope (`feat(tokens)!: rename the surface tokens`) and
+    explains it in a `BREAKING CHANGE:` footer.
 - UI pull requests include screenshots at 390, 768 and 1440 px, light and dark.
 - Problems and ideas become GitHub issues.
 - Never touch, share code with, or propose packages shared with uScore (Defero-AS/defero).
