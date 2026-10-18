@@ -3,9 +3,11 @@
 /**
  * Renders Plinth's Blade components for the parity tests in storybook/.
  *
- * Reads a JSON list of cases from stdin, each {"component": "badge", "props": {...}, "slot": "..."},
- * and writes the rendered HTML of each, as a JSON list, to stdout. Props are passed as PHP
- * values (`:tone="$props['tone']"`), so booleans and arrays arrive as they would from a view.
+ * Reads a JSON list of cases from stdin, each {"component": "badge", "props": {...},
+ * "attributes": {...}, "slot": "..."}, and writes the rendered HTML of each, as a JSON list, to
+ * stdout. Props are passed as PHP values (`:tone="$props['tone']"`), so booleans and arrays arrive
+ * as they would from a view. Attributes are written as plain ones (`id="status"`), the way a
+ * project writes `class`, `wire:click` or `x-on:click` on the component.
  */
 
 use BDynamic\Plinth\PlinthServiceProvider;
@@ -26,6 +28,9 @@ $rendered = array_map(function (array $case): string {
     $bindings = collect(array_keys($props))
         ->map(fn (string $name) => sprintf(':%s="$props[%s]"', Str::kebab($name), var_export($name, true)))
         ->implode(' ');
+    $bindings .= collect($case['attributes'] ?? [])
+        ->map(fn (string $value, string $name) => sprintf(' %s="%s"', $name, e($value)))
+        ->implode('');
     $template = sprintf('<x-plinth::%s %s>{!! $slot !!}</x-plinth::%1$s>', $case['component'], $bindings);
 
     return Blade::render($template, ['props' => $props, 'slot' => $case['slot'] ?? '']);

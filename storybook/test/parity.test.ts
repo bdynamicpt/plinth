@@ -3,19 +3,27 @@ import { h, type Component } from 'vue';
 import { renderToString } from 'vue/server-renderer';
 import { describe, expect, it } from 'vitest';
 import * as badgeStories from '../stories/components/Badge.stories.ts';
-import { badge, type BadgeArgs } from '../stories/components/badge.ts';
+import { badge, type Attributes, type BadgeArgs } from '../stories/components/badge.ts';
 import { normalize, renderBlade } from './markup.ts';
 
 /**
  * Parity: for every story of a component, the Blade and the Vue output must match the story's
  * markup (ignoring whitespace and attribute order). If a layer drifts from the contract, this
  * fails. Stories with their own render (galleries such as AllTones) are not single cases.
+ *
+ * Each component also has a case with extra attributes, as a project adds them (a class, an id,
+ * data-* and aria-*), so attribute forwarding cannot drift between Blade and Vue either.
  */
 interface ParityCase {
   story: string;
   markup: string;
   vue: { component: Component; props: Record<string, unknown>; slot: string };
-  blade: { component: string; props: Record<string, unknown>; slot: string };
+  blade: {
+    component: string;
+    props: Record<string, unknown>;
+    attributes?: Attributes;
+    slot: string;
+  };
 }
 
 function storyArgs<Args>(stories: Record<string, unknown>): [string, Args][] {
@@ -34,7 +42,34 @@ const cases: ParityCase[] = [
     vue: { component: PlinthBadge, props: { tone: args.tone, dot: args.dot }, slot: args.label },
     blade: { component: 'badge', props: { tone: args.tone, dot: args.dot }, slot: args.label },
   })),
+  badgeWithAttributes(),
 ];
+
+function badgeWithAttributes(): ParityCase {
+  const args: BadgeArgs = { label: 'Paid', tone: 'success', dot: true };
+  const attributes: Attributes = {
+    class: 'ms-2',
+    id: 'order-status',
+    'data-testid': 'order-status',
+    'aria-describedby': 'order-status-help',
+    title: 'Paid on 3 October',
+  };
+  return {
+    story: 'Badge/with extra attributes',
+    markup: badge(args, attributes),
+    vue: {
+      component: PlinthBadge,
+      props: { tone: args.tone, dot: args.dot, ...attributes },
+      slot: args.label,
+    },
+    blade: {
+      component: 'badge',
+      props: { tone: args.tone, dot: args.dot },
+      attributes,
+      slot: args.label,
+    },
+  };
+}
 
 describe('parity with the stories', () => {
   const blade = renderBlade(cases.map((c) => c.blade));
@@ -46,6 +81,7 @@ describe('parity with the stories', () => {
       'Badge/Warning',
       'Badge/Danger',
       'Badge/WithDot',
+      'Badge/with extra attributes',
     ]);
   });
 

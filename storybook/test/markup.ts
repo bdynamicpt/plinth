@@ -33,6 +33,7 @@ export function normalize(html: string): string {
 export interface BladeCase {
   component: string;
   props: Record<string, unknown>;
+  attributes?: Record<string, string>;
   slot: string;
 }
 

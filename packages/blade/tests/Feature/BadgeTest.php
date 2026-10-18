@@ -22,6 +22,15 @@ it('escapes the label', function () {
         ->toContain('&lt;b&gt;x&lt;/b&gt;');
 });
 
+it('passes Livewire and Alpine attributes to its root', function () {
+    $html = Blade::render('<x-plinth::badge wire:click="refresh" x-on:click="open = true" wire:key="status">Paid</x-plinth::badge>');
+
+    expect($html)
+        ->toContain('wire:click="refresh"')
+        ->toContain('x-on:click="open = true"')
+        ->toContain('wire:key="status"');
+});
+
 it('keeps extra classes and attributes', function () {
     $html = Blade::render('<x-plinth::badge tone="danger" class="ms-2" id="status">Overdue</x-plinth::badge>');
 

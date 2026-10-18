@@ -64,6 +64,15 @@ storybook/  never published
   component tokens only, never primitives (`--plinth-ref-*`). No `!important`.
 - Classes `plinth-component` and `plinth-component-part`; state is an ARIA attribute or an `is-*`
   class.
+- Behaviour comes from native elements first (docs/adr/0002): `<dialog>` for sheets, `popover` for
+  menus, `<details>` for disclosure, `command`/`commandfor` to open and close. Open state is the
+  native one (`[open]`, `:popover-open`), not a class. Only what the platform can't do goes in a
+  layer (Alpine in Blade, state in Vue), and no Plinth JavaScript ships.
+- The app owns the state: components never fetch, route or remember; layout state is an
+  attribute or `is-*` class the app sets.
+- Blade merges `$attributes` onto the documented root and Vue lets attributes fall through to it,
+  so `wire:*`, `x-*`, `data-*` and `aria-*` reach it; Vue emits documented events. Each component
+  has a parity case with extra attributes.
 - Logical properties; touch targets at least 40 × 40 px; nothing hover-only;
   `prefers-reduced-motion` respected.
 - Each component ships its story (every state, three widths, light and dark), Blade and Vue

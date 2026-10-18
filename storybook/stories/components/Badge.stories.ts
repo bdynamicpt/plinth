@@ -3,7 +3,7 @@ import { badge, tones, type BadgeArgs } from './badge.ts';
 
 const meta = {
   title: 'Components/Badge',
-  render: badge,
+  render: (args) => badge(args),
   args: { label: 'Draft', tone: 'neutral', dot: false },
   argTypes: {
     tone: { control: 'inline-radio', options: tones },

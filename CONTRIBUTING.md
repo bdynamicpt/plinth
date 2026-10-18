@@ -28,6 +28,26 @@ keep its own custom properties, named `--plinth-component-*`.
 depends on hover. Motion uses the `--plinth-duration-*` tokens, which drop to 0ms under
 `prefers-reduced-motion`. Colour is never the only signal. Text meets WCAG AA in light and dark.
 
+**Native behaviour first.** Interactive components get their behaviour from the platform:
+`<dialog>` for sheets, the `popover` attribute for menus, `<details>` for disclosure, and
+`command` / `commandfor` buttons to open and close them. Style the native open state
+(`[open]`, `:popover-open`) rather than adding a class. See
+[ADR 2](docs/adr/0002-behaviour-state-and-forwarding.md) for what to do when the
+platform is not enough.
+
+**The app owns the state.** Components never fetch, route or remember anything. Layout state
+(the active nav item, which pane a split view shows on a phone) is an attribute or `is-*` class
+the app sets, such as `aria-current="page"` or `data-pane="detail"`; the component only defines
+what each state looks like, and its contract lists them.
+
+**Forward attributes and events.** The Blade component merges `$attributes` onto its documented
+root (`$attributes->merge(['class' => …])`), so `class`, `wire:*`, `x-*`, `href`, `data-*` and
+`aria-*` reach it. The Vue component lets attributes fall through to the same root and emits
+documented events (`open`, `close`, `select`) rather than handling them. When the element an app
+needs to reach is inside another (the link in a nav item), it becomes the root of its own
+component. Each component has a parity case with extra attributes, so Blade and Vue forward the
+same ones.
+
 **In `@layer plinth`.** Wrap a component's rules in `@layer plinth { … }`, so a project's
 utilities can override them without `!important`; the CSS build refuses a file that doesn't.
 Plain modern CSS, no `@apply`.
@@ -51,8 +71,8 @@ component; `.claude/skills/new-component/SKILL.md` walks through the rest.
    (`<x-plinth::name>`), with Pest tests.
 4. **Vue**: `packages/vue/src/Plinth<Name>.vue`, exported from `src/index.ts` and registered by
    the plugin, with Vitest tests.
-5. **Parity test**: a case in `storybook/test/parity.test.ts`, so the Blade and Vue output must
-   match the story's markup.
+5. **Parity test**: cases in `storybook/test/parity.test.ts`, one per story and one with extra
+   attributes, so the Blade and Vue output must match the story's markup.
 6. **Docs**: the story's docs page (description, and anything a user must know).
 7. **Screenshots** in the pull request, at 390, 768 and 1440 px in light and dark.
 
