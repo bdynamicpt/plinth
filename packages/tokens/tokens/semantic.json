@@ -49,7 +49,7 @@
       "$description": "Buttons, inputs and other controls."
     },
     "container": {
-      "$value": "{ref.radius.12}",
+      "$value": "{ref.radius.10}",
       "$description": "Cards, sheets and dialogs."
     },
     "pill": {
@@ -100,20 +100,21 @@
     },
     "size": {
       "$type": "dimension",
+      "$description": "UI text is md (14px), with sm (13px) and xs (12px) below it; reading text is lg (15px); larger sizes are for headings.",
       "xs": {
         "$value": "{ref.font.size.12}"
       },
       "sm": {
-        "$value": "{ref.font.size.14}"
+        "$value": "{ref.font.size.13}"
       },
       "md": {
-        "$value": "{ref.font.size.16}"
+        "$value": "{ref.font.size.14}"
       },
       "lg": {
-        "$value": "{ref.font.size.18}"
+        "$value": "{ref.font.size.15}"
       },
       "xl": {
-        "$value": "{ref.font.size.20}"
+        "$value": "{ref.font.size.18}"
       },
       "2xl": {
         "$value": "{ref.font.size.24}"
@@ -148,6 +149,22 @@
       "normal": {
         "$value": "{ref.font.leading.150}"
       }
+    },
+    "tracking": {
+      "$type": "dimension",
+      "$description": "Letter spacing: tight for headings, tighter for large display type.",
+      "normal": {
+        "$value": "{ref.font.tracking.0}"
+      },
+      "snug": {
+        "$value": "{ref.font.tracking.neg-1}"
+      },
+      "tight": {
+        "$value": "{ref.font.tracking.neg-2}"
+      },
+      "tighter": {
+        "$value": "{ref.font.tracking.neg-4}"
+      }
     }
   },
   "duration": {
@@ -177,15 +194,15 @@
   },
   "control": {
     "$type": "dimension",
-    "$description": "Control heights.",
+    "$description": "Control heights (28, 32 and 40 px). On a touch screen every control keeps a 40px hit area.",
     "sm": {
-      "$value": "{ref.size.32}"
+      "$value": "{ref.size.28}"
     },
     "md": {
-      "$value": "{ref.size.40}"
+      "$value": "{ref.size.32}"
     },
     "lg": {
-      "$value": "{ref.size.44}"
+      "$value": "{ref.size.40}"
     }
   },
   "touch-target": {

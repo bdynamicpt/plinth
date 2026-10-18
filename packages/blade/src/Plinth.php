@@ -17,7 +17,7 @@ class Plinth
     }
 
     /** The button's variants. The first one is the default. */
-    public const BUTTON_VARIANTS = ['primary', 'secondary', 'ghost', 'danger', 'danger-ghost'];
+    public const BUTTON_VARIANTS = ['primary', 'accent', 'secondary', 'ghost', 'danger', 'danger-ghost'];
 
     /** The button's sizes (32, 40 and 44 px tall). */
     public const BUTTON_SIZES = ['sm', 'md', 'lg'];
@@ -32,6 +32,12 @@ class Plinth
     public static function buttonSize(?string $size): string
     {
         return in_array($size, self::BUTTON_SIZES, true) ? $size : 'md';
+    }
+
+    /** The default typefaces: the font files and fonts/index.css with their @font-face rules. */
+    public static function fontsPath(): string
+    {
+        return dirname(__DIR__).'/resources/dist/fonts';
     }
 
     /** The built stylesheet: the tokens and every component, in one file. */

@@ -1,5 +1,12 @@
 /** The button's variants. `primary` is the default. */
-export const buttonVariants = ['primary', 'secondary', 'ghost', 'danger', 'danger-ghost'] as const;
+export const buttonVariants = [
+  'primary',
+  'accent',
+  'secondary',
+  'ghost',
+  'danger',
+  'danger-ghost',
+] as const;
 export type ButtonVariant = (typeof buttonVariants)[number];
 
 /** The button's sizes (32, 40 and 44 px tall). `md` is the default. */

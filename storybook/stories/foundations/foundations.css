@@ -6,7 +6,7 @@
 }
 
 /*
- * Demonstration controls for the focus ring page; components repeat the same three lines.
+ * The demo uses Plinth's own button; these style the links in text, which have no component yet.
  * A text link gets no padding, so the ring hugs the words, and a ring per line when it wraps.
  */
 .sb-demo-link {
@@ -20,16 +20,6 @@
   line-height: var(--plinth-font-leading-normal);
 }
 
-.sb-demo-button {
-  min-block-size: var(--plinth-touch-target);
-  padding: var(--plinth-space-2) var(--plinth-space-4);
-  font: inherit;
-  border-radius: var(--plinth-radius-control);
-  color: var(--plinth-color-on-accent);
-  background-color: var(--plinth-color-accent);
-  border: 0;
-}
-
 .sb-demo-row {
   display: flex;
   flex-wrap: wrap;
@@ -37,23 +27,7 @@
   align-items: center;
 }
 
-.sb-demo-outline {
-  min-block-size: var(--plinth-touch-target);
-  padding: var(--plinth-space-2) var(--plinth-space-4);
-  font: inherit;
-  color: var(--plinth-color-text);
-  background-color: var(--plinth-color-surface-raised);
-  border: 1px solid var(--plinth-color-border-strong);
-  border-radius: var(--plinth-radius-control);
-}
-
-.sb-demo-outline:focus-visible,
 .sb-demo-link:focus-visible {
   outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
   outline-offset: var(--plinth-focus-ring-offset);
-}
-
-.sb-demo-button:focus-visible {
-  outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
-  outline-offset: var(--plinth-focus-ring-offset-filled);
 }

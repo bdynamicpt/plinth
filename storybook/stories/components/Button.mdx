@@ -1,0 +1,114 @@
+import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
+import * as ButtonStories from './Button.stories';
+
+<Meta of={ButtonStories} />
+
+# Button
+
+A button **does something**: saves, submits, opens a sheet, deletes. A link **goes somewhere**.
+If activating it takes the person to another page, use a link; give it the button's look (an
+`href`) only when it is a call to action that must look like one, such as "Read more" on a card.
+
+<Canvas of={ButtonStories.Primary} />
+<Controls of={ButtonStories.Primary} />
+
+## Choosing a variant
+
+Most of a screen's buttons are **secondary** or **ghost**. Emphasis is a budget: spend it on the
+one action the person came to do.
+
+| Variant          | Use it for                                                                                 | Not for                                      |
+| ---------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------- |
+| **primary**      | The main action of a view, dialog or form: _Save changes_, _Create invoice_. One per area. | Several actions side by side                 |
+| **accent**       | A marketing or brand moment: _Upgrade plan_, _Start free trial_. At most one per screen.   | Everyday app actions; use primary            |
+| **secondary**    | The alternatives next to a primary: _Cancel_, _Back_, _Export_.                            | The main action                              |
+| **ghost**        | Low-emphasis and repeated actions: toolbars, table rows, _Skip_.                           | Anything the person must not miss            |
+| **danger**       | Confirming a destructive action, usually in a dialog: _Delete project_, next to _Cancel_.  | The first step of a delete; use danger-ghost |
+| **danger-ghost** | A destructive action in a list or row that a confirmation will follow: _Remove_.           | Confirming the deletion itself               |
+
+### Primary
+
+The quiet default: dark on light, light on dark. A project's brand can colour it (switch
+**Brand** in the toolbar), but in Plinth's own look it stays neutral, so the accent keeps its
+meaning.
+
+<Canvas of={ButtonStories.Primary} />
+
+### Accent
+
+The brand's colour, filled. It pulls the eye harder than anything else on the page, which is
+exactly why it is rare: one per screen, for the moment that matters to the business.
+
+<Canvas of={ButtonStories.Accent} />
+
+### Secondary and ghost
+
+Secondary sits on a raised surface with a hairline; ghost is text until you hover it. Pair a
+secondary with a primary; use ghost where many actions repeat, so they don't shout.
+
+<Canvas of={ButtonStories.Secondary} />
+<Canvas of={ButtonStories.Ghost} />
+
+### Danger and danger-ghost
+
+Solid red is for the last, deliberate step of something that can't be undone. Earlier steps, and
+destructive actions in rows, use danger-ghost: red text, no fill.
+
+<Canvas of={ButtonStories.Danger} />
+<Canvas of={ButtonStories.DangerGhost} />
+
+### Why there is no success or warning button
+
+Status colours describe an **outcome**, not an action. _Approve_ or _Confirm_ is the main action,
+so it is primary; success is shown afterwards, with a badge or a message. A green or yellow button
+also makes colour carry the meaning, which the label should carry.
+
+## Sizes
+
+**md** (32px) is the default. Use **sm** (28px) in dense places such as table rows and toolbars,
+and **lg** (40px) for the main action on a touch-first screen or a marketing page. On a touch
+screen every size keeps a 40px touch target, so a small button is still easy to tap.
+
+<Canvas of={ButtonStories.Gallery} />
+
+## Labels and icons
+
+- Start with a verb and say what happens: _Save changes_, not _OK_; _Delete project_, not _Yes_.
+- Sentence case, two or three words.
+- A leading icon (the `icon` slot) helps a familiar action be found; a trailing icon (`trailing`)
+  is for direction, such as an arrow on _Next_. Set `mirror-trailing` on arrows so they flip in
+  right-to-left text.
+- A button with only an icon is the icon button (#18); it needs an accessible name.
+
+<Canvas of={ButtonStories.WithIcon} />
+<Canvas of={ButtonStories.WithTrailingIcon} />
+
+## States
+
+**Disabled**: prefer keeping the button enabled and explaining what is missing when it is pressed;
+a disabled button doesn't say why. When you must disable it, a `<button>` gets `disabled`, and a
+link loses its `href` and gets `aria-disabled`.
+
+**Busy**: while the action runs, the button shows a spinner and keeps focus. Change the label
+too (_Saving_), since screen readers announce the busy state unreliably, and ignore further
+presses yourself: a busy submit button still submits its form.
+
+<Canvas of={ButtonStories.Disabled} />
+<Canvas of={ButtonStories.Busy} />
+
+## In Blade and Vue
+
+<Source
+  language="html"
+  dark
+  code={`<x-plinth::button variant="secondary" wire:click="cancel">Cancel</x-plinth::button>
+<x-plinth::button type="submit" :busy="$saving">
+    <x-slot:icon><svg>…</svg></x-slot:icon>
+    Save changes
+</x-plinth::button>
+
+<PlinthButton variant="accent" href="/upgrade">Upgrade plan</PlinthButton>`}
+/>
+
+`class`, `type`, `wire:*`, `x-*` and `@click` reach the button itself. The markup contract is at
+the top of `packages/css/src/components/button.css`.

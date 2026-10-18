@@ -5,44 +5,51 @@
       "$type": "color",
       "neutral": {
         "0": {
-          "$value": "#ffffff"
+          "$value": "oklch(1 0 0)"
         },
         "50": {
-          "$value": "#fafafa"
+          "$value": "oklch(0.985 0.002 260)"
         },
         "100": {
-          "$value": "#f4f4f5"
+          "$value": "oklch(0.965 0.003 260)"
+        },
+        "150": {
+          "$value": "oklch(0.945 0.004 260)"
         },
         "200": {
-          "$value": "#e4e4e7"
+          "$value": "oklch(0.92 0.004 260)"
         },
         "300": {
-          "$value": "#d4d4d8"
+          "$value": "oklch(0.82 0.005 260)"
         },
         "400": {
-          "$value": "#a1a1aa"
+          "$value": "oklch(0.71 0.008 260)"
         },
         "500": {
-          "$value": "#71717a"
+          "$value": "oklch(0.54 0.01 260)"
         },
         "600": {
-          "$value": "#52525b"
+          "$value": "oklch(0.45 0.01 260)"
         },
         "700": {
-          "$value": "#3f3f46"
+          "$value": "oklch(0.37 0.01 260)"
         },
         "800": {
-          "$value": "#27272a"
+          "$value": "oklch(0.27 0.008 260)"
+        },
+        "850": {
+          "$value": "oklch(0.235 0.007 260)"
         },
         "900": {
-          "$value": "#18181b"
+          "$value": "oklch(0.205 0.006 260)"
         },
         "950": {
-          "$value": "#09090b"
+          "$value": "oklch(0.18 0.005 260)"
         },
         "1000": {
-          "$value": "#000000"
-        }
+          "$value": "oklch(0.145 0.004 260)"
+        },
+        "$description": "Neutral greys in oklch with a slight cool tint (hue 260). Dark pages sit at 950, never pure black."
       },
       "brand": {
         "50": {
@@ -176,6 +183,35 @@
         "70": {
           "$value": "#000000b3"
         }
+      },
+      "ink-alpha": {
+        "$description": "The light theme's text colour at low opacity, for lines that sit right on any surface.",
+        "6": {
+          "$value": "oklch(0.18 0.005 260 / 0.06)"
+        },
+        "10": {
+          "$value": "oklch(0.18 0.005 260 / 0.1)"
+        },
+        "20": {
+          "$value": "oklch(0.18 0.005 260 / 0.2)"
+        }
+      },
+      "chalk-alpha": {
+        "$description": "The dark theme's text colour at low opacity.",
+        "6": {
+          "$value": "oklch(0.965 0.003 260 / 0.06)"
+        },
+        "10": {
+          "$value": "oklch(0.965 0.003 260 / 0.1)"
+        },
+        "20": {
+          "$value": "oklch(0.965 0.003 260 / 0.2)"
+        }
+      },
+      "white-alpha": {
+        "12": {
+          "$value": "#ffffff1f"
+        }
       }
     },
     "space": {
@@ -232,14 +268,14 @@
       "24": {
         "$value": "1.5rem"
       },
+      "28": {
+        "$value": "1.75rem"
+      },
       "32": {
         "$value": "2rem"
       },
       "40": {
         "$value": "2.5rem"
-      },
-      "44": {
-        "$value": "2.75rem"
       }
     },
     "radius": {
@@ -258,6 +294,9 @@
       },
       "8": {
         "$value": "0.5rem"
+      },
+      "10": {
+        "$value": "0.625rem"
       },
       "12": {
         "$value": "0.75rem"
@@ -286,6 +325,8 @@
         "$type": "fontFamily",
         "sans": {
           "$value": [
+            "Geist Variable",
+            "Geist",
             "system-ui",
             "-apple-system",
             "Segoe UI",
@@ -297,6 +338,8 @@
         },
         "mono": {
           "$value": [
+            "Geist Mono Variable",
+            "Geist Mono",
             "ui-monospace",
             "SFMono-Regular",
             "Menlo",
@@ -311,17 +354,20 @@
         "12": {
           "$value": "0.75rem"
         },
+        "13": {
+          "$value": "0.8125rem"
+        },
         "14": {
           "$value": "0.875rem"
+        },
+        "15": {
+          "$value": "0.9375rem"
         },
         "16": {
           "$value": "1rem"
         },
         "18": {
           "$value": "1.125rem"
-        },
-        "20": {
-          "$value": "1.25rem"
         },
         "24": {
           "$value": "1.5rem"
@@ -355,6 +401,22 @@
         },
         "150": {
           "$value": 1.5
+        }
+      },
+      "tracking": {
+        "$type": "dimension",
+        "$description": "Letter spacing, in hundredths of an em.",
+        "0": {
+          "$value": "0"
+        },
+        "neg-1": {
+          "$value": "-0.01em"
+        },
+        "neg-2": {
+          "$value": "-0.02em"
+        },
+        "neg-4": {
+          "$value": "-0.04em"
         }
       }
     },

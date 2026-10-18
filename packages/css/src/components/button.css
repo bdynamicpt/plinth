@@ -12,10 +12,11 @@
  * data-mirror on an icon flips it in right-to-left text, for arrows (mirror-icon and
  * mirror-trailing in Blade and Vue).
  *
- * Variants (data-variant): primary (default, also when missing), secondary, ghost, danger, and
+ * Variants (data-variant): primary (default, also when missing; inverted neutral unless a brand
+ * colours it), accent (the brand's colour, for marketing and brand moments), secondary, ghost, danger, and
  * danger-ghost for a low-emphasis destructive action (Remove next to an item).
- * Sizes (data-size): sm 32px, md 40px (default), lg 44px. The small size keeps a 40px touch
- * target through an invisible hit area. Icons inside are 16px on sm and 20px otherwise.
+ * Sizes (data-size): sm 28px, md 32px (default), lg 40px. On a touch screen every size keeps a
+ * 40px touch target through an invisible hit area. Icons inside are 16px on sm and 20px otherwise.
  *
  * States:
  * - disabled: `disabled` on a <button>; on a link, no href, role="link" and aria-disabled="true".
@@ -27,11 +28,12 @@
 
 @layer plinth {
   .plinth-button {
-    --plinth-button-surface: var(--plinth-color-accent);
-    --plinth-button-surface-hover: var(--plinth-color-accent-hover);
-    --plinth-button-surface-active: var(--plinth-color-accent-active);
-    --plinth-button-text: var(--plinth-color-on-accent);
+    --plinth-button-surface: var(--plinth-color-primary);
+    --plinth-button-surface-hover: var(--plinth-color-primary-hover);
+    --plinth-button-surface-active: var(--plinth-color-primary-active);
+    --plinth-button-text: var(--plinth-color-on-primary);
     --plinth-button-edge: transparent;
+    --plinth-button-inner-edge: inset 0 0 0 1px var(--plinth-color-primary-edge);
     --plinth-button-height: var(--plinth-control-md);
     --plinth-button-padding: var(--plinth-space-4);
     --plinth-button-icon-size: var(--plinth-size-icon-md);
@@ -46,7 +48,7 @@
     padding-block: 0;
     padding-inline: var(--plinth-button-padding);
     font-family: var(--plinth-font-family-body);
-    font-size: var(--plinth-font-size-sm);
+    font-size: var(--plinth-font-size-md);
     font-weight: var(--plinth-font-weight-medium);
     line-height: var(--plinth-font-leading-tight);
     vertical-align: middle;
@@ -58,27 +60,39 @@
     background-color: var(--plinth-button-surface);
     border: var(--plinth-border-width-thin) solid var(--plinth-button-edge);
     border-radius: var(--plinth-radius-control);
+    box-shadow: var(--plinth-button-inner-edge);
     transition:
       background-color var(--plinth-duration-fast) var(--plinth-easing-standard),
       border-color var(--plinth-duration-fast) var(--plinth-easing-standard);
   }
 
+  /* The brand's colour, for marketing and brand moments (Upgrade plan): at most one per screen. */
+  .plinth-button[data-variant='accent'] {
+    --plinth-button-surface: var(--plinth-color-accent);
+    --plinth-button-surface-hover: var(--plinth-color-accent-hover);
+    --plinth-button-surface-active: var(--plinth-color-accent-active);
+    --plinth-button-text: var(--plinth-color-on-accent);
+  }
+
   .plinth-button[data-variant='secondary'] {
+    --plinth-button-inner-edge: none;
     --plinth-button-surface: var(--plinth-color-surface-raised);
-    --plinth-button-surface-hover: var(--plinth-color-surface-sunken);
+    --plinth-button-surface-hover: var(--plinth-color-surface-hover);
     --plinth-button-surface-active: var(--plinth-color-surface-sunken);
     --plinth-button-text: var(--plinth-color-text);
     --plinth-button-edge: var(--plinth-color-border-strong);
   }
 
   .plinth-button[data-variant='ghost'] {
+    --plinth-button-inner-edge: none;
     --plinth-button-surface: transparent;
-    --plinth-button-surface-hover: var(--plinth-color-surface-sunken);
+    --plinth-button-surface-hover: var(--plinth-color-surface-hover);
     --plinth-button-surface-active: var(--plinth-color-surface-sunken);
     --plinth-button-text: var(--plinth-color-text);
   }
 
   .plinth-button[data-variant='danger'] {
+    --plinth-button-inner-edge: none;
     --plinth-button-surface: var(--plinth-color-danger-solid);
     --plinth-button-surface-hover: var(--plinth-color-danger-solid-hover);
     --plinth-button-surface-active: var(--plinth-color-danger-solid-active);
@@ -86,6 +100,7 @@
   }
 
   .plinth-button[data-variant='danger-ghost'] {
+    --plinth-button-inner-edge: none;
     --plinth-button-surface: transparent;
     --plinth-button-surface-hover: var(--plinth-color-danger-surface);
     --plinth-button-surface-active: var(--plinth-color-danger-surface);
@@ -96,21 +111,28 @@
     --plinth-button-height: var(--plinth-control-sm);
     --plinth-button-padding: var(--plinth-space-3);
     --plinth-button-icon-size: var(--plinth-size-icon-sm);
+
+    font-size: var(--plinth-font-size-sm);
   }
 
   .plinth-button[data-size='lg'] {
     --plinth-button-height: var(--plinth-control-lg);
     --plinth-button-padding: var(--plinth-space-5);
-
-    font-size: var(--plinth-font-size-md);
   }
 
-  /* The small button is 32px tall; this keeps its touch target at 40px without changing its look. */
-  .plinth-button[data-size='sm']::before {
-    position: absolute;
-    inset-block: calc((var(--plinth-control-sm) - var(--plinth-touch-target)) / 2);
-    inset-inline: 0;
-    content: '';
+  /*
+   * On a touch screen, every button keeps a 40px touch target through an invisible hit area,
+   * centred on it, without changing its look (ADR 3: controls look small, touch stays at 40px).
+   */
+  @media (pointer: coarse) {
+    .plinth-button::before {
+      position: absolute;
+      inset-block-start: 50%;
+      inset-inline: 0;
+      block-size: max(100%, var(--plinth-touch-target));
+      content: '';
+      translate: 0 -50%;
+    }
   }
 
   @media (hover: hover) {

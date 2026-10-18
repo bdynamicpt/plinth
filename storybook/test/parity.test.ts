@@ -186,6 +186,7 @@ describe('parity with the stories', () => {
       'Icon/Mirrored',
       'Icon/with extra attributes',
       'Button/Primary',
+      'Button/Accent',
       'Button/Secondary',
       'Button/Ghost',
       'Button/Danger',

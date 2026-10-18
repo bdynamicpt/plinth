@@ -9,22 +9,48 @@
       "$value": "{ref.color.neutral.900}"
     },
     "surface-sunken": {
-      "$value": "{ref.color.neutral.800}"
+      "$value": "{ref.color.neutral.1000}"
+    },
+    "surface-hover": {
+      "$value": "{ref.color.neutral.850}",
+      "$description": "A small surface step for hover, never a colour jump."
     },
     "text": {
-      "$value": "{ref.color.neutral.50}"
+      "$value": "{ref.color.neutral.100}"
     },
     "text-muted": {
-      "$value": "{ref.color.neutral.400}"
+      "$value": "{ref.color.neutral.300}"
+    },
+    "text-subtle": {
+      "$value": "{ref.color.neutral.400}",
+      "$description": "The third text level: placeholders, timestamps, disabled labels."
     },
     "border": {
-      "$value": "{ref.color.neutral.800}"
+      "$value": "{ref.color.chalk-alpha.10}",
+      "$description": "Translucent, so it sits right on any surface."
     },
     "border-strong": {
-      "$value": "{ref.color.neutral.600}"
+      "$value": "{ref.color.chalk-alpha.20}"
     },
     "divider": {
-      "$value": "{ref.color.neutral.900}"
+      "$value": "{ref.color.chalk-alpha.6}"
+    },
+    "primary": {
+      "$value": "{ref.color.neutral.100}",
+      "$description": "The primary button: inverted neutral by default (ADR 3). A brand usually sets its own colour here, with primary-hover, primary-active, on-primary and primary-edge."
+    },
+    "primary-hover": {
+      "$value": "{ref.color.neutral.200}"
+    },
+    "primary-active": {
+      "$value": "{ref.color.neutral.300}"
+    },
+    "on-primary": {
+      "$value": "{ref.color.neutral.950}"
+    },
+    "primary-edge": {
+      "$value": "{ref.color.black-alpha.10}",
+      "$description": "A 1px inner edge on the primary button, instead of a shadow."
     },
     "accent": {
       "$value": "{ref.color.brand.600}"
@@ -87,6 +113,10 @@
     },
     "on-danger": {
       "$value": "{ref.color.neutral.0}"
+    },
+    "accent-subtle": {
+      "$value": "{ref.color.brand.950}",
+      "$description": "A tinted surface for selected states, such as the active nav item, with accent-text on it."
     }
   },
   "elevation": {

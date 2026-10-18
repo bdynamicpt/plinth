@@ -6,6 +6,7 @@
   "type": "module",
   "exports": {
     ".": "./dist/plinth.css",
+    "./fonts.css": "./dist/fonts/index.css",
     "./src/components/*": "./src/components/*",
     "./*": "./dist/*"
   },
@@ -15,5 +16,9 @@
   },
   "dependencies": {
     "@bdynamic/plinth-tokens": "*"
+  },
+  "devDependencies": {
+    "@fontsource-variable/geist": "^5.3.0",
+    "@fontsource-variable/geist-mono": "^5.3.0"
   }
 }

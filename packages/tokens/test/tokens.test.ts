@@ -17,15 +17,38 @@ const token = (path: string): Token => {
 };
 const tier = (name: Token['tier']) => tokens.filter((t) => t.tier === name);
 
-/** WCAG 2 contrast ratio between two hex colours. */
+/** Relative luminance (WCAG 2) of a hex or oklch() colour. */
+function luminance(color: string): number {
+  const linear = (channel: number) =>
+    channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+  let rgb: [number, number, number];
+  const oklch = /^oklch\(([\d.]+) ([\d.]+) ([\d.]+)/.exec(color);
+  if (oklch) {
+    // oklch -> oklab -> linear sRGB (Björn Ottosson's matrices).
+    const [L, C, h] = oklch.slice(1).map(Number) as [number, number, number];
+    const a = C * Math.cos((h * Math.PI) / 180);
+    const b = C * Math.sin((h * Math.PI) / 180);
+    const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3;
+    const m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3;
+    const s = (L - 0.0894841775 * a - 1.291485548 * b) ** 3;
+    const clamp = (x: number) => Math.min(1, Math.max(0, x));
+    rgb = [
+      clamp(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s),
+      clamp(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s),
+      clamp(-0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s),
+    ];
+  } else {
+    rgb = [1, 3, 5].map((i) => linear(parseInt(color.slice(i, i + 2), 16) / 255)) as [
+      number,
+      number,
+      number,
+    ];
+  }
+  return 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
+}
+
+/** WCAG 2 contrast ratio between two colours. */
 function contrast(a: string, b: string): number {
-  const luminance = (hex: string) => {
-    const [r, g, b] = [1, 3, 5].map((i) => {
-      const channel = parseInt(hex.slice(i, i + 2), 16) / 255;
-      return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
-    }) as [number, number, number];
-    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-  };
   const [light, dark] = [luminance(a), luminance(b)].sort((x, y) => y - x) as [number, number];
   return (light + 0.05) / (dark + 0.05);
 }
@@ -44,8 +67,8 @@ describe('tiers', () => {
   });
 
   it('has the neutrals from 0 to 1000, one brand ramp, and the scales', () => {
-    expect(token('ref.color.neutral.0').value).toBe('#ffffff');
-    expect(token('ref.color.neutral.1000').value).toBe('#000000');
+    expect(token('ref.color.neutral.0').value).toBe('oklch(1 0 0)');
+    expect(token('ref.color.neutral.1000').value).toMatch(/^oklch\(0\.145 /);
     expect(token('ref.color.brand.600').value).toBe('#2563eb');
     expect(token('ref.space.1').value).toBe('0.25rem');
     expect(token('ref.space.4').value).toBe('1rem');
@@ -86,6 +109,15 @@ describe('tiers', () => {
     expect(token('focus-ring.offset-filled').value).toBe('2px');
   });
 
+  it('defaults to Geist and Geist Mono, with system fonts behind them', () => {
+    expect(token('ref.font.family.sans').value).toMatch(/^'Geist Variable', Geist, system-ui/);
+    expect(token('ref.font.family.mono').value).toMatch(/^'Geist Mono Variable', 'Geist Mono'/);
+  });
+
+  it('has letter spacing for headings', () => {
+    expect(token('font.tracking.tight').value).toBe('-0.02em');
+  });
+
   it('has icon sizes of 16, 20 and 24 px', () => {
     expect(['sm', 'md', 'lg'].map((s) => token(`size.icon.${s}`).value)).toEqual([
       '1rem',
@@ -96,9 +128,9 @@ describe('tiers', () => {
 
   it('has control sizes, the touch target, layers, elevation and breakpoints', () => {
     expect(['sm', 'md', 'lg'].map((s) => token(`control.${s}`).value)).toEqual([
+      '1.75rem',
       '2rem',
       '2.5rem',
-      '2.75rem',
     ]);
     expect(token('touch-target').value).toBe('2.5rem');
     expect(
@@ -124,7 +156,13 @@ describe('contrast', () => {
     ['text-muted', 'surface'],
     ['text-muted', 'surface-raised'],
     ['text-muted', 'surface-sunken'],
+    ['text-subtle', 'surface'],
+    ['text-subtle', 'surface-raised'],
+    ['on-primary', 'primary'],
+    ['on-primary', 'primary-hover'],
+    ['on-primary', 'primary-active'],
     ['accent-text', 'surface'],
+    ['accent-text', 'accent-subtle'],
     ['on-accent', 'accent'],
     ['on-accent', 'accent-hover'],
     ['on-accent', 'accent-active'],
@@ -168,13 +206,13 @@ describe('CSS custom properties', () => {
     for (const t of tokens) {
       expect(css).toContain(`${t.name}: ${t.css};`);
     }
-    expect(css).toContain('--plinth-color-text: var(--plinth-ref-color-neutral-900);');
+    expect(css).toContain('--plinth-color-text: var(--plinth-ref-color-neutral-950);');
     expect(css).toContain('--plinth-header-height: var(--plinth-space-14);');
   });
 
   it('switches to dark with data-theme, the .dark class or the system preference', () => {
     expect(css).toMatch(/\[data-theme="dark"\],\n {2}\.dark \{\n {4}color-scheme: dark;/);
-    expect(css).toContain('--plinth-color-text: var(--plinth-ref-color-neutral-50);');
+    expect(css).toContain('--plinth-color-text: var(--plinth-ref-color-neutral-100);');
     expect(css).toContain('@media (prefers-color-scheme: dark)');
     expect(css).toContain(':root:not([data-theme="light"], .light)');
   });

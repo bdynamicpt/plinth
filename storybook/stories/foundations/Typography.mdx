@@ -7,7 +7,9 @@ export const body = group('semantic', 'font', 'family', 'body')[0];
 
 # Typography
 
-Neutral system fonts by default. A project sets its own typefaces by overriding
+Geist and Geist Mono by default, self-hosted (load `@bdynamic/plinth/fonts.css`; Laravel and
+Filament get them from the Composer package). Use the sans for interface text and the mono for
+metadata: handles, hashes, times and key hints. A project sets its own typefaces by overriding
 `--plinth-font-family-body` and `--plinth-font-family-mono`.
 
 ## Families
@@ -25,6 +27,12 @@ Neutral system fonts by default. A project sets its own typefaces by overriding
 ## Line heights
 
 <TokenTable list={group('semantic', 'font', 'leading')} />
+
+## Letter spacing
+
+Tight for headings, tighter for large display type; body text stays normal.
+
+<TokenTable list={group('semantic', 'font', 'tracking')} />
 
 ## Built from
 

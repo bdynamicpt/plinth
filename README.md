@@ -115,8 +115,9 @@ $panel->plugin(PlinthPlugin::make());
 php artisan filament:assets
 ```
 
-Outside Filament, publish the CSS with `php artisan vendor:publish --tag=plinth-assets` and link
-`vendor/plinth/plinth.css`. Components are then available as `<x-plinth::badge>`.
+Outside Filament, publish the CSS and fonts with `php artisan vendor:publish --tag=plinth-assets`
+and link `vendor/plinth/fonts/index.css` and `vendor/plinth/plinth.css`. The Filament plugin
+registers both itself. Components are then available as `<x-plinth::badge>`.
 
 **Vue**: point npm at the checkout with a `file:` link:
 
@@ -129,6 +130,7 @@ Outside Filament, publish the CSS with `php artisan vendor:publish --tag=plinth-
 ```
 
 ```ts
+import '@bdynamic/plinth/fonts.css'; // Geist and Geist Mono, the default typefaces
 import '@bdynamic/plinth/css';
 import { PlinthBadge } from '@bdynamic/plinth/vue';
 ```

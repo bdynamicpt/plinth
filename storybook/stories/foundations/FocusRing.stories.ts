@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
+import { button } from '../components/button.ts';
+import '@bdynamic/plinth-css/src/components/button.css';
 import './foundations.css';
 
 /**
@@ -17,8 +19,8 @@ export const Demo: StoryObj = {
   render: () =>
     `<div class="sb-demo">
       <div class="sb-demo-row">
-        <button type="button" class="sb-demo-outline">An outlined button</button>
-        <button type="button" class="sb-demo-button">A filled button</button>
+        ${button({ label: 'A secondary button', variant: 'secondary', size: 'md', disabled: false, busy: false })}
+        ${button({ label: 'A primary button', variant: 'primary', size: 'md', disabled: false, busy: false })}
       </div>
       <p class="sb-demo-text">A sentence with <a class="sb-demo-link" href="#focus-ring">a link in it</a>, and then <a class="sb-demo-link" href="#focus-ring">a longer link that wraps onto the next line</a> to show the ring on each line.</p>
     </div>`,
