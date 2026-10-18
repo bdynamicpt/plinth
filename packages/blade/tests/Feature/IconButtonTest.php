@@ -1,7 +1,7 @@
 <?php
 
-use BDynamic\Plinth\Enums\ButtonSize;
 use BDynamic\Plinth\Enums\ButtonVariant;
+use BDynamic\Plinth\Enums\Size;
 use Illuminate\Support\Facades\Blade;
 
 $svg = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
@@ -27,7 +27,7 @@ it('takes every variant and size, with icons sized to it', function (string $var
         ->toContain("data-variant=\"{$variant}\"")
         ->toContain("data-size=\"{$size}\"")
         ->toContain('class="plinth-icon" data-size="'.($size === 'sm' ? 'sm' : 'md').'"');
-})->with(ButtonVariant::values())->with(ButtonSize::values());
+})->with(ButtonVariant::values())->with(array_column(Size::controls(), 'value'));
 
 it('is a toggle when pressed is set, and not otherwise', function () use ($svg) {
     expect(Blade::render("<x-plinth::icon-button label=\"Favourite\" :pressed=\"true\">{$svg}</x-plinth::icon-button>"))->toContain('aria-pressed="true"');

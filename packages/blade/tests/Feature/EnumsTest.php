@@ -1,8 +1,8 @@
 <?php
 
-use BDynamic\Plinth\Enums\ButtonSize;
 use BDynamic\Plinth\Enums\ButtonVariant;
 use BDynamic\Plinth\Enums\IconSize;
+use BDynamic\Plinth\Enums\Size;
 use BDynamic\Plinth\Enums\Tone;
 use Illuminate\Support\Facades\Blade;
 
@@ -15,21 +15,28 @@ it('resolves a case, its value, or nothing to a case', function () {
 
 it('defaults each choice the way the components do', function () {
     expect(Tone::default())->toBe(Tone::Neutral)
-        ->and(IconSize::default())->toBe(IconSize::Md)
+        ->and(IconSize::default())->toBe(IconSize::Medium)
         ->and(ButtonVariant::default())->toBe(ButtonVariant::Primary)
-        ->and(ButtonSize::default())->toBe(ButtonSize::Md);
+        ->and(Size::default())->toBe(Size::Medium);
 });
 
-it('sizes a button\'s icons to the button', function () {
-    expect(ButtonSize::Sm->iconSize())->toBe(IconSize::Sm)
-        ->and(ButtonSize::Md->iconSize())->toBe(IconSize::Md)
-        ->and(ButtonSize::Lg->iconSize())->toBe(IconSize::Md);
+it('sizes a control\'s icons to the control', function () {
+    expect(Size::Small->iconSize())->toBe(IconSize::Small)
+        ->and(Size::Medium->iconSize())->toBe(IconSize::Medium)
+        ->and(Size::Large->iconSize())->toBe(IconSize::Medium);
+});
+
+it('resolves a size among the ones a component supports', function () {
+    expect(Size::resolve('lg', Size::controls()))->toBe(Size::Large)
+        ->and(Size::resolve('xl', Size::controls()))->toBe(Size::Medium)
+        ->and(Size::resolve(Size::ExtraLarge))->toBe(Size::ExtraLarge)
+        ->and(Size::resolve('huge', Size::controls(), Size::Small))->toBe(Size::Small);
 });
 
 it('lets a view pass the enum instead of a string', function () {
     $html = Blade::render(
         '<x-plinth::button :variant="$variant" :size="$size">Delete</x-plinth::button><x-plinth::badge :tone="$tone">Paid</x-plinth::badge>',
-        ['variant' => ButtonVariant::Danger, 'size' => ButtonSize::Sm, 'tone' => Tone::Success],
+        ['variant' => ButtonVariant::Danger, 'size' => Size::Small, 'tone' => Tone::Success],
     );
 
     expect($html)
@@ -49,5 +56,8 @@ it('matches the lists the Vue layer and the stories use', function () {
     }
     foreach (IconSize::values() as $value) {
         expect($vue('icon.ts'))->toContain("'{$value}'");
+    }
+    foreach (Size::values() as $value) {
+        expect($vue('size.ts'))->toContain("'{$value}'");
     }
 });

@@ -10,7 +10,7 @@
 ])
 @php
     $variant = \BDynamic\Plinth\Enums\ButtonVariant::resolve($variant);
-    $size = \BDynamic\Plinth\Enums\ButtonSize::resolve($size);
+    $size = \BDynamic\Plinth\Enums\Size::resolve($size, \BDynamic\Plinth\Enums\Size::controls());
     $iconSize = $size->iconSize()->value;
     $isLink = filled($href);
     $isBusy = $busy && ! $disabled;

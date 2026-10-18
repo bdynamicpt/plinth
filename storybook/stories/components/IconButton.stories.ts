@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
-import { buttonSizes, buttonVariants } from './button.ts';
+import { controlSizes, buttonVariants } from './button.ts';
 import { iconButton, type IconButtonArgs } from './icon-button.ts';
 import { sampleIcons } from './icons.ts';
 import '@bdynamic/plinth-css/src/components/icon.css';
@@ -20,7 +20,7 @@ const meta = {
   },
   argTypes: {
     variant: { control: 'inline-radio', options: buttonVariants },
-    size: { control: 'inline-radio', options: buttonSizes },
+    size: { control: 'inline-radio', options: controlSizes },
     href: { control: 'text' },
     pressed: { control: 'boolean' },
     mirror: { control: 'boolean' },
@@ -64,7 +64,7 @@ export const Busy: Story = { args: { variant: 'secondary', busy: true, label: 'S
 /** Every variant at every size. */
 export const Gallery: Story = {
   render: () =>
-    `<div style="display: grid; gap: var(--plinth-space-3);">${buttonSizes
+    `<div style="display: grid; gap: var(--plinth-space-3);">${controlSizes
       .map(
         (size) =>
           `<div style="display: flex; gap: var(--plinth-space-3); align-items: center;">${buttonVariants

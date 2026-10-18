@@ -5,13 +5,8 @@ import PlinthIcon from './PlinthIcon.vue';
 import PlinthIconButton from './PlinthIconButton.vue';
 
 export { PlinthBadge, PlinthButton, PlinthIcon, PlinthIconButton };
-export {
-  buttonSizes,
-  buttonVariants,
-  buttonIconSize,
-  type ButtonSize,
-  type ButtonVariant,
-} from './button';
+export { buttonVariants, type ButtonVariant } from './button';
+export { controlSizes, iconSizeFor, resolveSize, sizes, type ControlSize, type Size } from './size';
 export { iconSizes, type IconSize } from './icon';
 export { tones, type Tone } from './tones';
 

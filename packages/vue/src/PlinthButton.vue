@@ -1,18 +1,13 @@
 <script setup lang="ts">
 // Markup contract: packages/css/src/components/button.css
 import { computed } from 'vue';
-import {
-  buttonIconSize,
-  buttonSize,
-  buttonVariant,
-  type ButtonSize,
-  type ButtonVariant,
-} from './button';
+import { buttonVariant, type ButtonVariant } from './button';
+import { controlSizes, iconSizeFor, resolveSize, type ControlSize } from './size';
 
 const props = withDefaults(
   defineProps<{
     variant?: ButtonVariant;
-    size?: ButtonSize;
+    size?: ControlSize;
     href?: string;
     disabled?: boolean;
     busy?: boolean;
@@ -31,8 +26,8 @@ const props = withDefaults(
 );
 
 const dataVariant = computed(() => buttonVariant(props.variant));
-const dataSize = computed(() => buttonSize(props.size));
-const iconSize = computed(() => buttonIconSize(dataSize.value));
+const dataSize = computed(() => resolveSize(props.size, controlSizes, 'md'));
+const iconSize = computed(() => iconSizeFor(dataSize.value));
 const isBusy = computed(() => props.busy && !props.disabled);
 </script>
 

@@ -2,17 +2,17 @@
 
 namespace BDynamic\Plinth\Enums;
 
-/** Icon sizes: 16, 20 and 24 px. */
+/** Icon sizes: 16, 20 and 24 px. Icons have their own scale, as in Filament. */
 enum IconSize: string
 {
     use ResolvesToDefault;
 
-    case Sm = 'sm';
-    case Md = 'md';
-    case Lg = 'lg';
+    case Small = 'sm';
+    case Medium = 'md';
+    case Large = 'lg';
 
     public static function default(): self
     {
-        return self::Md;
+        return self::Medium;
     }
 }

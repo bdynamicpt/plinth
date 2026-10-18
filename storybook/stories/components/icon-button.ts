@@ -1,11 +1,11 @@
-import { buttonIconSize, type ButtonSize, type ButtonVariant } from '@bdynamic/plinth-vue';
+import { iconSizeFor, type ControlSize, type ButtonVariant } from '@bdynamic/plinth-vue';
 import { escape, rootAttributes, type Attributes } from './markup.ts';
 
 export interface IconButtonArgs {
   /** The accessible name: required, since the button has no visible text. */
   label: string;
   variant: ButtonVariant;
-  size: ButtonSize;
+  size: ControlSize;
   /** Renders a link instead of a button. */
   href?: string;
   disabled: boolean;
@@ -42,6 +42,6 @@ export function iconButton(
     : `<button type="${escape(type)}" class="${classes}"`;
   const inner = isBusy
     ? '<span class="plinth-button-spinner" aria-hidden="true"></span>'
-    : `<span class="plinth-icon" data-size="${buttonIconSize(size)}"${mirror ? ' data-mirror' : ''} aria-hidden="true">${svg}</span>`;
+    : `<span class="plinth-icon" data-size="${iconSizeFor(size)}"${mirror ? ' data-mirror' : ''} aria-hidden="true">${svg}</span>`;
   return `${open} data-variant="${variant}" data-size="${size}"${state}${extra}>${inner}${href ? '</a>' : '</button>'}`;
 }

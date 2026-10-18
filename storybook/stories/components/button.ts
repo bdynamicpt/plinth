@@ -1,18 +1,18 @@
 import {
-  buttonIconSize,
-  buttonSizes,
+  iconSizeFor,
+  controlSizes,
   buttonVariants,
-  type ButtonSize,
+  type ControlSize,
   type ButtonVariant,
 } from '@bdynamic/plinth-vue';
 import { escape, rootAttributes, type Attributes } from './markup.ts';
 
-export { buttonSizes, buttonVariants, type ButtonSize, type ButtonVariant };
+export { controlSizes, buttonVariants, type ControlSize, type ButtonVariant };
 
 export interface ButtonArgs {
   label: string;
   variant: ButtonVariant;
-  size: ButtonSize;
+  size: ControlSize;
   /** Renders a link instead of a button. */
   href?: string;
   disabled: boolean;
@@ -28,8 +28,8 @@ export interface ButtonArgs {
   mirrorTrailing?: boolean;
 }
 
-const iconSpan = (svg: string, size: ButtonSize, mirror = false) =>
-  `<span class="plinth-icon" data-size="${buttonIconSize(size)}"${mirror ? ' data-mirror' : ''} aria-hidden="true">${svg}</span>`;
+const iconSpan = (svg: string, size: ControlSize, mirror = false) =>
+  `<span class="plinth-icon" data-size="${iconSizeFor(size)}"${mirror ? ' data-mirror' : ''} aria-hidden="true">${svg}</span>`;
 
 /** The button's markup contract. Blade and Vue must print exactly this (see parity.test.ts). */
 export function button(
