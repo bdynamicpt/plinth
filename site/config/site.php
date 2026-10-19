@@ -13,14 +13,14 @@ return [
     'source' => $repository.'/blob/main',
 
     /*
-    | The main navigation. Docs, components and foundations point at the repository until the
-    | site has those pages (#78, #79).
+    | The main navigation, as paths on the site or URLs. Components point at the repository until the
+    | site has its pages (#79).
     */
 
     'nav' => [
-        'Docs' => $repository.'#readme',
+        'Docs' => '/docs/introduction',
         'Components' => $repository.'/tree/main/packages/css/src/components',
-        'Foundations' => $repository.'/blob/main/docs/adr/0003-visual-direction.md',
+        'Foundations' => '/docs/foundations',
         'Changelog' => $repository.'/releases',
     ],
 
@@ -32,6 +32,15 @@ return [
         'Avatar', 'Badge', 'Button', 'Callout', 'Code block', 'Data table', 'Header', 'Icon', 'Icon button', 'List card',
         'List row', 'Menu sheet', 'Pill row', 'Section menu', 'Sheet',
     ],
+
+    /*
+    | The design tokens the foundations pages list: the tokens build in the repository, or the copy
+    | a deploy build puts in resources/tokens.json.
+    */
+
+    'tokens' => env('SITE_TOKENS_PATH', is_file(resource_path('tokens.json'))
+        ? resource_path('tokens.json')
+        : base_path('../packages/tokens/dist/tokens.json')),
 
     /*
     | The architecture decision records: docs/adr in the repository, or the copy a deploy build

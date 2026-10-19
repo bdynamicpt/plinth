@@ -17,6 +17,16 @@ final readonly class Decisions
         return $this->all()->take($count)->values();
     }
 
+    public function find(string $slug): ?Decision
+    {
+        return $this->all()->first(fn (Decision $decision): bool => $decision->slug() === $slug);
+    }
+
+    public function markdown(Decision $decision): string
+    {
+        return File::get("{$this->path}/{$decision->file}");
+    }
+
     /** @return Collection<int, Decision> */
     public function all(): Collection
     {

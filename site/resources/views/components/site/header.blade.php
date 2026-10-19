@@ -1,5 +1,5 @@
 {{-- The site's header: the wordmark, the main navigation, the theme switch, GitHub and, on a phone, the menu. --}}
-@props(['overlay' => false])
+@props(['overlay' => false, 'current' => null])
 @php
     $nav = config('site.nav');
 @endphp
@@ -18,7 +18,7 @@
 
         <nav class="site-header-nav" aria-label="Main">
             @foreach ($nav as $label => $href)
-                <a class="site-header-link" href="{{ $href }}">{{ $label }}</a>
+                <a class="site-header-link" href="{{ $href }}" @if ($label === $current) aria-current="page" @endif>{{ $label }}</a>
             @endforeach
         </nav>
 
@@ -34,7 +34,7 @@
             <x-plinth::icon-button label="Plinth on GitHub" :href="config('site.repository')">
                 <x-site.glyph name="github" />
             </x-plinth::icon-button>
-            <x-plinth::button class="site-header-cta" variant="accent" :href="$nav['Docs']">Get started</x-plinth::button>
+            <x-plinth::button class="site-header-cta" variant="accent" :href="route('docs.show', 'installation')">Get started</x-plinth::button>
             <x-plinth::icon-button class="site-header-menu" label="Open the menu" commandfor="site-menu" command="show-modal">
                 <x-site.glyph name="menu" />
             </x-plinth::icon-button>
@@ -45,7 +45,7 @@
 <x-plinth::menu-sheet id="site-menu" title="Menu">
     <x-plinth::list-card>
         @foreach ($nav as $label => $href)
-            <li><x-plinth::list-row :href="$href" chevron>{{ $label }}</x-plinth::list-row></li>
+            <li><x-plinth::list-row :href="$href" :current="$label === $current" chevron>{{ $label }}</x-plinth::list-row></li>
         @endforeach
         <li><x-plinth::list-row :href="config('site.repository')" chevron>GitHub</x-plinth::list-row></li>
     </x-plinth::list-card>

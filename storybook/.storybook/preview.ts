@@ -27,25 +27,7 @@ const preview: Preview = {
     docs: { page: DocsPage },
     options: {
       storySort: {
-        order: [
-          'Branding',
-          'Foundations',
-          [
-            'Overview',
-            'Colour',
-            'Typography',
-            'Spacing',
-            'Sizes',
-            'Radii and borders',
-            'Elevation',
-            'Layers',
-            'Breakpoints',
-            'Motion',
-            'Focus ring',
-            'Component tokens',
-          ],
-          'Components',
-        ],
+        order: ['Branding', 'Foundations', ['Overview', 'Focus ring'], 'Components'],
       },
     },
   },

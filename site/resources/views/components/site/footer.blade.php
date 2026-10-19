@@ -5,7 +5,7 @@
         'Learn' => [
             'Docs' => $nav['Docs'],
             'Foundations' => $nav['Foundations'],
-            'Decisions' => route('home').'#decisions',
+            'Decisions' => route('decisions.index'),
         ],
         'Build' => [
             'Components' => $nav['Components'],

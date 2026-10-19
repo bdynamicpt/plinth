@@ -30,6 +30,13 @@ rm -rf resources/decisions
 mkdir -p resources/decisions
 cp "$root"/docs/adr/[0-9][0-9][0-9][0-9]-*.md resources/decisions/
 
+# The tokens the foundations pages list, and the pages kept elsewhere in the repository
+# (config/docs.php reads them here when they are present).
+cp "$root/packages/tokens/dist/tokens.json" resources/tokens.json
+rm -rf resources/repository
+mkdir -p resources/repository
+cp "$root/CONTRIBUTING.md" resources/repository/
+
 # PHP without the dev tools, then Laravel's caches (config, events, routes and views).
 composer install --no-dev --no-interaction --no-progress --prefer-dist --optimize-autoloader
 php artisan optimize

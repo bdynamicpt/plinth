@@ -38,4 +38,20 @@ final readonly class Decision
 
         return new self((int) $heading[1], $title, $summary, $date, $file);
     }
+
+    /**
+     * As the previous or next link at the foot of a page.
+     *
+     * @return array{label: string, url: string}
+     */
+    public function toPager(): array
+    {
+        return ['label' => "ADR {$this->number}: {$this->title}", 'url' => route('decisions.show', $this->slug())];
+    }
+
+    /** The file's name without .md, as the decision's address on the site. */
+    public function slug(): string
+    {
+        return basename($this->file, '.md');
+    }
 }

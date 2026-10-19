@@ -1,0 +1,70 @@
+{
+    "name": "plinth",
+    "type": "dark",
+    "colors": {
+        "editor.background": "none",
+        "editor.foreground": "text"
+    },
+    "tokenColors": [
+        {
+            "scope": ["comment", "punctuation.definition.comment"],
+            "settings": {
+                "foreground": "comment",
+                "fontStyle": "italic"
+            }
+        },
+        {
+            "scope": ["string", "punctuation.definition.string", "markup.inline.raw"],
+            "settings": {
+                "foreground": "string"
+            }
+        },
+        {
+            "scope": [
+                "keyword",
+                "storage",
+                "entity.name.tag",
+                "support.function.construct",
+                "punctuation.section.embedded",
+                "keyword.other.unit"
+            ],
+            "settings": {
+                "foreground": "keyword"
+            }
+        },
+        {
+            "scope": [
+                "entity.other.attribute-name",
+                "support.type.property-name",
+                "variable.css",
+                "variable.argument.css",
+                "meta.property-name",
+                "support.type.vendored.property-name"
+            ],
+            "settings": {
+                "foreground": "property"
+            }
+        },
+        {
+            "scope": [
+                "constant",
+                "support.constant",
+                "variable.other.constant",
+                "entity.name.function",
+                "support.function",
+                "entity.name.type",
+                "support.class",
+                "entity.other.inherited-class"
+            ],
+            "settings": {
+                "foreground": "constant"
+            }
+        },
+        {
+            "scope": ["string.unquoted.argument.shell"],
+            "settings": {
+                "foreground": "text"
+            }
+        }
+    ]
+}

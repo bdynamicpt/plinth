@@ -4,8 +4,9 @@ import '@bdynamic/plinth-css/src/components/button.css';
 import './foundations.css';
 
 /**
- * The live demonstration on the Focus ring page (FocusRing.mdx). Hidden from the sidebar, but a
- * story, so the test runner checks it with axe and the focus check.
+ * The focus ring on Plinth's buttons and on links in text (the website's Focus ring page shows
+ * the same). Hidden from the sidebar, but a story, so the test runner checks it with axe and the
+ * focus check.
  */
 const meta = {
   title: 'Foundations/Focus ring',

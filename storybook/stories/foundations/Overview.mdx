@@ -4,28 +4,37 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 # Foundations
 
-The tokens every component is built from: colour, type, spacing, sizes, radii, elevation, layers,
-breakpoints and motion. They are written once in `packages/tokens/tokens/` and built to CSS custom
-properties, a JS export and a Tailwind theme (ADR 1 in `docs/adr/`).
+The foundations pages are on Plinth's website now, with every token's light and dark value
+built from `packages/tokens`:
 
-## Three tiers
+- <a href="/docs/foundations" target="_top">
+    Foundations
+  </a>
+  , and the token tiers
+- <a href="/docs/colour" target="_top">
+    Colour
+  </a>
+- <a href="/docs/typography" target="_top">
+    Typography
+  </a>
+- <a href="/docs/spacing-and-sizes" target="_top">
+    Spacing and sizes
+  </a>
+- <a href="/docs/radii-and-elevation" target="_top">
+    Radii and elevation
+  </a>
+- <a href="/docs/layers-and-breakpoints" target="_top">
+    Layers and breakpoints
+  </a>
+- <a href="/docs/motion" target="_top">
+    Motion
+  </a>
+- <a href="/docs/focus-ring" target="_top">
+    Focus ring
+  </a>
+- <a href="/docs/component-tokens" target="_top">
+    Component tokens
+  </a>
 
-| Tier      | Custom properties               | Used by                                                |
-| --------- | ------------------------------- | ------------------------------------------------------ |
-| Primitive | `--plinth-ref-color-neutral-50` | semantic tokens only: the raw scales, named by value   |
-| Semantic  | `--plinth-color-surface`        | components, named by role; **projects override these** |
-| Component | `--plinth-header-height`        | one component, for values a project may tune           |
-
-Components use semantic and component tokens only. Stylelint rejects primitives in component CSS,
-and the CSS build rejects any `--plinth-*` that isn't a token.
-
-## Bringing a brand
-
-A project overrides semantic tokens after Plinth's CSS, outside any layer. Switch **Brand** in the
-toolbar to see the made-up example brand restyle every component, and read
-`storybook/brands/example.css` for how it does it.
-
-## The pages
-
-Each page shows the semantic tokens first (what components use, in light and dark), then the
-primitives they are built from.
+Their Markdown is in `site/docs/` in the repository. Storybook keeps the stories: switch the
+theme and the brand in the toolbar to see every component with the tokens applied.

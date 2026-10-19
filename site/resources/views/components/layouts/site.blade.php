@@ -1,8 +1,9 @@
-{{-- The site's page: head, header, main and footer. `overlay` lets the header sit over a hero until the page scrolls. --}}
+{{-- The site's page: head, header, main and footer. `overlay` lets the header sit over a hero until the page scrolls; `current` is the main navigation's item for the page. --}}
 @props([
     'title' => null,
     'description' => 'Plinth is BDynamic\'s design system: tokens, components written as plain HTML and CSS, and thin Blade, Vue and React layers that print the same markup.',
     'overlay' => false,
+    'current' => null,
 ])
 <!doctype html>
 <html lang="en">
@@ -24,7 +25,7 @@
 <body>
     <a class="site-skip-link" href="#content">Skip to content</a>
 
-    <x-site.header :overlay="$overlay" />
+    <x-site.header :overlay="$overlay" :current="$current" />
 
     <main id="content" tabindex="-1">
         {{ $slot }}
