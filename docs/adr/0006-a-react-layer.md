@@ -61,4 +61,5 @@ alongside Vue and Blade, and before Storybook.
   the component reviewer say so.
 - The components built before this ADR get their React layer in #65 (badge, icon, button, icon
   button) and #66 (the rest).
-- A Svelte, Solid or other layer would follow the same rules; none is planned.
+- A Svelte layer is wanted as a nice to have, after React and the dialog family (68). It
+  follows these rules with Svelte's own idioms (snippets for slots), in its own ADR.
