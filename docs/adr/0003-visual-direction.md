@@ -43,6 +43,11 @@ weight 400.
 - UI text (labels, controls, table cells, menus) is **14px**, with 13px and 12px steps below it.
 - Reading text (descriptions, messages, docs) is 15px.
 - Larger sizes are for headings only.
+- **Display sizes are for marketing pages only:** 48px (`font.size.5xl`) for section headings
+  and the closing call to action, 64px (`font.size.6xl`) for the hero, with
+  `font.leading.display` (1.05) and the tighter letter spacing. They step down with the
+  breakpoints: 36px on a phone, 48px from 768px, 64px from 1280px, through media queries rather
+  than `clamp()`, so every value stays a token. Inside an app the scale still stops at 36px.
 
 ### 3. Controls look small, touch stays at 40px
 
@@ -106,6 +111,9 @@ light and dark, and screenshots in pull requests still cover both.
   brand does. Plinth's own defaults stay neutral in the app and use the accent on marketing pages.
 - Amended 2026-10-18: the accent's hue and where a solid accent fill is used (marketing pages,
   through the button's `accent` variant) were settled after reviewing a mood board.
+- Amended 2026-10-19: display sizes (48 and 64px) and a display line height were added for
+  marketing pages, after the mood board's marketing page showed that 36px gives a hero no more
+  weight than an app's page title. The app scale is unchanged.
 - The values in the table above are a reference for the feel, not for copying: Plinth takes the
   pattern, not another product's palette or typeface choices beyond what is open source.
 

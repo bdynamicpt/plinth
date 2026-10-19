@@ -18,6 +18,12 @@ metadata: handles, hashes, times and key hints. A project sets its own typefaces
 
 ## Scale
 
+UI text is 14px, with 13px and 12px below it, and reading text is 15px. Larger sizes are for
+headings. **5xl and 6xl are display sizes for marketing pages only** ([ADR 3](https://github.com/bdynamicpt/plinth/blob/main/docs/adr/0003-visual-direction.md)):
+inside an app the scale stops at 4xl (36px). Pair them with the `display` line height and the
+`tighter` letter spacing, and step them down on smaller screens: 4xl on a phone, 5xl from
+768px, 6xl from 1280px.
+
 <TypeScale list={group('semantic', 'font', 'size')} family={body.cssVar} />
 
 ## Weights
