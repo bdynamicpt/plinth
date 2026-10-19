@@ -1,0 +1,8 @@
+<button class="plinth-button"
+  type="button"
+  data-variant="primary"
+  data-size="md">
+  <span class="plinth-button-label">
+    Save changes
+  </span>
+</button>

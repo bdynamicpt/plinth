@@ -1,0 +1,479 @@
+/* The home page's sections. */
+
+@layer site {
+    /* Hero: the pitch, the install commands and an app built from the components. */
+    .site-hero {
+        position: relative;
+        padding: calc(var(--plinth-space-16) * 2) var(--plinth-space-4) 0;
+        overflow: clip;
+    }
+
+    .site-hero-glow,
+    .site-cta-glow {
+        position: absolute;
+        inset-inline: 0;
+        block-size: 40rem;
+        pointer-events: none;
+        background: radial-gradient(
+            50% 50% at 50% 50%,
+            var(--plinth-color-accent-subtle),
+            transparent 70%
+        );
+    }
+
+    .site-hero-glow {
+        inset-block-start: calc(var(--plinth-space-16) * -4);
+    }
+
+    .site-hero-content,
+    .site-cta-content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-6);
+        align-items: center;
+        max-inline-size: 45rem;
+        margin-inline: auto;
+        text-align: center;
+    }
+
+    .site-hero-content .site-display {
+        max-inline-size: 16ch;
+    }
+
+    .site-hero-content .site-lead {
+        max-inline-size: 52ch;
+    }
+
+    /* The announcement: 28px tall, with a 40px hit area on a touch screen like Plinth's controls. */
+    .site-announcement {
+        position: relative;
+        display: inline-flex;
+        gap: var(--plinth-space-2);
+        align-items: center;
+        min-block-size: var(--plinth-control-sm);
+        padding-inline: var(--plinth-space-3);
+        font-family: var(--plinth-font-family-mono);
+        font-size: var(--plinth-font-size-xs);
+        color: var(--plinth-color-text-muted);
+        text-decoration: none;
+        background: var(--plinth-color-surface-raised);
+        border: var(--plinth-border-width-thin) solid var(--plinth-color-border-strong);
+        border-radius: var(--plinth-radius-pill);
+    }
+
+    .site-announcement:focus-visible {
+        border-radius: var(--plinth-radius-pill);
+    }
+
+    .site-announcement-dot {
+        inline-size: calc(var(--plinth-space-1) * 1.5);
+        block-size: calc(var(--plinth-space-1) * 1.5);
+        background: var(--plinth-color-accent);
+        border-radius: var(--plinth-radius-pill);
+    }
+
+    .site-announcement-arrow {
+        color: var(--plinth-color-accent-text);
+    }
+
+    .site-install {
+        box-sizing: border-box;
+        inline-size: 100%;
+        max-inline-size: 28rem;
+        padding-block: var(--plinth-space-1);
+        text-align: start;
+        background: var(--plinth-color-surface-sunken);
+        border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+        border-radius: var(--plinth-radius-container);
+    }
+
+    .site-install-row {
+        display: flex;
+        gap: var(--plinth-space-3);
+        align-items: center;
+        min-block-size: var(--plinth-touch-target);
+        padding-inline: var(--plinth-space-4) var(--plinth-space-2);
+    }
+
+    .site-install-command {
+        flex: 1;
+        min-inline-size: 0;
+        font-family: var(--plinth-font-family-mono);
+        font-size: var(--plinth-font-size-sm);
+        color: var(--plinth-color-text);
+        overflow-wrap: anywhere;
+    }
+
+    /* The app preview: a browser-like frame, cut off at the bottom by the next section. */
+    .site-preview {
+        position: relative;
+        box-sizing: border-box;
+        max-inline-size: 65rem;
+        padding: var(--plinth-space-2) var(--plinth-space-2) 0;
+        margin: var(--plinth-space-16) auto 0;
+        background: var(--plinth-color-surface-sunken);
+        border: var(--plinth-border-width-thin) solid var(--plinth-color-border-strong);
+        border-block-end: 0;
+        border-start-start-radius: calc(var(--plinth-radius-container) + var(--plinth-space-2));
+        border-start-end-radius: calc(var(--plinth-radius-container) + var(--plinth-space-2));
+    }
+
+    .site-preview-app {
+        display: flex;
+        max-block-size: 32.5rem;
+        overflow: hidden;
+        text-align: start;
+        background: var(--plinth-color-surface);
+        border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+        border-block-end: 0;
+        border-start-start-radius: var(--plinth-radius-container);
+        border-start-end-radius: var(--plinth-radius-container);
+    }
+
+    .site-preview-side {
+        display: none;
+        flex: 0 0 13.75rem;
+        flex-direction: column;
+        gap: var(--plinth-space-0-5);
+        padding: var(--plinth-space-4) var(--plinth-space-3);
+        background: var(--plinth-color-surface-sunken);
+        border-inline-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+    }
+
+    .site-preview-side-heading {
+        padding: 0 var(--plinth-space-3) var(--plinth-space-2);
+    }
+
+    .site-preview-side-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: calc(var(--plinth-space-1) * 1.5) var(--plinth-space-3);
+        font-size: var(--plinth-font-size-md);
+        color: var(--plinth-color-text-muted);
+        border-radius: var(--plinth-radius-control);
+    }
+
+    .site-preview-side-item.is-current {
+        color: var(--plinth-color-text);
+        background: var(--plinth-color-surface-raised);
+        box-shadow: inset 0 0 0 var(--plinth-border-width-thin) var(--plinth-color-border);
+    }
+
+    .site-preview-main {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        min-inline-size: 0;
+    }
+
+    .site-preview-header {
+        position: static;
+    }
+
+    .site-preview-body {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-4);
+        padding: var(--plinth-space-4);
+    }
+
+    /* Works with: the stacks Plinth fits in. */
+    .site-works {
+        border-block: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+    }
+
+    .site-works-inner {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--plinth-space-4) var(--plinth-space-6);
+        align-items: center;
+        justify-content: center;
+        padding-block: var(--plinth-space-8);
+    }
+
+    .site-works-heading {
+        flex-basis: 100%;
+        margin: 0;
+        font-weight: var(--plinth-font-weight-regular);
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    .site-works-list {
+        display: contents;
+    }
+
+    .site-works-item {
+        font-size: var(--plinth-font-size-lg);
+        font-weight: var(--plinth-font-weight-semibold);
+        color: var(--plinth-color-text-muted);
+        letter-spacing: var(--plinth-font-tracking-snug);
+        list-style: none;
+    }
+
+    /* The sections below the hero. */
+    .site-section {
+        border-block-start: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+    }
+
+    .site-works + .site-section {
+        border-block-start: 0;
+    }
+
+    .site-section-sunken {
+        background: var(--plinth-color-surface-sunken);
+    }
+
+    .site-section-inner,
+    .site-decisions-inner {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-12);
+        padding-block: var(--plinth-space-16);
+    }
+
+    .site-section-intro {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-4);
+        align-items: flex-start;
+        max-inline-size: 40rem;
+    }
+
+    /* Three layers: Blade, Vue and React side by side, the HTML they print below them. */
+    .site-layers {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--plinth-space-4);
+    }
+
+    .site-layers-output {
+        grid-column: 1 / -1;
+        background: var(--plinth-color-surface-raised);
+        border-color: var(--plinth-color-border-strong);
+    }
+
+    /* Foundations: a grid of cells split by hairlines. */
+    .site-features {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--plinth-border-width-thin);
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+        list-style: none;
+        background: var(--plinth-color-divider);
+        border: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+        border-radius: var(--plinth-radius-container);
+    }
+
+    .site-feature {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-3);
+        padding: var(--plinth-space-6);
+        background: var(--plinth-color-surface);
+    }
+
+    .site-feature-icon {
+        color: var(--plinth-color-accent-text);
+    }
+
+    /* Brand: the override and what it does, next to Plinth's default. */
+    .site-brand {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--plinth-space-4);
+    }
+
+    .site-brand-cards {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--plinth-space-4);
+    }
+
+    .site-brand-card {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-4);
+        align-items: flex-start;
+        min-inline-size: 0;
+        padding: var(--plinth-space-5);
+        background: var(--plinth-color-surface-raised);
+        border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+        border-radius: var(--plinth-radius-container);
+    }
+
+    /*
+   * The example brand from the brand.css snippet beside it, scoped to its card. The colours are
+   * the sample's own, not Plinth's tokens, and light-dark() picks each one for the theme.
+   */
+    /* stylelint-disable color-no-hex, color-named */
+    .site-brand-example {
+        --plinth-color-accent: light-dark(#0f766e, #2dd4bf);
+        --plinth-color-accent-hover: light-dark(#115e59, #5eead4);
+        --plinth-color-accent-active: light-dark(#134e4a, #99f6e4);
+        --plinth-color-accent-text: light-dark(#115e59, #5eead4);
+        --plinth-color-on-accent: light-dark(#fff, #042f2e);
+        --plinth-color-focus-ring: light-dark(#0f766e, #5eead4);
+        --plinth-radius-pill: 0.25rem;
+    }
+    /* stylelint-enable color-no-hex, color-named */
+
+    /* Decisions: the latest ADRs. */
+    .site-decisions {
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        background: var(--plinth-color-surface);
+        border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+        border-radius: var(--plinth-radius-container);
+    }
+
+    .site-decision {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--plinth-space-2) var(--plinth-space-4);
+        padding: var(--plinth-space-5) var(--plinth-space-4);
+    }
+
+    .site-decision + .site-decision {
+        border-block-start: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+    }
+
+    .site-decision-date {
+        flex: 0 0 6rem;
+        line-height: var(--plinth-font-leading-normal);
+    }
+
+    .site-decision-content {
+        display: flex;
+        flex: 1 1 16rem;
+        flex-direction: column;
+        gap: calc(var(--plinth-space-1) * 1.5);
+    }
+
+    .site-decision-title {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--plinth-space-2);
+        align-items: center;
+    }
+
+    /* The title's link covers the whole row, so the row is the touch target. */
+    .site-decision-link {
+        font-weight: var(--plinth-font-weight-semibold);
+        color: var(--plinth-color-text);
+        text-decoration: none;
+    }
+
+    .site-decision-link::after {
+        position: absolute;
+        inset: 0;
+        content: '';
+        border-radius: inherit;
+    }
+
+    .site-decision-link:focus-visible {
+        outline: none;
+    }
+
+    .site-decision:has(.site-decision-link:focus-visible) {
+        outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+        outline-offset: var(--plinth-focus-ring-offset-inset);
+    }
+
+    /* The closing call to action. */
+    .site-cta {
+        position: relative;
+        overflow: clip;
+        border-block-start: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+    }
+
+    .site-cta-glow {
+        inset-block-end: calc(var(--plinth-space-16) * -5);
+    }
+
+    .site-cta-content {
+        box-sizing: border-box;
+        padding: calc(var(--plinth-space-16) + var(--plinth-space-12)) var(--plinth-space-4);
+    }
+
+    @media (hover: hover) {
+        .site-decision:hover {
+            background: var(--plinth-color-surface-hover);
+        }
+
+        .site-decision:hover .site-decision-link {
+            color: var(--plinth-color-text);
+        }
+    }
+
+    @media (min-width: 768px) {
+        .site-hero {
+            padding-block-start: calc(var(--plinth-space-16) * 2 + var(--plinth-space-8));
+        }
+
+        .site-preview-app {
+            block-size: 28.75rem;
+            max-block-size: none;
+        }
+
+        .site-preview-side {
+            display: flex;
+        }
+
+        .site-works-inner {
+            justify-content: space-between;
+        }
+
+        .site-works-heading {
+            flex-basis: auto;
+        }
+
+        .site-section-inner,
+        .site-decisions-inner {
+            padding-block: calc(var(--plinth-space-16) + var(--plinth-space-12));
+        }
+
+        .site-layers {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .site-features {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .site-brand {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .site-decision {
+            padding-inline: var(--plinth-space-6);
+        }
+    }
+
+    @media (min-width: 1280px) {
+        .site-features {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .site-decisions-inner {
+            flex-flow: row wrap;
+            gap: var(--plinth-space-16);
+        }
+
+        .site-decisions-intro {
+            flex: 1 1 22rem;
+        }
+
+        .site-decisions {
+            flex: 999 1 30rem;
+        }
+    }
+}

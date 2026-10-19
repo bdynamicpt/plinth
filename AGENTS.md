@@ -41,11 +41,16 @@ packages/
   blade/    Composer package: Blade components (<x-plinth::name>) + Filament plugin;
             has a package.json whose scripts run Composer and copy the built CSS in
 storybook/  never published
+site/       Plinth's website, a Laravel app built with Plinth (docs/adr/0007); never published
 ```
 
 - npm workspaces, Node 22, Vite, TypeScript. Not Bun or pnpm.
 - Turborepo with no remote cache. Task order: `tokens` → `css` → `vue`, `react` and `blade` →
-  `storybook`; outputs declared in `turbo.json`.
+  `storybook` and `site`; outputs declared in `turbo.json`.
+- The site (`site/`) follows the same rules as the packages: final PHP classes, Pint, PHPStan at
+  `level: max`, Pest at 100% coverage, and site CSS under the component rules with `site-*`
+  classes. It uses `<x-plinth::…>` wherever Plinth has a component; a pattern other projects would
+  need too becomes a Plinth component first. Commits for it use the scope `site`.
 - Tests: Vitest (tokens build, Vue, React with Testing Library), Storybook test runner with
   Playwright and axe (every story, both themes, three widths), Pest (Blade). Screenshot comparison is paused until the
   foundations settle (#9).
@@ -131,7 +136,7 @@ storybook/  never published
   `main`.
   - Types: `feat`, `fix`, `docs`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`.
   - Scope: the component for component work (`button`, `icon-button`), otherwise the area
-    (`tokens`, `css`, `vue`, `react`, `blade`, `storybook`, `adr`, `agents`, `deps`). Leave it
+    (`tokens`, `css`, `vue`, `react`, `blade`, `storybook`, `site`, `adr`, `agents`, `deps`). Leave it
     out when a change spans the whole repository.
   - Description: lowercase, imperative, no full stop (`feat(badge): add a dot option`).
   - A breaking change adds `!` after the scope (`feat(tokens)!: rename the surface tokens`) and

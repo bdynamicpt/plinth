@@ -1,0 +1,71 @@
+/* The site's text styles. Display sizes are for the marketing pages (ADR 3). */
+
+@layer site {
+    .site-display {
+        margin: 0;
+        font-size: var(--plinth-font-size-4xl);
+        font-weight: var(--plinth-font-weight-semibold);
+        line-height: var(--plinth-font-leading-display);
+        letter-spacing: var(--plinth-font-tracking-tighter);
+        text-wrap: balance;
+    }
+
+    .site-heading {
+        margin: 0;
+        font-size: var(--plinth-font-size-3xl);
+        font-weight: var(--plinth-font-weight-semibold);
+        line-height: var(--plinth-font-leading-tight);
+        letter-spacing: var(--plinth-font-tracking-tighter);
+        text-wrap: balance;
+    }
+
+    .site-title {
+        margin: 0;
+        font-size: var(--plinth-font-size-lg);
+        font-weight: var(--plinth-font-weight-semibold);
+        line-height: var(--plinth-font-leading-tight);
+        letter-spacing: var(--plinth-font-tracking-snug);
+    }
+
+    .site-lead {
+        margin: 0;
+        font-size: var(--plinth-font-size-lg);
+        line-height: var(--plinth-font-leading-normal);
+        color: var(--plinth-color-text-muted);
+        text-wrap: pretty;
+    }
+
+    .site-small {
+        margin: 0;
+        font-size: var(--plinth-font-size-sm);
+        line-height: var(--plinth-font-leading-normal);
+        color: var(--plinth-color-text-muted);
+    }
+
+    .site-meta {
+        font-family: var(--plinth-font-family-mono);
+        font-size: var(--plinth-font-size-xs);
+        color: var(--plinth-color-text-subtle);
+    }
+
+    .site-eyebrow {
+        font-family: var(--plinth-font-family-mono);
+        font-size: var(--plinth-font-size-xs);
+        color: var(--plinth-color-accent-text);
+        text-transform: uppercase;
+    }
+
+    @media (min-width: 768px) {
+        .site-display,
+        .site-heading {
+            font-size: var(--plinth-font-size-5xl);
+            line-height: var(--plinth-font-leading-display);
+        }
+    }
+
+    @media (min-width: 1280px) {
+        .site-display-hero {
+            font-size: var(--plinth-font-size-6xl);
+        }
+    }
+}

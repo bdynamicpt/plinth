@@ -2,6 +2,8 @@
 node_modules/
 vendor/
 composer.lock
+# The site is an app, so its lock file is kept.
+!site/composer.lock
 
 # Build output (packages/blade/resources/dist is committed: Packagist ships it)
 dist/
@@ -26,6 +28,7 @@ coverage/
 npm-debug.log*
 .env
 .env.*
+!.env.example
 .DS_Store
 Thumbs.db
 .idea/

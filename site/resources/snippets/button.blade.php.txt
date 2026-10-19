@@ -1,0 +1,4 @@
+<x-plinth::button
+    variant="primary">
+    Save changes
+</x-plinth::button>
