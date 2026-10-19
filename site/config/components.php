@@ -1,0 +1,221 @@
+<?php
+
+/*
+| Plinth's components, as the site lists them: each has a page from its Markdown in
+| site/components, a card on the components page, and, where it has variants, sizes or states, a
+| playground. The playground's template is Blade, rendered live and printed in every layer
+| (App\Components\Playground). `react` says the component has its React layer (#66 ports the rest);
+| `css` names its stylesheet when that isn't the component's own name.
+*/
+
+$variants = ['primary', 'accent', 'secondary', 'ghost', 'danger', 'danger-ghost'];
+$controls = ['values' => ['sm', 'md', 'lg'], 'default' => 'md'];
+
+return [
+
+    'path' => base_path('components'),
+
+    'groups' => ['Actions', 'Content', 'Navigation', 'Overlays'],
+
+    'components' => [
+
+        'button' => [
+            'name' => 'Button',
+            'group' => 'Actions',
+            'description' => 'Does something: saves, submits, opens a sheet. Six variants, three sizes.',
+            'react' => true,
+            'playground' => [
+                'template' => '<x-plinth::button{attributes}>{label}</x-plinth::button>',
+                'options' => [
+                    'variant' => [
+                        'values' => $variants,
+                        'default' => 'primary',
+                        'content' => [
+                            'primary' => ['{label}' => 'Save changes'],
+                            'accent' => ['{label}' => 'Start free trial'],
+                            'secondary' => ['{label}' => 'Cancel'],
+                            'ghost' => ['{label}' => 'Skip'],
+                            'danger' => ['{label}' => 'Delete project'],
+                            'danger-ghost' => ['{label}' => 'Remove'],
+                        ],
+                    ],
+                    'size' => $controls,
+                ],
+                'states' => ['busy', 'disabled'],
+            ],
+        ],
+
+        'icon-button' => [
+            'name' => 'Icon button',
+            'group' => 'Actions',
+            'description' => 'A button with only an icon, for toolbars, headers and closing a sheet.',
+            'react' => true,
+            'css' => 'button',
+            'playground' => [
+                'template' => '<x-plinth::icon-button label="Search"{attributes}><x-site.glyph name="search" /></x-plinth::icon-button>',
+                'options' => [
+                    'variant' => ['values' => $variants, 'default' => 'ghost'],
+                    'size' => $controls,
+                ],
+                'states' => ['pressed', 'busy', 'disabled'],
+            ],
+        ],
+
+        'avatar' => [
+            'name' => 'Avatar',
+            'group' => 'Content',
+            'description' => 'A person or an organisation at a glance: image, then initials, then a glyph.',
+            'playground' => [
+                'template' => '<x-plinth::avatar name="Ana Lima"{attributes} />',
+                'options' => [
+                    'size' => ['values' => ['sm', 'md', 'lg', 'xl'], 'default' => 'md'],
+                    'status' => [
+                        'values' => ['none', 'success', 'warning', 'danger'],
+                        'default' => 'none',
+                        'print' => [
+                            'success' => 'status="success" status-label="Online"',
+                            'warning' => 'status="warning" status-label="Away"',
+                            'danger' => 'status="danger" status-label="Busy"',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+
+        'badge' => [
+            'name' => 'Badge',
+            'group' => 'Content',
+            'description' => 'A short label for the status of something, next to what it describes.',
+            'react' => true,
+            'playground' => [
+                'template' => '<x-plinth::badge{attributes}>{label}</x-plinth::badge>',
+                'options' => [
+                    'tone' => [
+                        'values' => ['neutral', 'success', 'warning', 'danger'],
+                        'default' => 'neutral',
+                        'content' => [
+                            'neutral' => ['{label}' => 'Draft'],
+                            'success' => ['{label}' => 'Paid'],
+                            'warning' => ['{label}' => 'Due soon'],
+                            'danger' => ['{label}' => 'Overdue'],
+                        ],
+                    ],
+                ],
+                'states' => ['dot'],
+            ],
+        ],
+
+        'callout' => [
+            'name' => 'Callout',
+            'group' => 'Content',
+            'description' => 'A short message set apart from the page: a note, a tip, a warning.',
+            'react' => true,
+            'playground' => [
+                'template' => '<x-plinth::callout{attributes} title="{title}">{text}</x-plinth::callout>',
+                'options' => [
+                    'tone' => [
+                        'values' => ['neutral', 'info', 'success', 'warning', 'danger'],
+                        'default' => 'neutral',
+                        'content' => [
+                            'neutral' => ['{title}' => 'Drafts are private', '{text}' => 'Only you can see an invoice until you send it.'],
+                            'info' => ['{title}' => 'Invoices are sent at 9:00', '{text}' => 'Anything you schedule today goes out tomorrow morning.'],
+                            'success' => ['{title}' => 'Invoice sent', '{text}' => 'The client gets a copy by email.'],
+                            'warning' => ['{title}' => 'Your trial ends in 3 days', '{text}' => 'Pick a plan to keep your projects.'],
+                            'danger' => ['{title}' => 'The export failed', '{text}' => 'Nothing was changed. Try again in a minute.'],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+
+        'code-block' => [
+            'name' => 'Code block',
+            'group' => 'Content',
+            'description' => 'Code to read and copy, with a label or tabs, highlighted on the server.',
+            'react' => true,
+        ],
+
+        'data-table' => [
+            'name' => 'Data table',
+            'group' => 'Content',
+            'description' => 'Records as cards on a phone and a table from 768px, from one markup, with no script.',
+        ],
+
+        'icon' => [
+            'name' => 'Icon',
+            'group' => 'Content',
+            'description' => 'Sizes and colours a project\'s own SVG, and mirrors arrows in right-to-left text.',
+            'react' => true,
+            'playground' => [
+                'template' => '<x-plinth::icon{attributes}><x-site.glyph name="check" /></x-plinth::icon>',
+                'options' => [
+                    'size' => ['values' => ['sm', 'md', 'lg'], 'default' => 'md'],
+                ],
+            ],
+        ],
+
+        'list-card' => [
+            'name' => 'List card',
+            'group' => 'Content',
+            'description' => 'Related rows on a raised surface, with an optional heading and footer note.',
+        ],
+
+        'list-row' => [
+            'name' => 'List row',
+            'group' => 'Content',
+            'description' => 'One row of a list: title, description, a leading and a trailing slot.',
+            'playground' => [
+                'template' => "<x-plinth::list-card>\n    <li><x-plinth::list-row href=\"#\" description=\"Monthly, by email\"{attributes}>Invoices</x-plinth::list-row></li>\n</x-plinth::list-card>",
+                'states' => ['chevron', 'current', 'disabled'],
+            ],
+        ],
+
+        'header' => [
+            'name' => 'Header',
+            'group' => 'Navigation',
+            'description' => 'The phone shell\'s top bar: a leading action, the title and a few actions.',
+        ],
+
+        'pill-row' => [
+            'name' => 'Pill row',
+            'group' => 'Navigation',
+            'description' => 'Filters, segments or sub-pages. Scrolls sideways and snaps on a phone.',
+        ],
+
+        'section-menu' => [
+            'name' => 'Section menu',
+            'group' => 'Navigation',
+            'description' => 'The row under the header that switches between a page\'s sections.',
+        ],
+
+        'menu-sheet' => [
+            'name' => 'Menu sheet',
+            'group' => 'Overlays',
+            'description' => 'The app shell\'s menu: the signed-in user, navigation and account actions.',
+        ],
+
+        'sheet' => [
+            'name' => 'Sheet',
+            'group' => 'Overlays',
+            'description' => 'A modal panel on a native dialog: slides up on a phone, a dialog from 768px.',
+            'playground' => [
+                'template' => "<x-plinth::button variant=\"secondary\" commandfor=\"playground-sheet\" command=\"show-modal\">Filters</x-plinth::button>\n<x-plinth::sheet id=\"playground-sheet\" title=\"Filters\"{attributes}>\n    <p>Show the invoices that are due this month.</p>\n</x-plinth::sheet>",
+                'options' => [
+                    'placement' => ['values' => ['center', 'end'], 'default' => 'center'],
+                ],
+            ],
+        ],
+
+    ],
+
+    /*
+    | The components that are coming, by their issue.
+    */
+
+    'coming' => [
+        60 => ['name' => 'Dialog', 'description' => 'A centred dialog, and the base it shares with the sheet.'],
+        62 => ['name' => 'Confirmation dialog', 'description' => 'Simple, type to confirm, or a password.'],
+        63 => ['name' => 'Drawer', 'description' => 'A draggable bottom panel with snap points.'],
+    ],
+
+];

@@ -29,6 +29,24 @@
         @case('window')
             <rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18"></path>
             @break
+        @case('search')
+            <circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4 4"></path>
+            @break
+        @case('alert')
+            <circle cx="12" cy="12" r="9"></circle><path d="M12 7v6M12 16.5v.01"></path>
+            @break
+        @case('close')
+            <path d="M6 6l12 12M18 6L6 18"></path>
+            @break
+        @case('plus')
+            <path d="M12 5v14M5 12h14"></path>
+            @break
+        @case('more')
+            <circle cx="5" cy="12" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle>
+            @break
+        @case('bell')
+            <path d="M6 16V11a6 6 0 1 1 12 0v5l2 2H4z"></path><path d="M10 21h4"></path>
+            @break
         @case('download')
             <path d="M12 3v12M7 10l5 5 5-5M5 21h14"></path>
             @break

@@ -1,0 +1,297 @@
+/*
+ * The components: the page that lists them (a card each, with a live preview), and a component's
+ * page (its links, the playground and the live examples). A card is a list item whose name is the
+ * link, stretched over the card, so the preview's real buttons aren't inside a link.
+ */
+
+@layer site {
+    .site-catalogue {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-6);
+        padding-block: var(--plinth-space-8) var(--plinth-space-16);
+    }
+
+    .site-catalogue-header {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-3);
+        max-inline-size: 40rem;
+    }
+
+    .site-catalogue-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--plinth-space-4);
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    .site-catalogue-coming {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-4);
+        padding-block-start: var(--plinth-space-6);
+    }
+
+    .site-catalogue-coming-title {
+        margin: 0;
+        font-size: var(--plinth-font-size-xl);
+        font-weight: var(--plinth-font-weight-semibold);
+        letter-spacing: var(--plinth-font-tracking-tight);
+    }
+
+    /* A card: the preview, then the name, what it is for and its layers. */
+    .site-component-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background: var(--plinth-color-surface);
+        border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+        border-radius: var(--plinth-radius-container);
+    }
+
+    .site-component-card.is-coming {
+        border-style: dashed;
+    }
+
+    .site-component-card:has(.site-component-card-link:focus-visible) {
+        outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+        outline-offset: var(--plinth-focus-ring-offset);
+    }
+
+    .site-component-card-preview {
+        box-sizing: border-box;
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--plinth-space-3);
+        align-items: center;
+        justify-content: center;
+        block-size: calc(var(--plinth-space-16) * 2.5);
+        padding: var(--plinth-space-4);
+        overflow: hidden;
+        background: var(--plinth-color-surface-sunken);
+        border-block-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+    }
+
+    .site-component-card-body {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-1);
+        padding: var(--plinth-space-4);
+    }
+
+    .site-component-card-title {
+        display: flex;
+        gap: var(--plinth-space-2);
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .site-component-card-link {
+        display: inline-flex;
+        align-items: center;
+        min-block-size: var(--plinth-touch-target);
+        color: var(--plinth-color-text);
+        text-decoration: none;
+    }
+
+    .site-component-card-link::after {
+        position: absolute;
+        inset: 0;
+        content: '';
+    }
+
+    .site-component-card-link:focus-visible {
+        outline: none;
+    }
+
+    /* The previews: full width where a component fills its container. */
+    .site-catalogue-fill {
+        inline-size: 100%;
+    }
+
+    .site-catalogue-frame {
+        inline-size: 100%;
+        overflow: hidden;
+        background: var(--plinth-color-surface);
+        border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+        border-radius: var(--plinth-radius-container);
+    }
+
+    .site-catalogue-header-preview {
+        position: static;
+    }
+
+    /* A sheet, drawn open in the card: centred, or at the bottom for the menu sheet. */
+    .site-catalogue-sheet {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-3);
+        inline-size: 70%;
+        padding: var(--plinth-space-4);
+        background: var(--plinth-color-surface-raised);
+        border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+        border-radius: var(--plinth-radius-container);
+        box-shadow: var(--plinth-elevation-3);
+    }
+
+    .site-catalogue-sheet .site-actions {
+        justify-content: flex-end;
+    }
+
+    .site-component-card-preview:has(.site-catalogue-sheet) {
+        background: var(--plinth-color-overlay);
+    }
+
+    .site-component-card-preview:has(.is-bottom) {
+        align-items: flex-end;
+        padding-block-end: 0;
+    }
+
+    .site-catalogue-sheet.is-bottom {
+        gap: var(--plinth-space-2);
+        border-block-end: 0;
+        border-end-start-radius: 0;
+        border-end-end-radius: 0;
+    }
+
+    .site-catalogue-sheet-user {
+        display: flex;
+        gap: var(--plinth-space-2);
+        align-items: center;
+    }
+
+    /* A component's page: its layers and links, then the sections it has. */
+    .site-docs.is-wide .site-docs-article {
+        max-inline-size: 53.75rem;
+    }
+
+    .site-component-meta {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-3);
+    }
+
+    .site-component-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--plinth-space-2);
+    }
+
+    /* A live example: the components on a stage, the code below. */
+    .site-demo,
+    .site-playground {
+        display: flex;
+        flex-direction: column;
+        min-inline-size: 0;
+        overflow: hidden;
+        border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+        border-radius: var(--plinth-radius-container);
+    }
+
+    .site-demo-stage {
+        box-sizing: border-box;
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--plinth-space-3);
+        align-items: center;
+        justify-content: center;
+        min-inline-size: 0;
+        padding: var(--plinth-space-8) var(--plinth-space-4);
+        background-color: var(--plinth-color-surface-sunken);
+        background-image: radial-gradient(var(--plinth-color-divider) var(--plinth-border-width-thin), transparent var(--plinth-border-width-thin));
+        background-size: var(--plinth-space-4) var(--plinth-space-4);
+    }
+
+    /* Components that fill their container, one under another. */
+    .site-demo-stage[data-layout='stack'] {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: stretch;
+    }
+
+    /* A phone's screen: the shell's components at the width they are made for. */
+    .site-demo-stage[data-layout='phone'] {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        padding-inline: max(var(--plinth-space-4), (100% - 24.375rem) / 2);
+    }
+
+    .site-demo-stage > :is(p, span:not([class])) {
+        margin: 0;
+        color: var(--plinth-color-text-muted);
+    }
+
+    /* The code block joins the stage; its own edge and corners give way to the example's. */
+    .site-demo-code.plinth-code-block {
+        border: 0;
+        border-block-start: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+        border-radius: 0;
+    }
+
+    .site-playground-stage {
+        min-block-size: calc(var(--plinth-space-16) * 3);
+    }
+
+    .site-playground-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--plinth-space-4) var(--plinth-space-6);
+        padding: var(--plinth-space-4);
+        background: var(--plinth-color-surface);
+        border-block-start: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+    }
+
+    .site-playground-control {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-2);
+        min-inline-size: 0;
+        max-inline-size: 100%;
+    }
+
+    /* While the next choice loads. */
+    .site-playground[aria-busy='true'] .site-playground-stage {
+        opacity: var(--plinth-opacity-disabled);
+    }
+
+    @media (hover: hover) {
+        .site-component-card:not(.is-coming):hover {
+            background: var(--plinth-color-surface-hover);
+            border-color: var(--plinth-color-border-strong);
+        }
+
+        .site-component-card.is-coming:hover {
+            border-color: var(--plinth-color-border-strong);
+        }
+    }
+
+    @media (min-width: 768px) {
+        .site-catalogue {
+            gap: var(--plinth-space-8);
+            padding-block-start: var(--plinth-space-12);
+        }
+
+        .site-catalogue-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .site-demo-stage {
+            padding-inline: var(--plinth-space-6);
+        }
+    }
+
+    @media (min-width: 1280px) {
+        .site-catalogue-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .site-docs.is-wide {
+            grid-template-columns: 14.5rem minmax(0, 1fr);
+        }
+    }
+}
