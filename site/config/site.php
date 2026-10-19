@@ -34,9 +34,12 @@ return [
     ],
 
     /*
-    | The architecture decision records, read from docs/adr in the repository.
+    | The architecture decision records: docs/adr in the repository, or the copy a deploy build
+    | puts in resources/decisions, since only site/ is deployed (deploy/build.sh).
     */
 
-    'decisions' => env('SITE_DECISIONS_PATH', base_path('../docs/adr')),
+    'decisions' => env('SITE_DECISIONS_PATH', is_dir(resource_path('decisions'))
+        ? resource_path('decisions')
+        : base_path('../docs/adr')),
 
 ];

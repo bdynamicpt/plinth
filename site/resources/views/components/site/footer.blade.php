@@ -9,6 +9,7 @@
         ],
         'Build' => [
             'Components' => $nav['Components'],
+            'Storybook' => route('storybook').'/',
             'Changelog' => $nav['Changelog'],
         ],
         'Source' => [
