@@ -67,6 +67,16 @@
     "overlay": {
       "$value": "{ref.color.black-alpha.70}"
     },
+    "info": {
+      "$value": "{ref.color.brand.400}",
+      "$description": "A quiet blue for neutral information, such as an info callout. It stays blue when a project changes its accent."
+    },
+    "info-surface": {
+      "$value": "{ref.color.brand.950}"
+    },
+    "info-text": {
+      "$value": "{ref.color.brand.200}"
+    },
     "success": {
       "$value": "{ref.color.green.400}"
     },

@@ -92,6 +92,7 @@ describe('tiers', () => {
       'border',
       'divider',
       'accent',
+      'info',
       'success',
       'warning',
       'danger',
@@ -205,9 +206,14 @@ describe('contrast', () => {
     ['on-danger', 'danger-solid'],
     ['on-danger', 'danger-solid-hover'],
     ['on-danger', 'danger-solid-active'],
+    ['info-text', 'info-surface'],
+    ['text', 'info-surface'],
     ['success-text', 'success-surface'],
+    ['text', 'success-surface'],
     ['warning-text', 'warning-surface'],
+    ['text', 'warning-surface'],
     ['danger-text', 'danger-surface'],
+    ['text', 'danger-surface'],
     ['danger-text', 'surface'],
     ['danger-text', 'surface-raised'],
   ] as const;
@@ -222,12 +228,17 @@ describe('contrast', () => {
     });
 
     // WCAG 1.4.11: the focus indicator needs 3:1 against what it sits on.
-    it.each(['surface', 'surface-raised', 'surface-sunken'])(
-      'the focus ring stands out on %s (3:1)',
-      (bg) => {
-        expect(contrast(value('focus-ring'), value(bg))).toBeGreaterThanOrEqual(3);
-      },
-    );
+    it.each([
+      'surface',
+      'surface-raised',
+      'surface-sunken',
+      'info-surface',
+      'success-surface',
+      'warning-surface',
+      'danger-surface',
+    ])('the focus ring stands out on %s (3:1)', (bg) => {
+      expect(contrast(value('focus-ring'), value(bg))).toBeGreaterThanOrEqual(3);
+    });
   });
 });
 

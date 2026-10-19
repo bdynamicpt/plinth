@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import * as vueCallout from '../../vue/src/callout.ts';
 import * as vueButton from '../../vue/src/button.ts';
 import * as vueIcon from '../../vue/src/icon.ts';
 import * as vueSize from '../../vue/src/size.ts';
@@ -7,6 +8,11 @@ import { buttonVariant } from '../src/button.ts';
 import { classNames, hasContent } from '../src/markup.ts';
 import {
   buttonVariants,
+  calloutIcons,
+  calloutRole,
+  calloutRoles,
+  calloutTone,
+  calloutTones,
   controlSizes,
   iconSizeFor,
   iconSizes,
@@ -22,12 +28,19 @@ describe('the shared lists', () => {
     expect(sizes).toEqual(vueSize.sizes);
     expect(controlSizes).toEqual(vueSize.controlSizes);
     expect(iconSizes).toEqual(vueIcon.iconSizes);
+    expect(calloutTones).toEqual(vueCallout.calloutTones);
+    expect(calloutRoles).toEqual(vueCallout.calloutRoles);
+    expect(calloutIcons).toEqual(vueCallout.calloutIcons);
   });
 
   it('fall back the way the Vue layer does', () => {
     expect(buttonVariant('loud')).toBe('primary');
     expect(buttonVariant('danger-ghost')).toBe('danger-ghost');
     expect(resolveSize('xl', controlSizes, 'md')).toBe('md');
+    expect(calloutTone('loud')).toBe('neutral');
+    expect(calloutTone('info')).toBe('info');
+    expect(calloutRole('log')).toBe('note');
+    expect(calloutRole('alert')).toBe('alert');
     expect(sizes.map(iconSizeFor)).toEqual(['sm', 'sm', 'md', 'md', 'md']);
   });
 });
