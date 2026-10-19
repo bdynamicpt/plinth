@@ -24,15 +24,16 @@ const props = withDefaults(
 const slots = useSlots();
 const dataTone = computed(() => calloutTone(props.tone));
 const dataRole = computed(() => calloutRole(props.role));
-const hasTitle = computed(() => Boolean(props.title?.trim()) || hasContent(slots.title?.()));
-const hasText = computed(() => hasContent(slots.default?.()));
-const hasActions = computed(() => hasContent(slots.actions?.()));
-const hasIcon = computed(() => hasContent(slots.icon?.()));
+// Slots are read while rendering, not in computed(), so a slot the parent adds later shows.
 </script>
 
 <template>
   <div class="plinth-callout" :data-tone="dataTone" :role="dataRole">
-    <span v-if="hasIcon" class="plinth-icon plinth-callout-icon" data-size="md" aria-hidden="true"
+    <span
+      v-if="hasContent(slots.icon?.())"
+      class="plinth-icon plinth-callout-icon"
+      data-size="md"
+      aria-hidden="true"
       ><slot name="icon"
     /></span>
     <span
@@ -43,11 +44,13 @@ const hasIcon = computed(() => hasContent(slots.icon?.()));
       v-html="calloutIcons[dataTone]"
     ></span>
     <div class="plinth-callout-body">
-      <p v-if="hasTitle" class="plinth-callout-title">
+      <p v-if="title?.trim() || hasContent(slots.title?.())" class="plinth-callout-title">
         <slot name="title">{{ title }}</slot>
       </p>
-      <div v-if="hasText" class="plinth-callout-text"><slot /></div>
-      <div v-if="hasActions" class="plinth-callout-actions"><slot name="actions" /></div>
+      <div v-if="hasContent(slots.default?.())" class="plinth-callout-text"><slot /></div>
+      <div v-if="hasContent(slots.actions?.())" class="plinth-callout-actions">
+        <slot name="actions" />
+      </div>
     </div>
   </div>
 </template>

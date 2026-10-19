@@ -81,7 +81,8 @@ icon shape, so the tone shows without colour too.
 ## Title, text and actions
 
 The title is optional: a short callout reads better as one sentence. The text may hold links and
-inline code; links take the text's colour, underlined, so they read on every tone. Actions are
+inline code (in the mono face); links take the text's colour, underlined, so they read on every
+tone. Actions are
 small buttons or links; keep them to one or two.
 
 <Canvas of={CalloutStories.WithoutTitle} />
@@ -104,9 +105,11 @@ specific picture helps; draw it with `currentColor` so it takes the tone's colou
   is around it and never announced on its own.
 - **`role="status"`** is for a message the app adds after something happens (_Invoice sent_):
   screen readers announce it when they are idle. **`role="alert"`** is for an urgent one (_The
-  export failed_): it is announced at once, interrupting. Use it sparingly. Both are announced
-  only when the callout is added to the page after it loads; one that is there from the start is
-  read like any other content.
+  export failed_): it is announced at once, interrupting. Use it sparingly. One that is there
+  when the page loads is read like any other content.
+- **A live region inserted with its content is often not announced,** a `status` especially. For
+  a reliable announcement, keep an empty container with `role="status"` (or `role="alert"`) in
+  the page from the start, and put the callout in it when the event happens.
 - **Don't move focus** to a callout. If it has actions, they come next in the tab order, where it
   sits in the page.
 - **The text meets WCAG AA** on every tone, in light and dark. The callout keeps its hairline

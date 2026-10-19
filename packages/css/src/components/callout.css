@@ -17,8 +17,11 @@
  * the text still says what kind of note it is, so the tone is never the only signal.
  *
  * role: note (default) for a note that is part of the page; status for a message the app adds
- * after something happens (announced politely); alert for an urgent one (announced at once). The
- * app adds a status or alert callout when the event happens, so it is announced.
+ * after something happens (announced politely); alert for an urgent one (announced at once). A
+ * live region inserted with its content is often not announced, so for a status the app keeps an
+ * empty container with role="status" in the page and puts the callout in it.
+ *
+ * The text may hold paragraphs, links (underlined, in the text's colour) and inline code.
  *
  * The icon is decorative (aria-hidden). The tone's icon comes with the component; a project puts
  * its own SVG in its place. Title, text and actions are each printed only when they have content.
@@ -95,7 +98,14 @@
   .plinth-callout-text a {
     color: inherit;
     text-decoration-line: underline;
+    text-decoration-color: var(--plinth-color-text-muted);
     text-underline-offset: 0.2em;
+  }
+
+  @media (hover: hover) {
+    .plinth-callout-text a:hover {
+      text-decoration-color: currentcolor;
+    }
   }
 
   .plinth-callout-text a:focus-visible {
@@ -104,11 +114,23 @@
     border-radius: var(--plinth-radius-control);
   }
 
+  .plinth-callout-text code {
+    font-family: var(--plinth-font-family-mono);
+    font-size: var(--plinth-font-size-sm);
+  }
+
   .plinth-callout-actions {
     display: flex;
     flex-wrap: wrap;
     gap: var(--plinth-space-2);
     align-items: center;
     margin-block-start: var(--plinth-space-2);
+  }
+
+  /* Small buttons grow a 40px hit area on a touch screen; wrapped rows keep theirs apart. */
+  @media (pointer: coarse) {
+    .plinth-callout-actions {
+      row-gap: var(--plinth-space-3);
+    }
   }
 }

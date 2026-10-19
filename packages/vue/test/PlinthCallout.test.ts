@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
-import { h } from 'vue';
+import { h, nextTick, ref } from 'vue';
 import { PlinthCallout, calloutIcons, calloutRoles, calloutTones } from '../src/index.ts';
 
 const icon = (tone: keyof typeof calloutIcons) =>
@@ -66,6 +66,23 @@ describe('PlinthCallout', () => {
     });
 
     expect(callout.get('.plinth-callout-body').element.children).toHaveLength(0);
+  });
+
+  it('shows a slot the parent adds later', async () => {
+    const canRetry = ref(false);
+    const callout = mount({
+      components: { PlinthCallout },
+      setup: () => ({ canRetry }),
+      template: `<PlinthCallout tone="danger" title="The export failed">
+        Try again later.
+        <template v-if="canRetry" #actions><button type="button">Try again</button></template>
+      </PlinthCallout>`,
+    });
+
+    expect(callout.find('.plinth-callout-actions').exists()).toBe(false);
+    canRetry.value = true;
+    await nextTick();
+    expect(callout.get('.plinth-callout-actions').text()).toBe('Try again');
   });
 
   it('takes the title as a slot with markup', () => {

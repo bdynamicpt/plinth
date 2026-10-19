@@ -28,7 +28,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A note inside a page: a tone with its icon, an optional title, the text and optional actions. Use it for what the reader should know before going on, not for a message that comes and goes. The title or the text says what kind of note it is; the tone and the icon only reinforce it. It is a `note` by default; when the app adds one after something happens, make it a `status`, or an `alert` when it is urgent, so it is announced.',
+          'A note inside a page: a tone with its icon, an optional title, the text and optional actions. Use it for what the reader should know before going on, not for a message that comes and goes. The title or the text says what kind of note it is; the tone and the icon only reinforce it. It is a `note` by default; when the app adds one after something happens, make it a `status`, or an `alert` when it is urgent. For a reliable announcement, keep an empty container with that role in the page and put the callout in it when the event happens.',
       },
     },
   },
