@@ -236,6 +236,9 @@
     --plinth-color-on-accent: var(--plinth-ref-color-neutral-0);
     --plinth-color-focus-ring: var(--plinth-ref-color-brand-600);
     --plinth-color-overlay: var(--plinth-ref-color-black-alpha-50);
+    --plinth-color-info: var(--plinth-ref-color-brand-600);
+    --plinth-color-info-surface: var(--plinth-ref-color-brand-100);
+    --plinth-color-info-text: var(--plinth-ref-color-brand-800);
     --plinth-color-success: var(--plinth-ref-color-green-600);
     --plinth-color-success-surface: var(--plinth-ref-color-green-100);
     --plinth-color-success-text: var(--plinth-ref-color-green-800);
@@ -280,6 +283,9 @@
     --plinth-color-on-accent: var(--plinth-ref-color-neutral-0);
     --plinth-color-focus-ring: var(--plinth-ref-color-brand-300);
     --plinth-color-overlay: var(--plinth-ref-color-black-alpha-70);
+    --plinth-color-info: var(--plinth-ref-color-brand-400);
+    --plinth-color-info-surface: var(--plinth-ref-color-brand-950);
+    --plinth-color-info-text: var(--plinth-ref-color-brand-200);
     --plinth-color-success: var(--plinth-ref-color-green-400);
     --plinth-color-success-surface: var(--plinth-ref-color-green-950);
     --plinth-color-success-text: var(--plinth-ref-color-green-200);
@@ -324,6 +330,9 @@
       --plinth-color-on-accent: var(--plinth-ref-color-neutral-0);
       --plinth-color-focus-ring: var(--plinth-ref-color-brand-300);
       --plinth-color-overlay: var(--plinth-ref-color-black-alpha-70);
+      --plinth-color-info: var(--plinth-ref-color-brand-400);
+      --plinth-color-info-surface: var(--plinth-ref-color-brand-950);
+      --plinth-color-info-text: var(--plinth-ref-color-brand-200);
       --plinth-color-success: var(--plinth-ref-color-green-400);
       --plinth-color-success-surface: var(--plinth-ref-color-green-950);
       --plinth-color-success-text: var(--plinth-ref-color-green-200);
@@ -799,6 +808,122 @@
     .plinth-button-spinner {
       forced-color-adjust: none;
     }
+  }
+}
+
+/* callout.css */
+/*
+ * Callout: a note inside a page, with a tone, an icon, an optional title and actions.
+ *
+ * <div class="plinth-callout" data-tone="warning" role="note">
+ *   <span class="plinth-icon plinth-callout-icon" data-size="md" aria-hidden="true">
+ *     <svg viewBox="0 0 24 24">…</svg>
+ *   </span>
+ *   <div class="plinth-callout-body">
+ *     <p class="plinth-callout-title">Invoices are sent at 9:00</p>
+ *     <div class="plinth-callout-text">Drafts saved after that go out the next morning.</div>
+ *     <div class="plinth-callout-actions">…buttons or links…</div>
+ *   </div>
+ * </div>
+ *
+ * Tones (data-tone): neutral (default, also when the attribute is missing), info, success,
+ * warning, danger. Each tints the surface and the icon, and has its own icon shape; the title or
+ * the text still says what kind of note it is, so the tone is never the only signal.
+ *
+ * role: note (default) for a note that is part of the page; status for a message the app adds
+ * after something happens (announced politely); alert for an urgent one (announced at once). The
+ * app adds a status or alert callout when the event happens, so it is announced.
+ *
+ * The icon is decorative (aria-hidden). The tone's icon comes with the component; a project puts
+ * its own SVG in its place. Title, text and actions are each printed only when they have content.
+ */
+
+@layer plinth {
+  .plinth-callout {
+    --plinth-callout-surface: var(--plinth-color-surface-sunken);
+    --plinth-callout-icon-color: var(--plinth-color-text-muted);
+
+    display: flex;
+    gap: var(--plinth-space-3);
+    align-items: flex-start;
+    min-inline-size: 0;
+    padding-block: var(--plinth-space-3);
+    padding-inline: var(--plinth-space-4);
+    font-family: var(--plinth-font-family-body);
+    font-size: var(--plinth-font-size-md);
+    line-height: var(--plinth-font-leading-normal);
+    color: var(--plinth-color-text);
+    overflow-wrap: anywhere;
+    background-color: var(--plinth-callout-surface);
+    border: 1px solid var(--plinth-color-border);
+    border-radius: var(--plinth-radius-container);
+  }
+
+  .plinth-callout[data-tone='info'] {
+    --plinth-callout-surface: var(--plinth-color-info-surface);
+    --plinth-callout-icon-color: var(--plinth-color-info-text);
+  }
+
+  .plinth-callout[data-tone='success'] {
+    --plinth-callout-surface: var(--plinth-color-success-surface);
+    --plinth-callout-icon-color: var(--plinth-color-success-text);
+  }
+
+  .plinth-callout[data-tone='warning'] {
+    --plinth-callout-surface: var(--plinth-color-warning-surface);
+    --plinth-callout-icon-color: var(--plinth-color-warning-text);
+  }
+
+  .plinth-callout[data-tone='danger'] {
+    --plinth-callout-surface: var(--plinth-color-danger-surface);
+    --plinth-callout-icon-color: var(--plinth-color-danger-text);
+  }
+
+  /* Centred on the first line of text, however tall the line is. */
+  .plinth-callout-icon {
+    margin-block: calc((1lh - var(--plinth-size-icon-md)) / 2);
+    color: var(--plinth-callout-icon-color);
+  }
+
+  .plinth-callout-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--plinth-space-1);
+    min-inline-size: 0;
+  }
+
+  .plinth-callout-title {
+    margin: 0;
+    font-weight: var(--plinth-font-weight-semibold);
+  }
+
+  .plinth-callout-text > * {
+    margin-block: 0;
+  }
+
+  .plinth-callout-text > * + * {
+    margin-block-start: var(--plinth-space-2);
+  }
+
+  .plinth-callout-text a {
+    color: inherit;
+    text-decoration-line: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .plinth-callout-text a:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset);
+    border-radius: var(--plinth-radius-control);
+  }
+
+  .plinth-callout-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--plinth-space-2);
+    align-items: center;
+    margin-block-start: var(--plinth-space-2);
   }
 }
 

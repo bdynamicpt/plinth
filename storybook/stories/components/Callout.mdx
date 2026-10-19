@@ -1,0 +1,164 @@
+import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
+import { AtEveryWidth } from '../../blocks/AtEveryWidth.tsx';
+import * as CalloutStories from './Callout.stories';
+
+<Meta of={CalloutStories} />
+
+# Callout
+
+A note inside a page: something the reader should know before going on. A docs page uses it for
+a tip or a warning next to the text it is about; an app uses it for a trial that is ending, a
+setting that affects others, or the result of something the person just did. It stays in the
+page's flow, so it is not a toast and not a dialog.
+
+<Canvas of={CalloutStories.Warning} />
+<Controls of={CalloutStories.Warning} />
+
+<AtEveryWidth of={CalloutStories.Warning} />
+
+## Markup contract
+
+Blade, Vue and React print exactly this markup, and the parity tests hold them to it. The CSS in
+`packages/css/src/components/callout.css` styles it.
+
+<Source
+  language="html"
+  dark
+  code={`<div class="plinth-callout" data-tone="warning" role="note">
+  <span class="plinth-icon plinth-callout-icon" data-size="md" aria-hidden="true">
+    <svg viewBox="0 0 24 24">…</svg>
+  </span>
+  <div class="plinth-callout-body">
+    <p class="plinth-callout-title">Your trial ends in 3 days</p>
+    <div class="plinth-callout-text">Add a payment method to keep your projects.</div>
+    <div class="plinth-callout-actions">
+      <button type="button" class="plinth-button" data-variant="secondary" data-size="sm">…</button>
+    </div>
+  </div>
+</div>`}
+/>
+
+| Part                      | Element  | Required | What it is                                                                     |
+| ------------------------- | -------- | -------- | ------------------------------------------------------------------------------ |
+| `.plinth-callout`         | `<div>`  | yes      | The root. Takes `data-tone`, `role` and any attribute the app forwards         |
+| `.plinth-callout-icon`    | `<span>` | yes      | A Plinth icon: the tone's own shape, or the project's SVG in its place         |
+| `.plinth-callout-body`    | `<div>`  | yes      | Holds the title, the text and the actions, one under the other                 |
+| `.plinth-callout-title`   | `<p>`    | no       | A short title in semibold, printed only when there is one                      |
+| `.plinth-callout-text`    | `<div>`  | no       | The text. It may hold paragraphs, links and code; links take the text's colour |
+| `.plinth-callout-actions` | `<div>`  | no       | Buttons or links, in a row that wraps                                          |
+
+| Attribute     | On                     | Values                                              | Default   |
+| ------------- | ---------------------- | --------------------------------------------------- | --------- |
+| `data-tone`   | `.plinth-callout`      | `neutral`, `info`, `success`, `warning`, `danger`   | `neutral` |
+| `role`        | `.plinth-callout`      | `note`, `status`, `alert`                           | `note`    |
+| `aria-hidden` | `.plinth-callout-icon` | always `true`: the icon only repeats what text says | —         |
+
+The callout has no states of its own: it doesn't open, close or select. A missing or unknown
+`data-tone` looks neutral, and Blade, Vue and React print `neutral` for a tone and `note` for a
+role they don't know. To let the reader dismiss it, the app puts a button in the actions and
+removes the callout itself.
+
+## Tones
+
+The tone says what kind of note it is. Pick it by meaning, not by colour. Each tone has its own
+icon shape, so the tone shows without colour too.
+
+| Tone        | Use it for                                       | Examples                                    |
+| ----------- | ------------------------------------------------ | ------------------------------------------- |
+| **neutral** | A remark or a tip, neither good nor bad          | _Drafts are private_                        |
+| **info**    | Something worth knowing about how things work    | _Invoices are sent at 9:00_                 |
+| **success** | Something worked                                 | _Invoice sent_                              |
+| **warning** | Needs attention soon, but nothing has gone wrong | _Your trial ends in 3 days_                 |
+| **danger**  | Something went wrong, or can't be undone         | _The export failed_, _Deleting is for good_ |
+
+<Canvas of={CalloutStories.Neutral} />
+<Canvas of={CalloutStories.Info} />
+<Canvas of={CalloutStories.Success} />
+<Canvas of={CalloutStories.Warning} />
+<Canvas of={CalloutStories.Danger} />
+<Canvas of={CalloutStories.AllTones} />
+
+## Title, text and actions
+
+The title is optional: a short callout reads better as one sentence. The text may hold links and
+inline code; links take the text's colour, underlined, so they read on every tone. Actions are
+small buttons or links; keep them to one or two.
+
+<Canvas of={CalloutStories.WithoutTitle} />
+<Canvas of={CalloutStories.WithLink} />
+<Canvas of={CalloutStories.LongText} />
+
+## Your own icon
+
+The tone's icon comes with the component. Put your project's SVG in its place when a more
+specific picture helps; draw it with `currentColor` so it takes the tone's colour.
+
+<Canvas of={CalloutStories.CustomIcon} />
+
+## Accessibility
+
+- **The words carry the meaning.** The tone and the icon only reinforce it, so the title or the
+  text says what kind of note it is (_The export failed_, not just a red box). The icon is hidden
+  from screen readers (`aria-hidden="true"`).
+- **`role="note"`** (the default) marks content that is part of the page, read in order with what
+  is around it and never announced on its own.
+- **`role="status"`** is for a message the app adds after something happens (_Invoice sent_):
+  screen readers announce it when they are idle. **`role="alert"`** is for an urgent one (_The
+  export failed_): it is announced at once, interrupting. Use it sparingly. Both are announced
+  only when the callout is added to the page after it loads; one that is there from the start is
+  read like any other content.
+- **Don't move focus** to a callout. If it has actions, they come next in the tab order, where it
+  sits in the page.
+- **The text meets WCAG AA** on every tone, in light and dark. The callout keeps its hairline
+  edge in forced-colours mode, and the icon takes the system's text colour.
+- Links in the text show the focus ring; buttons in the actions keep a 40 × 40 px touch target on
+  a touch screen.
+
+## In Blade, Vue and React
+
+| Prop    | Blade                                                      | Vue                              | React              | Default    |
+| ------- | ---------------------------------------------------------- | -------------------------------- | ------------------ | ---------- |
+| tone    | `tone="warning"` or `:tone="$tone"` (a `CalloutTone` case) | `tone="warning"`                 | `tone="warning"`   | `neutral`  |
+| role    | `role="status"` or `:role="$role"` (a `CalloutRole` case)  | `role="status"`                  | `role="status"`    | `note`     |
+| title   | `title="…"`, or `<x-slot:title>` for markup                | `title="…"`, or the `title` slot | `title` (a node)   | none       |
+| text    | the slot                                                   | the default slot                 | `children`         | —          |
+| actions | `<x-slot:actions>`                                         | the `actions` slot               | `actions` (a node) | none       |
+| icon    | `<x-slot:icon>` with your SVG                              | the `icon` slot                  | `icon` (a node)    | the tone's |
+
+<Source
+  language="html"
+  dark
+  code={`<x-plinth::callout tone="warning" title="Your trial ends in 3 days">
+    Add a payment method to keep your projects.
+    <x-slot:actions>
+        <x-plinth::button variant="secondary" size="sm" :href="route('billing')">Add payment method</x-plinth::button>
+    </x-slot:actions>
+</x-plinth::callout>
+
+<PlinthCallout tone="success" role="status" title="Invoice sent">
+  Acme Studio will get INV-1042 by email.
+</PlinthCallout>`}
+/>
+
+<Source
+  language="tsx"
+  dark
+  code={`import { PlinthButton, PlinthCallout } from '@bdynamic/plinth/react';
+
+<PlinthCallout
+  tone="danger"
+  role="alert"
+  title="The export failed"
+  actions={<PlinthButton variant="secondary" size="sm" onClick={retry}>Try again</PlinthButton>}
+>
+  Your projects are safe; try again in a few minutes.
+</PlinthCallout>`}
+/>
+
+Extra attributes reach the root `<div>`: in Blade through `$attributes` (`class`, `id`, `data-*`,
+`aria-*`, and Livewire's and Alpine's `wire:key`, `x-show`), in Vue by falling through (`class`,
+`id`, `data-*`, `aria-*`), and in React as props (`className`, added to Plinth's class, `id`,
+`data-*`, `aria-*` and `ref`). In Blade the tone and role are values or cases of
+`\BDynamic\Plinth\Enums\CalloutTone` and `CalloutRole`; in Vue and React they are a `CalloutTone`
+and a `CalloutRole`, and the lists are exported as `calloutTones` and `calloutRoles`. Vue emits
+no events and React has no callbacks: the callout does nothing by itself.

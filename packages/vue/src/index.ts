@@ -2,6 +2,7 @@ import type { App, Plugin } from 'vue';
 import PlinthAvatar from './PlinthAvatar.vue';
 import PlinthBadge from './PlinthBadge.vue';
 import PlinthButton from './PlinthButton.vue';
+import PlinthCallout from './PlinthCallout.vue';
 import PlinthCodeBlock from './PlinthCodeBlock.vue';
 import PlinthDataTable from './PlinthDataTable.vue';
 import PlinthDataTableCell from './PlinthDataTableCell.vue';
@@ -25,6 +26,7 @@ export {
   PlinthAvatar,
   PlinthBadge,
   PlinthButton,
+  PlinthCallout,
   PlinthCodeBlock,
   PlinthDataTable,
   PlinthDataTableCell,
@@ -46,6 +48,15 @@ export {
 };
 export { avatarGlyph, avatarSizes, initialsFrom, type AvatarSize } from './avatar';
 export { buttonVariants, type ButtonVariant } from './button';
+export {
+  calloutIcons,
+  calloutRole,
+  calloutRoles,
+  calloutTone,
+  calloutTones,
+  type CalloutRole,
+  type CalloutTone,
+} from './callout';
 export { type CodeBlockTab } from './code-block';
 export {
   dataTableCellKind,
@@ -69,6 +80,7 @@ export const Plinth: Plugin = {
     app.component('PlinthAvatar', PlinthAvatar);
     app.component('PlinthBadge', PlinthBadge);
     app.component('PlinthButton', PlinthButton);
+    app.component('PlinthCallout', PlinthCallout);
     app.component('PlinthCodeBlock', PlinthCodeBlock);
     app.component('PlinthDataTable', PlinthDataTable);
     app.component('PlinthDataTableCell', PlinthDataTableCell);

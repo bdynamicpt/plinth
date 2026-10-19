@@ -2,6 +2,7 @@ import {
   PlinthAvatar,
   PlinthBadge,
   PlinthButton,
+  PlinthCallout,
   PlinthCodeBlock,
   PlinthDataTable,
   PlinthDataTableCell,
@@ -24,6 +25,7 @@ import {
 import {
   PlinthBadge as ReactBadge,
   PlinthButton as ReactButton,
+  PlinthCallout as ReactCallout,
   PlinthCodeBlock as ReactCodeBlock,
   PlinthIcon as ReactIcon,
   PlinthIconButton as ReactIconButton,
@@ -39,6 +41,13 @@ import * as badgeStories from '../stories/components/Badge.stories.ts';
 import { badge, type Attributes, type BadgeArgs } from '../stories/components/badge.ts';
 import * as buttonStories from '../stories/components/Button.stories.ts';
 import { button, type ButtonArgs } from '../stories/components/button.ts';
+import * as calloutStories from '../stories/components/Callout.stories.ts';
+import {
+  callout,
+  calloutRoles,
+  calloutTones,
+  type CalloutArgs,
+} from '../stories/components/callout.ts';
 import * as codeBlockStories from '../stories/components/CodeBlock.stories.ts';
 import { codeBlock, type CodeBlockArgs } from '../stories/components/code-block.ts';
 import { escape } from '../stories/components/markup.ts';
@@ -123,6 +132,7 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthButton, ReactButton],
   [PlinthIconButton, ReactIconButton],
   [PlinthCodeBlock, ReactCodeBlock],
+  [PlinthCallout, ReactCallout],
 ]);
 
 /**
@@ -210,6 +220,13 @@ const codeBlockDefaults: CodeBlockArgs = {
   copy: true,
   copyLabel: 'Copy',
   copiedLabel: 'Copied',
+};
+
+const calloutDefaults: CalloutArgs = {
+  tone: 'info',
+  role: 'note',
+  title: 'Invoices are sent at 9:00',
+  text: 'Invoices you approve after that go out the next morning.',
 };
 
 const cases: ParityCase[] = [
@@ -577,6 +594,27 @@ const cases: ParityCase[] = [
     ],
     selected: 'Svelte',
     tabsLabel: 'Framework',
+  }),
+  ...storyArgs<CalloutArgs>(calloutStories).map(([story, args]) =>
+    calloutCase(`Callout/${story}`, args),
+  ),
+  calloutCase('Callout/with extra attributes', calloutDefaults, {
+    class: 'mb-4',
+    id: 'sending-time',
+    'data-testid': 'sending-time',
+    'aria-labelledby': 'sending-time-title',
+  }),
+  calloutCase('Callout/unknown tone and role', {
+    ...calloutDefaults,
+    tone: 'loud' as CalloutArgs['tone'],
+    role: 'log' as CalloutArgs['role'],
+  }),
+  calloutCase('Callout/blank title and text', { ...calloutDefaults, title: '  ', text: ' ' }),
+  calloutCase('Callout/title only', { ...calloutDefaults, text: '' }),
+  calloutCase('Callout/escaped text', {
+    ...calloutDefaults,
+    title: 'Fish & <chips>',
+    text: '"Quotes" & <tags>',
   }),
 ];
 
@@ -989,6 +1027,37 @@ function codeBlockCase(
   };
 }
 
+function calloutCase(story: string, args: CalloutArgs, attributes: Attributes = {}): ParityCase {
+  // The story prints unknown values as they are; the layers print the defaults.
+  const markup = callout(
+    {
+      ...args,
+      tone: calloutTones.includes(args.tone) ? args.tone : 'neutral',
+      role: calloutRoles.includes(args.role) ? args.role : 'note',
+    },
+    attributes,
+  );
+  const props = { tone: args.tone, role: args.role, ...(args.title ? { title: args.title } : {}) };
+  const named = {
+    ...(args.actions ? { actions: args.actions } : {}),
+    ...(args.icon ? { icon: args.icon } : {}),
+  };
+  const html = args.textHtml !== undefined;
+  const slot = args.textHtml ?? args.text;
+  return {
+    story,
+    markup,
+    vue: { component: PlinthCallout, props: { ...props, ...attributes }, slot, html, named },
+    blade: {
+      component: 'callout',
+      props,
+      attributes,
+      slot: html ? slot : escape(slot),
+      named,
+    },
+  };
+}
+
 function badgeWithAttributes(): ParityCase {
   const args: BadgeArgs = { label: 'Paid', tone: 'success', dot: true };
   const attributes: Attributes = {
@@ -1225,6 +1294,20 @@ describe('parity with the stories', () => {
       'Code block/blank label and id',
       'Code block/highlighted tab and seven tabs',
       'Code block/unknown selected tab',
+      'Callout/Neutral',
+      'Callout/Info',
+      'Callout/Success',
+      'Callout/Warning',
+      'Callout/Danger',
+      'Callout/WithoutTitle',
+      'Callout/WithLink',
+      'Callout/CustomIcon',
+      'Callout/LongText',
+      'Callout/with extra attributes',
+      'Callout/unknown tone and role',
+      'Callout/blank title and text',
+      'Callout/title only',
+      'Callout/escaped text',
     ]);
   });
 
@@ -1257,11 +1340,18 @@ describe('parity with the stories', () => {
 });
 
 describe('the React side', () => {
-  it('covers badge, icon, button, icon button and code block', () => {
+  it('covers badge, icon, button, icon button, code block and callout', () => {
     const covered = new Set(
       cases.filter((c) => reactComponents.has(c.vue.component)).map((c) => c.story.split('/')[0]),
     );
-    expect([...covered]).toEqual(['Badge', 'Icon', 'Button', 'Icon button', 'Code block']);
+    expect([...covered]).toEqual([
+      'Badge',
+      'Icon',
+      'Button',
+      'Icon button',
+      'Code block',
+      'Callout',
+    ]);
   });
 
   it('turns markup into the elements React prints back', () => {
