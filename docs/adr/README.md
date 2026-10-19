@@ -10,6 +10,7 @@ from it. They are numbered in the order they were made and never renumbered.
 | [3](0003-visual-direction.md)                                  | Visual direction: a dense, quiet look, dark first                       |
 | [4](0004-one-version-released-with-changesets.md)              | One version for npm and Packagist, released with Changesets             |
 | [5](0005-dialogs-sheets-and-drawers.md)                        | Dialogs, sheets and drawers: one base, named by what they are for       |
+| [6](0006-a-react-layer.md)                                     | A React layer, the third thin layer over the markup contract            |
 
 ## Writing one
 
