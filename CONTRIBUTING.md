@@ -93,6 +93,10 @@ attributes that the story does not have.
 
 ## Before you open a pull request
 
+If the change reaches what Plinth ships (tokens, CSS, Vue, Blade), add a changeset with
+`npx changeset`: a patch for a fix, a minor for something new, a major for a breaking change,
+and one line for the changelog. See `.changeset/README.md`.
+
 ```bash
 npm run format
 npx turbo run lint test build build-storybook

@@ -61,6 +61,10 @@ storybook/  never published
 - Published as npm `@bdynamic/plinth` (subpaths `tokens`, `tokens.css`, `css`, `vue`, `tailwind.css`)
   and Packagist `bdynamicpt/plinth` (Blade, Filament plugin, built CSS so Laravel needs no Node
   build). One version, one tag. Storybook, tests, token sources and tooling are not published.
+- Versions come from Changesets (docs/adr/0004): the four workspaces are one `fixed` group, and
+  `npm run release:version` copies the version to the root `package.json` and `CHANGELOG.md`. A
+  pull request that changes a package adds a changeset (`npx changeset`); docs, tests, Storybook
+  and tooling don't.
 
 ## Component rules
 

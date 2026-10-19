@@ -168,6 +168,19 @@ it with **Brand** in the toolbar.
 Dark mode follows the system, or `data-theme="dark"` / the `.dark` class on any ancestor;
 `data-theme="light"` forces light.
 
+## Releases
+
+Plinth has one version for npm and Packagist, and one tag, `v<version>`
+([ADR 4](docs/adr/0004-one-version-released-with-changesets.md)). What changed is in
+`CHANGELOG.md` (from the first release on), written by [Changesets](https://github.com/changesets/changesets):
+
+```bash
+npx changeset                    # in a pull request that changes a package: the bump and a line for the changelog
+npm run release:version          # on a branch: the next version, in every package and the changelog
+npm run release -- --dry-run     # what npm and Packagist would get, without tagging or publishing
+npm run release                  # on main, after the version pull request merges: tag and publish
+```
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the rules every component follows.
