@@ -1,0 +1,468 @@
+/*
+ * The docs: the layout (sidebar, page, table of contents), the Markdown's text, highlighted code
+ * and the token tables. A phone or a tablet gets the page alone, with the sidebar in a menu sheet;
+ * the sidebar and the table of contents join it from 1280px.
+ */
+
+@layer site {
+    .site-docs {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--plinth-space-8);
+    }
+
+    .site-docs-side,
+    .site-docs-toc {
+        display: none;
+    }
+
+    /* The sidebar: the pages by section. */
+    .site-docs-nav {
+        position: sticky;
+        inset-block-start: var(--plinth-space-16);
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-6);
+        max-block-size: calc(100dvh - var(--plinth-space-16));
+        padding-block: var(--plinth-space-8);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+
+    .site-docs-nav-section {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-0-5);
+    }
+
+    .site-docs-nav-heading,
+    .site-docs-toc-heading {
+        padding-inline: var(--plinth-space-3);
+        margin: 0 0 var(--plinth-space-1);
+        font-family: var(--plinth-font-family-mono);
+        font-size: var(--plinth-font-size-xs);
+        font-weight: var(--plinth-font-weight-regular);
+        color: var(--plinth-color-text-subtle);
+        text-transform: uppercase;
+    }
+
+    .site-docs-nav-list,
+    .site-docs-toc-list,
+    .site-docs-breadcrumb-list {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    .site-docs-nav-list,
+    .site-docs-toc-list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-0-5);
+    }
+
+    .site-docs-nav-link,
+    .site-docs-toc-link {
+        position: relative;
+        display: flex;
+        align-items: center;
+        min-block-size: var(--plinth-control-md);
+        padding-inline: var(--plinth-space-3);
+        font-size: var(--plinth-font-size-md);
+        color: var(--plinth-color-text-muted);
+        text-decoration: none;
+        border-radius: var(--plinth-radius-control);
+    }
+
+    .site-docs-nav-link[aria-current='page'] {
+        color: var(--plinth-color-text);
+        background: var(--plinth-color-surface-raised);
+        box-shadow: inset 0 0 0 var(--plinth-border-width-thin) var(--plinth-color-border);
+    }
+
+    /* The table of contents: this page's sections. */
+    .site-docs-toc-nav {
+        position: sticky;
+        inset-block-start: var(--plinth-space-16);
+        display: flex;
+        flex-direction: column;
+        padding-block: var(--plinth-space-10);
+    }
+
+    .site-docs-toc-heading {
+        padding-inline: 0;
+    }
+
+    .site-docs-toc-link {
+        min-block-size: var(--plinth-control-sm);
+        padding-inline: 0;
+        font-size: var(--plinth-font-size-sm);
+        color: var(--plinth-color-text-subtle);
+    }
+
+    /* The page. */
+    .site-docs-article {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-6);
+        min-inline-size: 0;
+        max-inline-size: 45rem;
+        padding-block: var(--plinth-space-4) var(--plinth-space-16);
+    }
+
+    .site-docs-top {
+        display: flex;
+        gap: var(--plinth-space-3);
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .site-docs-breadcrumb-list {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        font-size: var(--plinth-font-size-sm);
+        color: var(--plinth-color-text-subtle);
+    }
+
+    .site-docs-breadcrumb-item::before {
+        padding-inline: var(--plinth-space-2);
+        content: '/';
+    }
+
+    .site-docs-breadcrumb-link {
+        display: inline-flex;
+        align-items: center;
+        min-block-size: var(--plinth-touch-target);
+        color: var(--plinth-color-text-muted);
+        text-decoration: none;
+    }
+
+    .site-docs-header {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-3);
+    }
+
+    .site-docs-title {
+        margin: 0;
+        font-size: var(--plinth-font-size-3xl);
+        font-weight: var(--plinth-font-weight-semibold);
+        line-height: var(--plinth-font-leading-tight);
+        letter-spacing: var(--plinth-font-tracking-tighter);
+        text-wrap: balance;
+    }
+
+    .site-docs-pager {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--plinth-space-3);
+        margin-block-start: var(--plinth-space-8);
+    }
+
+    .site-docs-pager-link {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-0-5);
+        padding: var(--plinth-space-3) var(--plinth-space-4);
+        color: var(--plinth-color-text);
+        text-decoration: none;
+        border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+        border-radius: var(--plinth-radius-container);
+    }
+
+    .site-docs-pager-link.is-next {
+        grid-column: -2;
+        text-align: end;
+    }
+
+    .site-docs-pager-label {
+        font-size: var(--plinth-font-size-md);
+        font-weight: var(--plinth-font-weight-medium);
+    }
+
+    .site-docs-edit {
+        gap: var(--plinth-space-2);
+        align-self: flex-start;
+        font-size: var(--plinth-font-size-sm);
+        color: var(--plinth-color-text-subtle);
+    }
+
+    .site-docs-nav-link:focus-visible,
+    .site-docs-toc-link:focus-visible,
+    .site-docs-pager-link:focus-visible {
+        outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+        outline-offset: var(--plinth-focus-ring-offset);
+    }
+
+    /* The Markdown's text. Components inside it (code, callouts, tables) keep their own styles. */
+    .site-prose {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-4);
+        min-inline-size: 0;
+        font-size: var(--plinth-font-size-md);
+        line-height: var(--plinth-font-leading-normal);
+        color: var(--plinth-color-text-muted);
+    }
+
+    /* Reading text is 15px (ADR 3); components in the page keep their 14px. */
+    .site-prose > :is(p, ul, ol, blockquote) {
+        margin: 0;
+        font-size: var(--plinth-font-size-lg);
+    }
+
+    .site-prose > :is(ul, ol) {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-2);
+        padding-inline-start: var(--plinth-space-6);
+    }
+
+    .site-prose li > :is(ul, ol) {
+        margin-block-start: var(--plinth-space-2);
+    }
+
+    .site-prose > :is(h2, h3, h4) {
+        margin: var(--plinth-space-6) 0 0;
+        font-weight: var(--plinth-font-weight-semibold);
+        line-height: var(--plinth-font-leading-tight);
+        color: var(--plinth-color-text);
+        text-wrap: balance;
+        scroll-margin-block-start: calc(var(--plinth-space-16) + var(--plinth-space-4));
+    }
+
+    .site-prose > h2 {
+        font-size: var(--plinth-font-size-2xl);
+        letter-spacing: var(--plinth-font-tracking-tight);
+    }
+
+    .site-prose > h3 {
+        font-size: var(--plinth-font-size-xl);
+        letter-spacing: var(--plinth-font-tracking-snug);
+    }
+
+    .site-prose > h4 {
+        font-size: var(--plinth-font-size-lg);
+    }
+
+    .site-prose > blockquote {
+        padding-inline-start: var(--plinth-space-4);
+        border-inline-start: var(--plinth-border-width-thick) solid
+            var(--plinth-color-border-strong);
+    }
+
+    .site-prose > hr {
+        inline-size: 100%;
+        margin: var(--plinth-space-4) 0;
+        border: 0;
+        border-block-start: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+    }
+
+    .site-prose :is(strong, b) {
+        font-weight: var(--plinth-font-weight-semibold);
+        color: var(--plinth-color-text);
+    }
+
+    .site-prose :not(pre) > code {
+        padding: 0 var(--plinth-space-1);
+        font-family: var(--plinth-font-family-mono);
+        font-size: var(--plinth-font-size-sm);
+        color: var(--plinth-color-text);
+        overflow-wrap: anywhere;
+        background: var(--plinth-color-surface-raised);
+        border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+        border-radius: var(--plinth-radius-control);
+    }
+
+    /* Highlighted code: the kinds of token the highlighter's theme names, in Plinth's text colours. */
+    .site-code-comment {
+        font-style: italic;
+        color: var(--plinth-color-text-subtle);
+    }
+
+    .site-code-string {
+        color: var(--plinth-color-success-text);
+    }
+
+    .site-code-keyword {
+        color: var(--plinth-color-accent-text);
+    }
+
+    .site-code-property {
+        color: var(--plinth-color-warning-text);
+    }
+
+    .site-code-constant {
+        color: var(--plinth-color-danger-text);
+    }
+
+    /* The token tables: a swatch in each theme's colour, and a preview drawn with the token. */
+    .site-token-name {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-1);
+        min-inline-size: 0;
+    }
+
+    /* A token's name breaks only at its hyphens. */
+    .site-prose .site-token-name code {
+        align-self: flex-start;
+        overflow-wrap: normal;
+    }
+
+    .site-token-description {
+        font-size: var(--plinth-font-size-sm);
+        font-weight: var(--plinth-font-weight-regular);
+        color: var(--plinth-color-text-muted);
+    }
+
+    .site-token-value {
+        display: inline-flex;
+        gap: var(--plinth-space-2);
+        align-items: center;
+        font-family: var(--plinth-font-family-mono);
+        font-size: var(--plinth-font-size-sm);
+    }
+
+    .site-token-value:has(.site-token-swatch) {
+        white-space: nowrap;
+    }
+
+    .site-token-swatch {
+        flex: none;
+        inline-size: var(--plinth-size-icon-lg);
+        block-size: var(--plinth-size-icon-lg);
+        background: var(--site-token-colour);
+        border: var(--plinth-border-width-thin) solid var(--plinth-color-border-strong);
+        border-radius: var(--plinth-radius-control);
+    }
+
+    .site-token-preview {
+        display: block;
+        max-inline-size: 100%;
+        color: var(--plinth-color-text);
+    }
+
+    /* Bars stop at 12rem, so a panel's width doesn't stretch the table. */
+    .site-token-preview[data-preview='bar'] {
+        inline-size: min(var(--site-token), var(--plinth-space-16) * 3);
+        block-size: var(--plinth-space-3);
+        background: var(--plinth-color-accent);
+        border-radius: var(--plinth-radius-control);
+    }
+
+    .site-token-preview:is([data-preview='radius'], [data-preview='shadow']) {
+        inline-size: var(--plinth-space-16);
+        block-size: var(--plinth-space-10);
+        background: var(--plinth-color-surface-raised);
+        border: var(--plinth-border-width-thin) solid var(--plinth-color-border-strong);
+    }
+
+    .site-token-preview[data-preview='radius'] {
+        border-radius: var(--site-token);
+    }
+
+    .site-token-preview[data-preview='shadow'] {
+        border-color: transparent;
+        box-shadow: var(--site-token);
+    }
+
+    .site-token-preview[data-preview='size'] {
+        font-size: var(--site-token);
+        line-height: var(--plinth-font-leading-tight);
+    }
+
+    .site-token-preview[data-preview='family'] {
+        font-family: var(--site-token);
+    }
+
+    .site-token-preview[data-preview='weight'] {
+        font-weight: var(--site-token);
+    }
+
+    .site-token-preview[data-preview='tracking'] {
+        font-size: var(--plinth-font-size-xl);
+        letter-spacing: var(--site-token);
+    }
+
+    /* A live example in a guide: real components on a sunken surface. */
+    .site-example {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-4);
+        padding: var(--plinth-space-5);
+        background: var(--plinth-color-surface-sunken);
+        border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+        border-radius: var(--plinth-radius-container);
+    }
+
+    .site-example.site-brand-cards {
+        display: grid;
+    }
+
+    .site-example-row {
+        justify-content: flex-start;
+    }
+
+    @media (hover: hover) {
+        .site-docs-nav-link:hover,
+        .site-docs-toc-link:hover {
+            color: var(--plinth-color-text);
+        }
+
+        .site-docs-nav-link:hover {
+            background: var(--plinth-color-surface-hover);
+        }
+
+        .site-docs-pager-link:hover {
+            background: var(--plinth-color-surface-hover);
+        }
+
+        .site-docs-breadcrumb-link:hover {
+            color: var(--plinth-color-text);
+        }
+    }
+
+    /* On a touch screen, every link in the sidebar and the contents keeps a 40px hit area. */
+    @media (pointer: coarse) {
+        .site-docs-nav-link,
+        .site-docs-toc-link {
+            min-block-size: var(--plinth-touch-target);
+        }
+    }
+
+    @media (min-width: 768px) {
+        .site-docs-article {
+            padding-block-start: var(--plinth-space-8);
+        }
+
+        .site-docs-title {
+            font-size: var(--plinth-font-size-4xl);
+        }
+
+        .site-docs-pager {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .site-token-name {
+            min-inline-size: 15rem;
+        }
+    }
+
+    @media (min-width: 1280px) {
+        .site-docs {
+            grid-template-columns: 14.5rem minmax(0, 1fr) 12.5rem;
+            gap: var(--plinth-space-10);
+        }
+
+        .site-docs-side,
+        .site-docs-toc {
+            display: block;
+        }
+
+        .site-docs-menu-button {
+            display: none;
+        }
+    }
+}

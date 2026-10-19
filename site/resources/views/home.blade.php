@@ -10,7 +10,7 @@
         <div class="site-hero-glow" aria-hidden="true"></div>
         <div class="site-hero-content">
             @if ($latest)
-                <a class="site-announcement" href="{{ config('site.source') }}/docs/adr/{{ $latest->file }}">
+                <a class="site-announcement" href="{{ route('decisions.show', $latest->slug()) }}">
                     <span class="site-announcement-dot" aria-hidden="true"></span>
                     New · ADR {{ $latest->number }}, {{ Str::lcfirst($latest->title) }}
                     <span class="site-announcement-arrow" aria-hidden="true">→</span>
@@ -21,7 +21,7 @@
             <p class="site-lead">Plinth is BDynamic's design system: tokens, components written as plain HTML and CSS, and thin Blade, Vue and React layers that print exactly the same markup.</p>
 
             <div class="site-actions">
-                <x-plinth::button variant="accent" size="lg" :href="$nav['Docs']" mirror-trailing>
+                <x-plinth::button variant="accent" size="lg" :href="route('docs.show', 'installation')" mirror-trailing>
                     Get started
                     <x-slot:trailing><x-site.glyph name="arrow-right" /></x-slot:trailing>
                 </x-plinth::button>
@@ -172,7 +172,7 @@
                             <span class="site-meta">{{ $label }}</span>
                             <x-plinth::badge tone="success" dot>Active</x-plinth::badge>
                             <x-plinth::button variant="accent">Start trial</x-plinth::button>
-                            <a class="site-link" href="{{ config('site.source') }}/storybook/stories/Branding.mdx">Read the guide</a>
+                            <a class="site-link" href="{{ route('docs.show', 'branding') }}">Read the guide</a>
                         </div>
                     @endforeach
                 </div>
@@ -187,26 +187,9 @@
                     <span class="site-eyebrow">Built in the open</span>
                     <h2 id="decisions-title" class="site-heading">Every decision, written down.</h2>
                     <p class="site-lead">Each choice that shapes Plinth is an architecture decision record in the repository, so you know what was decided and why.</p>
-                    <a class="site-link site-link-strong" href="{{ config('site.repository') }}/tree/main/docs/adr">Read the decisions <span aria-hidden="true">→</span></a>
+                    <a class="site-link site-link-strong" href="{{ route('decisions.index') }}">Read the decisions <span aria-hidden="true">→</span></a>
                 </div>
-                <ol class="site-decisions" role="list">
-                    @foreach ($decisions as $decision)
-                        <li class="site-decision">
-                            @if ($decision->date)
-                                <time class="site-meta site-decision-date" datetime="{{ $decision->date->toDateString() }}">{{ $decision->date->format('j M Y') }}</time>
-                            @endif
-                            <span class="site-decision-content">
-                                <span class="site-decision-title">
-                                    <x-plinth::badge>ADR {{ $decision->number }}</x-plinth::badge>
-                                    <a class="site-decision-link" href="{{ config('site.source') }}/docs/adr/{{ $decision->file }}">{{ $decision->title }}</a>
-                                </span>
-                                @if ($decision->summary)
-                                    <span class="site-small">{{ $decision->summary }}</span>
-                                @endif
-                            </span>
-                        </li>
-                    @endforeach
-                </ol>
+                <x-site.decisions :decisions="$decisions" />
             </div>
         </section>
     @endif

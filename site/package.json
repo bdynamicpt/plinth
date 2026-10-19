@@ -12,7 +12,8 @@
         "test": "composer test"
     },
     "dependencies": {
-        "@bdynamic/plinth-blade": "*"
+        "@bdynamic/plinth-blade": "*",
+        "@bdynamic/plinth-tokens": "*"
     },
     "devDependencies": {
         "alpinejs": "^3.15.0",

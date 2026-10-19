@@ -7,7 +7,9 @@
     "require": {
         "php": "^8.4",
         "bdynamicpt/plinth": "*@dev",
-        "laravel/framework": "^13.17"
+        "laravel/framework": "^13.17",
+        "league/commonmark": "^2.10",
+        "phiki/phiki": "^2.2"
     },
     "require-dev": {
         "larastan/larastan": "^3.13",

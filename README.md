@@ -24,8 +24,9 @@ packages/
   vue/        Vue 3 components that print the markup contract
   react/      React 19 components that print the same markup contract
   blade/      Composer package: Blade components, a Filament plugin, and the built CSS
-storybook/    Storybook (HTML renderer): Branding, Foundations, component stories, parity tests
-site/         Plinth's website, a Laravel app built with Plinth's components (see site/README.md)
+storybook/    Storybook (HTML renderer): component stories, their docs pages, parity tests
+site/         Plinth's website, a Laravel app built with Plinth's components, and the guides in
+              site/docs (see site/README.md)
 ```
 
 The npm workspaces are private. They are published together as one npm package and one Composer
@@ -85,7 +86,10 @@ The tokens are in `packages/tokens/tokens/`, in three tiers ([ADR 1](docs/adr/00
 | Semantic  | `semantic.json`, `semantic.light.json`, `.dark.json` | `--plinth-color-surface`        | components; projects override these |
 | Component | `component.json`                                     | `--plinth-header-height`        | one component                       |
 
-Storybook has a page for each under **Foundations** (colour, typography, spacing, sizes, radii, elevation, layers, breakpoints, motion, the focus ring and component tokens), each showing the semantic tokens and the primitives they are built from.
+The website has a page for each under **Foundations** (colour, typography, spacing and sizes,
+radii and elevation, layers and breakpoints, motion, the focus ring and component tokens), each
+showing the semantic tokens and the primitives they are built from. Its Markdown is in
+[`site/docs`](site/docs).
 
 ## Using Plinth from a project while you work on it
 

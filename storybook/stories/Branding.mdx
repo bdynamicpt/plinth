@@ -2,89 +2,36 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 <Meta title="Branding" />
 
-# Plinth
+export const Site = ({ to, children }) => (
+  <a href={`/docs/${to}`} target="_top">
+    {children}
+  </a>
+);
 
-_This page is a placeholder. Each section below gets its real content in its own issue._
+# Plinth
 
 ## What Plinth is
 
 Plinth is the design system of **b.dynamic**'s projects. It is design tokens, components written as
-plain HTML and CSS, and thin Blade and Vue layers that print the same markup. A project brings its
-brand through the tokens and never forks a component.
+plain HTML and CSS, and thin Blade, Vue and React layers that print the same markup. A project
+brings its brand through the tokens and never forks a component.
+
+## The guides are on the website
+
+Installing Plinth, using it from Laravel and Filament, Vue, React and Tailwind, bringing a brand,
+dark mode, the token tiers, the foundations, the component rules and the releases are documented
+on Plinth's website, which serves this Storybook at `/storybook`:
+
+- Start with the <Site to="introduction">introduction</Site> and the <Site to="installation">installation</Site>.
+- Bring a brand: <Site to="branding">branding your project</Site> and <Site to="dark-mode">dark mode</Site>.
+- The tokens: the <Site to="foundations">foundations</Site>.
+- Why Plinth is the way it is: the <Site to="decisions">decisions</Site>, the ADRs in `docs/adr`.
+
+Their Markdown is in `site/docs/` in the repository. Switch **Brand** in the toolbar to see the
+made-up example brand restyle every component.
 
 ## The logo
 
 <div className="sb-unstyled sb-wordmark">b.dynamic</div>
 
 _To come: the logo files, clear space, minimum sizes and what not to do._
-
-## Colours, and how a project brings its own
-
-_To come: the palette and how to use it. In short, a project overrides the semantic tokens
-(`--plinth-color-*`, `--plinth-radius-*`, `--plinth-font-family-body`) after Plinth's CSS. Switch
-**Brand** in the toolbar to see the made-up example brand restyle every component:_
-
-```css
-:root {
-  --plinth-color-accent: #0f766e;
-  --plinth-radius-pill: 0.25rem;
-}
-```
-
-See **Foundations → Colour** for the colours as they are today.
-
-## Typography
-
-_To come: the typefaces, the scale and how to use it. See **Foundations → Typography**._
-
-## Principles
-
-_To come._
-
-## Installing it in a Laravel app
-
-_To come. In short:_
-
-```bash
-composer require bdynamicpt/plinth
-```
-
-```blade
-<x-plinth::badge tone="success" dot>Paid</x-plinth::badge>
-```
-
-_In a Filament panel, add `PlinthPlugin::make()` to the panel and run `php artisan filament:assets`._
-
-## Installing it in a Vue app
-
-_To come. In short:_
-
-```bash
-npm install @bdynamic/plinth
-```
-
-```ts
-import '@bdynamic/plinth/css';
-import { PlinthBadge } from '@bdynamic/plinth/vue';
-```
-
-## Installing it in a React app
-
-For a React 19 app, an Inertia one included. _To come. In short:_
-
-```bash
-npm install @bdynamic/plinth
-```
-
-```tsx
-import '@bdynamic/plinth/css';
-import { PlinthBadge } from '@bdynamic/plinth/react';
-
-<PlinthBadge tone="success" dot>
-  Paid
-</PlinthBadge>;
-```
-
-_The components take the Vue props by the same names. Vue's default slot is `children` and its
-named slots are props that take a node (`icon`, `trailing`); `className`, `ref` and every other
-prop reach the root element. They render the same on the server, for Inertia's SSR._
