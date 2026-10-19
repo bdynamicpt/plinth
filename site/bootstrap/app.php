@@ -15,6 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // On Forge the site sits behind Cloudflare and a load balancer: trust their forwarded
+        // headers so URLs (and Vite's asset URLs) use https and the visitor's host.
+        $middleware->trustProxies(at: '*');
+
         // The site has no forms, sign-in or sessions: its pages set no cookies, so they can be cached.
         $middleware->web(remove: [
             EncryptCookies::class,
