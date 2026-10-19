@@ -38,6 +38,7 @@ It writes a minimal component in every layer, all printing `<div class="plinth-<
 | `packages/css/src/components/<name>.css`                     | the contract comment and `@layer plinth`                                       |
 | `storybook/stories/components/<name>.ts`                     | the markup function (the contract itself)                                      |
 | `storybook/stories/components/<Name>.stories.ts`             | the stories, the docs description and the import of the component's source CSS |
+| `storybook/stories/components/<Name>.mdx`                    | the docs page, in the shape of `Badge.mdx`                                     |
 | `packages/blade/resources/views/components/<name>.blade.php` | `<x-plinth::<name>>`                                                           |
 | `packages/blade/tests/Feature/<Name>Test.php`                | Pest tests                                                                     |
 | `packages/vue/src/Plinth<Name>.vue`                          | the Vue component                                                              |
@@ -79,8 +80,12 @@ Change all four together so they keep printing the same markup:
 - **Stories:** one for every variant and state, each with args (the parity test covers stories
   without their own `render`); galleries such as `AllTones` may have a `render`. The
   `docs.description.component` says what it is, when to use it, and anything a user must add
-  (an accessible name, `aria-controls`, …). Write an MDX page next to the story only when the
-  docs need more than that.
+  (an accessible name, `aria-controls`, …).
+- **Docs page:** `<Name>.mdx` next to the story, in the shape of `Badge.mdx` (the scaffold writes
+  its headings): the intro and a canvas with controls, **Markup contract** (the markup, a table
+  of parts, a table of attributes and states with values and defaults), a section per variant or
+  state with its canvas, **Accessibility**, and **In Blade and Vue** (a props table for both,
+  an example, what is forwarded where and the events Vue emits). Every story appears in a canvas.
 - **Tests:** Blade and Vue each cover the full markup, defaults, every variant, the fallback,
   escaping and extra attributes.
 

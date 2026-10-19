@@ -85,7 +85,12 @@ component; `.claude/skills/new-component/SKILL.md` walks through the rest.
    the plugin, with Vitest tests.
 5. **Parity test**: cases in `storybook/test/parity.test.ts`, one per story and one with extra
    attributes, so the Blade and Vue output must match the story's markup.
-6. **Docs**: the story's docs page (description, and anything a user must know).
+6. **Docs**: an MDX page next to the story, `storybook/stories/components/<Name>.mdx`, in the
+   shape of `Badge.mdx`: what it is and when to use it, the **markup contract** (the markup, a
+   table of its parts and one of its attributes and states), a section with a canvas for each
+   variant and state, **accessibility** (accessible name, what is announced, keyboard, what the
+   app must add), and **in Blade and Vue** (a table of the props in each, an example, and which
+   attributes reach which element).
 7. **Screenshots** in the pull request, at 390, 768 and 1440 px in light and dark.
 
 The Blade and Vue layers only print markup. They hold no styles, and they do not add elements or

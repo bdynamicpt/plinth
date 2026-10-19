@@ -1,0 +1,106 @@
+import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
+import * as BadgeStories from './Badge.stories';
+
+<Meta of={BadgeStories} />
+
+# Badge
+
+A short label for the status of something: an invoice that is _Paid_, a task that is _Due soon_,
+a person who is _Online_. It sits next to what it describes, in a list row, a table cell or a
+header. It is not a button and not a count: it does nothing when pressed.
+
+<Canvas of={BadgeStories.Success} />
+<Controls of={BadgeStories.Success} />
+
+## Markup contract
+
+Blade and Vue print exactly this markup, and the parity tests hold them to it. The CSS in
+`packages/css/src/components/badge.css` styles it.
+
+<Source
+  language="html"
+  dark
+  code={`<span class="plinth-badge" data-tone="success">
+  <span class="plinth-badge-dot" aria-hidden="true"></span>
+  <span class="plinth-badge-label">Paid</span>
+</span>`}
+/>
+
+| Part                  | Element  | Required | What it is                                                     |
+| --------------------- | -------- | -------- | -------------------------------------------------------------- |
+| `.plinth-badge`       | `<span>` | yes      | The root. Takes `data-tone` and any attribute the app forwards |
+| `.plinth-badge-dot`   | `<span>` | no       | A dot before the label, in the tone's colour                   |
+| `.plinth-badge-label` | `<span>` | yes      | The text. It stays on one line and ends in an ellipsis         |
+
+| Attribute     | On                  | Values                                        | Default   |
+| ------------- | ------------------- | --------------------------------------------- | --------- |
+| `data-tone`   | `.plinth-badge`     | `neutral`, `success`, `warning`, `danger`     | `neutral` |
+| `aria-hidden` | `.plinth-badge-dot` | always `true`: the dot only repeats the label | —         |
+
+The badge has no states of its own: it doesn't open, select or disable. A missing or unknown
+`data-tone` looks neutral, and Blade and Vue print `neutral` for a tone they don't know.
+
+## Tones
+
+The tone says what kind of status it is. Pick it by meaning, not by colour.
+
+| Tone        | Use it for                                       | Examples                       |
+| ----------- | ------------------------------------------------ | ------------------------------ |
+| **neutral** | A state that is neither good nor bad, or not yet | _Draft_, _Archived_, _Offline_ |
+| **success** | Done, healthy, in good standing                  | _Paid_, _Active_, _Online_     |
+| **warning** | Needs attention soon, but nothing has gone wrong | _Due soon_, _Expiring_         |
+| **danger**  | Something has gone wrong or is blocked           | _Overdue_, _Failed_            |
+
+<Canvas of={BadgeStories.Neutral} />
+<Canvas of={BadgeStories.Success} />
+<Canvas of={BadgeStories.Warning} />
+<Canvas of={BadgeStories.Danger} />
+
+## The dot
+
+The dot adds a second cue to the tone, for statuses that are a live state rather than a stage,
+such as presence (_Online_, _Away_). Use it the same way across a screen: all of a list's badges
+with a dot, or none.
+
+<Canvas of={BadgeStories.WithDot} />
+<Canvas of={BadgeStories.AllTones} />
+
+## Accessibility
+
+- **The label carries the meaning.** The tone and the dot only reinforce it, so a person who
+  can't tell the colours apart, or a screen reader, still gets the status from the words. Never
+  use a badge with an empty or colour-only label.
+- **Screen readers read the label as plain text,** in reading order with what's around it. The
+  dot is hidden from them (`aria-hidden="true"`). When the label alone is ambiguous out of
+  context, say what it is about in the text around it (_Invoice 104 · Paid_).
+- **A badge that changes while the page is open** (a status that updates live) is not announced
+  by itself. If the change matters, the app puts it in a region with `aria-live="polite"`.
+- **The text meets WCAG AA** in every tone, in light and dark. In forced-colours mode the badge
+  keeps its edge and the dot takes the text colour.
+- **Keep it short:** one or two words. A long label is cut with an ellipsis when its container is
+  narrow, and the cut part is lost to sighted readers.
+- It is not focusable and has no touch target, because it does nothing. To make a status
+  clickable, put the badge inside a link or a button, which brings its own focus ring.
+
+## In Blade and Vue
+
+| Prop  | Blade                                       | Vue                      | Default   |
+| ----- | ------------------------------------------- | ------------------------ | --------- |
+| tone  | `tone="success"` or `:tone="Tone::Success"` | `tone="success"`         | `neutral` |
+| dot   | `dot` or `:dot="$online"`                   | `dot` or `:dot="online"` | off       |
+| label | the slot                                    | the default slot         | —         |
+
+<Source
+  language="html"
+  dark
+  code={`<x-plinth::badge tone="success">Paid</x-plinth::badge>
+<x-plinth::badge :tone="$invoice->status->tone()" wire:key="status-{{ $invoice->id }}">
+    {{ $invoice->status->label() }}
+</x-plinth::badge>
+
+<PlinthBadge tone="warning" dot>Away</PlinthBadge>`}
+/>
+
+`class`, `id`, `data-*`, `aria-*`, `wire:*` and `x-*` reach the root `<span>` in both layers. In
+Blade the tone is the `BDynamic\Plinth\Enums\Tone` enum or its value; in Vue it is a `Tone`,
+and the list is exported as `tones`.

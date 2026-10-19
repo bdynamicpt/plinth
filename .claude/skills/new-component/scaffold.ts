@@ -79,6 +79,57 @@ type Story = StoryObj<${Name}Args>;
 export const Default: Story = {};
 `,
 
+  [`storybook/stories/components/${Name}.mdx`]: `import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
+import * as ${Name}Stories from './${Name}.stories';
+
+<Meta of={${Name}Stories} />
+
+# ${title}
+
+TODO what it is, where it goes, and what it is not (Badge.mdx is the model for every page).
+
+<Canvas of={${Name}Stories.Default} />
+<Controls of={${Name}Stories.Default} />
+
+## Markup contract
+
+Blade and Vue print exactly this markup, and the parity tests hold them to it. The CSS in
+\`packages/css/src/components/${name}.css\` styles it.
+
+<Source language="html" dark code={\`<div class="plinth-${name}">Content</div>\`} />
+
+| Part             | Element | Required | What it is |
+| ---------------- | ------- | -------- | ---------- |
+| \`.plinth-${name}\` | \`<div>\` | yes      | The root   |
+
+TODO a table of the data-* variants, states and ARIA attributes, with their values and defaults.
+
+## TODO one section per variant or state
+
+<Canvas of={${Name}Stories.Default} />
+
+## Accessibility
+
+- TODO the accessible name, what screen readers announce, the keyboard, the focus ring, touch
+  targets, and anything the app must add.
+
+## In Blade and Vue
+
+| Prop  | Blade      | Vue              | Default |
+| ----- | ---------- | ---------------- | ------- |
+| label | the slot   | the default slot | —       |
+
+<Source
+  language="html"
+  dark
+  code={\`<x-plinth::${name}>Content</x-plinth::${name}>
+
+<Plinth${Name}>Content</Plinth${Name}>\`}
+/>
+
+TODO which attributes reach which element, and the events Vue emits.
+`,
+
   [`packages/blade/resources/views/components/${name}.blade.php`]: `{{-- Markup contract: packages/css/src/components/${name}.css --}}
 <div {{ $attributes->merge(['class' => 'plinth-${name}']) }}>{{ $slot }}</div>
 `,
