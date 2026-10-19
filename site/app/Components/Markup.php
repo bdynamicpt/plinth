@@ -103,20 +103,25 @@ final class Markup
             }
 
             /** @var Element $node */
-            $inline = $this->inline($node, $dialect);
             $children = $this->children($node);
             $elements = array_filter($children, fn (Node $child): bool => $child instanceof Element);
+            // Measured as Blade at four spaces a level, so every layer breaks the same elements.
+            $width = $depth * 4 + mb_strlen($this->inline($node, 'blade'));
 
-            if ($this->isIcon($node) || $node->localName === 'pre' || ($elements === [] && strlen($indent.$inline) <= 100) || (count($children) === 1 && strlen($indent.$inline) <= 80)) {
-                $lines[] = $indent.$inline;
+            if ($this->isIcon($node) || $node->localName === 'pre' || ($elements === [] && $width <= 100) || (count($children) === 1 && $width <= 80)) {
+                $lines[] = $indent.$this->inline($node, $dialect);
 
                 continue;
             }
 
-            [$open, $close, $children] = $this->tags($node, $dialect, $depth);
-            $lines = [...$lines, ...array_map(fn (string $line): string => $indent.$line, $open)];
-            $lines = [...$lines, ...$this->lines($children, $depth + 1, $dialect)];
-            $lines[] = $indent.$close;
+            [$open, $close, $children] = $this->tags($node, $dialect);
+            $lines[] = $indent.$open;
+
+            // In React, an element whose children were all slots closes itself.
+            if ($close !== '') {
+                $lines = [...$lines, ...$this->lines($children, $depth + 1, $dialect)];
+                $lines[] = $indent.$close;
+            }
         }
 
         return $lines;
@@ -134,25 +139,25 @@ final class Markup
             return '<svg>…</svg>';
         }
 
-        [$open, $close, $children] = $this->tags($node, $dialect, 0);
+        [$open, $close, $children] = $this->tags($node, $dialect);
 
         // Code keeps its own lines and spaces.
         if ($node->localName === 'pre') {
-            return implode(' ', $open).$node->innerHTML.$close;
+            return $open.$node->innerHTML.$close;
         }
 
         $content = implode('', array_map(fn (Node $child): string => $this->inline($child, $dialect), $children));
 
-        return $close === '' ? implode(' ', $open) : implode(' ', $open).$content.$close;
+        return $close === '' ? $open : $open.$content.$close;
     }
 
     /**
      * An element's opening tag, its closing tag (empty when the opening one closes itself), and the
      * children that go between them.
      *
-     * @return array{list<string>, string, list<Node>}
+     * @return array{string, string, list<Node>}
      */
-    private function tags(Element $element, string $dialect, int $depth): array
+    private function tags(Element $element, string $dialect): array
     {
         $name = $this->name($element, $dialect);
         $attributes = $this->attributes($element, $dialect);
@@ -179,7 +184,7 @@ final class Markup
         $end = $selfClosing ? ($dialect === 'html' && $void ? '>' : ' />') : '>';
         $open = trim('<'.$name.' '.implode(' ', $attributes)).$end;
 
-        return [[$open], $selfClosing ? '' : '</'.$name.'>', $children];
+        return [$open, $selfClosing ? '' : '</'.$name.'>', $children];
     }
 
     private function name(Element $element, string $dialect): string
@@ -226,7 +231,9 @@ final class Markup
                 $dialect === 'html' && $value === '' && in_array($name, self::BOOLEANS, true) => $name,
                 $dialect !== 'html' && $value === '' => $name,
                 $dialect === 'react' && $bound => $name.'={'.$value.'}',
-                default => $name.'="'.htmlspecialchars($value, ENT_COMPAT).'"',
+                // Source keeps its characters as written; HTML escapes them.
+                $dialect === 'html' => $name.'="'.htmlspecialchars($value, ENT_COMPAT).'"',
+                default => $name.'="'.str_replace('"', '&quot;', $value).'"',
             };
         }
 

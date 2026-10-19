@@ -101,8 +101,14 @@ Alpine.data('playground', () => ({
         }
 
         this.$el.removeAttribute('aria-busy');
-        for (const part of ['.site-playground-stage', '.site-playground-controls', '.site-demo-code']) {
-            this.$el.querySelector(part).replaceWith(document.importNode(next.querySelector(part), true));
+        for (const part of [
+            '.site-playground-stage',
+            '.site-playground-controls',
+            '.site-demo-code',
+        ]) {
+            this.$el
+                .querySelector(part)
+                .replaceWith(document.importNode(next.querySelector(part), true));
         }
         history.replaceState(history.state, '', url);
 

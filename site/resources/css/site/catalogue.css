@@ -202,23 +202,24 @@
         min-inline-size: 0;
         padding: var(--plinth-space-8) var(--plinth-space-4);
         background-color: var(--plinth-color-surface-sunken);
-        background-image: radial-gradient(var(--plinth-color-divider) var(--plinth-border-width-thin), transparent var(--plinth-border-width-thin));
+        background-image: radial-gradient(
+            var(--plinth-color-divider) var(--plinth-border-width-thin),
+            transparent var(--plinth-border-width-thin)
+        );
         background-size: var(--plinth-space-4) var(--plinth-space-4);
     }
 
     /* Components that fill their container, one under another. */
     .site-demo-stage[data-layout='stack'] {
-        flex-direction: column;
-        flex-wrap: nowrap;
+        flex-flow: column nowrap;
         align-items: stretch;
     }
 
     /* A phone's screen: the shell's components at the width they are made for. */
     .site-demo-stage[data-layout='phone'] {
-        flex-direction: column;
-        flex-wrap: nowrap;
+        flex-flow: column nowrap;
         align-items: stretch;
-        padding-inline: max(var(--plinth-space-4), (100% - 24.375rem) / 2);
+        padding-inline: max(var(--plinth-space-4), (100% - var(--plinth-space-16) * 6) / 2);
     }
 
     .site-demo-stage > :is(p, span:not([class])) {
@@ -226,8 +227,9 @@
         color: var(--plinth-color-text-muted);
     }
 
-    /* The code block joins the stage; its own edge and corners give way to the example's. */
-    .site-demo-code.plinth-code-block {
+    /* The code block joins the stage; its own edge and corners give way to the example's (the
+       site's layer is above Plinth's). */
+    .site-demo-code {
         border: 0;
         border-block-start: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
         border-radius: 0;

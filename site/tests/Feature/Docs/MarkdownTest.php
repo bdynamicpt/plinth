@@ -155,3 +155,18 @@ it('refuses a node its renderer is not for', function (string $renderer) {
 it('keeps a callout\'s tone and title', function () {
     expect(new Callout('info', 'Note'))->tone->toBe('info')->title->toBe('Note');
 });
+
+it('renders a Blade example live, with its code in each layer', function () {
+    $html = markdown("```blade example layout=\"stack\"\n<x-plinth::badge tone=\"success\">Paid</x-plinth::badge>\n```\n\n```blade example\n<x-plinth::list-card><li><x-plinth::list-row>A</x-plinth::list-row></li></x-plinth::list-card>\n```\n")->html;
+
+    expect($html)->toContain('<div class="site-demo-stage"  data-layout="stack" >')
+        ->toContain('<span class="plinth-badge" data-tone="success">')
+        ->toContain('aria-label="Markup in"')
+        ->toContain('>React<')
+        ->and(substr_count($html, '>React<'))->toBe(1);
+});
+
+it('links a component\'s Markdown to its page', function () {
+    expect(markdown('[Badge](../components/badge.md#tones)', 'site/docs/page.md')->html)
+        ->toContain('href="/components/badge#tones"');
+});

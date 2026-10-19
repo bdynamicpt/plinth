@@ -4,6 +4,13 @@ A button **does something**: saves, submits, opens a sheet, deletes. A link **go
 If activating it takes the person to another page, use a link; give it the button's look (an
 `href`) only when it is a call to action that must look like one, such as _Read more_ on a card.
 
+## When not to use it
+
+- To go to another page: use a link. Give it the button's look only for a call to action.
+- For an action with only an icon: use the [icon button](icon-button.md), which needs a label.
+- To choose between options or filter a list: use a [pill row](pill-row.md).
+- For a status: use a [badge](badge.md). A button that does nothing when pressed misleads.
+
 ## Choosing a variant
 
 Most of a screen's buttons are **secondary** or **ghost**. Emphasis is a budget: spend it on the
