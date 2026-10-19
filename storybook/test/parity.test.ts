@@ -879,8 +879,8 @@ function badgeWithAttributes(): ParityCase {
     class: 'ms-2',
     id: 'order-status',
     'data-testid': 'order-status',
-    'aria-describedby': 'order-status-help',
-    title: 'Paid on 3 October',
+    'data-status': 'paid',
+    'aria-label': 'Order status: Paid',
   };
   return {
     story: 'Badge/with extra attributes',

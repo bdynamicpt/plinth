@@ -49,5 +49,8 @@ jobs:
         if: github.event_name != 'pull_request'
         run: npx turbo run lint test build build-storybook
 
+      - name: A release dry run gives npm and Packagist one version
+        run: npm run release -- --dry-run
+
       - name: The CSS shipped in packages/blade is up to date
         run: git diff --exit-code -- packages/blade/resources/dist
