@@ -1,0 +1,173 @@
+import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
+import * as DataTableStories from './DataTable.stories';
+
+<Meta of={DataTableStories} />
+
+# Data table
+
+A collection of records (orders, users, invoices) from one markup: a stack of cards on a phone,
+a table from 768px up. The CSS alone changes the layout, so there is no script, and Blade and Vue
+print the table once. Use it in Blade views and Vue apps; Filament panels keep their own tables.
+
+<Canvas of={DataTableStories.Default} />
+<Controls of={DataTableStories.Default} />
+
+## Markup
+
+<Source
+  language="html"
+  dark
+  code={`<table class="plinth-data-table" role="table">
+  <caption class="plinth-data-table-caption">Orders</caption>
+  <thead class="plinth-data-table-head" role="rowgroup">
+    <tr class="plinth-data-table-head-row" role="row">
+      <th class="plinth-data-table-column" role="columnheader" scope="col">Order</th>
+      <th class="plinth-data-table-column" role="columnheader" scope="col" aria-sort="descending">
+        <button type="button" class="plinth-data-table-sort">
+          <span class="plinth-data-table-sort-label">Date</span>
+          <span class="plinth-icon plinth-data-table-sort-icon" data-size="sm" aria-hidden="true"><svg>…</svg></span>
+        </button>
+      </th>
+      <th class="plinth-data-table-column" role="columnheader" scope="col" data-numeric>Total</th>
+      <th class="plinth-data-table-column" role="columnheader" scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody class="plinth-data-table-body" role="rowgroup">
+    <tr class="plinth-data-table-row" role="row">
+      <td class="plinth-data-table-cell" role="cell" data-kind="title">
+        <span class="plinth-data-table-label" aria-hidden="true">Order</span>
+        <span class="plinth-data-table-value">#1042</span>
+      </td>
+      <td class="plinth-data-table-cell" role="cell" data-kind="field">
+        <span class="plinth-data-table-label" aria-hidden="true">Date</span>
+        <span class="plinth-data-table-value">3 Oct 2026</span>
+      </td>
+      <td class="plinth-data-table-cell" role="cell" data-kind="field" data-numeric>
+        <span class="plinth-data-table-label" aria-hidden="true">Total</span>
+        <span class="plinth-data-table-value">€1,240.00</span>
+      </td>
+      <td class="plinth-data-table-cell" role="cell" data-kind="actions">
+        <span class="plinth-data-table-value"><button class="plinth-button" …>View #1042</button></span>
+      </td>
+    </tr>
+  </tbody>
+</table>`}
+/>
+
+- **`plinth-data-table`**, the root, is the `<table>`; a project's classes and attributes land on
+  it. The **caption** is optional: without one, name the table with `aria-label` or
+  `aria-labelledby`.
+- **The explicit roles** (`table`, `rowgroup`, `row`, `columnheader`, `cell`) are part of the
+  contract. Some browsers, Safari in particular, drop a table's semantics once its rows stop
+  displaying as table rows, which is what the phone's cards do.
+- **`plinth-data-table-label`** repeats the column's name in each cell. It shows only on a
+  phone's card and is `aria-hidden`, since the column header already names the cell. On a phone
+  the header row stays in the accessibility tree, visually hidden, so every cell keeps its header.
+- A wide table from 768px up belongs in a scrolling container the app adds; text wraps in its cell.
+
+## Cards on a phone
+
+Each row becomes a card: the **title** cell first, then each **field** as its label and its
+value, then the **actions** under a divider. Pick the kind with `data-kind` (`kind` in Blade and
+Vue); `field` is the default.
+
+- **`data-kind="title"`** is the card's title, such as the order number, with no label. It must
+  be the row's first cell, and the actions cell its last: the card moves them with `order`, which
+  must not change the reading and focus order.
+- **`data-kind="actions"`** holds the row's buttons, last on the card, with no label. From 768px
+  up they sit at the start of their cell, under the column header.
+- **`data-numeric`** (`numeric`) aligns numbers to the end of a table cell, with figures of one
+  width. Put it on the column header and its cells.
+- **`data-phone="hidden"`** (`hide-on-phone`, `hideOnPhone`) leaves a less important column out
+  of the card and shows it from 768px up. Put it on the column header **and** on every cell of the
+  column, so the headers still match the cells for a screen reader.
+
+<Canvas of={DataTableStories.HiddenOnPhone} />
+
+## Sorting, selection and the empty state
+
+The app owns sorting, paging and selection (ADR 2); the table only
+shows them.
+
+- **Sorting:** a sortable column header takes `aria-sort` (`sort`): `none`, `ascending` or
+  `descending`, with one column sorted at a time. Its label is a
+  **`plinth-data-table-sort`** button (`<x-plinth::data-table-sort>`, `PlinthDataTableSort`),
+  which the app listens to; its icon shows both arrows, or the one of the order. On a phone the
+  sortable headers stay visible above the cards as a row of sort buttons.
+- **Selection:** a table whose rows can be selected puts `aria-selected` on every row (`selected`),
+  `true` on the selected ones. A selected row takes the selection tint and an accent edge at its
+  start. `aria-selected` only drives the styling: screen readers don't announce it in a table. The
+  control that selects a row (a checkbox, a pressed button, as in the story) is the app's, and it
+  carries the state.
+- **The empty state:** one `plinth-data-table-empty` row in the body, whose cell spans every
+  column (`columns`).
+- **Paging** controls sit outside the table.
+
+<Canvas of={DataTableStories.Sorted} />
+<Canvas of={DataTableStories.Selected} />
+<Canvas of={DataTableStories.Empty} />
+
+## Blade
+
+<Source
+  language="html"
+  dark
+  code={`<x-plinth::data-table caption="Orders">
+  <x-slot:head>
+    <x-plinth::data-table-column>Order</x-plinth::data-table-column>
+    <x-plinth::data-table-column :sort="$sort === 'date' ? $direction : 'none'">
+      <x-plinth::data-table-sort wire:click="sortBy('date')">Date</x-plinth::data-table-sort>
+    </x-plinth::data-table-column>
+    <x-plinth::data-table-column numeric>Total</x-plinth::data-table-column>
+    <x-plinth::data-table-column>Actions</x-plinth::data-table-column>
+  </x-slot:head>
+  @forelse ($orders as $order)
+    <x-plinth::data-table-row wire:key="order-{{ $order->id }}">
+      <x-plinth::data-table-cell label="Order" kind="title">{{ $order->number }}</x-plinth::data-table-cell>
+      <x-plinth::data-table-cell label="Date">{{ $order->date }}</x-plinth::data-table-cell>
+      <x-plinth::data-table-cell label="Total" numeric>{{ $order->total }}</x-plinth::data-table-cell>
+      <x-plinth::data-table-cell kind="actions">
+        <x-plinth::button variant="secondary" size="sm" :href="route('orders.show', $order)">View {{ $order->number }}</x-plinth::button>
+      </x-plinth::data-table-cell>
+    </x-plinth::data-table-row>
+  @empty
+    <x-plinth::data-table-empty :columns="4">No orders yet.</x-plinth::data-table-empty>
+  @endforelse
+</x-plinth::data-table>`}
+/>
+
+`sort` and `kind` take the `DataTableSort` and `DataTableCellKind` enums or their values; an
+unknown sort falls back to `none` and an unknown kind to `field`.
+
+## Vue
+
+<Source
+  language="html"
+  dark
+  code={`<PlinthDataTable caption="Orders">
+  <template #head>
+    <PlinthDataTableColumn>Order</PlinthDataTableColumn>
+    <PlinthDataTableColumn :sort="sort === 'date' ? direction : 'none'">
+      <PlinthDataTableSort @click="sortBy('date')">Date</PlinthDataTableSort>
+    </PlinthDataTableColumn>
+    <PlinthDataTableColumn numeric>Total</PlinthDataTableColumn>
+    <PlinthDataTableColumn>Actions</PlinthDataTableColumn>
+  </template>
+  <PlinthDataTableRow v-for="order in orders" :key="order.id">
+    <PlinthDataTableCell label="Order" kind="title">{{ order.number }}</PlinthDataTableCell>
+    <PlinthDataTableCell label="Date">{{ order.date }}</PlinthDataTableCell>
+    <PlinthDataTableCell label="Total" numeric>{{ order.total }}</PlinthDataTableCell>
+    <PlinthDataTableCell kind="actions">
+      <PlinthButton variant="secondary" size="sm" :href="order.url">View {{ order.number }}</PlinthButton>
+    </PlinthDataTableCell>
+  </PlinthDataTableRow>
+  <PlinthDataTableEmpty v-if="orders.length === 0" :columns="4">No orders yet.</PlinthDataTableEmpty>
+</PlinthDataTable>`}
+/>
+
+## Tokens
+
+- **`--plinth-data-table-row-height`** is a body row's height in the table layout (44px).
+- The cards use `color.surface-raised`, `color.border` and `radius.container`, like the
+  [list card](?path=/docs/components-list-card--docs); a selected row uses `color.accent-subtle`
+  and `color.accent`.

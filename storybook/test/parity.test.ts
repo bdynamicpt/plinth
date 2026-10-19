@@ -2,6 +2,12 @@ import {
   PlinthAvatar,
   PlinthBadge,
   PlinthButton,
+  PlinthDataTable,
+  PlinthDataTableCell,
+  PlinthDataTableColumn,
+  PlinthDataTableEmpty,
+  PlinthDataTableRow,
+  PlinthDataTableSort,
   PlinthHeader,
   PlinthIcon,
   PlinthIconButton,
@@ -23,6 +29,21 @@ import * as badgeStories from '../stories/components/Badge.stories.ts';
 import { badge, type Attributes, type BadgeArgs } from '../stories/components/badge.ts';
 import * as buttonStories from '../stories/components/Button.stories.ts';
 import { button, type ButtonArgs } from '../stories/components/button.ts';
+import * as dataTableStories from '../stories/components/DataTable.stories.ts';
+import {
+  dataTable,
+  dataTableBody,
+  dataTableCell,
+  dataTableColumn,
+  dataTableEmpty,
+  dataTableHead,
+  dataTableRow,
+  dataTableSortButton,
+  type DataTableArgs,
+  type DataTableCellArgs,
+  type DataTableColumnArgs,
+  type DataTableRowArgs,
+} from '../stories/components/data-table.ts';
 import * as headerStories from '../stories/components/Header.stories.ts';
 import { header, type HeaderArgs } from '../stories/components/header.ts';
 import * as iconButtonStories from '../stories/components/IconButton.stories.ts';
@@ -129,6 +150,19 @@ const sectionMenuItemDefaults: SectionMenuItemArgs = {
   href: '#tasks',
   current: false,
   disabled: false,
+};
+
+const dataTableColumnDefaults: DataTableColumnArgs = {
+  label: 'Date',
+  numeric: false,
+  hideOnPhone: false,
+};
+const dataTableCellDefaults: DataTableCellArgs = {
+  label: 'Date',
+  content: '3 Oct 2026',
+  kind: 'field',
+  numeric: false,
+  hideOnPhone: false,
 };
 
 const cases: ParityCase[] = [
@@ -371,6 +405,94 @@ const cases: ParityCase[] = [
     { class: 'app-header', id: 'top', 'data-testid': 'header', 'aria-label': 'Inbox' },
   ),
   headerCase('Header/blank slots', { title: 'Settings', leading: '  ', actions: ' ' }),
+  ...storyArgs<DataTableArgs>(dataTableStories).map(([story, args]) =>
+    dataTableCase(`Data table/${story}`, args),
+  ),
+  dataTableCase(
+    'Data table/with extra attributes',
+    { caption: undefined, columns: [dataTableColumnDefaults], rows: [] },
+    { class: 'mt-4', id: 'orders', 'data-testid': 'orders', 'aria-label': 'Orders' },
+  ),
+  dataTableCase('Data table/blank caption', {
+    caption: '  ',
+    columns: [dataTableColumnDefaults],
+    rows: [],
+  }),
+  dataTableColumnCase('Data table column/Default', dataTableColumnDefaults),
+  dataTableColumnCase('Data table column/Numeric', { ...dataTableColumnDefaults, numeric: true }),
+  dataTableColumnCase('Data table column/HiddenOnPhone', {
+    ...dataTableColumnDefaults,
+    hideOnPhone: true,
+  }),
+  dataTableColumnCase('Data table column/Sortable', { ...dataTableColumnDefaults, sort: 'none' }),
+  dataTableColumnCase('Data table column/Ascending', {
+    ...dataTableColumnDefaults,
+    sort: 'ascending',
+    numeric: true,
+  }),
+  dataTableColumnCase('Data table column/Descending', {
+    ...dataTableColumnDefaults,
+    sort: 'descending',
+  }),
+  dataTableColumnCase('Data table column/unknown sort', {
+    ...dataTableColumnDefaults,
+    sort: 'sideways' as DataTableColumnArgs['sort'],
+  }),
+  dataTableColumnCase(
+    'Data table column/with extra attributes',
+    { ...dataTableColumnDefaults, sort: 'none' },
+    { class: 'w-32', id: 'date', 'data-key': 'date', 'aria-describedby': 'date-help' },
+  ),
+  dataTableSortCase('Data table sort/Default', 'Date'),
+  dataTableSortCase('Data table sort/with extra attributes', 'Date', {
+    class: 'is-busy',
+    'data-key': 'date',
+    'aria-describedby': 'date-help',
+  }),
+  dataTableRowCase('Data table row/Default', {}),
+  dataTableRowCase('Data table row/Selected', { selected: true }),
+  dataTableRowCase('Data table row/NotSelected', { selected: false }),
+  dataTableRowCase(
+    'Data table row/with extra attributes',
+    { selected: true },
+    { class: 'is-new', id: 'order-1042', 'data-key': '1042', 'aria-describedby': 'order-help' },
+  ),
+  dataTableCellCase('Data table cell/Field', dataTableCellDefaults),
+  dataTableCellCase('Data table cell/Title', { ...dataTableCellDefaults, kind: 'title' }),
+  dataTableCellCase('Data table cell/Actions', {
+    ...dataTableCellDefaults,
+    label: undefined,
+    kind: 'actions',
+    content: '<button type="button">View</button>',
+  }),
+  dataTableCellCase('Data table cell/Numeric', {
+    ...dataTableCellDefaults,
+    numeric: true,
+    content: '€86.50',
+  }),
+  dataTableCellCase('Data table cell/HiddenOnPhone', {
+    ...dataTableCellDefaults,
+    hideOnPhone: true,
+  }),
+  dataTableCellCase('Data table cell/blank label', { ...dataTableCellDefaults, label: ' ' }),
+  dataTableCellCase('Data table cell/unknown kind', {
+    ...dataTableCellDefaults,
+    kind: 'header' as DataTableCellArgs['kind'],
+  }),
+  dataTableCellCase('Data table cell/with extra attributes', dataTableCellDefaults, {
+    class: 'truncate',
+    id: 'date-1042',
+    'data-key': 'date',
+    'aria-describedby': 'date-help',
+  }),
+  dataTableEmptyCase('Data table empty/Default', 'No orders yet.', 5),
+  dataTableEmptyCase('Data table empty/no columns', 'No orders yet.', 0),
+  dataTableEmptyCase('Data table empty/with extra attributes', 'No orders yet.', 3, {
+    class: 'is-filtered',
+    id: 'empty',
+    'data-testid': 'empty',
+    'aria-describedby': 'empty-help',
+  }),
   iconCase(
     'Icon/with an aria-label attribute',
     { size: 'md', mirror: false, svg: sampleIcons.alert },
@@ -642,6 +764,115 @@ function iconCase(story: string, args: IconArgs, attributes: Attributes = {}): P
   };
 }
 
+/** The data table's parity; its column headers and rows are markup, passed in as the slots. */
+function dataTableCase(
+  story: string,
+  args: DataTableArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = args.caption !== undefined ? { caption: args.caption } : {};
+  const named = { head: dataTableHead(args.columns) };
+  const slot = dataTableBody(args);
+  return {
+    story,
+    markup: dataTable(args, attributes),
+    vue: {
+      component: PlinthDataTable,
+      props: { ...props, ...attributes },
+      slot,
+      html: true,
+      named,
+    },
+    blade: { component: 'data-table', props, attributes, slot, named },
+  };
+}
+
+function dataTableColumnCase(
+  story: string,
+  args: DataTableColumnArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = {
+    ...(args.sort !== undefined ? { sort: args.sort } : {}),
+    numeric: args.numeric,
+    hideOnPhone: args.hideOnPhone,
+  };
+  const slot = args.sort === undefined ? args.label : dataTableSortButton(args.label);
+  return {
+    story,
+    markup: dataTableColumn(args, slot, attributes),
+    vue: {
+      component: PlinthDataTableColumn,
+      props: { ...props, ...attributes },
+      slot,
+      html: args.sort !== undefined,
+    },
+    blade: { component: 'data-table-column', props, attributes, slot },
+  };
+}
+
+function dataTableSortCase(story: string, label: string, attributes: Attributes = {}): ParityCase {
+  return {
+    story,
+    markup: dataTableSortButton(label, attributes),
+    vue: { component: PlinthDataTableSort, props: { ...attributes }, slot: label },
+    blade: { component: 'data-table-sort', props: {}, attributes, slot: label },
+  };
+}
+
+function dataTableRowCase(
+  story: string,
+  args: Omit<DataTableRowArgs, 'cells'>,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = args.selected !== undefined ? { selected: args.selected } : {};
+  const slot = '<td>#1042</td>';
+  return {
+    story,
+    markup: dataTableRow(args, slot, attributes),
+    vue: { component: PlinthDataTableRow, props: { ...props, ...attributes }, slot, html: true },
+    blade: { component: 'data-table-row', props, attributes, slot },
+  };
+}
+
+function dataTableCellCase(
+  story: string,
+  args: DataTableCellArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = {
+    ...(args.label !== undefined ? { label: args.label } : {}),
+    kind: args.kind,
+    numeric: args.numeric,
+    hideOnPhone: args.hideOnPhone,
+  };
+  return {
+    story,
+    markup: dataTableCell(args, attributes),
+    vue: {
+      component: PlinthDataTableCell,
+      props: { ...props, ...attributes },
+      slot: args.content,
+      html: args.content.startsWith('<'),
+    },
+    blade: { component: 'data-table-cell', props, attributes, slot: args.content },
+  };
+}
+
+function dataTableEmptyCase(
+  story: string,
+  text: string,
+  columns: number,
+  attributes: Attributes = {},
+): ParityCase {
+  return {
+    story,
+    markup: dataTableEmpty(text, columns, attributes),
+    vue: { component: PlinthDataTableEmpty, props: { columns, ...attributes }, slot: text },
+    blade: { component: 'data-table-empty', props: { columns }, attributes, slot: text },
+  };
+}
+
 function badgeWithAttributes(): ParityCase {
   const args: BadgeArgs = { label: 'Paid', tone: 'success', dot: true };
   const attributes: Attributes = {
@@ -828,6 +1059,40 @@ describe('parity with the stories', () => {
       'Header/LongTitle',
       'Header/with extra attributes',
       'Header/blank slots',
+      'Data table/Default',
+      'Data table/Sorted',
+      'Data table/SortedAscending',
+      'Data table/Selected',
+      'Data table/HiddenOnPhone',
+      'Data table/Empty',
+      'Data table/LongText',
+      'Data table/with extra attributes',
+      'Data table/blank caption',
+      'Data table column/Default',
+      'Data table column/Numeric',
+      'Data table column/HiddenOnPhone',
+      'Data table column/Sortable',
+      'Data table column/Ascending',
+      'Data table column/Descending',
+      'Data table column/unknown sort',
+      'Data table column/with extra attributes',
+      'Data table sort/Default',
+      'Data table sort/with extra attributes',
+      'Data table row/Default',
+      'Data table row/Selected',
+      'Data table row/NotSelected',
+      'Data table row/with extra attributes',
+      'Data table cell/Field',
+      'Data table cell/Title',
+      'Data table cell/Actions',
+      'Data table cell/Numeric',
+      'Data table cell/HiddenOnPhone',
+      'Data table cell/blank label',
+      'Data table cell/unknown kind',
+      'Data table cell/with extra attributes',
+      'Data table empty/Default',
+      'Data table empty/no columns',
+      'Data table empty/with extra attributes',
       'Icon/with an aria-label attribute',
     ]);
   });

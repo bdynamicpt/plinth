@@ -2,6 +2,12 @@ import type { App, Plugin } from 'vue';
 import PlinthAvatar from './PlinthAvatar.vue';
 import PlinthBadge from './PlinthBadge.vue';
 import PlinthButton from './PlinthButton.vue';
+import PlinthDataTable from './PlinthDataTable.vue';
+import PlinthDataTableCell from './PlinthDataTableCell.vue';
+import PlinthDataTableColumn from './PlinthDataTableColumn.vue';
+import PlinthDataTableEmpty from './PlinthDataTableEmpty.vue';
+import PlinthDataTableRow from './PlinthDataTableRow.vue';
+import PlinthDataTableSort from './PlinthDataTableSort.vue';
 import PlinthHeader from './PlinthHeader.vue';
 import PlinthIcon from './PlinthIcon.vue';
 import PlinthIconButton from './PlinthIconButton.vue';
@@ -18,6 +24,12 @@ export {
   PlinthAvatar,
   PlinthBadge,
   PlinthButton,
+  PlinthDataTable,
+  PlinthDataTableCell,
+  PlinthDataTableColumn,
+  PlinthDataTableEmpty,
+  PlinthDataTableRow,
+  PlinthDataTableSort,
   PlinthHeader,
   PlinthIcon,
   PlinthIconButton,
@@ -32,6 +44,15 @@ export {
 };
 export { avatarGlyph, avatarSizes, initialsFrom, type AvatarSize } from './avatar';
 export { buttonVariants, type ButtonVariant } from './button';
+export {
+  dataTableCellKind,
+  dataTableCellKinds,
+  dataTableSort,
+  dataTableSortIcon,
+  dataTableSorts,
+  type DataTableCellKind,
+  type DataTableSort,
+} from './data-table';
 export { headingLevel, headingLevels, type HeadingLevel } from './heading';
 export { controlSizes, iconSizeFor, resolveSize, sizes, type ControlSize, type Size } from './size';
 export { iconSizes, type IconSize } from './icon';
@@ -45,6 +66,12 @@ export const Plinth: Plugin = {
     app.component('PlinthAvatar', PlinthAvatar);
     app.component('PlinthBadge', PlinthBadge);
     app.component('PlinthButton', PlinthButton);
+    app.component('PlinthDataTable', PlinthDataTable);
+    app.component('PlinthDataTableCell', PlinthDataTableCell);
+    app.component('PlinthDataTableColumn', PlinthDataTableColumn);
+    app.component('PlinthDataTableEmpty', PlinthDataTableEmpty);
+    app.component('PlinthDataTableRow', PlinthDataTableRow);
+    app.component('PlinthDataTableSort', PlinthDataTableSort);
     app.component('PlinthHeader', PlinthHeader);
     app.component('PlinthIcon', PlinthIcon);
     app.component('PlinthIconButton', PlinthIconButton);

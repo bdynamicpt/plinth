@@ -1,0 +1,470 @@
+/*
+ * Data table: a collection of records (orders, users, invoices) from one markup, a stack of cards
+ * on a phone and a table from 768px up. No script: the CSS alone changes the layout.
+ *
+ * <table class="plinth-data-table" role="table">
+ *   <caption class="plinth-data-table-caption">Orders</caption>
+ *   <thead class="plinth-data-table-head" role="rowgroup">
+ *     <tr class="plinth-data-table-head-row" role="row">
+ *       <th class="plinth-data-table-column" role="columnheader" scope="col">Order</th>
+ *       <th class="plinth-data-table-column" role="columnheader" scope="col" aria-sort="descending">
+ *         <button type="button" class="plinth-data-table-sort">
+ *           <span class="plinth-data-table-sort-label">Date</span>
+ *           <span class="plinth-icon plinth-data-table-sort-icon" data-size="sm" aria-hidden="true">
+ *             <svg>…<path class="plinth-data-table-sort-up"/><path class="plinth-data-table-sort-down"/></svg>
+ *           </span>
+ *         </button>
+ *       </th>
+ *       <th class="plinth-data-table-column" role="columnheader" scope="col" data-numeric>Total</th>
+ *       <th class="plinth-data-table-column" role="columnheader" scope="col" data-phone="hidden">…</th>
+ *     </tr>
+ *   </thead>
+ *   <tbody class="plinth-data-table-body" role="rowgroup">
+ *     <tr class="plinth-data-table-row" role="row">
+ *       <td class="plinth-data-table-cell" role="cell" data-kind="title">
+ *         <span class="plinth-data-table-label" aria-hidden="true">Order</span>
+ *         <span class="plinth-data-table-value">#1042</span>
+ *       </td>
+ *       <td class="plinth-data-table-cell" role="cell" data-kind="field">…</td>
+ *       <td class="plinth-data-table-cell" role="cell" data-kind="field" data-numeric>…</td>
+ *       <td class="plinth-data-table-cell" role="cell" data-kind="actions">
+ *         <span class="plinth-data-table-value">buttons</span>
+ *       </td>
+ *     </tr>
+ *     <tr class="plinth-data-table-row" role="row" aria-selected="true">…</tr>
+ *   </tbody>
+ * </table>
+ *
+ * With no rows, the body holds the empty state:
+ *
+ *   <tbody class="plinth-data-table-body" role="rowgroup">
+ *     <tr class="plinth-data-table-empty" role="row">
+ *       <td class="plinth-data-table-empty-cell" role="cell" colspan="4">No orders yet.</td>
+ *     </tr>
+ *   </tbody>
+ *
+ * The explicit roles (table, rowgroup, row, columnheader, cell) are part of the contract: some
+ * browsers, Safari in particular, drop a table's semantics once its rows stop displaying as table
+ * rows. The caption is optional; without it, name the table with aria-label or aria-labelledby.
+ *
+ * Each cell repeats its column's name in plinth-data-table-label, shown only on a phone's card
+ * and aria-hidden, since the column header already names the cell. The label is optional (an
+ * actions cell has none). The header row stays in the accessibility tree on a phone, visually
+ * hidden, so every cell keeps its header.
+ *
+ * Choices, on the cells and the column headers:
+ * - data-kind on a cell: field (the default; the label, then the value), title (the card's title,
+ *   first on the card, with no label) or actions (row actions, last on the card, with no label).
+ * - data-numeric: numbers, aligned to the end, with figures of one width.
+ * - data-phone="hidden": a less important column, left out of a phone's card and shown from 768px
+ *   up. Put it on the column header and on every cell of the column, so the two always match.
+ * The title cell is the row's first cell and the actions cell its last: the card moves them to
+ * its top and bottom with `order`, which must not change the reading and focus order.
+ *
+ * The app owns sorting, paging and selection (ADR 2); the table only shows them:
+ * - aria-sort on a sortable column header: none, ascending or descending (one column at a time).
+ *   Its label is a plinth-data-table-sort button, which the app listens to; its icon shows both
+ *   arrows (none) or the one of the order. On a phone the sortable headers stay visible above the
+ *   cards as a row of sort buttons; the other headers are visually hidden.
+ * - aria-selected on a row of a table whose rows can be selected: true for a selected row, false
+ *   for the others. A selected row takes the selection tint (accent-subtle) and an accent edge at
+ *   its start. aria-selected drives the styling only: screen readers don't announce it in a
+ *   table, so the control that selects a row (a checkbox, a pressed button) is the app's, and it
+ *   carries the state.
+ * - the sort button's states: hover where the device can hover, pressed (:active) a surface step
+ *   down, disabled (while a sort loads, say) dimmed with opacity.disabled.
+ * - the empty state: one plinth-data-table-empty row in the body, whose plinth-data-table-empty-cell
+ *   spans every column (colspan).
+ * Paging controls sit outside the table.
+ *
+ * From 768px up the actions sit at the start of their cell, under their column header.
+ *
+ * Text wraps in its cell. A table wider than its container, from 768px up, belongs in a
+ * scrolling container the app adds. --plinth-data-table-row-height is a body row's height (44px).
+ */
+
+@layer plinth {
+  /* The phone: a stack of cards. */
+  .plinth-data-table {
+    position: relative;
+    display: block;
+    inline-size: 100%;
+    font-family: var(--plinth-font-family-body);
+    font-size: var(--plinth-font-size-md);
+    line-height: var(--plinth-font-leading-tight);
+    color: var(--plinth-color-text);
+    border-spacing: 0;
+    border-collapse: separate;
+  }
+
+  .plinth-data-table-caption {
+    display: block;
+    padding-inline: var(--plinth-space-4);
+    margin-block-end: var(--plinth-space-2);
+    font-size: var(--plinth-font-size-sm);
+    font-weight: var(--plinth-font-weight-medium);
+    line-height: var(--plinth-font-leading-normal);
+    color: var(--plinth-color-text-muted);
+    text-align: start;
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-data-table-head {
+    display: block;
+  }
+
+  .plinth-data-table-head-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--plinth-space-2);
+  }
+
+  .plinth-data-table-head-row:has(> [aria-sort]:not([data-phone='hidden'])) {
+    margin-block-end: var(--plinth-space-3);
+  }
+
+  .plinth-data-table-column {
+    display: block;
+    padding: 0;
+    font-size: var(--plinth-font-size-sm);
+    font-weight: var(--plinth-font-weight-medium);
+    color: var(--plinth-color-text-muted);
+    text-align: start;
+  }
+
+  /* Visually hidden, still a column header to assistive technology. */
+  .plinth-data-table-column:not([aria-sort]) {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+
+  .plinth-data-table-sort {
+    display: inline-flex;
+    gap: var(--plinth-space-1);
+    align-items: center;
+    min-inline-size: var(--plinth-touch-target);
+    min-block-size: var(--plinth-touch-target);
+    padding-inline: var(--plinth-space-3);
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    text-align: inherit;
+    cursor: pointer;
+    background-color: var(--plinth-color-surface-raised);
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+    border-radius: var(--plinth-radius-pill);
+    transition:
+      color var(--plinth-duration-fast) var(--plinth-easing-standard),
+      background-color var(--plinth-duration-fast) var(--plinth-easing-standard);
+  }
+
+  .plinth-data-table-sort:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset);
+  }
+
+  :is([aria-sort='ascending'], [aria-sort='descending']) > .plinth-data-table-sort {
+    color: var(--plinth-color-text);
+    border-color: var(--plinth-color-border-strong);
+  }
+
+  @media (hover: hover) {
+    .plinth-data-table-sort:hover {
+      color: var(--plinth-color-text);
+      background-color: var(--plinth-color-surface-hover);
+    }
+  }
+
+  .plinth-data-table-sort:disabled {
+    cursor: not-allowed;
+    opacity: var(--plinth-opacity-disabled);
+  }
+
+  .plinth-data-table-sort:enabled:active {
+    background-color: var(--plinth-color-surface-sunken);
+  }
+
+  .plinth-data-table-sort-label {
+    overflow-wrap: anywhere;
+  }
+
+  [aria-sort='none'] .plinth-data-table-sort-icon {
+    color: var(--plinth-color-text-subtle);
+  }
+
+  [aria-sort='ascending'] .plinth-data-table-sort-down,
+  [aria-sort='descending'] .plinth-data-table-sort-up {
+    display: none;
+  }
+
+  .plinth-data-table-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--plinth-space-3);
+  }
+
+  .plinth-data-table-row {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding-block: var(--plinth-space-1);
+    background-color: var(--plinth-color-surface-raised);
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+    border-radius: var(--plinth-radius-container);
+  }
+
+  .plinth-data-table-cell {
+    display: flex;
+    gap: var(--plinth-space-3);
+    align-items: baseline;
+    justify-content: space-between;
+    padding-block: var(--plinth-space-2);
+    padding-inline: var(--plinth-space-4);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-data-table-label {
+    flex: none;
+    max-inline-size: 50%;
+    font-size: var(--plinth-font-size-sm);
+    color: var(--plinth-color-text-muted);
+  }
+
+  .plinth-data-table-value {
+    min-inline-size: 0;
+    text-align: end;
+  }
+
+  .plinth-data-table-cell[data-kind='title'] {
+    order: -1;
+    font-weight: var(--plinth-font-weight-medium);
+  }
+
+  .plinth-data-table-cell:is([data-kind='title'], [data-kind='actions']) .plinth-data-table-label {
+    display: none;
+  }
+
+  .plinth-data-table-cell[data-kind='title'] .plinth-data-table-value {
+    text-align: start;
+  }
+
+  .plinth-data-table-cell[data-kind='actions'] {
+    justify-content: flex-end;
+    order: 1;
+    padding-block-start: var(--plinth-space-3);
+    margin-block-start: var(--plinth-space-1);
+    border-block-start: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+  }
+
+  .plinth-data-table-cell[data-kind='actions'] .plinth-data-table-value {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--plinth-space-2);
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .plinth-data-table [data-numeric] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .plinth-data-table [data-phone='hidden'] {
+    display: none;
+  }
+
+  .plinth-data-table-row[aria-selected='true'] {
+    background-color: var(--plinth-color-accent-subtle);
+    border-color: var(--plinth-color-accent);
+  }
+
+  /* The selected row's edge, so the tint is not the only sign of it. */
+  .plinth-data-table-row[aria-selected='true']::before {
+    position: absolute;
+    inset-block: var(--plinth-space-3);
+    inset-inline-start: 0;
+    inline-size: var(--plinth-border-width-thick);
+    content: '';
+    background-color: var(--plinth-color-accent);
+    border-radius: var(--plinth-radius-pill);
+  }
+
+  .plinth-data-table-empty {
+    display: block;
+  }
+
+  .plinth-data-table-empty-cell {
+    display: block;
+    padding-block: var(--plinth-space-8);
+    padding-inline: var(--plinth-space-4);
+    color: var(--plinth-color-text-muted);
+    text-align: center;
+    overflow-wrap: anywhere;
+    background-color: var(--plinth-color-surface-raised);
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+    border-radius: var(--plinth-radius-container);
+  }
+
+  /* From 768px: a table. */
+  @media (min-width: 768px) {
+    .plinth-data-table {
+      display: table;
+    }
+
+    .plinth-data-table-caption {
+      display: table-caption;
+      padding-inline: 0;
+      caption-side: top;
+    }
+
+    .plinth-data-table-head {
+      display: table-header-group;
+    }
+
+    .plinth-data-table-head-row,
+    .plinth-data-table-head-row:has(> [aria-sort]:not([data-phone='hidden'])) {
+      display: table-row;
+      margin: 0;
+    }
+
+    .plinth-data-table-column,
+    .plinth-data-table-column:not([aria-sort]),
+    .plinth-data-table [data-phone='hidden'].plinth-data-table-column {
+      position: static;
+      box-sizing: border-box;
+      display: table-cell;
+      inline-size: auto;
+      block-size: var(--plinth-touch-target);
+      padding-block: 0;
+      padding-inline: var(--plinth-space-3);
+      overflow: visible;
+      vertical-align: middle;
+      white-space: normal;
+      border-block-end: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+      clip-path: none;
+    }
+
+    .plinth-data-table-sort {
+      padding-inline: var(--plinth-space-1);
+      margin-inline: calc(var(--plinth-space-1) * -1);
+      background-color: transparent;
+      border: 0;
+      border-radius: var(--plinth-radius-control);
+    }
+
+    @media (hover: hover) {
+      .plinth-data-table-sort:hover {
+        background-color: transparent;
+      }
+    }
+
+    .plinth-data-table-sort:enabled:active {
+      background-color: var(--plinth-color-surface-sunken);
+    }
+
+    .plinth-data-table-body {
+      display: table-row-group;
+    }
+
+    .plinth-data-table-row {
+      position: static;
+      display: table-row;
+      padding: 0;
+      background-color: transparent;
+      border: 0;
+      border-radius: 0;
+    }
+
+    .plinth-data-table-cell,
+    .plinth-data-table-cell[data-kind='actions'],
+    .plinth-data-table [data-phone='hidden'].plinth-data-table-cell {
+      position: relative;
+      box-sizing: border-box;
+      display: table-cell;
+      block-size: var(--plinth-data-table-row-height);
+      padding-block: var(--plinth-space-2);
+      padding-inline: var(--plinth-space-3);
+      margin: 0;
+      vertical-align: middle;
+      text-align: start;
+      overflow-wrap: break-word;
+      border: 0;
+    }
+
+    .plinth-data-table-row + .plinth-data-table-row > .plinth-data-table-cell {
+      border-block-start: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+    }
+
+    .plinth-data-table-label {
+      display: none;
+    }
+
+    .plinth-data-table-value {
+      text-align: inherit;
+    }
+
+    .plinth-data-table-cell[data-kind='actions'] .plinth-data-table-value {
+      display: inline-flex;
+      flex-wrap: nowrap;
+    }
+
+    .plinth-data-table-column[data-numeric],
+    .plinth-data-table-cell[data-numeric] {
+      text-align: end;
+    }
+
+    .plinth-data-table-row[aria-selected='true'] {
+      border-color: transparent;
+    }
+
+    .plinth-data-table-row[aria-selected='true'] > .plinth-data-table-cell {
+      background-color: var(--plinth-color-accent-subtle);
+    }
+
+    .plinth-data-table-row[aria-selected='true']::before {
+      content: none;
+    }
+
+    .plinth-data-table-row[aria-selected='true'] > .plinth-data-table-cell:first-child::before {
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 0;
+      inline-size: var(--plinth-border-width-thick);
+      content: '';
+      background-color: var(--plinth-color-accent);
+    }
+
+    .plinth-data-table-empty {
+      display: table-row;
+    }
+
+    .plinth-data-table-empty-cell {
+      display: table-cell;
+      background-color: transparent;
+      border: 0;
+      border-radius: 0;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .plinth-data-table-column,
+    .plinth-data-table-column:not([aria-sort]),
+    .plinth-data-table [data-phone='hidden'].plinth-data-table-column,
+    .plinth-data-table-cell,
+    .plinth-data-table-cell[data-kind='actions'],
+    .plinth-data-table [data-phone='hidden'].plinth-data-table-cell {
+      padding-inline: var(--plinth-space-4);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .plinth-data-table-row[aria-selected='true'],
+    .plinth-data-table-row[aria-selected='true'] > .plinth-data-table-cell {
+      color: HighlightText;
+      background-color: Highlight;
+    }
+  }
+}
