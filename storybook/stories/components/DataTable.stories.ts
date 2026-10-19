@@ -147,10 +147,28 @@ export const SortedAscending: Story = {
   },
 };
 
-/** Rows that can be selected: aria-selected on every row, true on the selected one. */
+/**
+ * Rows that can be selected: aria-selected on every row, true on the selected one. The app's
+ * Select button carries the state for assistive technology (aria-pressed).
+ */
 export const Selected: Story = {
   args: {
-    rows: orders.map((order, index) => orderRow(order, { selected: index === 1 })),
+    rows: orders.map((order, index) => {
+      const selected = index === 1;
+      const row = orderRow(order, { selected });
+      const select = button(
+        {
+          label: `Select ${order.number}`,
+          variant: 'ghost',
+          size: 'sm',
+          disabled: false,
+          busy: false,
+        },
+        { 'aria-pressed': String(selected) },
+      );
+      row.cells[row.cells.length - 1]!.content = select + view(order.number);
+      return row;
+    }),
   },
 };
 

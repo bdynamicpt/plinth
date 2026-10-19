@@ -104,7 +104,7 @@ it('marks a numeric cell and one hidden on a phone', function () {
 it('prints the empty state across the columns, at least one', function () {
     expect(squish(Blade::render('<x-plinth::data-table-empty :columns="5">No orders yet.</x-plinth::data-table-empty>')))
         ->toBe('<tr class="plinth-data-table-empty" role="row"><td class="plinth-data-table-empty-cell" role="cell" colspan="5">No orders yet.</td></tr>');
-    foreach ([[null, '1'], ['3', '3'], [2.7, '2'], [0, '1'], [-2, '1'], ['many', '1']] as [$columns, $span]) {
+    foreach ([[null, '1'], ['3', '3'], [2.7, '2'], [0, '1'], [-2, '1'], ['many', '1'], [INF, '1'], ['0x1A', '1'], [' 1e1 ', '10']] as [$columns, $span]) {
         expect(Blade::render('<x-plinth::data-table-empty :columns="$columns">None</x-plinth::data-table-empty>', ['columns' => $columns]))
             ->toContain('colspan="'.$span.'"');
     }

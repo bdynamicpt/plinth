@@ -10,8 +10,13 @@ const props = withDefaults(
   { columns: 1 },
 );
 
-// Whole numbers of at least 1, as Blade's view decides.
-const span = computed(() => Math.max(1, Math.trunc(Number(props.columns)) || 1));
+// A whole number of at least 1; anything that isn't a decimal number is 1, as Blade's view decides.
+const decimal = /^\s*[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?\s*$/;
+const span = computed(() => {
+  const value = typeof props.columns === 'number' ? props.columns : String(props.columns);
+  const count = typeof value === 'number' || decimal.test(value) ? Number(value) : Number.NaN;
+  return Number.isFinite(count) ? Math.max(1, Math.trunc(count)) : 1;
+});
 </script>
 
 <template>

@@ -7,8 +7,7 @@ import * as DataTableStories from './DataTable.stories';
 
 A collection of records (orders, users, invoices) from one markup: a stack of cards on a phone,
 a table from 768px up. The CSS alone changes the layout, so there is no script, and Blade and Vue
-print the table once. Use it on custom pages and in the Vue site; Filament panels keep their own
-tables.
+print the table once. Use it in Blade views and Vue apps; Filament panels keep their own tables.
 
 <Canvas of={DataTableStories.Default} />
 <Controls of={DataTableStories.Default} />
@@ -72,7 +71,9 @@ Each row becomes a card: the **title** cell first, then each **field** as its la
 value, then the **actions** under a divider. Pick the kind with `data-kind` (`kind` in Blade and
 Vue); `field` is the default.
 
-- **`data-kind="title"`** is the card's title, such as the order number, with no label.
+- **`data-kind="title"`** is the card's title, such as the order number, with no label. It must
+  be the row's first cell, and the actions cell its last: the card moves them with `order`, which
+  must not change the reading and focus order.
 - **`data-kind="actions"`** holds the row's buttons, last on the card, with no label. From 768px
   up they sit at the start of their cell, under the column header.
 - **`data-numeric`** (`numeric`) aligns numbers to the end of a table cell, with figures of one
@@ -95,7 +96,9 @@ shows them.
   sortable headers stay visible above the cards as a row of sort buttons.
 - **Selection:** a table whose rows can be selected puts `aria-selected` on every row (`selected`),
   `true` on the selected ones. A selected row takes the selection tint and an accent edge at its
-  start. The control that selects it is the app's.
+  start. `aria-selected` only drives the styling: screen readers don't announce it in a table. The
+  control that selects a row (a checkbox, a pressed button, as in the story) is the app's, and it
+  carries the state.
 - **The empty state:** one `plinth-data-table-empty` row in the body, whose cell spans every
   column (`columns`).
 - **Paging** controls sit outside the table.

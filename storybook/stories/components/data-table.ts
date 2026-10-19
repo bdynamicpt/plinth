@@ -107,7 +107,7 @@ export const dataTableRowFor = (row: DataTableRowArgs) =>
 /** The empty state: one row with one cell across every column. */
 export function dataTableEmpty(text: string, columns: number, attributes: Attributes = {}): string {
   const { classes, extra } = rootAttributes('plinth-data-table-empty', attributes);
-  const span = Math.max(1, Math.trunc(columns) || 1);
+  const span = Number.isFinite(columns) ? Math.max(1, Math.trunc(columns)) : 1;
   return `<tr class="${classes}" role="row"${extra}><td class="plinth-data-table-empty-cell" role="cell" colspan="${span}">${escape(text)}</td></tr>`;
 }
 

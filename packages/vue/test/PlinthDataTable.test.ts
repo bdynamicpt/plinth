@@ -182,6 +182,9 @@ describe('PlinthDataTableEmpty', () => {
     expect(span(0)).toBe('1');
     expect(span(-2)).toBe('1');
     expect(span('many')).toBe('1');
+    expect(span(Infinity)).toBe('1');
+    expect(span('0x1A')).toBe('1');
+    expect(span(' 1e1 ')).toBe('10');
   });
 
   it('escapes the text and keeps extra attributes', () => {

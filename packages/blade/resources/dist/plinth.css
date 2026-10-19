@@ -825,10 +825,21 @@
  *       </td>
  *       <td class="plinth-data-table-cell" role="cell" data-kind="field">…</td>
  *       <td class="plinth-data-table-cell" role="cell" data-kind="field" data-numeric>…</td>
- *       <td class="plinth-data-table-cell" role="cell" data-kind="actions">buttons</td>
+ *       <td class="plinth-data-table-cell" role="cell" data-kind="actions">
+ *         <span class="plinth-data-table-value">buttons</span>
+ *       </td>
  *     </tr>
+ *     <tr class="plinth-data-table-row" role="row" aria-selected="true">…</tr>
  *   </tbody>
  * </table>
+ *
+ * With no rows, the body holds the empty state:
+ *
+ *   <tbody class="plinth-data-table-body" role="rowgroup">
+ *     <tr class="plinth-data-table-empty" role="row">
+ *       <td class="plinth-data-table-empty-cell" role="cell" colspan="4">No orders yet.</td>
+ *     </tr>
+ *   </tbody>
  *
  * The explicit roles (table, rowgroup, row, columnheader, cell) are part of the contract: some
  * browsers, Safari in particular, drop a table's semantics once its rows stop displaying as table
@@ -845,6 +856,8 @@
  * - data-numeric: numbers, aligned to the end, with figures of one width.
  * - data-phone="hidden": a less important column, left out of a phone's card and shown from 768px
  *   up. Put it on the column header and on every cell of the column, so the two always match.
+ * The title cell is the row's first cell and the actions cell its last: the card moves them to
+ * its top and bottom with `order`, which must not change the reading and focus order.
  *
  * The app owns sorting, paging and selection (ADR 2); the table only shows them:
  * - aria-sort on a sortable column header: none, ascending or descending (one column at a time).
@@ -853,7 +866,11 @@
  *   cards as a row of sort buttons; the other headers are visually hidden.
  * - aria-selected on a row of a table whose rows can be selected: true for a selected row, false
  *   for the others. A selected row takes the selection tint (accent-subtle) and an accent edge at
- *   its start. The control that selects it (a checkbox, a button) is the app's.
+ *   its start. aria-selected drives the styling only: screen readers don't announce it in a
+ *   table, so the control that selects a row (a checkbox, a pressed button) is the app's, and it
+ *   carries the state.
+ * - the sort button's states: hover where the device can hover, pressed (:active) a surface step
+ *   down, disabled (while a sort loads, say) dimmed with opacity.disabled.
  * - the empty state: one plinth-data-table-empty row in the body, whose plinth-data-table-empty-cell
  *   spans every column (colspan).
  * Paging controls sit outside the table.
@@ -927,6 +944,7 @@
     display: inline-flex;
     gap: var(--plinth-space-1);
     align-items: center;
+    min-inline-size: var(--plinth-touch-target);
     min-block-size: var(--plinth-touch-target);
     padding-inline: var(--plinth-space-3);
     margin: 0;
@@ -957,6 +975,15 @@
       color: var(--plinth-color-text);
       background-color: var(--plinth-color-surface-hover);
     }
+  }
+
+  .plinth-data-table-sort:disabled {
+    cursor: not-allowed;
+    opacity: var(--plinth-opacity-disabled);
+  }
+
+  .plinth-data-table-sort:enabled:active {
+    background-color: var(--plinth-color-surface-sunken);
   }
 
   .plinth-data-table-sort-label {
@@ -1130,6 +1157,10 @@
       .plinth-data-table-sort:hover {
         background-color: transparent;
       }
+    }
+
+    .plinth-data-table-sort:enabled:active {
+      background-color: var(--plinth-color-surface-sunken);
     }
 
     .plinth-data-table-body {
