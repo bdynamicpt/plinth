@@ -128,6 +128,23 @@ describe('tiers', () => {
     expect(token('font.tracking.tight').value).toBe('-0.02em');
   });
 
+  it('has a type scale from 12 to 36 px, and display sizes of 48 and 64 px for marketing pages', () => {
+    const sizes = ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'];
+    expect(sizes.map((s) => token(`font.size.${s}`).value)).toEqual([
+      '0.75rem',
+      '0.8125rem',
+      '0.875rem',
+      '0.9375rem',
+      '1.125rem',
+      '1.5rem',
+      '1.875rem',
+      '2.25rem',
+      '3rem',
+      '4rem',
+    ]);
+    expect(token('font.leading.display').value).toBe('1.05');
+  });
+
   it('has avatar sizes of 24, 32, 40 and 56 px', () => {
     expect(['sm', 'md', 'lg', 'xl'].map((s) => token(`size.avatar.${s}`).value)).toEqual([
       '1.5rem',

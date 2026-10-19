@@ -104,7 +104,7 @@
     },
     "size": {
       "$type": "dimension",
-      "$description": "UI text is md (14px), with sm (13px) and xs (12px) below it; reading text is lg (15px); larger sizes are for headings.",
+      "$description": "UI text is md (14px), with sm (13px) and xs (12px) below it; reading text is lg (15px); larger sizes are for headings. 5xl (48px) and 6xl (64px) are display sizes for marketing pages only.",
       "xs": {
         "$value": "{ref.font.size.12}"
       },
@@ -128,6 +128,12 @@
       },
       "4xl": {
         "$value": "{ref.font.size.36}"
+      },
+      "5xl": {
+        "$value": "{ref.font.size.48}"
+      },
+      "6xl": {
+        "$value": "{ref.font.size.64}"
       }
     },
     "weight": {
@@ -147,6 +153,10 @@
     },
     "leading": {
       "$type": "number",
+      "$description": "normal for text, tight for headings, display for the 5xl and 6xl display sizes.",
+      "display": {
+        "$value": "{ref.font.leading.105}"
+      },
       "tight": {
         "$value": "{ref.font.leading.125}"
       },
