@@ -2,6 +2,7 @@ import {
   PlinthAvatar,
   PlinthBadge,
   PlinthButton,
+  PlinthCodeBlock,
   PlinthDataTable,
   PlinthDataTableCell,
   PlinthDataTableColumn,
@@ -23,6 +24,7 @@ import {
 import {
   PlinthBadge as ReactBadge,
   PlinthButton as ReactButton,
+  PlinthCodeBlock as ReactCodeBlock,
   PlinthIcon as ReactIcon,
   PlinthIconButton as ReactIconButton,
 } from '@bdynamic/plinth-react';
@@ -37,6 +39,9 @@ import * as badgeStories from '../stories/components/Badge.stories.ts';
 import { badge, type Attributes, type BadgeArgs } from '../stories/components/badge.ts';
 import * as buttonStories from '../stories/components/Button.stories.ts';
 import { button, type ButtonArgs } from '../stories/components/button.ts';
+import * as codeBlockStories from '../stories/components/CodeBlock.stories.ts';
+import { codeBlock, type CodeBlockArgs } from '../stories/components/code-block.ts';
+import { escape } from '../stories/components/markup.ts';
 import * as dataTableStories from '../stories/components/DataTable.stories.ts';
 import {
   dataTable,
@@ -76,7 +81,7 @@ import {
 import * as sheetStories from '../stories/components/Sheet.stories.ts';
 import { sheet, type SheetArgs } from '../stories/components/sheet.ts';
 import { sampleIcons } from '../stories/components/icons.ts';
-import { htmlToReact, normalize, reactProps, renderBlade } from './markup.ts';
+import { htmlToReact, normalize, reactProps, renderBlade, withoutAlpine } from './markup.ts';
 
 /**
  * Parity: for every story of a component, the Blade, Vue and React output must match the story's
@@ -117,6 +122,7 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthIcon, ReactIcon],
   [PlinthButton, ReactButton],
   [PlinthIconButton, ReactIconButton],
+  [PlinthCodeBlock, ReactCodeBlock],
 ]);
 
 /**
@@ -196,6 +202,14 @@ const dataTableCellDefaults: DataTableCellArgs = {
   kind: 'field',
   numeric: false,
   hideOnPhone: false,
+};
+
+const codeBlockDefaults: CodeBlockArgs = {
+  code: 'npm ci',
+  tabsLabel: 'Language',
+  copy: true,
+  copyLabel: 'Copy',
+  copiedLabel: 'Copied',
 };
 
 const cases: ParityCase[] = [
@@ -533,6 +547,37 @@ const cases: ParityCase[] = [
     { size: 'md', mirror: false, svg: sampleIcons.alert },
     { 'aria-label': 'Warning' },
   ),
+  ...storyArgs<CodeBlockArgs>(codeBlockStories).map(([story, args]) =>
+    codeBlockCase(`Code block/${story}`, args),
+  ),
+  codeBlockCase(
+    'Code block/with extra attributes',
+    { ...codeBlockDefaults, id: 'install', label: 'Terminal' },
+    { class: 'ms-2', 'data-testid': 'install', 'aria-describedby': 'install-help' },
+  ),
+  codeBlockCase('Code block/blank label and id', { ...codeBlockDefaults, id: ' ', label: '  ' }),
+  codeBlockCase('Code block/highlighted tab and seven tabs', {
+    ...codeBlockDefaults,
+    id: 'many',
+    tabs: [
+      {
+        label: 'PHP',
+        code: 'echo',
+        html: '<span style="color: var(--plinth-color-accent-text)">echo</span>',
+      },
+      ...Array.from({ length: 6 }, (_, i) => ({ label: `Tab ${i}`, code: `code ${i}` })),
+    ],
+  }),
+  codeBlockCase('Code block/unknown selected tab', {
+    ...codeBlockDefaults,
+    id: 'pick',
+    tabs: [
+      { label: 'Vue', code: '<PlinthBadge />' },
+      { label: 'React', code: '<PlinthBadge />' },
+    ],
+    selected: 'Svelte',
+    tabsLabel: 'Framework',
+  }),
 ];
 
 function buttonCase(story: string, args: ButtonArgs, attributes: Attributes = {}): ParityCase {
@@ -908,6 +953,42 @@ function dataTableEmptyCase(
   };
 }
 
+function codeBlockCase(
+  story: string,
+  args: CodeBlockArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = {
+    ...(args.id !== undefined ? { id: args.id } : {}),
+    ...(args.label !== undefined && !args.labelHtml ? { label: args.label } : {}),
+    ...(args.tabs ? { tabs: args.tabs } : {}),
+    ...(args.selected !== undefined ? { selected: args.selected } : {}),
+    tabsLabel: args.tabsLabel,
+    copy: args.copy,
+    copyLabel: args.copyLabel,
+    copiedLabel: args.copiedLabel,
+  };
+  const named: Record<string, string> = args.labelHtml ? { label: args.labelHtml } : {};
+  const code = args.tabs ? '' : args.code;
+  return {
+    story,
+    markup: codeBlock(args, attributes),
+    vue: {
+      component: PlinthCodeBlock,
+      props: { ...props, ...(args.html !== undefined ? { html: args.html } : {}), ...attributes },
+      slot: args.html !== undefined ? '' : code,
+      named,
+    },
+    blade: {
+      component: 'code-block',
+      props,
+      attributes,
+      slot: args.html ?? escape(code),
+      named,
+    },
+  };
+}
+
 function badgeWithAttributes(): ParityCase {
   const args: BadgeArgs = { label: 'Paid', tone: 'success', dot: true };
   const attributes: Attributes = {
@@ -1130,6 +1211,20 @@ describe('parity with the stories', () => {
       'Data table empty/no columns',
       'Data table empty/with extra attributes',
       'Icon/with an aria-label attribute',
+      'Code block/Default',
+      'Code block/WithoutLabel',
+      'Code block/Tabs',
+      'Code block/TabsWithLabel',
+      'Code block/Highlighted',
+      'Code block/LongLine',
+      'Code block/LongLabel',
+      'Code block/WithoutCopy',
+      'Code block/CodeOnly',
+      'Code block/LabelWithBadge',
+      'Code block/with extra attributes',
+      'Code block/blank label and id',
+      'Code block/highlighted tab and seven tabs',
+      'Code block/unknown selected tab',
     ]);
   });
 
@@ -1149,7 +1244,7 @@ describe('parity with the stories', () => {
     });
 
     it('Blade prints the story markup', () => {
-      expect(normalize(blade[i]!)).toBe(normalize(c.markup));
+      expect(normalize(withoutAlpine(blade[i]!))).toBe(normalize(c.markup));
     });
 
     const react = reactComponents.get(c.vue.component);
@@ -1162,11 +1257,11 @@ describe('parity with the stories', () => {
 });
 
 describe('the React side', () => {
-  it('covers badge, icon, button and icon button', () => {
+  it('covers badge, icon, button, icon button and code block', () => {
     const covered = new Set(
       cases.filter((c) => reactComponents.has(c.vue.component)).map((c) => c.story.split('/')[0]),
     );
-    expect([...covered]).toEqual(['Badge', 'Icon', 'Button', 'Icon button']);
+    expect([...covered]).toEqual(['Badge', 'Icon', 'Button', 'Icon button', 'Code block']);
   });
 
   it('turns markup into the elements React prints back', () => {

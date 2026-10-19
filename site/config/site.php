@@ -29,7 +29,7 @@ return [
     */
 
     'components' => [
-        'Avatar', 'Badge', 'Button', 'Data table', 'Header', 'Icon', 'Icon button', 'List card',
+        'Avatar', 'Badge', 'Button', 'Code block', 'Data table', 'Header', 'Icon', 'Icon button', 'List card',
         'List row', 'Menu sheet', 'Pill row', 'Section menu', 'Sheet',
     ],
 

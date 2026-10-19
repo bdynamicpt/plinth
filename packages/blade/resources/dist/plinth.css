@@ -802,6 +802,291 @@
   }
 }
 
+/* code-block.css */
+/*
+ * Code block: a block of code with an optional file name or label, a copy button and optional
+ * language tabs.
+ *
+ * <div class="plinth-code-block">
+ *   <div class="plinth-code-block-header">
+ *     <span class="plinth-code-block-label">resources/css/brand.css</span>
+ *     <button type="button" class="plinth-button plinth-code-block-copy" data-variant="ghost"
+ *       data-size="sm" hidden>
+ *       <span class="plinth-button-label">Copy</span>
+ *     </button>
+ *     <span class="plinth-code-block-status" role="status"></span>
+ *   </div>
+ *   <pre class="plinth-code-block-code" dir="ltr" tabindex="0"><code>…</code></pre>
+ * </div>
+ *
+ * With language tabs, the header holds a radio group after the label, and there is one <pre> per
+ * tab, in the same order:
+ *
+ *   <div class="plinth-code-block-tabs" role="radiogroup" aria-label="Language">
+ *     <label class="plinth-code-block-tab">
+ *       <input type="radio" class="plinth-code-block-tab-input" name="install-language" checked>
+ *       <span class="plinth-code-block-tab-label">Blade</span>
+ *     </label>
+ *     <label class="plinth-code-block-tab">…Vue…</label>
+ *   </div>
+ *   …
+ *   <pre class="plinth-code-block-code" dir="ltr" tabindex="0"><code>…Blade…</code></pre>
+ *   <pre class="plinth-code-block-code" dir="ltr" tabindex="0"><code>…Vue…</code></pre>
+ *
+ * The root is the <div>, and takes the app's id. The label is optional, and is text or a little
+ * markup (a badge). The tabs are native radio buttons (ADR 2): the browser moves between them with
+ * the arrow keys and remembers the checked one, and CSS shows the <pre> in the checked tab's
+ * place, with no script. Their name is the root's id with -language (one is generated when the
+ * root has no id), and the group's name is tabs-label in Blade, Vue and React ("Language" by
+ * default). In plain HTML, give each block on a page its own name, or their tabs become one group.
+ * Up to six tabs (the layers drop the rest); the first is checked unless the app picks another
+ * (selected), and after that the browser keeps the reader's choice. Inside a <form> the radios
+ * are part of it: they are sent with it (name=on), and a reset checks the starting tab again.
+ *
+ * The code is text, or the markup a highlighter prints (Phiki, Shiki: the spans inside its
+ * <code>). Plinth styles the block, not the tokens: their colours are the highlighter's. The
+ * <pre> keeps the code's lines and scrolls sideways inside its own box, so it takes tabindex="0"
+ * (a scrolling region must be reachable by keyboard), and dir="ltr", as code reads left to right
+ * on any page.
+ *
+ * Copy: the button (button.css) is printed hidden, and the Blade (Alpine), Vue and React layers
+ * show it when the clipboard is there. It copies the text of the <pre> that shows, says Copied
+ * (copied-label) for two seconds and puts the same word in the status, a polite live region,
+ * hidden from sight. The plain HTML works without it, and the header keeps its place for the
+ * button either way. copy: false in Blade, Vue and React leaves
+ * the button and the status out.
+ *
+ * States: the checked tab (input:checked) is a raised surface with a strong edge; hover only
+ * where the device can hover; the focus ring on :focus-visible, on the tab's input (it covers the
+ * tab) and inset on the <pre>. On a touch screen each tab keeps a 40px touch target, as the
+ * button does. The header hides itself when it has nothing to show.
+ */
+
+@layer plinth {
+  .plinth-code-block {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    color: var(--plinth-color-text);
+    background-color: var(--plinth-color-surface-sunken);
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+    border-radius: var(--plinth-radius-container);
+  }
+
+  .plinth-code-block-header {
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--plinth-space-2);
+    align-items: center;
+    min-block-size: var(--plinth-touch-target);
+    padding-block: calc((var(--plinth-touch-target) - var(--plinth-control-sm)) / 2);
+    padding-inline: var(--plinth-space-4)
+      calc((var(--plinth-touch-target) - var(--plinth-control-sm)) / 2);
+    border-block-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+  }
+
+  /* Tabs first, with no label: the header's start matches its end. */
+  .plinth-code-block-header:not(:has(.plinth-code-block-label)) {
+    padding-inline-start: calc((var(--plinth-touch-target) - var(--plinth-control-sm)) / 2);
+  }
+
+  /*
+   * Nothing to show: no label, no tabs and no copy button (copy off). A hidden copy button keeps
+   * the header, so the code doesn't move down when the layer shows it.
+   */
+  .plinth-code-block-header:not(
+    :has(.plinth-code-block-label, .plinth-code-block-tabs, .plinth-code-block-copy)
+  ) {
+    display: none;
+  }
+
+  .plinth-code-block-label {
+    display: inline-flex;
+    flex: 0 1 auto;
+    gap: var(--plinth-space-2);
+    align-items: center;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: var(--plinth-font-family-mono);
+    font-size: var(--plinth-font-size-xs);
+    line-height: var(--plinth-font-leading-tight);
+    color: var(--plinth-color-text-muted);
+    white-space: nowrap;
+  }
+
+  .plinth-code-block-label:has(+ .plinth-code-block-tabs) {
+    margin-inline-end: var(--plinth-space-2);
+  }
+
+  /* The tabs follow the label; the copy button sits at the end. */
+  .plinth-code-block-tabs {
+    display: flex;
+    flex: 0 1 auto;
+    flex-wrap: wrap;
+    gap: var(--plinth-space-1);
+    align-items: center;
+    min-inline-size: 0;
+  }
+
+  .plinth-code-block-tab {
+    position: relative;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: var(--plinth-control-sm);
+    padding-block: 0;
+    padding-inline: var(--plinth-space-3);
+    font-family: var(--plinth-font-family-body);
+    font-size: var(--plinth-font-size-sm);
+    font-weight: var(--plinth-font-weight-medium);
+    line-height: var(--plinth-font-leading-tight);
+    color: var(--plinth-color-text-muted);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    background-color: transparent;
+    border: var(--plinth-border-width-thin) solid transparent;
+    border-radius: var(--plinth-radius-control);
+    transition:
+      background-color var(--plinth-duration-fast) var(--plinth-easing-standard),
+      border-color var(--plinth-duration-fast) var(--plinth-easing-standard),
+      color var(--plinth-duration-fast) var(--plinth-easing-standard);
+  }
+
+  /* The radio covers its tab, so the tab is what is focused, clicked and ringed. */
+  .plinth-code-block-tab-input {
+    position: absolute;
+    inset: calc(-1 * var(--plinth-border-width-thin));
+    margin: 0;
+    appearance: none;
+    cursor: pointer;
+    background: none;
+    border: 0;
+    border-radius: var(--plinth-radius-control);
+  }
+
+  .plinth-code-block-tab-input:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset);
+  }
+
+  .plinth-code-block-tab:has(> .plinth-code-block-tab-input:checked) {
+    color: var(--plinth-color-text);
+    background-color: var(--plinth-color-surface-raised);
+    border-color: var(--plinth-color-border-strong);
+  }
+
+  @media (hover: hover) {
+    .plinth-code-block-tab:not(:has(> .plinth-code-block-tab-input:checked)):hover {
+      color: var(--plinth-color-text);
+      background-color: var(--plinth-color-surface-hover);
+    }
+  }
+
+  .plinth-code-block-tab:not(:has(> .plinth-code-block-tab-input:checked)):active {
+    background-color: var(--plinth-color-surface-sunken);
+  }
+
+  /* A 40px touch target through an invisible hit area, as on the button (ADR 3). */
+  @media (pointer: coarse) {
+    .plinth-code-block-tab::before {
+      position: absolute;
+      inset-block-start: 50%;
+      inset-inline: min(0%, 50% - var(--plinth-touch-target) / 2);
+      block-size: max(100%, var(--plinth-touch-target));
+      content: '';
+      translate: 0 -50%;
+    }
+  }
+
+  .plinth-code-block-copy {
+    margin-inline-start: auto;
+  }
+
+  /* The button's own display would beat the hidden attribute. */
+  .plinth-code-block-copy[hidden] {
+    display: none;
+  }
+
+  /* Read out, not shown. */
+  .plinth-code-block-status {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: calc(-1 * var(--plinth-border-width-thin));
+    overflow: hidden;
+    white-space: nowrap;
+    border: 0;
+    clip-path: inset(50%);
+  }
+
+  .plinth-code-block-code {
+    box-sizing: border-box;
+    max-inline-size: 100%;
+    padding: var(--plinth-space-4);
+    margin: 0;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    font-family: var(--plinth-font-family-mono);
+    font-size: var(--plinth-font-size-sm);
+    line-height: var(--plinth-font-leading-normal);
+    color: var(--plinth-color-text);
+    tab-size: 2;
+    white-space: pre;
+    border-radius: var(--plinth-radius-container);
+  }
+
+  .plinth-code-block-code:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset-inset);
+  }
+
+  .plinth-code-block-code > code {
+    font: inherit;
+    color: inherit;
+    background: none;
+  }
+
+  /*
+   * With tabs, only the checked tab's <pre> shows: the nth tab shows the nth <pre>. Nothing
+   * checked (a reset form) shows the first.
+   */
+  .plinth-code-block:has(.plinth-code-block-tabs) > .plinth-code-block-code {
+    display: none;
+  }
+
+  .plinth-code-block:not(:has(.plinth-code-block-tab-input:checked))
+    > .plinth-code-block-code:first-of-type,
+  .plinth-code-block:has(.plinth-code-block-tab:nth-child(1) > :checked)
+    > .plinth-code-block-code:nth-of-type(1),
+  .plinth-code-block:has(.plinth-code-block-tab:nth-child(2) > :checked)
+    > .plinth-code-block-code:nth-of-type(2),
+  .plinth-code-block:has(.plinth-code-block-tab:nth-child(3) > :checked)
+    > .plinth-code-block-code:nth-of-type(3),
+  .plinth-code-block:has(.plinth-code-block-tab:nth-child(4) > :checked)
+    > .plinth-code-block-code:nth-of-type(4),
+  .plinth-code-block:has(.plinth-code-block-tab:nth-child(5) > :checked)
+    > .plinth-code-block-code:nth-of-type(5),
+  .plinth-code-block:has(.plinth-code-block-tab:nth-child(6) > :checked)
+    > .plinth-code-block-code:nth-of-type(6) {
+    display: block;
+  }
+
+  @media (forced-colors: active) {
+    .plinth-code-block-tab:has(> .plinth-code-block-tab-input:checked) {
+      color: HighlightText;
+      background-color: Highlight;
+      border-color: Highlight;
+    }
+  }
+}
+
 /* data-table.css */
 /*
  * Data table: a collection of records (orders, users, invoices) from one markup, a stack of cards
