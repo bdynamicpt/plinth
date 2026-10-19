@@ -1,0 +1,19 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.1.4/schema.json",
+  "changelog": false,
+  "commit": false,
+  "fixed": [
+    [
+      "@bdynamic/plinth-tokens",
+      "@bdynamic/plinth-css",
+      "@bdynamic/plinth-vue",
+      "@bdynamic/plinth-blade"
+    ]
+  ],
+  "linked": [],
+  "access": "public",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": ["@bdynamic/plinth-storybook"],
+  "privatePackages": { "version": true, "tag": false }
+}
