@@ -31,6 +31,23 @@ export function normalize(html: string): string {
   return [...template.content.childNodes].map(print).join('');
 }
 
+/**
+ * Some markup without its Alpine attributes (`x-data`, `x-on:click`, …). They are how the Blade
+ * layer adds what the platform can't do (ADR 2), such as the code block's copy button, and are not
+ * part of the contract; Pest checks them.
+ */
+export function withoutAlpine(html: string): string {
+  const { document } = new JSDOM('').window;
+  const template = document.createElement('template');
+  template.innerHTML = html;
+  for (const element of template.content.querySelectorAll('*')) {
+    for (const { name } of [...element.attributes]) {
+      if (name.startsWith('x-')) element.removeAttribute(name);
+    }
+  }
+  return template.innerHTML;
+}
+
 export interface BladeCase {
   component: string;
   props: Record<string, unknown>;
