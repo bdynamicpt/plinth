@@ -16,7 +16,7 @@ it('shows the home page with every section', function () {
             'Built on the platform. Tested on every story.',
             'Your brand is a few custom properties.',
             'Every decision, written down.',
-            '13 components today, each with its contract.',
+            '14 components today, each with its contract.',
         ]);
 });
 
@@ -26,6 +26,8 @@ it('builds the page from Plinth components', function () {
         ->assertSee('class="plinth-header site-preview-header"', false)
         ->assertSee('class="plinth-pill-row"', false)
         ->assertSee('class="plinth-list-card"', false)
+        ->assertSee('class="plinth-code-block"', false)
+        ->assertSee('class="plinth-code-block site-layers-output"', false)
         ->assertSee('class="plinth-sheet plinth-menu-sheet"', false)
         ->assertSee('id="site-menu"', false);
 });

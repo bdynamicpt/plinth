@@ -119,18 +119,15 @@
             </div>
             <div class="site-layers">
                 @foreach ($layers as $layer => $code)
-                    <div class="site-panel">
-                        <div class="site-panel-header">{{ $layer }}</div>
-                        <pre class="site-code" tabindex="0" aria-label="{{ $layer }} example"><code>{{ $code }}</code></pre>
-                    </div>
+                    <x-plinth::code-block :label="$layer">{{ $code }}</x-plinth::code-block>
                 @endforeach
-                <div class="site-panel site-layers-output">
-                    <div class="site-panel-header">
+                <x-plinth::code-block class="site-layers-output">
+                    <x-slot:label>
                         HTML, from all three
                         <x-plinth::badge tone="success" dot>Parity</x-plinth::badge>
-                    </div>
-                    <pre class="site-code" tabindex="0" aria-label="The HTML all three print"><code>{{ $html }}</code></pre>
-                </div>
+                    </x-slot:label>
+                    {{ $html }}
+                </x-plinth::code-block>
             </div>
         </div>
     </section>
@@ -168,10 +165,7 @@
                 <p class="site-lead">Plinth ships a quiet, neutral default. A project overrides the semantic tokens after Plinth's CSS, in light and in dark, and never forks a component.</p>
             </div>
             <div class="site-brand">
-                <div class="site-panel">
-                    <div class="site-panel-header">brand.css</div>
-                    <pre class="site-code" tabindex="0" aria-label="brand.css"><code>{{ $brand }}</code></pre>
-                </div>
+                <x-plinth::code-block label="resources/css/brand.css">{{ $brand }}</x-plinth::code-block>
                 <div class="site-brand-cards">
                     @foreach (['Plinth default' => false, 'With brand.css' => true] as $label => $branded)
                         <div @class(['site-brand-card', 'site-brand-example' => $branded])>

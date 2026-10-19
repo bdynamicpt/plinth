@@ -898,7 +898,7 @@
 
   .plinth-code-block-label {
     display: inline-flex;
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     gap: var(--plinth-space-2);
     align-items: center;
     min-inline-size: 0;
@@ -911,18 +911,18 @@
     white-space: nowrap;
   }
 
+  .plinth-code-block-label:has(+ .plinth-code-block-tabs) {
+    margin-inline-end: var(--plinth-space-2);
+  }
+
+  /* The tabs follow the label; the copy button sits at the end. */
   .plinth-code-block-tabs {
     display: flex;
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     flex-wrap: wrap;
     gap: var(--plinth-space-1);
     align-items: center;
     min-inline-size: 0;
-  }
-
-  /* With a label, the tabs sit at their own width after it. */
-  .plinth-code-block-label ~ .plinth-code-block-tabs {
-    flex: none;
   }
 
   .plinth-code-block-tab {

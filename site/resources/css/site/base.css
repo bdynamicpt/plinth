@@ -104,45 +104,6 @@
         font-weight: var(--plinth-font-weight-medium);
     }
 
-    .site-panel {
-        min-inline-size: 0;
-        overflow: hidden;
-        background: var(--plinth-color-surface-sunken);
-        border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
-        border-radius: var(--plinth-radius-container);
-    }
-
-    .site-panel-header {
-        display: flex;
-        gap: var(--plinth-space-2);
-        align-items: center;
-        justify-content: space-between;
-        min-block-size: var(--plinth-control-sm);
-        padding: var(--plinth-space-1) var(--plinth-space-4);
-        font-family: var(--plinth-font-family-mono);
-        font-size: var(--plinth-font-size-xs);
-        color: var(--plinth-color-text-muted);
-        border-block-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
-    }
-
-    .site-code {
-        padding: var(--plinth-space-4);
-        margin: 0;
-        overflow-x: auto;
-        font-family: var(--plinth-font-family-mono);
-        font-size: var(--plinth-font-size-sm);
-        line-height: var(--plinth-font-leading-normal);
-        color: var(--plinth-color-text);
-        tab-size: 2;
-        white-space: pre;
-    }
-
-    /* A code panel scrolls sideways when a line is longer than it, so it takes focus to scroll by keyboard. */
-    .site-code:focus-visible {
-        outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
-        outline-offset: var(--plinth-focus-ring-offset-inset);
-    }
-
     @media (min-width: 768px) {
         .site-container {
             padding-inline: var(--plinth-space-6);
