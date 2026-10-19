@@ -7,8 +7,6 @@ import '@bdynamic/plinth-css/src/components/button.css';
 
 const meta = {
   title: 'Components/Icon button',
-  // The docs page is IconButton.mdx, written by hand.
-  tags: ['!autodocs'],
   render: (args) => iconButton(args),
   args: {
     label: 'More actions',
@@ -25,6 +23,14 @@ const meta = {
     pressed: { control: 'boolean' },
     mirror: { control: 'boolean' },
     svg: { control: 'text' },
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'A button with only an icon, for toolbars, headers and closing a sheet. It always has a label.',
+      },
+    },
   },
 } satisfies Meta<IconButtonArgs>;
 

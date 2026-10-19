@@ -7,10 +7,11 @@ import {
   Title,
 } from '@storybook/addon-docs/blocks';
 import { AtEveryWidth } from './AtEveryWidth.tsx';
+import { SiteLink } from './SiteLink.tsx';
 
 /**
- * The page autodocs writes for a story file without its own MDX page: Storybook's default page,
- * with the main story at every width under the first example, as on the MDX pages.
+ * The page autodocs writes for a story file: Storybook's default page, with a link to the
+ * component's page on the website and the main story at every width under the first example.
  */
 export function DocsPage() {
   return (
@@ -18,6 +19,7 @@ export function DocsPage() {
       <Title />
       <Subtitle />
       <Description />
+      <SiteLink />
       <Primary />
       <Controls />
       <AtEveryWidth of="story" />

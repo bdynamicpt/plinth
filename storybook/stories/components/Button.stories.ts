@@ -6,8 +6,6 @@ import '@bdynamic/plinth-css/src/components/button.css';
 
 const meta = {
   title: 'Components/Button',
-  // The docs page is Button.mdx, written by hand.
-  tags: ['!autodocs'],
   render: (args) => button(args),
   args: { label: 'Save', variant: 'primary', size: 'md', disabled: false, busy: false },
   argTypes: {
@@ -20,6 +18,14 @@ const meta = {
     trailingIcon: { control: 'text' },
     mirrorIcon: { control: 'boolean' },
     mirrorTrailing: { control: 'boolean' },
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'Does something: saves, submits, opens a sheet. Six variants, three sizes, and busy and disabled states.',
+      },
+    },
   },
 } satisfies Meta<ButtonArgs>;
 

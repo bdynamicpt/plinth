@@ -4,8 +4,6 @@ import '@bdynamic/plinth-css/src/components/avatar.css';
 
 const meta = {
   title: 'Components/Avatar',
-  // The docs page is Avatar.mdx, written by hand.
-  tags: ['!autodocs'],
   render: (args) => avatar(args),
   args: { name: 'Ana Lima', size: 'md', decorative: false },
   argTypes: {
@@ -14,6 +12,14 @@ const meta = {
     src: { control: 'text' },
     initials: { control: 'text' },
     statusLabel: { control: 'text' },
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'A person or an organisation at a glance: an image, then initials, then a glyph, with an optional status dot.',
+      },
+    },
   },
 } satisfies Meta<AvatarArgs>;
 

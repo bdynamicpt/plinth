@@ -30,22 +30,14 @@ describe('AtEveryWidth', () => {
     expect(toTheme(undefined)).toBe('dark');
   });
 
-  it('is on every component docs page, under the first example', () => {
+  it('is on every docs page, under the first example', () => {
+    const source = readFileSync(new URL('../blocks/DocsPage.tsx', import.meta.url), 'utf8');
+    expect(source.indexOf('<AtEveryWidth')).toBeGreaterThan(source.indexOf('<Primary />'));
+    expect(source.indexOf('<AtEveryWidth')).toBeLessThan(source.indexOf('<Stories />'));
+  });
+
+  it('leaves the components to the docs page, with no MDX page of their own', () => {
     const dir = new URL('../stories/components/', import.meta.url);
-    const pages = readdirSync(dir).filter((file) => file.endsWith('.mdx'));
-    expect(pages.length).toBeGreaterThan(0);
-    for (const page of pages) {
-      const source = readFileSync(new URL(page, dir), 'utf8');
-      const block = source.indexOf('<AtEveryWidth of={');
-      expect(block, `${page} has no <AtEveryWidth>`).toBeGreaterThan(-1);
-      const firstCanvas = source.indexOf('<Canvas of={');
-      const firstHeading = source.indexOf('\n## ');
-      expect(block, `${page}: <AtEveryWidth> comes after the first canvas`).toBeGreaterThan(
-        firstCanvas,
-      );
-      expect(block, `${page}: <AtEveryWidth> comes before the first section`).toBeLessThan(
-        firstHeading,
-      );
-    }
+    expect(readdirSync(dir).filter((file) => file.endsWith('.mdx'))).toEqual([]);
   });
 });

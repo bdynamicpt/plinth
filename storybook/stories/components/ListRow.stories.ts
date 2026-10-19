@@ -24,8 +24,6 @@ const moreActions = iconButton({
 
 const meta = {
   title: 'Components/List Row',
-  // The docs page is ListRow.mdx, written by hand.
-  tags: ['!autodocs'],
   render: (args) => listRow(args),
   args: { title: 'Notifications', chevron: false, button: false, current: false, disabled: false },
   argTypes: {
@@ -33,6 +31,14 @@ const meta = {
     href: { control: 'text' },
     leading: { control: 'text' },
     trailing: { control: 'text' },
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'One row of a list: a title, a description, and a leading and a trailing slot. A link, a button or plain.',
+      },
+    },
   },
 } satisfies Meta<ListRowArgs>;
 
