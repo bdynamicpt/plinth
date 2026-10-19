@@ -101,6 +101,19 @@ presses yourself: a busy submit button still submits its form.
 
 ## In Blade, Vue and React
 
+| Prop           | Blade                                             | Vue                        | React                 | Default   |
+| -------------- | ------------------------------------------------- | -------------------------- | --------------------- | --------- |
+| variant        | `variant="secondary"` (or a `ButtonVariant` case) | `variant="secondary"`      | `variant="secondary"` | `primary` |
+| size           | `size="sm"` (or a `Size` case)                    | `size="sm"`                | `size="sm"`           | `md`      |
+| href           | `href="/orders"`, makes it a link                 | `href="/orders"`           | `href="/orders"`      | —         |
+| disabled       | `disabled` or `:disabled="$locked"`               | `disabled`                 | `disabled`            | off       |
+| busy           | `busy` or `:busy="$saving"`                       | `busy` or `:busy="saving"` | `busy={saving}`       | off       |
+| mirrorIcon     | `mirror-icon`                                     | `mirror-icon`              | `mirrorIcon`          | off       |
+| mirrorTrailing | `mirror-trailing`                                 | `mirror-trailing`          | `mirrorTrailing`      | off       |
+| leading icon   | `<x-slot:icon>`                                   | `#icon` slot               | `icon={<Icon />}`     | —         |
+| trailing icon  | `<x-slot:trailing>`                               | `#trailing` slot           | `trailing={<Icon />}` | —         |
+| label          | the slot                                          | the default slot           | `children`            | —         |
+
 <Source
   language="html"
   dark

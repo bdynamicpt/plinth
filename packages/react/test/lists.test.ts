@@ -16,7 +16,7 @@ import {
 } from '../src/index.ts';
 
 describe('the shared lists', () => {
-  it('match the lists the Vue layer, Blade and the stories use', () => {
+  it('match the Vue layer’s lists, which Blade’s enums and the stories follow', () => {
     expect(tones).toEqual(vueTones.tones);
     expect(buttonVariants).toEqual(vueButton.buttonVariants);
     expect(sizes).toEqual(vueSize.sizes);

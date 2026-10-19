@@ -21,7 +21,7 @@ const icons = (element: Element) => [...element.querySelectorAll('.plinth-icon')
 describe('PlinthButton', () => {
   it('prints the button markup contract', () => {
     expect(renderToStaticMarkup(<PlinthButton>Save</PlinthButton>)).toBe(
-      '<button type="button" class="plinth-button" data-variant="primary" data-size="md"><span class="plinth-button-label">Save</span></button>',
+      '<button type="button" data-variant="primary" data-size="md" class="plinth-button"><span class="plinth-button-label">Save</span></button>',
     );
   });
 
@@ -199,5 +199,22 @@ describe('PlinthButton', () => {
     expect(link.getAttribute('target')).toBe('_blank');
     expect(link.getAttribute('data-testid')).toBe('orders');
     expect(ref.current).toBe(link);
+  });
+
+  it('lets a project’s own attributes win, as Blade and Vue do', () => {
+    const button = root(
+      <PlinthButton aria-disabled="true" data-variant="custom">
+        Save
+      </PlinthButton>,
+    );
+    const link = root(
+      <PlinthButton href="/orders" role="button">
+        Orders
+      </PlinthButton>,
+    );
+
+    expect(button.getAttribute('aria-disabled')).toBe('true');
+    expect(button.getAttribute('data-variant')).toBe('custom');
+    expect(link.getAttribute('role')).toBe('button');
   });
 });

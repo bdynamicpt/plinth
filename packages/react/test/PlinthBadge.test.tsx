@@ -13,13 +13,13 @@ describe('PlinthBadge', () => {
         </PlinthBadge>,
       ),
     ).toBe(
-      '<span class="plinth-badge" data-tone="success"><span class="plinth-badge-dot" aria-hidden="true"></span><span class="plinth-badge-label">Paid</span></span>',
+      '<span data-tone="success" class="plinth-badge"><span class="plinth-badge-dot" aria-hidden="true"></span><span class="plinth-badge-label">Paid</span></span>',
     );
   });
 
   it('is neutral and has no dot by default', () => {
     expect(renderToStaticMarkup(<PlinthBadge>Draft</PlinthBadge>)).toBe(
-      '<span class="plinth-badge" data-tone="neutral"><span class="plinth-badge-label">Draft</span></span>',
+      '<span data-tone="neutral" class="plinth-badge"><span class="plinth-badge-label">Draft</span></span>',
     );
   });
 
@@ -55,5 +55,15 @@ describe('PlinthBadge', () => {
     expect(root.id).toBe('status');
     expect(root.getAttribute('data-testid')).toBe('status');
     expect(ref.current).toBe(root);
+  });
+
+  it('lets a project’s own attributes win, as Blade and Vue do', () => {
+    const { container } = render(
+      <PlinthBadge tone="success" data-tone="custom">
+        Paid
+      </PlinthBadge>,
+    );
+
+    expect(container.firstElementChild?.getAttribute('data-tone')).toBe('custom');
   });
 });

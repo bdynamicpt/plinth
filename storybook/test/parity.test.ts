@@ -226,6 +226,8 @@ const cases: ParityCase[] = [
       type: 'submit',
     },
   ),
+  // A project's own value for an attribute the button also sets wins, in every layer.
+  buttonCase('Button/with its own aria-disabled', buttonDefaults, { 'aria-disabled': 'true' }),
   buttonCase('Button/small with an icon', {
     ...buttonDefaults,
     size: 'sm',
@@ -965,6 +967,7 @@ describe('parity with the stories', () => {
       'Button/DisabledLink',
       'Button/Busy',
       'Button/with extra attributes',
+      'Button/with its own aria-disabled',
       'Button/small with an icon',
       'Button/busy with an icon',
       'Button/busy link',

@@ -10,7 +10,8 @@ export type PlinthBadgeProps = ComponentProps<'span'> & {
 
 export function PlinthBadge({ tone, dot = false, className, children, ...rest }: PlinthBadgeProps) {
   return (
-    <span {...rest} className={classNames('plinth-badge', className)} data-tone={toTone(tone)}>
+    // The project's own attributes come last and win, as in Blade and Vue.
+    <span data-tone={toTone(tone)} {...rest} className={classNames('plinth-badge', className)}>
       {dot ? <span className="plinth-badge-dot" aria-hidden="true"></span> : null}
       <span className="plinth-badge-label">{children}</span>
     </span>

@@ -43,7 +43,6 @@ export function PlinthButton({
   const iconSize = iconSizeFor(dataSize);
   const isBusy = busy && !disabled;
   const common = {
-    className: classNames('plinth-button', className),
     'data-variant': buttonVariant(variant),
     'data-size': dataSize,
     'aria-busy': isBusy ? ('true' as const) : undefined,
@@ -76,14 +75,17 @@ export function PlinthButton({
     </>
   );
 
+  // The project's own attributes come after Plinth's and win, as in Blade and Vue; its class is
+  // added to Plinth's.
   if (href) {
     return (
       <a
-        {...(rest as ComponentProps<'a'>)}
         {...common}
         href={disabled ? undefined : href}
         role={disabled ? 'link' : undefined}
         aria-disabled={isBusy || disabled ? 'true' : undefined}
+        {...(rest as ComponentProps<'a'>)}
+        className={classNames('plinth-button', className)}
       >
         {content}
       </a>
@@ -93,10 +95,11 @@ export function PlinthButton({
   return (
     <button
       type="button"
-      {...(rest as ComponentProps<'button'>)}
       {...common}
       disabled={disabled || undefined}
       aria-disabled={isBusy ? 'true' : undefined}
+      {...(rest as ComponentProps<'button'>)}
+      className={classNames('plinth-button', className)}
     >
       {content}
     </button>
