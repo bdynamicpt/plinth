@@ -22,3 +22,10 @@ body {
   color: var(--plinth-color-text);
   background-color: var(--plinth-color-surface);
 }
+
+/* A wide table in a docs page scrolls inside itself on a phone instead of widening the page. */
+.sbdocs-content table {
+  display: block;
+  max-inline-size: 100%;
+  overflow-x: auto;
+}
