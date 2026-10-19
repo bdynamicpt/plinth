@@ -40,14 +40,19 @@ const settings = [
 
 const meta = {
   title: 'Components/List Card',
-  // The docs page is ListCard.mdx, written by hand.
-  tags: ['!autodocs'],
   render: (args) => listCard(args),
   args: { heading: 'Preferences', headingLevel: 'h2', rows: settings },
   argTypes: {
     heading: { control: 'text' },
     headingLevel: { control: 'select', options: ['h2', 'h3', 'h4', 'h5', 'h6'] },
     footer: { control: 'text' },
+  },
+  parameters: {
+    docs: {
+      description: {
+        component: 'Related rows on a raised surface, with an optional heading and footer note.',
+      },
+    },
   },
 } satisfies Meta<ListCardArgs>;
 

@@ -1,7 +1,6 @@
 <x-layouts.site overlay>
     @php
         $nav = config('site.nav');
-        $components = config('site.components');
         $latest = $decisions->first();
         $installs = ['composer require bdynamicpt/plinth', 'npm install @bdynamic/plinth'];
     @endphp
@@ -198,7 +197,7 @@
         <div class="site-cta-glow" aria-hidden="true"></div>
         <div class="site-cta-content">
             <h2 id="cta-title" class="site-display">{{ count($components) }} components today, each with its contract.</h2>
-            <p class="site-lead">{{ Str::ucfirst(Str::lower(collect($components)->join(', ', ' and '))) }}. Dialog and drawer are next.</p>
+            <p class="site-lead">{{ Str::ucfirst(Str::lower($components->join(', ', ' and '))) }}. Dialog and drawer are next.</p>
             <div class="site-actions">
                 <x-plinth::button variant="accent" size="lg" :href="$nav['Components']">Browse components</x-plinth::button>
                 <x-plinth::button variant="secondary" size="lg" :href="$nav['Docs']">Read the docs</x-plinth::button>

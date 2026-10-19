@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ComponentsController;
 use App\Http\Controllers\DecisionsController;
 use App\Http\Controllers\DocsController;
 use App\Http\Controllers\HomeController;
@@ -8,6 +9,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 Route::get('/storybook', StorybookController::class)->name('storybook');
+
+Route::get('/components', [ComponentsController::class, 'index'])->name('components.index');
+Route::get('/components/{slug}', [ComponentsController::class, 'show'])->where('slug', '[a-z0-9-]+')->name('components.show');
 
 Route::redirect('/docs', '/docs/introduction')->name('docs');
 Route::get('/docs/decisions', [DecisionsController::class, 'index'])->name('decisions.index');

@@ -23,7 +23,7 @@ const preview: Preview = {
     viewport: { options: viewports },
     a11y: { test: 'error' },
     backgrounds: { disable: true },
-    // A story file without its own MDX page gets Storybook's page, plus the block at every width.
+    // Every story file gets Storybook's page, plus the link to the website and the block at every width.
     docs: { page: DocsPage },
     options: {
       storySort: {

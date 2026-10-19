@@ -105,13 +105,19 @@ const orderRow = (order: Order, extra: Partial<DataTableRowArgs> = {}): DataTabl
 
 const meta = {
   title: 'Components/Data Table',
-  // The docs page is DataTable.mdx, written by hand.
-  tags: ['!autodocs'],
   render: (args) => dataTable(args),
   args: { caption: 'Orders', columns, rows: orders.map((order) => orderRow(order)) },
   argTypes: {
     caption: { control: 'text' },
     empty: { control: 'text' },
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'Records as cards on a phone and a table from 768px, from one markup, with no script.',
+      },
+    },
   },
 } satisfies Meta<DataTableArgs>;
 

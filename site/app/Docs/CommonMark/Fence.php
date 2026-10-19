@@ -6,7 +6,8 @@ use League\CommonMark\Extension\CommonMark\Node\Block\FencedCode;
 
 /**
  * A fenced code block's info string: its language, then label="…" (a file name, say) and
- * tab="…" (its tab, when blocks in a row are one block with tabs).
+ * tab="…" (its tab, when blocks in a row are one block with tabs). A Blade block marked `example`
+ * is a live example (App\Components\Example), laid out as layout="…" says.
  */
 final readonly class Fence
 {
@@ -32,6 +33,8 @@ final readonly class Fence
         public ?string $label,
         public ?string $tab,
         public string $code,
+        public bool $example = false,
+        public ?string $layout = null,
     ) {}
 
     public static function of(FencedCode $node): self
@@ -47,6 +50,8 @@ final readonly class Fence
             $attributes['label'] ?? ($language === null ? null : self::LABELS[$language] ?? null),
             $attributes['tab'] ?? null,
             rtrim($node->getLiteral(), "\n"),
+            $language === 'blade' && in_array('example', $node->getInfoWords(), true),
+            $attributes['layout'] ?? null,
         );
     }
 }

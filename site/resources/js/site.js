@@ -1,6 +1,6 @@
 /*
- * The site's few behaviours, as Alpine components: the theme switch, the copy buttons and the
- * header that sits over the hero. Everything works without them except what they add.
+ * The site's few behaviours, as Alpine components: the theme switch, the copy buttons, the
+ * header that sits over the hero and the components' playground. Everything works without them except what they add.
  */
 import Alpine from 'alpinejs';
 
@@ -60,6 +60,68 @@ Alpine.data('siteHeader', () => ({
 
     update() {
         this.scrolled = window.scrollY > 8;
+    },
+}));
+
+/*
+ * A component's playground: each choice is a link to the page with a query string. This loads it
+ * and swaps the playground in place, keeping the tab of code that shows and the focus, instead of
+ * loading the whole page.
+ */
+Alpine.data('playground', () => ({
+    init() {
+        this.$el.addEventListener('click', (event) => {
+            const link = event.target.closest('a.plinth-pill');
+            if (!link || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+            event.preventDefault();
+            this.load(link);
+        });
+    },
+
+    async load(link) {
+        const url = new URL(link.href);
+        const key = `${link.closest('.plinth-pill-row').getAttribute('aria-labelledby')} ${link.textContent.trim()}`;
+        const tabs = [...this.$el.querySelectorAll('.plinth-code-block-tab-input')];
+        const tab = tabs.findIndex((input) => input.checked);
+        this.$el.setAttribute('aria-busy', 'true');
+
+        let next;
+        try {
+            const response = await fetch(url, { headers: { Accept: 'text/html' } });
+            if (!response.ok) throw new Error(response.statusText);
+            const page = new DOMParser().parseFromString(await response.text(), 'text/html');
+            next = page.getElementById('playground');
+        } catch {
+            next = null;
+        }
+
+        if (!next) {
+            window.location.assign(url);
+            return;
+        }
+
+        this.$el.removeAttribute('aria-busy');
+        for (const part of [
+            '.site-playground-stage',
+            '.site-playground-controls',
+            '.site-demo-code',
+        ]) {
+            this.$el
+                .querySelector(part)
+                .replaceWith(document.importNode(next.querySelector(part), true));
+        }
+        history.replaceState(history.state, '', url);
+
+        const inputs = this.$el.querySelectorAll('.plinth-code-block-tab-input');
+        if (inputs[tab]) inputs[tab].checked = true;
+        const pills = this.$el.querySelectorAll('a.plinth-pill');
+        [...pills]
+            .find(
+                (pill) =>
+                    `${pill.closest('.plinth-pill-row').getAttribute('aria-labelledby')} ${pill.textContent.trim()}` ===
+                    key,
+            )
+            ?.focus();
     },
 }));
 

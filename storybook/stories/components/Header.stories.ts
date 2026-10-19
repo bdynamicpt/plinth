@@ -41,12 +41,17 @@ const notifications = action('Notifications', sampleIcons.bell);
 
 const meta = {
   title: 'Components/Header',
-  // The docs page is Header.mdx, written by hand.
-  tags: ['!autodocs'],
   render: (args) => header(args),
   args: { title: 'Inbox', leading: menu, actions: search + more },
   // The header spans the page, as it does in an app.
-  parameters: { layout: 'fullscreen' },
+  parameters: {
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        component: "The phone shell's top bar: a leading action, the title and a few actions.",
+      },
+    },
+  },
   argTypes: {
     title: { control: 'text' },
     leading: { control: false },

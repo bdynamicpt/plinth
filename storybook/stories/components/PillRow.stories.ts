@@ -18,10 +18,16 @@ const statuses = [
 
 const meta = {
   title: 'Components/Pill Row',
-  // The docs page is PillRow.mdx, written by hand.
-  tags: ['!autodocs'],
   render: (args) => pillRow(args),
   args: { label: 'Status', nav: false, pills: statuses },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'Filters, segments or sub-pages as pills. Scrolls sideways and snaps on a phone.',
+      },
+    },
+  },
 } satisfies Meta<PillRowArgs>;
 
 export default meta;

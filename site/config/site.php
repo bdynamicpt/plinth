@@ -13,24 +13,14 @@ return [
     'source' => $repository.'/blob/main',
 
     /*
-    | The main navigation, as paths on the site or URLs. Components point at the repository until the
-    | site has its pages (#79).
+    | The main navigation, as paths on the site or URLs.
     */
 
     'nav' => [
         'Docs' => '/docs/introduction',
-        'Components' => $repository.'/tree/main/packages/css/src/components',
+        'Components' => '/components',
         'Foundations' => '/docs/foundations',
         'Changelog' => $repository.'/releases',
-    ],
-
-    /*
-    | The components Plinth has today, as the home page lists them.
-    */
-
-    'components' => [
-        'Avatar', 'Badge', 'Button', 'Callout', 'Code block', 'Data table', 'Header', 'Icon', 'Icon button', 'List card',
-        'List row', 'Menu sheet', 'Pill row', 'Section menu', 'Sheet',
     ],
 
     /*

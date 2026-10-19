@@ -47,8 +47,6 @@ const opener = (args: SheetArgs) =>
 
 const meta = {
   title: 'Components/Sheet',
-  // The docs page is Sheet.mdx, written by hand.
-  tags: ['!autodocs'],
   render: (args) => opener(args) + sheet(args),
   // The story opens its sheet, as an app would with showModal(). In the docs page the sheets stay
   // closed until their button is pressed.
@@ -70,6 +68,13 @@ const meta = {
     placement: { control: 'inline-radio', options: [...sheetPlacements] },
     body: { control: false },
     footer: { control: false },
+  },
+  parameters: {
+    docs: {
+      description: {
+        component: 'A modal panel on a native dialog: slides up on a phone, a dialog from 768px.',
+      },
+    },
   },
 } satisfies Meta<SheetArgs>;
 

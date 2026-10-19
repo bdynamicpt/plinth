@@ -2,6 +2,7 @@
 
 namespace App\Docs;
 
+use App\Components\Example;
 use App\Docs\CommonMark\Callout;
 use App\Docs\CommonMark\CalloutRenderer;
 use App\Docs\CommonMark\CodeRenderer;
@@ -31,8 +32,9 @@ use League\CommonMark\Renderer\HtmlRenderer;
 
 /**
  * Renders the docs' Markdown on the server: GitHub Flavored Markdown, with code in Plinth's code
- * block (highlighted by Phiki), alerts (> [!NOTE]) as Plinth's callout, tables as Plinth's data
- * table, ids on the headings, and links that work on GitHub turned into the site's. The first
+ * block (highlighted by Phiki), Blade examples rendered live, alerts (> [!NOTE]) as Plinth's
+ * callout, tables as Plinth's data table, ids on the headings, and links that work on GitHub
+ * turned into the site's. The first
  * heading is the page's title and the paragraph after it its lead; the layout prints both.
  */
 final readonly class Markdown
@@ -48,9 +50,9 @@ final readonly class Markdown
 
     private Environment $environment;
 
-    public function __construct(Highlighter $highlighter, Tokens $tokens, private Links $links)
+    public function __construct(Highlighter $highlighter, Example $example, Tokens $tokens, private Links $links)
     {
-        $code = new CodeRenderer($highlighter);
+        $code = new CodeRenderer($highlighter, $example);
 
         $this->environment = (new Environment(['html_input' => 'strip', 'allow_unsafe_links' => false]))
             ->addExtension(new CommonMarkCoreExtension)

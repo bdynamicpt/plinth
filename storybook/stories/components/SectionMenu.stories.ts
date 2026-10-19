@@ -24,12 +24,17 @@ const sections = [
 
 const meta = {
   title: 'Components/Section Menu',
-  // The docs page is SectionMenu.mdx, written by hand.
-  tags: ['!autodocs'],
   render: (args) => sectionMenu(args),
   args: { label: 'Project', nav: true, items: sections },
   // The menu spans the page, as it does under the header.
-  parameters: { layout: 'fullscreen' },
+  parameters: {
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        component: "The row under the header that switches between a page's sections.",
+      },
+    },
+  },
 } satisfies Meta<SectionMenuArgs>;
 
 export default meta;

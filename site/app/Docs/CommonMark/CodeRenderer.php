@@ -2,6 +2,7 @@
 
 namespace App\Docs\CommonMark;
 
+use App\Components\Example;
 use App\Docs\Highlighter;
 use Illuminate\Support\HtmlString;
 use League\CommonMark\Extension\CommonMark\Node\Block\FencedCode;
@@ -9,10 +10,13 @@ use League\CommonMark\Node\Node;
 use League\CommonMark\Renderer\ChildNodeRendererInterface;
 use League\CommonMark\Renderer\NodeRendererInterface;
 
-/** Fenced code, highlighted, in Plinth's code block; blocks with tabs share one. */
+/**
+ * Fenced code, highlighted, in Plinth's code block; blocks with tabs share one. A Blade example is
+ * rendered live above its code in every layer.
+ */
 final readonly class CodeRenderer implements NodeRendererInterface
 {
-    public function __construct(private Highlighter $highlighter) {}
+    public function __construct(private Highlighter $highlighter, private Example $example) {}
 
     public function render(Node $node, ChildNodeRendererInterface $childRenderer): string
     {
@@ -30,6 +34,16 @@ final readonly class CodeRenderer implements NodeRendererInterface
         }
 
         $fence = Fence::of(Nodes::expect($node, FencedCode::class));
+
+        if ($fence->example) {
+            $preview = $this->example->render($fence->code);
+
+            return view('docs.partials.example', [
+                'preview' => new HtmlString($preview),
+                'tabs' => $this->example->tabs($fence->code, $preview),
+                'layout' => $fence->layout,
+            ])->render();
+        }
 
         return view('docs.partials.code', [
             'label' => $fence->label,

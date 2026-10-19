@@ -56,8 +56,6 @@ const opener = (id: string) =>
 
 const meta = {
   title: 'Components/Menu Sheet',
-  // The docs page is MenuSheet.mdx, written by hand.
-  tags: ['!autodocs'],
   render: (args) => opener(args.id) + menuSheet(args),
   // The story opens its menu, as the menu button would. In the docs page the menus stay closed
   // until their button is pressed.
@@ -83,6 +81,14 @@ const meta = {
     userHref: { control: 'text' },
     nav: { control: false },
     account: { control: false },
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "The app shell's menu: the signed-in user, navigation and account actions, in a sheet.",
+      },
+    },
   },
 } satisfies Meta<MenuSheetArgs>;
 

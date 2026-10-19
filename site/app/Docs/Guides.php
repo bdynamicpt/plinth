@@ -56,6 +56,8 @@ final readonly class Guides
         $files = [
             ...glob(app_path('Docs/*.php')) ?: [],
             ...glob(app_path('Docs/CommonMark/*.php')) ?: [],
+            ...glob(app_path('Components/*.php')) ?: [],
+            ...glob(resource_path('views/components/site/*.blade.php')) ?: [],
             ...glob(resource_path('views/docs/*/*.blade.php')) ?: [],
             ...glob(resource_path('highlight/*.json')) ?: [],
             ...glob(base_path('vendor/bdynamicpt/plinth/resources/views/components/*.blade.php')) ?: [],
