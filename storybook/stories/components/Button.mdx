@@ -99,7 +99,7 @@ presses yourself: a busy submit button still submits its form.
 <Canvas of={ButtonStories.Disabled} />
 <Canvas of={ButtonStories.Busy} />
 
-## In Blade and Vue
+## In Blade, Vue and React
 
 <Source
   language="html"
@@ -113,5 +113,22 @@ presses yourself: a busy submit button still submits its form.
 <PlinthButton variant="accent" href="/upgrade">Upgrade plan</PlinthButton>`}
 />
 
-`class`, `type`, `wire:*`, `x-*` and `@click` reach the button itself. The markup contract is at
+<Source
+  language="tsx"
+  dark
+  code={`import { PlinthButton } from '@bdynamic/plinth/react';
+
+<PlinthButton type="submit" busy={saving} icon={<SaveIcon />}>
+  Save changes
+</PlinthButton>
+<PlinthButton variant="ghost" href="/orders/2" trailing={<ArrowIcon />} mirrorTrailing>
+  Next
+</PlinthButton>`}
+/>
+
+In React the props are the Vue ones; the label is `children`, and the `icon` and `trailing` slots
+are props that take a node, such as your icon component.
+
+`class`, `type`, `wire:*`, `x-*` and `@click` reach the button itself; in React, `className`
+(added to Plinth's classes), `type`, `onClick`, `ref` and every other prop do. The markup contract is at
 the top of `packages/css/src/components/button.css`.

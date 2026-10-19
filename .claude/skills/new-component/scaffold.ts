@@ -45,7 +45,7 @@ const files: Record<string, string> = {
 
 const escape = (text: string) => text.replace(/[&<>"']/g, (char) => \`&#\${char.charCodeAt(0)};\`);
 
-/** The ${title.toLowerCase()}'s markup contract. Blade and Vue must print exactly this (see parity.test.ts). */
+/** The ${title.toLowerCase()}'s markup contract. Blade, Vue and React must print exactly this (see parity.test.ts). */
 export function ${camel}({ label }: ${Name}Args, attributes: Record<string, string> = {}): string {
   const { class: extraClass, ...rest } = attributes;
   const extra = Object.entries(rest)
@@ -96,7 +96,7 @@ TODO what it is, where it goes, and what it is not (Badge.mdx is the model for e
 
 ## Markup contract
 
-Blade and Vue print exactly this markup, and the parity tests hold them to it. The CSS in
+Blade, Vue and React print exactly this markup, and the parity tests hold them to it. The CSS in
 \`packages/css/src/components/${name}.css\` styles it.
 
 <Source language="html" dark code={\`<div class="plinth-${name}">Content</div>\`} />
@@ -116,11 +116,11 @@ TODO a table of the data-* variants, states and ARIA attributes, with their valu
 - TODO the accessible name, what screen readers announce, the keyboard, the focus ring, touch
   targets, and anything the app must add.
 
-## In Blade and Vue
+## In Blade, Vue and React
 
-| Prop  | Blade      | Vue              | Default |
-| ----- | ---------- | ---------------- | ------- |
-| label | the slot   | the default slot | —       |
+| Prop  | Blade    | Vue              | React      | Default |
+| ----- | -------- | ---------------- | ---------- | ------- |
+| label | the slot | the default slot | \`children\` | —       |
 
 <Source
   language="html"
@@ -130,7 +130,15 @@ TODO a table of the data-* variants, states and ARIA attributes, with their valu
 <Plinth${Name}>Content</Plinth${Name}>\`}
 />
 
-TODO which attributes reach which element, and the events Vue emits.
+<Source
+  language="tsx"
+  dark
+  code={\`import { Plinth${Name} } from '@bdynamic/plinth/react';
+
+<Plinth${Name} className="ms-2">Content</Plinth${Name}>\`}
+/>
+
+TODO which attributes reach which element, the events Vue emits and React's \`on…\` callbacks.
 `,
 
   [`packages/blade/resources/views/components/${name}.blade.php`]: `{{-- Markup contract: packages/css/src/components/${name}.css --}}
@@ -194,6 +202,56 @@ describe('Plinth${Name}', () => {
   });
 });
 `,
+
+  [`packages/react/src/Plinth${Name}.tsx`]: `// Markup contract: packages/css/src/components/${name}.css
+import type { ComponentProps } from 'react';
+import { classNames } from './markup';
+
+export type Plinth${Name}Props = ComponentProps<'div'>;
+
+export function Plinth${Name}({ className, children, ...rest }: Plinth${Name}Props) {
+  return (
+    <div {...rest} className={classNames('plinth-${name}', className)}>
+      {children}
+    </div>
+  );
+}
+`,
+
+  [`packages/react/test/Plinth${Name}.test.tsx`]: `import { render } from '@testing-library/react';
+import { createRef } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { describe, expect, it } from 'vitest';
+import { Plinth${Name} } from '../src/index.ts';
+
+describe('Plinth${Name}', () => {
+  it('prints the ${title.toLowerCase()} markup contract', () => {
+    expect(renderToStaticMarkup(<Plinth${Name}>Content</Plinth${Name}>)).toBe(
+      '<div class="plinth-${name}">Content</div>',
+    );
+  });
+
+  it('escapes the content', () => {
+    expect(renderToStaticMarkup(<Plinth${Name}>{'<b>x</b>'}</Plinth${Name}>)).toContain(
+      '&lt;b&gt;x&lt;/b&gt;',
+    );
+  });
+
+  it('keeps extra classes, attributes and the ref on its root', () => {
+    const ref = createRef<HTMLDivElement>();
+    const { container } = render(
+      <Plinth${Name} ref={ref} className="ms-2" id="extra">
+        Content
+      </Plinth${Name}>,
+    );
+    const root = container.firstElementChild!;
+
+    expect(root.className).toBe('plinth-${name} ms-2');
+    expect(root.id).toBe('extra');
+    expect(ref.current).toBe(root);
+  });
+});
+`,
 };
 
 const existing = Object.keys(files).filter((path) => existsSync(new URL(path, root)));
@@ -212,5 +270,7 @@ for (const [path, content] of Object.entries(files)) {
 console.log(`
 Still to do by hand (SKILL.md, step 2):
   packages/vue/src/index.ts           export Plinth${Name} and register it in the plugin
-  packages/vue/test/PlinthBadge.test.ts  the plugin test checks Plinth${Name} too
-  storybook/test/parity.test.ts       a case for every ${Name} story, and its name in the list`);
+  packages/vue/test/index.test.ts     the plugin test checks Plinth${Name} too
+  packages/react/src/index.ts         export Plinth${Name} and its props type
+  storybook/test/parity.test.ts       a case for every ${Name} story, its name in the list, and
+                                      the Vue and React components in reactComponents`);

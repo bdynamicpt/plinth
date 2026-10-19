@@ -21,9 +21,9 @@ The design system of BDynamic's projects. Nothing in Plinth may know about any o
   components use and projects override, light and dark), component (per-component tuning).
 - **Components are plain HTML and CSS**, each with a documented markup contract (elements, classes,
   states, ARIA).
-- **Blade (with a Filament plugin) and Vue 3 layers are thin:** they print the contract and hold no
-  styles. Parity tests compare their output with the story's markup, ignoring whitespace and
-  attribute order.
+- **Blade (with a Filament plugin), Vue 3 and React 19 layers are thin:** they print the contract
+  and hold no styles (docs/adr/0006 for React). Parity tests compare their output with the story's
+  markup, ignoring whitespace and attribute order.
 - **Storybook** (`@storybook/html-vite`, not Vue) documents and tests the plain HTML. Addons: docs,
   a11y, viewport (390, 768, 1440 px), a light/dark switch driven by the tokens.
 - **Brand per project:** Plinth ships its default look (docs/adr/0003: dense and quiet, dark
@@ -37,31 +37,32 @@ packages/
   tokens/   DTCG token source; builds CSS custom properties, JS/TS export, Tailwind `@theme` CSS
   css/      one stylesheet per component, tokens only, mobile first
   vue/      Vue 3 components
+  react/    React 19 components (`@bdynamic/plinth-react`)
   blade/    Composer package: Blade components (<x-plinth::name>) + Filament plugin;
             has a package.json whose scripts run Composer and copy the built CSS in
 storybook/  never published
 ```
 
 - npm workspaces, Node 22, Vite, TypeScript. Not Bun or pnpm.
-- Turborepo with no remote cache. Task order: `tokens` → `css` → `vue` and `blade` → `storybook`;
-  outputs declared in `turbo.json`.
-- Tests: Vitest (tokens build, Vue), Storybook test runner with Playwright and axe (every
-  story, both themes, three widths), Pest (Blade). Screenshot comparison is paused until the
+- Turborepo with no remote cache. Task order: `tokens` → `css` → `vue`, `react` and `blade` →
+  `storybook`; outputs declared in `turbo.json`.
+- Tests: Vitest (tokens build, Vue, React with Testing Library), Storybook test runner with
+  Playwright and axe (every story, both themes, three widths), Pest (Blade). Screenshot comparison is paused until the
   foundations settle (#9).
 - Lint: ESLint, Prettier, Stylelint (property order, no `!important`, no raw colours), Pint.
 - PHPStan (with Larastan) runs at `level: max` on `packages/blade/src`, as part of
   `composer lint`. Fix the types; no baseline, no `@phpstan-ignore`.
 - Test coverage is 100% and the test scripts fail below it: Pest with `--coverage --min=100` for
-  the Blade package (needs pcov or Xdebug), Vitest coverage thresholds for the Vue package. New
-  code ships with the tests that cover it.
+  the Blade package (needs pcov or Xdebug), Vitest coverage thresholds for the Vue and React
+  packages. New code ships with the tests that cover it.
 - PHP classes are always `final`; Pint's `final_class` rule enforces it. Abstract base classes
   (such as the tests' `TestCase`) are the only exception.
 - CI: `npm ci`, then `turbo run lint test build build-storybook`, `.turbo` kept by the Actions
   cache; pull requests use `--filter=...[origin/main]`.
-- Published as npm `@bdynamic/plinth` (subpaths `tokens`, `tokens.css`, `css`, `vue`, `tailwind.css`)
-  and Packagist `bdynamicpt/plinth` (Blade, Filament plugin, built CSS so Laravel needs no Node
-  build). One version, one tag. Storybook, tests, token sources and tooling are not published.
-- Versions come from Changesets (docs/adr/0004): the four workspaces are one `fixed` group, and
+- Published as npm `@bdynamic/plinth` (subpaths `tokens`, `tokens.css`, `css`, `vue`, `react`,
+  `tailwind.css`) and Packagist `bdynamicpt/plinth` (Blade, Filament plugin, built CSS so Laravel
+  needs no Node build). One version, one tag. Storybook, tests, token sources and tooling are not published.
+- Versions come from Changesets (docs/adr/0004): the five workspaces are one `fixed` group, and
   `npm run release:version` copies the version to the root `package.json` and `CHANGELOG.md`. A
   pull request that changes a package adds a changeset (`npx changeset`); docs, tests, Storybook
   and tooling don't.
@@ -79,12 +80,16 @@ storybook/  never published
 - Behaviour comes from native elements first (docs/adr/0002): `<dialog>` for sheets, `popover` for
   menus, `<details>` for disclosure, `command`/`commandfor` to open and close. Open state is the
   native one (`[open]`, `:popover-open`), not a class. Only what the platform can't do goes in a
-  layer (Alpine in Blade, state in Vue), and no Plinth JavaScript ships.
+  layer (Alpine in Blade, state in Vue and React, effects only, never while rendering), and no
+  Plinth JavaScript ships.
 - The app owns the state: components never fetch, route or remember; layout state is an
   attribute or `is-*` class the app sets.
 - Blade merges `$attributes` onto the documented root and Vue lets attributes fall through to it,
-  so `wire:*`, `x-*`, `data-*` and `aria-*` reach it; Vue emits documented events. Each component
-  has a parity case with extra attributes.
+  so `wire:*`, `x-*`, `data-*` and `aria-*` reach it; Vue emits documented events. React spreads
+  its other props (`className` merged with Plinth's, `id`, `data-*`, `aria-*`, handlers, `ref`)
+  onto the same root, takes Vue's props by the same names, turns Vue's default slot into
+  `children` and named slots into props that take a node, and has `on…` callbacks for Vue's
+  events. Each component has a parity case with extra attributes.
 - Every focusable element shows the focus ring on `:focus-visible` (outline in
   `--plinth-color-focus-ring` at `--plinth-focus-ring-width`, offset `--plinth-focus-ring-offset`,
   `-offset-filled` on solid filled controls, or `-offset-inset` on full-width rows); the test runner checks it.
@@ -92,7 +97,7 @@ storybook/  never published
   (xs to xl, icons included) with each component's supported subset. PHP classes are `final`.
 - Logical properties; touch targets at least 40 × 40 px; nothing hover-only;
   `prefers-reduced-motion` respected.
-- Each component ships its story (every state, three widths, light and dark), Blade and Vue
+- Each component ships its story (every state, three widths, light and dark), Blade, Vue and React
   layers, a parity test, a clean a11y check and a docs page.
 
 ## Agent tooling
@@ -101,7 +106,7 @@ storybook/  never published
   the `new-component` skill). Its script writes the files for every layer; the skill lists what
   to wire up and check.
 - **Reviewing a component:** `.claude/agents/component-reviewer.md` checks one against its
-  contract (ARIA, states, logical properties, touch targets, reduced motion, Blade and Vue
+  contract (ARIA, states, logical properties, touch targets, reduced motion, Blade, Vue and React
   parity). It leaves to Stylelint what Stylelint catches.
 - **Storybook MCP:** `.mcp.json` registers `@storybook/addon-mcp` at `http://127.0.0.1:6006/mcp`,
   live while `npm run storybook` runs. Use it to find a component's stories and their preview
@@ -126,8 +131,8 @@ storybook/  never published
   `main`.
   - Types: `feat`, `fix`, `docs`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`.
   - Scope: the component for component work (`button`, `icon-button`), otherwise the area
-    (`tokens`, `css`, `vue`, `blade`, `storybook`, `adr`, `agents`, `deps`). Leave it out when a
-    change spans the whole repository.
+    (`tokens`, `css`, `vue`, `react`, `blade`, `storybook`, `adr`, `agents`, `deps`). Leave it
+    out when a change spans the whole repository.
   - Description: lowercase, imperative, no full stop (`feat(badge): add a dot option`).
   - A breaking change adds `!` after the scope (`feat(tokens)!: rename the surface tokens`) and
     explains it in a `BREAKING CHANGE:` footer.

@@ -1,16 +1,16 @@
 # Plinth
 
 The design system of BDynamic's projects: design tokens, components as plain HTML and CSS, and
-thin Blade and Vue layers that print the same markup, documented and tested in Storybook.
+thin Blade, Vue and React layers that print the same markup, documented and tested in Storybook.
 
 - **Tokens** are the source of truth: colour (light and dark), type, spacing, radii, layers,
   breakpoints and motion. They are written once and built to CSS custom properties, a JS/TS
   export and a Tailwind v4 theme file.
 - **Components are plain HTML and CSS.** Each one has a markup contract (its elements, classes,
   states and ARIA) that every framework layer prints.
-- **Blade and Vue layers** print that markup and hold no styles of their own.
+- **Blade, Vue and React layers** print that markup and hold no styles of their own.
 - **Storybook** documents the plain HTML and tests it: accessibility and parity
-  between the story, Blade and Vue.
+  between the story, Blade, Vue and React.
 - **Each project brings its brand through the tokens.** Plinth ships neutral defaults; a project
   overrides the custom properties and never forks a component.
 
@@ -22,6 +22,7 @@ packages/
               properties, a JS/TS export and a Tailwind theme
   css/        one stylesheet per component, tokens only, mobile first; builds dist/plinth.css
   vue/        Vue 3 components that print the markup contract
+  react/      React 19 components that print the same markup contract
   blade/      Composer package: Blade components, a Filament plugin, and the built CSS
 storybook/    Storybook (HTML renderer): Branding, Foundations, component stories, parity tests
 ```
@@ -31,7 +32,7 @@ package (nothing is published yet):
 
 | Package             | Registry  | Holds                                                                                      |
 | ------------------- | --------- | ------------------------------------------------------------------------------------------ |
-| `@bdynamic/plinth`  | npm       | `./tokens`, `./tokens.css`, `./css`, `./vue` and `./tailwind.css`                          |
+| `@bdynamic/plinth`  | npm       | `./tokens`, `./tokens.css`, `./css`, `./vue`, `./react` and `./tailwind.css`               |
 | `bdynamicpt/plinth` | Packagist | `<x-plinth::…>` Blade components, `PlinthPlugin` for Filament, `resources/dist/plinth.css` |
 
 ## Working on Plinth
@@ -49,7 +50,7 @@ npm run check                     # everything CI runs (turbo run lint test buil
 ```
 
 [Turborepo](https://turborepo.com) runs each task in the order the packages depend on each other
-(`tokens` → `css` → `vue` and `blade` → `storybook`) and caches the results in `.turbo/`, so a
+(`tokens` → `css` → `vue`, `react` and `blade` → `storybook`) and caches the results in `.turbo/`, so a
 second run with nothing changed is served from the cache. On a small machine, add
 `--concurrency=2`.
 
@@ -64,9 +65,10 @@ What the tests cover:
   built from primitives in both themes, text colours meet WCAG AA, and the CSS and Tailwind output
   are right (Tailwind itself compiles the theme).
 - `packages/vue`: Vitest with Vue Test Utils.
+- `packages/react`: Vitest with Testing Library.
 - `packages/blade`: Pest with Testbench, including the Filament plugin (`composer test` there).
-- `storybook`: Vitest **parity tests** render every story's markup, the Blade component and the
-  Vue component, and compare them ignoring whitespace and attribute order. Then the Storybook
+- `storybook`: Vitest **parity tests** render every story's markup, the Blade component, the
+  Vue component and the React one, and compare them ignoring whitespace and attribute order. Then the Storybook
   test runner opens every story in light and dark at 390, 768 and 1440 px and checks it with axe.
 
 Screenshot comparison is paused until the foundations settle
@@ -134,6 +136,23 @@ import '@bdynamic/plinth/fonts.css'; // Geist and Geist Mono, the default typefa
 import '@bdynamic/plinth/css';
 import { PlinthBadge } from '@bdynamic/plinth/vue';
 ```
+
+**React** (an Inertia React app, or any React 19 app): the same `file:` link, then
+
+```tsx
+import '@bdynamic/plinth/fonts.css';
+import '@bdynamic/plinth/css';
+import { PlinthButton } from '@bdynamic/plinth/react';
+
+<PlinthButton variant="secondary" onClick={save}>
+  Save
+</PlinthButton>;
+```
+
+The React components take the Vue props by the same names. Vue's default slot is `children`, and
+its named slots are props that take a node (`icon`, `trailing`). Everything else, `className`
+and `ref` included, reaches the root element. They render the same on the server (Inertia's SSR)
+and in the browser.
 
 **Tailwind v4**: Plinth's CSS is in `@layer plinth`. Place that layer after Tailwind's reset and
 before its utilities, so a utility class can adjust a component without `!important`. Then import
