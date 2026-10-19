@@ -38,7 +38,8 @@ it('shows the header and footer links', function () {
     }
 
     $response->assertSee('aria-label="Plinth on GitHub"', false)
-        ->assertSee('href="'.config('site.repository').'/issues"', false);
+        ->assertSee('href="'.config('site.repository').'/issues"', false)
+        ->assertSee('href="'.route('storybook').'/"', false);
 });
 
 it('shows the latest four decisions, newest first, with the newest announced in the hero', function () {
