@@ -1,4 +1,5 @@
 import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
+import { AtEveryWidth } from '../../blocks/AtEveryWidth.tsx';
 import * as SectionMenuStories from './SectionMenu.stories';
 
 <Meta of={SectionMenuStories} />
@@ -11,6 +12,8 @@ which takes the selection tint and an accent edge. It never wraps: when the item
 
 <Canvas of={SectionMenuStories.Default} />
 <Controls of={SectionMenuStories.Default} />
+
+<AtEveryWidth of={SectionMenuStories.Default} />
 
 ## Links or buttons
 

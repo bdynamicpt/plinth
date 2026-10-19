@@ -1,4 +1,5 @@
 import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
+import { AtEveryWidth } from '../../blocks/AtEveryWidth.tsx';
 import * as PillRowStories from './PillRow.stories';
 
 <Meta of={PillRowStories} />
@@ -11,6 +12,8 @@ pills; from 768px it wraps onto more lines.
 
 <Canvas of={PillRowStories.Filters} />
 <Controls of={PillRowStories.Filters} />
+
+<AtEveryWidth of={PillRowStories.Filters} />
 
 ## Filters or navigation
 

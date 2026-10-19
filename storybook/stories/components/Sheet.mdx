@@ -1,4 +1,5 @@
 import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
+import { AtEveryWidth } from '../../blocks/AtEveryWidth.tsx';
 import * as SheetStories from './Sheet.stories';
 
 <Meta of={SheetStories} />
@@ -9,11 +10,13 @@ A modal panel for a task that sits on top of the page: filters, a short form, a 
 list of options. On a phone it slides up from the bottom; from 768px up it shows as a dialog in
 the middle of the screen, or as a full-height panel on the side.
 
-The sheets on this page stay closed until you press their button; open a story on its own to see
-it open.
+The sheets on this page stay closed until you press their button. Under the first one, **At every
+width** shows it open on a phone, a tablet and a desktop.
 
 <Canvas of={SheetStories.Default} />
 <Controls of={SheetStories.Default} />
+
+<AtEveryWidth of={SheetStories.Default} height={640} />
 
 ## Markup
 

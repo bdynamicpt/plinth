@@ -86,7 +86,9 @@ component; `.claude/skills/new-component/SKILL.md` walks through the rest.
 5. **Parity test**: cases in `storybook/test/parity.test.ts`, one per story and one with extra
    attributes, so the Blade and Vue output must match the story's markup.
 6. **Docs**: an MDX page next to the story, `storybook/stories/components/<Name>.mdx`, in the
-   shape of `Badge.mdx`: what it is and when to use it, the **markup contract** (the markup, a
+   shape of `Badge.mdx`: what it is and when to use it, its first example with
+   **`<AtEveryWidth of={…} />`** under it (the story at 390, 768 and 1440 px, in dark and light;
+   a story that opens a sheet or dialog passes a `height`), the **markup contract** (the markup, a
    table of its parts and one of its attributes and states), a section with a canvas for each
    variant and state, **accessibility** (accessible name, what is announced, keyboard, what the
    app must add), and **in Blade and Vue** (a table of the props in each, an example, and which

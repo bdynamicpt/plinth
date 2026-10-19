@@ -80,6 +80,7 @@ export const Default: Story = {};
 `,
 
   [`storybook/stories/components/${Name}.mdx`]: `import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
+import { AtEveryWidth } from '../../blocks/AtEveryWidth.tsx';
 import * as ${Name}Stories from './${Name}.stories';
 
 <Meta of={${Name}Stories} />
@@ -90,6 +91,8 @@ TODO what it is, where it goes, and what it is not (Badge.mdx is the model for e
 
 <Canvas of={${Name}Stories.Default} />
 <Controls of={${Name}Stories.Default} />
+
+<AtEveryWidth of={${Name}Stories.Default} />
 
 ## Markup contract
 

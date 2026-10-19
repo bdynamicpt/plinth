@@ -1,4 +1,5 @@
 import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
+import { AtEveryWidth } from '../../blocks/AtEveryWidth.tsx';
 import * as ListRowStories from './ListRow.stories';
 
 <Meta of={ListRowStories} />
@@ -11,6 +12,8 @@ value, a badge or a control. It is 44px tall at least, and grows with a descript
 
 <Canvas of={ListRowStories.WithDescription} />
 <Controls of={ListRowStories.WithDescription} />
+
+<AtEveryWidth of={ListRowStories.WithDescription} />
 
 ## Static, link or button
 
