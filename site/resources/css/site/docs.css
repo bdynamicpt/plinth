@@ -1,7 +1,7 @@
 /*
  * The docs: the layout (sidebar, page, table of contents), the Markdown's text, highlighted code
- * and the token tables. A phone gets the page alone, with the sidebar in a menu sheet; the sidebar
- * joins it from 768px and the table of contents from 1280px.
+ * and the token tables. A phone or a tablet gets the page alone, with the sidebar in a menu sheet;
+ * the sidebar and the table of contents join it from 1280px.
  */
 
 @layer site {
@@ -433,19 +433,6 @@
     }
 
     @media (min-width: 768px) {
-        .site-docs {
-            grid-template-columns: 13rem minmax(0, 1fr);
-            gap: var(--plinth-space-10);
-        }
-
-        .site-docs-side {
-            display: block;
-        }
-
-        .site-docs-menu-button {
-            display: none;
-        }
-
         .site-docs-article {
             padding-block-start: var(--plinth-space-8);
         }
@@ -457,19 +444,25 @@
         .site-docs-pager {
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
+
+        .site-token-name {
+            min-inline-size: 15rem;
+        }
     }
 
     @media (min-width: 1280px) {
         .site-docs {
             grid-template-columns: 14.5rem minmax(0, 1fr) 12.5rem;
+            gap: var(--plinth-space-10);
         }
 
+        .site-docs-side,
         .site-docs-toc {
             display: block;
         }
 
-        .site-token-name {
-            min-inline-size: 15rem;
+        .site-docs-menu-button {
+            display: none;
         }
     }
 }

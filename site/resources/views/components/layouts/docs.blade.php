@@ -1,5 +1,5 @@
 {{--
-    A docs page: the sidebar by section (from 768px; on a phone, a menu sheet), the breadcrumb, the
+    A docs page: the sidebar by section (from 1280px; below that, a menu sheet), the breadcrumb, the
     title and lead, the page, previous and next, the edit link, and the table of contents (from 1280px).
 --}}
 @props([
