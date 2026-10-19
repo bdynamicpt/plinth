@@ -82,7 +82,9 @@ Change all four together so they keep printing the same markup:
   `docs.description.component` says what it is, when to use it, and anything a user must add
   (an accessible name, `aria-controls`, …).
 - **Docs page:** `<Name>.mdx` next to the story, in the shape of `Badge.mdx` (the scaffold writes
-  its headings): the intro and a canvas with controls, **Markup contract** (the markup, a table
+  its headings): the intro and a canvas with controls, then **`<AtEveryWidth of={…} />`** with
+  the same story (the phone, tablet and desktop frames, in dark and light; pass `height` when
+  the story opens a sheet or dialog, which takes no room in the page), **Markup contract** (the markup, a table
   of parts, a table of attributes and states with values and defaults), a section per variant or
   state with its canvas, **Accessibility**, and **In Blade and Vue** (a props table for both,
   an example, what is forwarded where and the events Vue emits). Every story appears in a canvas.

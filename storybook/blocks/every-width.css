@@ -1,12 +1,16 @@
 /*
- * The AtEveryWidth docs block: a bar with the theme switch, then the phone and the tablet side
+ * The AtEveryWidth docs block, on the theme's surface like a canvas: a bar with the theme switch, then the phone and the tablet side
  * by side and the desktop under them, or all three stacked in a narrow docs column.
  */
 .sb-every-width {
   container-type: inline-size;
   margin-block: var(--plinth-space-8);
+  padding: var(--plinth-space-4);
   color: var(--plinth-color-text);
   font-family: var(--plinth-font-family-body);
+  background-color: var(--plinth-color-surface);
+  border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+  border-radius: var(--plinth-radius-container);
 }
 
 .sb-every-width-bar {

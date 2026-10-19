@@ -34,7 +34,7 @@ interface FrameProps {
 }
 
 /** The smallest frame, until the story has rendered and been measured. */
-const minHeight = 120;
+const minHeight = 48;
 
 function Frame({ src, title, label, width, height }: FrameProps) {
   const cell = useRef<HTMLDivElement>(null);
@@ -117,7 +117,11 @@ export function AtEveryWidth({ of, height }: AtEveryWidthProps) {
   useEffect(() => setTheme(globals.theme), [globals.theme]);
 
   return (
-    <section className="sb-every-width sb-unstyled" aria-label={`${story.name} at every width`}>
+    <section
+      className="sb-every-width sb-unstyled"
+      data-theme={theme}
+      aria-label={`${story.name} at every width`}
+    >
       <div className="sb-every-width-bar">
         <p className="sb-every-width-title">At every width</p>
         <div className="sb-every-width-themes" role="group" aria-label="Theme">
