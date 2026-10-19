@@ -1,7 +1,7 @@
 {
   "name": "@bdynamic/plinth",
   "version": "0.0.0",
-  "description": "The design system of BDynamic's projects: tokens, plain HTML and CSS components, and thin Blade and Vue layers.",
+  "description": "The design system of BDynamic's projects: tokens, plain HTML and CSS components, and thin Blade, Vue and React layers.",
   "license": "MIT",
   "private": true,
   "type": "module",
@@ -13,6 +13,7 @@
     "packages/tokens",
     "packages/css",
     "packages/vue",
+    "packages/react",
     "packages/blade",
     "storybook"
   ],
@@ -29,18 +30,31 @@
     "./vue": {
       "types": "./packages/vue/dist/index.d.ts",
       "default": "./packages/vue/dist/index.js"
+    },
+    "./react": {
+      "types": "./packages/react/dist/index.d.ts",
+      "default": "./packages/react/dist/index.js"
     }
   },
   "files": [
     "packages/tokens/dist",
     "packages/css/dist",
-    "packages/vue/dist"
+    "packages/vue/dist",
+    "packages/react/dist"
   ],
   "peerDependencies": {
-    "vue": "^3.5.0"
+    "vue": "^3.5.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "peerDependenciesMeta": {
     "vue": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
       "optional": true
     }
   },

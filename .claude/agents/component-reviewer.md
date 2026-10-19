@@ -1,6 +1,6 @@
 ---
 name: component-reviewer
-description: Reviews one Plinth component against its markup contract (ARIA, states, logical properties, touch targets, reduced motion, colour as a signal, and parity between the story, Blade and Vue). Use after adding or changing a component, before the pull request. Give it the component's name.
+description: Reviews one Plinth component against its markup contract (ARIA, states, logical properties, touch targets, reduced motion, colour as a signal, and parity between the story, Blade, Vue and React). Use after adding or changing a component, before the pull request. Give it the component's name.
 tools: Read, Grep, Glob, Bash
 ---
 
@@ -18,6 +18,8 @@ For a component `<name>` (kebab case) and `<Name>` (Pascal case):
   `packages/blade/tests/Feature/<Name>Test.php`
 - `packages/vue/src/Plinth<Name>.vue`, `packages/vue/src/index.ts` and
   `packages/vue/test/Plinth<Name>.test.ts`
+- `packages/react/src/Plinth<Name>.tsx`, `packages/react/src/index.ts` and
+  `packages/react/test/Plinth<Name>.test.tsx`
 - its cases in `storybook/test/parity.test.ts`
 
 `packages/css/src/components/badge.css` and its layers are the reference for how a component is
@@ -62,20 +64,29 @@ Check what Stylelint cannot:
 9. **Colour is never the only signal.** Text or an icon carries the meaning, and the parts that
    need an edge keep one in forced-colours mode.
 10. **Mobile first.** Base rules are the phone; the 768 and 1280 px queries only add.
-11. **Parity.** The Blade and Vue components print the story's markup and nothing else: no
-    extra elements, attributes, classes or inline styles. Defaults and fallbacks match between
-    the two (an unknown variant falls back the same way), both escape text, both pass through
-    extra classes and attributes on the root, and neither holds styles. Every story that takes
-    args has a parity case, and the case list in `parity.test.ts` names it.
-12. **Shipping.** The Vue component is exported from `src/index.ts` and registered by the
-    plugin; Blade and Vue tests cover defaults, every variant, escaping and extra attributes;
+11. **Parity.** The Blade, Vue and React components print the story's markup and nothing else:
+    no extra elements, attributes, classes or inline styles. Defaults and fallbacks match between
+    the three (an unknown variant falls back the same way), all escape text, all pass through
+    extra classes and attributes on the root, and none holds styles. Every story that takes args
+    has a parity case, the case list in `parity.test.ts` names it, and the component is in
+    `reactComponents` there so React is checked too.
+12. **React forwarding.** The React component takes Vue's prop names; the default slot is
+    `children` and named slots are node props; every other prop, `ref` included, is spread onto
+    the documented root, and `className` is merged with Plinth's classes rather than replacing
+    them; Vue's events are `on…` callbacks. Nothing reads `window` or `document` while
+    rendering (it must render the same on the server); behaviour runs in an effect.
+13. **Shipping.** The Vue component is exported from `src/index.ts` and registered by the
+    plugin, and the React one is exported from its `src/index.ts`; Blade, Vue and React tests
+    cover defaults, every variant, escaping and extra attributes (and React's `ref`);
     the story's docs description says what a user must know (including the ARIA they must add
     themselves).
-13. **No consumer.** No project names, brand colours or copy from a consumer anywhere,
+14. **No consumer.** No project names, brand colours or copy from a consumer anywhere,
     including story labels.
 
 If the tests are cheap to run, run them: `npx vitest run test/parity.test.ts` in `storybook/`,
-`npx vitest run` in `packages/vue`, and `composer test` in `packages/blade`.
+`npx vitest run` in `packages/vue` and in `packages/react`, and `composer test` in
+`packages/blade`. The parity suite reads the built Vue and React packages: run
+`npx turbo run build --filter=@bdynamic/plinth-storybook^...` first.
 
 ## How to report
 

@@ -17,7 +17,7 @@ header. It is not a button and not a count: it does nothing when pressed.
 
 ## Markup contract
 
-Blade and Vue print exactly this markup, and the parity tests hold them to it. The CSS in
+Blade, Vue and React print exactly this markup, and the parity tests hold them to it. The CSS in
 `packages/css/src/components/badge.css` styles it.
 
 <Source
@@ -41,7 +41,7 @@ Blade and Vue print exactly this markup, and the parity tests hold them to it. T
 | `aria-hidden` | `.plinth-badge-dot` | always `true`: the dot only repeats the label | —         |
 
 The badge has no states of its own: it doesn't open, select or disable. A missing or unknown
-`data-tone` looks neutral, and Blade and Vue print `neutral` for a tone they don't know.
+`data-tone` looks neutral, and Blade, Vue and React print `neutral` for a tone they don't know.
 
 ## Tones
 
@@ -87,13 +87,13 @@ with a dot, or none.
 - It is not focusable and has no touch target, because it does nothing. To make a status
   clickable, put the badge inside a link or a button, which brings its own focus ring.
 
-## In Blade and Vue
+## In Blade, Vue and React
 
-| Prop  | Blade                                               | Vue                      | Default   |
-| ----- | --------------------------------------------------- | ------------------------ | --------- |
-| tone  | `tone="success"` or `:tone="$tone"` (a `Tone` case) | `tone="success"`         | `neutral` |
-| dot   | `dot` or `:dot="$online"`                           | `dot` or `:dot="online"` | off       |
-| label | the slot                                            | the default slot         | —         |
+| Prop  | Blade                                               | Vue                      | React                   | Default   |
+| ----- | --------------------------------------------------- | ------------------------ | ----------------------- | --------- |
+| tone  | `tone="success"` or `:tone="$tone"` (a `Tone` case) | `tone="success"`         | `tone="success"`        | `neutral` |
+| dot   | `dot` or `:dot="$online"`                           | `dot` or `:dot="online"` | `dot` or `dot={online}` | off       |
+| label | the slot                                            | the default slot         | `children`              | —         |
 
 <Source
   language="html"
@@ -106,8 +106,19 @@ with a dot, or none.
 <PlinthBadge tone="warning" dot>Away</PlinthBadge>`}
 />
 
+<Source
+  language="tsx"
+  dark
+  code={`import { PlinthBadge } from '@bdynamic/plinth/react';
+
+<PlinthBadge tone={order.paid ? 'success' : 'warning'} dot className="ms-2">
+  {order.statusLabel}
+</PlinthBadge>`}
+/>
+
 Extra attributes reach the root `<span>`: in Blade through `$attributes` (`class`, `id`,
 `data-*`, `aria-*`, and Livewire's and Alpine's `wire:key`, `x-show`), in Vue by falling through
-(`class`, `id`, `data-*`, `aria-*`). In Blade the tone is a value or a case of
-`\BDynamic\Plinth\Enums\Tone` (write the full name, or `@use` it in the view); in Vue it is a
-`Tone`, and the list is exported as `tones`.
+(`class`, `id`, `data-*`, `aria-*`), and in React as props (`className`, added to Plinth's class,
+`id`, `data-*`, `aria-*` and `ref`). In Blade the tone is a value or a case of
+`\BDynamic\Plinth\Enums\Tone` (write the full name, or `@use` it in the view); in Vue and React
+it is a `Tone`, and the list is exported as `tones`.

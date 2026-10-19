@@ -67,3 +67,24 @@ npm install @bdynamic/plinth
 import '@bdynamic/plinth/css';
 import { PlinthBadge } from '@bdynamic/plinth/vue';
 ```
+
+## Installing it in a React app
+
+For a React 19 app, an Inertia one included. _To come. In short:_
+
+```bash
+npm install @bdynamic/plinth
+```
+
+```tsx
+import '@bdynamic/plinth/css';
+import { PlinthBadge } from '@bdynamic/plinth/react';
+
+<PlinthBadge tone="success" dot>
+  Paid
+</PlinthBadge>;
+```
+
+_The components take the Vue props by the same names. Vue's default slot is `children` and its
+named slots are props that take a node (`icon`, `trailing`); `className`, `ref` and every other
+prop reach the root element. They render the same on the server, for Inertia's SSR._

@@ -106,14 +106,14 @@ describe('sharedVersion', () => {
   };
 
   it('returns the version the packages share', () => {
-    const root = workspace(['0.2.0', '0.2.0', '0.2.0', '0.2.0']);
+    const root = workspace(['0.2.0', '0.2.0', '0.2.0', '0.2.0', '0.2.0']);
     expect(sharedVersion(root)).toBe('0.2.0');
     expect(readPackage(root)).toEqual({ name: '@bdynamic/plinth', version: '0.0.0' });
   });
 
   it('refuses packages that have drifted apart', () => {
-    expect(() => sharedVersion(workspace(['0.2.0', '0.2.0', '0.1.0', '0.2.0']))).toThrow(
-      'The packages should share one version, but they have packages/tokens 0.2.0, packages/css 0.2.0, packages/vue 0.1.0, packages/blade 0.2.0.',
+    expect(() => sharedVersion(workspace(['0.2.0', '0.2.0', '0.1.0', '0.2.0', '0.2.0']))).toThrow(
+      'The packages should share one version, but they have packages/tokens 0.2.0, packages/css 0.2.0, packages/vue 0.1.0, packages/react 0.2.0, packages/blade 0.2.0.',
     );
   });
 });

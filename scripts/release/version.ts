@@ -1,7 +1,7 @@
 /**
  * `npm run release:version`: turns the pending changesets into the next version.
  *
- * Changesets bumps the four workspaces together (they are one `fixed` group). This script then
+ * Changesets bumps the five workspaces together (they are one `fixed` group). This script then
  * gives that version to the root package.json, which is the npm package `@bdynamic/plinth`, and
  * writes the changelog: one CHANGELOG.md for both registries, instead of one per workspace.
  * The Composer package has no version field; Packagist reads the tag `npm run release` makes.

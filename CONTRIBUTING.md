@@ -52,10 +52,12 @@ what each state looks like, and its contract lists them.
 **Forward attributes and events.** The Blade component merges `$attributes` onto its documented
 root (`$attributes->merge(['class' => …])`), so `class`, `wire:*`, `x-*`, `href`, `data-*` and
 `aria-*` reach it. The Vue component lets attributes fall through to the same root and emits
-documented events (`open`, `close`, `select`) rather than handling them. When the element an app
-needs to reach is inside another (the link in a nav item), it becomes the root of its own
-component. Each component has a parity case with extra attributes, so Blade and Vue forward the
-same ones.
+documented events (`open`, `close`, `select`) rather than handling them. The React component
+spreads every prop it doesn't use (`id`, `data-*`, `aria-*`, handlers, `ref`) onto the same root
+and merges `className` with Plinth's classes; its events are `on…` callbacks (`onClose`) for the
+Vue ones ([ADR 6](docs/adr/0006-a-react-layer.md)). When the element an app needs to reach is
+inside another (the link in a nav item), it becomes the root of its own component. Each component
+has a parity case with extra attributes, so Blade, Vue and React forward the same ones.
 
 **In `@layer plinth`.** Wrap a component's rules in `@layer plinth { … }`, so a project's
 utilities can override them without `!important`; the CSS build refuses a file that doesn't.
@@ -83,24 +85,27 @@ component; `.claude/skills/new-component/SKILL.md` walks through the rest.
    (`Size::resolve($size, Size::controls())`). PHP classes are `final` (Pint checks).
 4. **Vue**: `packages/vue/src/Plinth<Name>.vue`, exported from `src/index.ts` and registered by
    the plugin, with Vitest tests.
-5. **Parity test**: cases in `storybook/test/parity.test.ts`, one per story and one with extra
-   attributes, so the Blade and Vue output must match the story's markup.
-6. **Docs**: an MDX page next to the story, `storybook/stories/components/<Name>.mdx`, in the
+5. **React**: `packages/react/src/Plinth<Name>.tsx`, exported from `src/index.ts`, with Vitest and
+   Testing Library tests. The same names and props as Vue; the default slot is `children`, a named
+   slot is a prop that takes a node, and nothing reads `window` or `document` while rendering.
+6. **Parity test**: cases in `storybook/test/parity.test.ts`, one per story and one with extra
+   attributes, so the Blade, Vue and React output must match the story's markup.
+7. **Docs**: an MDX page next to the story, `storybook/stories/components/<Name>.mdx`, in the
    shape of `Badge.mdx`: what it is and when to use it, its first example with
    **`<AtEveryWidth of={…} />`** under it (the story at 390, 768 and 1440 px, in dark and light;
    a story that opens a sheet or dialog passes a `height`), the **markup contract** (the markup, a
    table of its parts and one of its attributes and states), a section with a canvas for each
    variant and state, **accessibility** (accessible name, what is announced, keyboard, what the
-   app must add), and **in Blade and Vue** (a table of the props in each, an example, and which
-   attributes reach which element).
-7. **Screenshots** in the pull request, at 390, 768 and 1440 px in light and dark.
+   app must add), and **in Blade, Vue and React** (a table of the props in each, an example, and
+   which attributes reach which element).
+8. **Screenshots** in the pull request, at 390, 768 and 1440 px in light and dark.
 
-The Blade and Vue layers only print markup. They hold no styles, and they do not add elements or
-attributes that the story does not have.
+The Blade, Vue and React layers only print markup. They hold no styles, and they do not add
+elements or attributes that the story does not have.
 
 ## Before you open a pull request
 
-If the change reaches what Plinth ships (tokens, CSS, Vue, Blade), add a changeset with
+If the change reaches what Plinth ships (tokens, CSS, Vue, React, Blade), add a changeset with
 `npx changeset`: a patch for a fix, a minor for something new, a major for a breaking change,
 and one line for the changelog. See `.changeset/README.md`.
 
