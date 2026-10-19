@@ -1,0 +1,10 @@
+/* After Plinth's CSS: each colour for light and dark. */
+:root {
+  --plinth-color-accent: light-dark(#0f766e, #2dd4bf);
+  --plinth-color-accent-hover: light-dark(#115e59, #5eead4);
+  --plinth-color-accent-active: light-dark(#134e4a, #99f6e4);
+  --plinth-color-accent-text: light-dark(#115e59, #5eead4);
+  --plinth-color-on-accent: light-dark(#fff, #042f2e);
+  --plinth-color-focus-ring: light-dark(#0f766e, #5eead4);
+  --plinth-radius-pill: 0.25rem;
+}

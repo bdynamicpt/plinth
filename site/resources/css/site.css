@@ -1,0 +1,15 @@
+/*
+ * The site's stylesheet: Plinth's fonts and CSS, as a Laravel project loads them, then the site's
+ * own CSS. The site's element defaults sit in a layer below Plinth's, so a component always wins
+ * over them; the site's classes sit above it.
+ */
+
+@layer site-base, plinth, site;
+
+@import url('../../vendor/bdynamicpt/plinth/resources/dist/fonts/index.css');
+@import url('../../vendor/bdynamicpt/plinth/resources/dist/plinth.css');
+@import url('./site/base.css');
+@import url('./site/type.css');
+@import url('./site/header.css');
+@import url('./site/footer.css');
+@import url('./site/home.css');

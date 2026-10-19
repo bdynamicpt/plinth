@@ -13,6 +13,8 @@ export default tseslint.config(
       '**/vendor/**',
       '**/node_modules/**',
       '**/.turbo/**',
+      'site/public/build/**',
+      'site/storage/**',
     ],
   },
   js.configs.recommended,

@@ -1,0 +1,150 @@
+/*
+ * The site's header. It sticks to the top; on the home page (is-overlay) it sits over the hero,
+ * with no surface of its own, until the page scrolls (is-scrolled, set by the siteHeader script).
+ * Without the script it keeps its surface.
+ */
+
+@layer site {
+    .site-header {
+        position: sticky;
+        inset-block-start: 0;
+        z-index: var(--plinth-layer-sticky);
+        background: var(--plinth-color-surface);
+        border-block-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+        transition:
+            background-color var(--plinth-duration-normal) var(--plinth-easing-standard),
+            border-color var(--plinth-duration-normal) var(--plinth-easing-standard);
+    }
+
+    .site-header.is-overlay {
+        margin-block-end: calc(var(--plinth-space-16) * -1);
+    }
+
+    .site-header.is-overlay[x-data]:not(.is-scrolled) {
+        background: transparent;
+        border-block-end-color: transparent;
+    }
+
+    .site-header-inner {
+        box-sizing: border-box;
+        display: flex;
+        gap: var(--plinth-space-6);
+        align-items: center;
+        max-inline-size: 75rem;
+        min-block-size: calc(var(--plinth-space-16) - var(--plinth-border-width-thin));
+        padding-inline: var(--plinth-space-4) var(--plinth-space-2);
+        margin-inline: auto;
+    }
+
+    .site-header-home {
+        display: inline-flex;
+        align-items: center;
+        min-block-size: var(--plinth-touch-target);
+        color: var(--plinth-color-text);
+        text-decoration: none;
+        border-radius: var(--plinth-radius-control);
+    }
+
+    .site-header-home:hover {
+        color: var(--plinth-color-text);
+    }
+
+    .site-wordmark {
+        display: inline-flex;
+        gap: var(--plinth-space-2);
+        align-items: center;
+        font-size: var(--plinth-font-size-lg);
+        font-weight: var(--plinth-font-weight-semibold);
+        letter-spacing: var(--plinth-font-tracking-snug);
+    }
+
+    .site-wordmark-mark {
+        flex: none;
+        inline-size: var(--plinth-size-icon-lg);
+        block-size: var(--plinth-size-icon-lg);
+    }
+
+    .site-header-nav {
+        display: none;
+        gap: var(--plinth-space-1);
+        align-items: center;
+    }
+
+    .site-header-link {
+        display: inline-flex;
+        align-items: center;
+        min-block-size: var(--plinth-touch-target);
+        padding-inline: var(--plinth-space-3);
+        font-size: var(--plinth-font-size-md);
+        color: var(--plinth-color-text-muted);
+        text-decoration: none;
+        border-radius: var(--plinth-radius-control);
+    }
+
+    .site-header-link[aria-current='page'] {
+        color: var(--plinth-color-text);
+        background: var(--plinth-color-surface-hover);
+    }
+
+    .site-header-actions {
+        display: flex;
+        gap: var(--plinth-space-2);
+        align-items: center;
+        margin-inline-start: auto;
+    }
+
+    .site-header-cta {
+        display: none;
+    }
+
+    /* The switch shows the moon in light, and the sun in dark, whether it is chosen or the system's. */
+    .site-theme-switch-sun {
+        display: none;
+    }
+
+    [data-theme='dark'] .site-theme-switch-sun {
+        display: inline;
+    }
+
+    [data-theme='dark'] .site-theme-switch-moon {
+        display: none;
+    }
+
+    @media (hover: hover) {
+        .site-header-link:hover {
+            color: var(--plinth-color-text);
+            background: var(--plinth-color-surface-hover);
+        }
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) .site-theme-switch-sun {
+            display: inline;
+        }
+
+        :root:not([data-theme='light']) .site-theme-switch-moon {
+            display: none;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .site-header {
+            transition: none;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .site-header-inner {
+            padding-inline: var(--plinth-space-6) var(--plinth-space-4);
+        }
+
+        .site-header-nav,
+        .site-header-cta {
+            display: inline-flex;
+        }
+
+        .site-header-menu {
+            display: none;
+        }
+    }
+}

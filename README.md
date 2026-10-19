@@ -25,6 +25,7 @@ packages/
   react/      React 19 components that print the same markup contract
   blade/      Composer package: Blade components, a Filament plugin, and the built CSS
 storybook/    Storybook (HTML renderer): Branding, Foundations, component stories, parity tests
+site/         Plinth's website, a Laravel app built with Plinth's components (see site/README.md)
 ```
 
 The npm workspaces are private. They are published together as one npm package and one Composer
@@ -50,7 +51,7 @@ npm run check                     # everything CI runs (turbo run lint test buil
 ```
 
 [Turborepo](https://turborepo.com) runs each task in the order the packages depend on each other
-(`tokens` → `css` → `vue`, `react` and `blade` → `storybook`) and caches the results in `.turbo/`, so a
+(`tokens` → `css` → `vue`, `react` and `blade` → `storybook` and `site`) and caches the results in `.turbo/`, so a
 second run with nothing changed is served from the cache. On a small machine, add
 `--concurrency=2`.
 

@@ -6,3 +6,6 @@ node_modules/
 package-lock.json
 packages/blade/resources/dist/
 *.php
+site/public/build/
+site/storage/
+site/bootstrap/cache/

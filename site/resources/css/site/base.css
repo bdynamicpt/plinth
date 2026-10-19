@@ -1,0 +1,151 @@
+/* Element defaults and the site's helpers. */
+
+@layer site-base {
+    html {
+        scrollbar-gutter: stable;
+        scroll-padding-block-start: calc(var(--plinth-space-16) + var(--plinth-space-4));
+    }
+
+    html:has(dialog:modal) {
+        overflow: hidden;
+    }
+
+    body {
+        margin: 0;
+        font-family: var(--plinth-font-family-body);
+        font-size: var(--plinth-font-size-md);
+        line-height: var(--plinth-font-leading-normal);
+        color: var(--plinth-color-text);
+        -webkit-font-smoothing: antialiased;
+        background: var(--plinth-color-surface);
+    }
+
+    a {
+        color: var(--plinth-color-accent-text);
+    }
+
+    a:focus-visible,
+    main:focus-visible {
+        outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+        outline-offset: var(--plinth-focus-ring-offset);
+    }
+
+    main:focus {
+        outline: none;
+    }
+
+    @media (hover: hover) {
+        a:hover {
+            color: var(--plinth-color-accent-hover);
+        }
+    }
+}
+
+@layer site {
+    [x-cloak] {
+        display: none;
+    }
+
+    .site-visually-hidden {
+        position: absolute;
+        inline-size: 1px;
+        block-size: 1px;
+        padding: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        border: 0;
+        clip-path: inset(50%);
+    }
+
+    .site-skip-link {
+        position: absolute;
+        inset-block-start: var(--plinth-space-2);
+        inset-inline-start: var(--plinth-space-2);
+        z-index: var(--plinth-layer-toast);
+        display: inline-flex;
+        align-items: center;
+        min-block-size: var(--plinth-touch-target);
+        padding-inline: var(--plinth-space-4);
+        color: var(--plinth-color-text);
+        background: var(--plinth-color-surface-raised);
+        border: var(--plinth-border-width-thin) solid var(--plinth-color-border-strong);
+        border-radius: var(--plinth-radius-control);
+        translate: 0 -200%;
+    }
+
+    .site-skip-link:focus-visible {
+        translate: none;
+    }
+
+    .site-container {
+        box-sizing: border-box;
+        inline-size: 100%;
+        max-inline-size: 75rem;
+        padding-inline: var(--plinth-space-4);
+        margin-inline: auto;
+    }
+
+    .site-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--plinth-space-3);
+        justify-content: center;
+    }
+
+    /* A link on its own, not in a sentence: its line is at least the 40px touch target. */
+    .site-link {
+        display: inline-flex;
+        align-items: center;
+        min-block-size: var(--plinth-touch-target);
+        font-size: var(--plinth-font-size-md);
+    }
+
+    .site-link-strong {
+        font-weight: var(--plinth-font-weight-medium);
+    }
+
+    .site-panel {
+        min-inline-size: 0;
+        overflow: hidden;
+        background: var(--plinth-color-surface-sunken);
+        border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+        border-radius: var(--plinth-radius-container);
+    }
+
+    .site-panel-header {
+        display: flex;
+        gap: var(--plinth-space-2);
+        align-items: center;
+        justify-content: space-between;
+        min-block-size: var(--plinth-control-sm);
+        padding: var(--plinth-space-1) var(--plinth-space-4);
+        font-family: var(--plinth-font-family-mono);
+        font-size: var(--plinth-font-size-xs);
+        color: var(--plinth-color-text-muted);
+        border-block-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+    }
+
+    .site-code {
+        padding: var(--plinth-space-4);
+        margin: 0;
+        overflow-x: auto;
+        font-family: var(--plinth-font-family-mono);
+        font-size: var(--plinth-font-size-sm);
+        line-height: var(--plinth-font-leading-normal);
+        color: var(--plinth-color-text);
+        tab-size: 2;
+        white-space: pre;
+    }
+
+    /* A code panel scrolls sideways when a line is longer than it, so it takes focus to scroll by keyboard. */
+    .site-code:focus-visible {
+        outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+        outline-offset: var(--plinth-focus-ring-offset-inset);
+    }
+
+    @media (min-width: 768px) {
+        .site-container {
+            padding-inline: var(--plinth-space-6);
+        }
+    }
+}

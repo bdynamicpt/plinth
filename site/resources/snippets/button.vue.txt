@@ -1,0 +1,4 @@
+<PlinthButton
+  variant="primary">
+  Save changes
+</PlinthButton>
