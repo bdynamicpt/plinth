@@ -6,7 +6,9 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 /** The workspaces Changesets versions together (the `fixed` group in .changeset/config.json). */
-export const versioned = ['tokens', 'css', 'vue', 'blade'].map((name) => `packages/${name}`);
+export const versioned = ['tokens', 'css', 'vue', 'react', 'blade'].map(
+  (name) => `packages/${name}`,
+);
 
 export type Bump = 'major' | 'minor' | 'patch' | 'none';
 

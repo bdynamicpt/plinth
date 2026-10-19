@@ -1,6 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { JSDOM } from 'jsdom';
+import { createElement, type ReactNode } from 'react';
 
 /**
  * Canonical form of some HTML, for comparing markup from different sources: attributes are
@@ -50,4 +51,47 @@ export function renderBlade(cases: BladeCase[]): string[] {
     encoding: 'utf8',
   });
   return JSON.parse(output) as string[];
+}
+
+/**
+ * A React prop name for an HTML attribute: `class` is `className`, `for` is `htmlFor`, and a
+ * dashed SVG attribute such as `stroke-width` is camel case. `data-*` and `aria-*` stay as they
+ * are.
+ */
+export function reactProp(name: string): string {
+  if (name === 'class') return 'className';
+  if (name === 'for') return 'htmlFor';
+  if (name.startsWith('data-') || name.startsWith('aria-')) return name;
+  return name.replace(/-([a-z])/g, (_, char: string) => char.toUpperCase());
+}
+
+/** HTML attributes as React props (see `reactProp`). */
+export function reactProps(attributes: Record<string, unknown>): Record<string, unknown> {
+  return Object.fromEntries(
+    Object.entries(attributes).map(([name, value]) => [reactProp(name), value]),
+  );
+}
+
+/**
+ * Some markup (a story's SVG icon) as React elements, so a parity case can pass it as children
+ * or as a node prop, the way a project passes its own icon component.
+ */
+export function htmlToReact(html: string): ReactNode {
+  const { document, Node } = new JSDOM('').window;
+  const template = document.createElement('template');
+  template.innerHTML = html;
+
+  const convert = (node: globalThis.Node, key: number): ReactNode => {
+    if (node.nodeType === Node.TEXT_NODE) return node.textContent;
+    if (node.nodeType !== Node.ELEMENT_NODE) return null;
+    const element = node as Element;
+    const props = reactProps(
+      Object.fromEntries([...element.attributes].map(({ name, value }) => [name, value])),
+    );
+    const children = [...element.childNodes].map(convert);
+    return createElement(element.localName, { ...props, key }, ...children);
+  };
+
+  const nodes = [...template.content.childNodes].map(convert);
+  return nodes.length === 1 ? nodes[0] : nodes;
 }

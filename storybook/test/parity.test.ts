@@ -20,6 +20,14 @@ import {
   PlinthSectionMenuItem,
   PlinthSheet,
 } from '@bdynamic/plinth-vue';
+import {
+  PlinthBadge as ReactBadge,
+  PlinthButton as ReactButton,
+  PlinthIcon as ReactIcon,
+  PlinthIconButton as ReactIconButton,
+} from '@bdynamic/plinth-react';
+import { createElement, type ComponentType } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { createStaticVNode, h, type Component } from 'vue';
 import { renderToString } from 'vue/server-renderer';
 import { describe, expect, it } from 'vitest';
@@ -68,15 +76,19 @@ import {
 import * as sheetStories from '../stories/components/Sheet.stories.ts';
 import { sheet, type SheetArgs } from '../stories/components/sheet.ts';
 import { sampleIcons } from '../stories/components/icons.ts';
-import { normalize, renderBlade } from './markup.ts';
+import { htmlToReact, normalize, reactProps, renderBlade } from './markup.ts';
 
 /**
- * Parity: for every story of a component, the Blade and the Vue output must match the story's
+ * Parity: for every story of a component, the Blade, Vue and React output must match the story's
  * markup (ignoring whitespace and attribute order). If a layer drifts from the contract, this
  * fails. Stories with their own render (galleries such as AllTones) are not single cases.
  *
  * Each component also has a case with extra attributes, as a project adds them (a class, an id,
- * data-* and aria-*), so attribute forwarding cannot drift between Blade and Vue either.
+ * data-* and aria-*), so attribute forwarding cannot drift between the layers either.
+ *
+ * React takes the same props as Vue (docs/adr/0006), so a case's React side is its Vue side
+ * with slots as `children` and node props. The React layer is being ported (#65, #66):
+ * `reactComponents` lists the components that have one so far.
  */
 interface ParityCase {
   story: string;
@@ -97,6 +109,27 @@ interface ParityCase {
     slot: string;
     named?: Record<string, string>;
   };
+}
+
+/** Each Vue component that has a React one so far, and that React component. */
+const reactComponents = new Map<Component, unknown>([
+  [PlinthBadge, ReactBadge],
+  [PlinthIcon, ReactIcon],
+  [PlinthButton, ReactButton],
+  [PlinthIconButton, ReactIconButton],
+]);
+
+/**
+ * A case's React output, from its Vue side: attributes become props (`class` is `className`),
+ * the default slot is `children`, and named slots are props that take a node.
+ */
+function renderReact(component: unknown, vue: ParityCase['vue']): string {
+  const slot = vue.html ? htmlToReact(vue.slot) : vue.slot;
+  const named = Object.entries(vue.named ?? {}).map(([name, html]) => [name, htmlToReact(html)]);
+  const props = { ...reactProps(vue.props), ...Object.fromEntries(named), children: slot };
+  return renderToStaticMarkup(
+    createElement(component as ComponentType<Record<string, unknown>>, props),
+  );
 }
 
 function storyArgs<Args>(stories: Record<string, unknown>): [string, Args][] {
@@ -1115,6 +1148,32 @@ describe('parity with the stories', () => {
     it('Blade prints the story markup', () => {
       expect(normalize(blade[i]!)).toBe(normalize(c.markup));
     });
+
+    const react = reactComponents.get(c.vue.component);
+    if (react) {
+      it('React prints the story markup', () => {
+        expect(normalize(renderReact(react, c.vue))).toBe(normalize(c.markup));
+      });
+    }
+  });
+});
+
+describe('the React side', () => {
+  it('covers badge, icon, button and icon button', () => {
+    const covered = new Set(
+      cases.filter((c) => reactComponents.has(c.vue.component)).map((c) => c.story.split('/')[0]),
+    );
+    expect([...covered]).toEqual(['Badge', 'Icon', 'Button', 'Icon button']);
+  });
+
+  it('turns markup into the elements React prints back', () => {
+    const svg = sampleIcons.more;
+    expect(normalize(renderToStaticMarkup(createElement('i', null, htmlToReact(svg))))).toBe(
+      normalize(`<i>${svg}</i>`),
+    );
+    expect(
+      normalize(renderToStaticMarkup(createElement('i', null, htmlToReact('a<b>c</b>')))),
+    ).toBe(normalize('<i>a<b>c</b></i>'));
   });
 });
 

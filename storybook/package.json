@@ -14,6 +14,7 @@
   "dependencies": {
     "@bdynamic/plinth-blade": "*",
     "@bdynamic/plinth-css": "*",
+    "@bdynamic/plinth-react": "*",
     "@bdynamic/plinth-tokens": "*",
     "@bdynamic/plinth-vue": "*"
   },
