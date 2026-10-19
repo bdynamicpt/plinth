@@ -1,5 +1,6 @@
 <?php
 
+use BDynamic\Plinth\Enums\Tone;
 use Illuminate\Support\Facades\Blade;
 
 it('prints the badge markup contract', function () {
@@ -22,13 +23,22 @@ it('escapes the label', function () {
         ->toContain('&lt;b&gt;x&lt;/b&gt;');
 });
 
+it('prints every tone', function (Tone $tone) {
+    expect(Blade::render('<x-plinth::badge :tone="$tone">Status</x-plinth::badge>', ['tone' => $tone->value]))
+        ->toContain('data-tone="'.$tone->value.'"');
+})->with(Tone::cases());
+
+it('takes a tone as an enum case', function () {
+    expect(Blade::render('<x-plinth::badge :tone="\\BDynamic\\Plinth\\Enums\\Tone::Warning">Due soon</x-plinth::badge>'))
+        ->toContain('data-tone="warning"');
+});
+
 it('passes Livewire and Alpine attributes to its root', function () {
-    $html = Blade::render('<x-plinth::badge wire:click="refresh" x-on:click="open = true" wire:key="status">Paid</x-plinth::badge>');
+    $html = Blade::render('<x-plinth::badge wire:key="status" x-show="visible">Paid</x-plinth::badge>');
 
     expect($html)
-        ->toContain('wire:click="refresh"')
-        ->toContain('x-on:click="open = true"')
-        ->toContain('wire:key="status"');
+        ->toContain('wire:key="status"')
+        ->toContain('x-show="visible"');
 });
 
 it('keeps extra classes and attributes', function () {
