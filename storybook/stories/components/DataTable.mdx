@@ -1,4 +1,5 @@
 import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
+import { AtEveryWidth } from '../../blocks/AtEveryWidth.tsx';
 import * as DataTableStories from './DataTable.stories';
 
 <Meta of={DataTableStories} />
@@ -11,6 +12,8 @@ print the table once. Use it in Blade views and Vue apps; Filament panels keep t
 
 <Canvas of={DataTableStories.Default} />
 <Controls of={DataTableStories.Default} />
+
+<AtEveryWidth of={DataTableStories.Default} />
 
 ## Markup
 

@@ -1,4 +1,5 @@
 import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
+import { AtEveryWidth } from '../../blocks/AtEveryWidth.tsx';
 import * as ButtonStories from './Button.stories';
 
 <Meta of={ButtonStories} />
@@ -11,6 +12,8 @@ If activating it takes the person to another page, use a link; give it the butto
 
 <Canvas of={ButtonStories.Primary} />
 <Controls of={ButtonStories.Primary} />
+
+<AtEveryWidth of={ButtonStories.Primary} />
 
 ## Choosing a variant
 

@@ -1,4 +1,5 @@
 import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
+import { AtEveryWidth } from '../../blocks/AtEveryWidth.tsx';
 import * as MenuSheetStories from './MenuSheet.stories';
 
 <Meta of={MenuSheetStories} />
@@ -9,11 +10,13 @@ The app shell's menu: a [sheet](?path=/docs/components-sheet--docs) with the sig
 navigation and the account actions. The header's menu button opens it. On a phone it slides up
 from the bottom; from 768px up it is a full-height panel on the inline-end edge.
 
-The menus on this page stay closed until you press their button; open a story on its own to see
-it open.
+The menus on this page stay closed until you press their button. Under the first one, **At every
+width** shows it open on a phone, a tablet and a desktop.
 
 <Canvas of={MenuSheetStories.Default} />
 <Controls of={MenuSheetStories.Default} />
+
+<AtEveryWidth of={MenuSheetStories.Default} height={640} />
 
 ## Markup
 

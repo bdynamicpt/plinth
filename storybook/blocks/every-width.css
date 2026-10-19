@@ -1,0 +1,80 @@
+/*
+ * The AtEveryWidth docs block: a bar with the theme switch, then the phone and the tablet side
+ * by side and the desktop under them, or all three stacked in a narrow docs column.
+ */
+.sb-every-width {
+  container-type: inline-size;
+  margin-block: var(--plinth-space-8);
+  color: var(--plinth-color-text);
+  font-family: var(--plinth-font-family-body);
+}
+
+.sb-every-width-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--plinth-space-3);
+  align-items: center;
+  justify-content: space-between;
+  margin-block-end: var(--plinth-space-3);
+}
+
+.sb-every-width-title {
+  margin: 0;
+  font-size: var(--plinth-font-size-sm);
+  font-weight: var(--plinth-font-weight-medium);
+}
+
+.sb-every-width-themes {
+  display: flex;
+  gap: var(--plinth-space-1);
+}
+
+.sb-every-width-grid {
+  display: grid;
+  grid-template-columns: 390fr 768fr;
+  gap: var(--plinth-space-4);
+  align-items: start;
+}
+
+.sb-every-width-frame {
+  min-inline-size: 0;
+  margin: 0;
+}
+
+.sb-every-width-frame:last-child {
+  grid-column: 1 / -1;
+}
+
+@container (max-width: 600px) {
+  .sb-every-width-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.sb-every-width-label {
+  margin-block-end: var(--plinth-space-2);
+  font-size: var(--plinth-font-size-xs);
+  color: var(--plinth-color-text-muted);
+}
+
+.sb-every-width-label span {
+  font-family: var(--plinth-font-family-mono);
+}
+
+/* The frame keeps its own left-to-right box, so the scale's origin is its top left corner. */
+.sb-every-width-viewport {
+  position: relative;
+  overflow: hidden;
+  direction: ltr;
+  border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+  border-radius: var(--plinth-radius-container);
+}
+
+.sb-every-width-viewport iframe {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  display: block;
+  border: 0;
+  transform-origin: 0 0;
+}

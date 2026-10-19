@@ -1,4 +1,5 @@
 import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
+import { AtEveryWidth } from '../../blocks/AtEveryWidth.tsx';
 import * as BadgeStories from './Badge.stories';
 
 <Meta of={BadgeStories} />
@@ -11,6 +12,8 @@ header. It is not a button and not a count: it does nothing when pressed.
 
 <Canvas of={BadgeStories.WithDot} />
 <Controls of={BadgeStories.WithDot} />
+
+<AtEveryWidth of={BadgeStories.WithDot} />
 
 ## Markup contract
 

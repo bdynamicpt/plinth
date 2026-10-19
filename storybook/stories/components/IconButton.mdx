@@ -1,4 +1,5 @@
 import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
+import { AtEveryWidth } from '../../blocks/AtEveryWidth.tsx';
 import * as IconButtonStories from './IconButton.stories';
 
 <Meta of={IconButtonStories} />
@@ -11,6 +12,8 @@ states), just square and without visible text.
 
 <Canvas of={IconButtonStories.Ghost} />
 <Controls of={IconButtonStories.Ghost} />
+
+<AtEveryWidth of={IconButtonStories.Ghost} />
 
 ## When to use it, and when not
 
