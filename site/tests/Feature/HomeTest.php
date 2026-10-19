@@ -16,7 +16,7 @@ it('shows the home page with every section', function () {
             'Built on the platform. Tested on every story.',
             'Your brand is a few custom properties.',
             'Every decision, written down.',
-            '14 components today, each with its contract.',
+            '15 components today, each with its contract.',
         ]);
 });
 
