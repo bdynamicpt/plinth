@@ -838,7 +838,10 @@
  * the arrow keys and remembers the checked one, and CSS shows the <pre> in the checked tab's
  * place, with no script. Their name is the root's id with -language (one is generated when the
  * root has no id), and the group's name is tabs-label in Blade, Vue and React ("Language" by
- * default). Up to six tabs; the first is checked unless the app picks another (selected).
+ * default). In plain HTML, give each block on a page its own name, or their tabs become one group.
+ * Up to six tabs (the layers drop the rest); the first is checked unless the app picks another
+ * (selected), and after that the browser keeps the reader's choice. Inside a <form> the radios
+ * are part of it: they are sent with it (name=on), and a reset checks the starting tab again.
  *
  * The code is text, or the markup a highlighter prints (Phiki, Shiki: the spans inside its
  * <code>). Plinth styles the block, not the tokens: their colours are the highlighter's. The
@@ -849,7 +852,8 @@
  * Copy: the button (button.css) is printed hidden, and the Blade (Alpine), Vue and React layers
  * show it when the clipboard is there. It copies the text of the <pre> that shows, says Copied
  * (copied-label) for two seconds and puts the same word in the status, a polite live region,
- * hidden from sight. The plain HTML works without it. copy: false in Blade, Vue and React leaves
+ * hidden from sight. The plain HTML works without it, and the header keeps its place for the
+ * button either way. copy: false in Blade, Vue and React leaves
  * the button and the status out.
  *
  * States: the checked tab (input:checked) is a raised surface with a strong edge; hover only
@@ -889,9 +893,12 @@
     padding-inline-start: calc((var(--plinth-touch-target) - var(--plinth-control-sm)) / 2);
   }
 
-  /* Nothing to show: no label, no tabs, and no copy button (copy off, or no script). */
+  /*
+   * Nothing to show: no label, no tabs and no copy button (copy off). A hidden copy button keeps
+   * the header, so the code doesn't move down when the layer shows it.
+   */
   .plinth-code-block-header:not(
-    :has(.plinth-code-block-label, .plinth-code-block-tabs, .plinth-code-block-copy:not([hidden]))
+    :has(.plinth-code-block-label, .plinth-code-block-tabs, .plinth-code-block-copy)
   ) {
     display: none;
   }
@@ -981,6 +988,10 @@
     }
   }
 
+  .plinth-code-block-tab:not(:has(> .plinth-code-block-tab-input:checked)):active {
+    background-color: var(--plinth-color-surface-sunken);
+  }
+
   /* A 40px touch target through an invisible hit area, as on the button (ADR 3). */
   @media (pointer: coarse) {
     .plinth-code-block-tab::before {
@@ -1028,7 +1039,7 @@
     color: var(--plinth-color-text);
     tab-size: 2;
     white-space: pre;
-    border-radius: 0 0 var(--plinth-radius-container) var(--plinth-radius-container);
+    border-radius: var(--plinth-radius-container);
   }
 
   .plinth-code-block-code:focus-visible {

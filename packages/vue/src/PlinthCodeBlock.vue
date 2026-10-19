@@ -2,7 +2,7 @@
 // Markup contract: packages/css/src/components/code-block.css
 import { computed, onBeforeUnmount, onMounted, ref, useId, useSlots } from 'vue';
 import PlinthButton from './PlinthButton.vue';
-import { checkedTab, codeBlockText, type CodeBlockTab } from './code-block';
+import { checkedTab, codeBlockTabs, codeBlockText, type CodeBlockTab } from './code-block';
 import { hasContent } from './slots';
 
 const props = withDefaults(
@@ -13,9 +13,9 @@ const props = withDefaults(
     label?: string;
     /** The highlighter's markup for the code (trusted, not escaped), in place of the slot. */
     html?: string;
-    /** Language tabs, each with its own code; the slot is then not used. */
+    /** Language tabs (up to six), each with its own code; the slot is then not used. */
     tabs?: CodeBlockTab[];
-    /** The label of the tab that starts checked; the first when it is missing or unknown. */
+    /** The tab that starts checked (later the browser keeps it); the first when unknown. */
     selected?: string;
     /** The tabs' accessible name. */
     tabsLabel?: string;
@@ -48,7 +48,9 @@ const generatedId = useId();
 const rootId = computed(() => props.id?.trim() || undefined);
 const name = computed(() => `${rootId.value ?? `plinth-code-block-${generatedId}`}-language`);
 const hasLabel = computed(() => Boolean(props.label?.trim()) || hasContent(slots.label?.()));
-const checked = computed(() => checkedTab(props.tabs, props.selected));
+const shownTabs = computed(() => codeBlockTabs(props.tabs));
+// Only the first tab to show is the app's: after that the radios keep the reader's choice.
+const checked = checkedTab(codeBlockTabs(props.tabs), props.selected);
 
 // The clipboard is only there in the browser, so the button shows once mounted.
 const canCopy = ref(false);
@@ -81,12 +83,12 @@ async function copyCode(event: MouseEvent) {
         ><slot name="label">{{ label }}</slot></span
       >
       <div
-        v-if="tabs.length"
+        v-if="shownTabs.length"
         class="plinth-code-block-tabs"
         role="radiogroup"
         :aria-label="tabsLabel"
       >
-        <label v-for="(tab, i) in tabs" :key="i" class="plinth-code-block-tab"
+        <label v-for="(tab, i) in shownTabs" :key="i" class="plinth-code-block-tab"
           ><input
             type="radio"
             class="plinth-code-block-tab-input"
@@ -107,14 +109,21 @@ async function copyCode(event: MouseEvent) {
         <span class="plinth-code-block-status" role="status">{{ copied ? copiedLabel : '' }}</span>
       </template>
     </div>
-    <template v-if="tabs.length">
-      <pre
-        v-for="(tab, i) in tabs"
-        :key="i"
-        class="plinth-code-block-code"
-        dir="ltr"
-        tabindex="0"
-      ><code>{{ tab.code }}</code></pre>
+    <template v-if="shownTabs.length">
+      <template v-for="(tab, i) in shownTabs" :key="i">
+        <pre
+          v-if="tab.html !== undefined"
+          class="plinth-code-block-code"
+          dir="ltr"
+          tabindex="0"
+        ><code v-html="tab.html"></code></pre>
+        <pre
+          v-else
+          class="plinth-code-block-code"
+          dir="ltr"
+          tabindex="0"
+        ><code>{{ tab.code }}</code></pre>
+      </template>
     </template>
     <pre
       v-else-if="html !== undefined"

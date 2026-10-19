@@ -6,6 +6,8 @@ export interface CodeBlockTab {
   label: string;
   /** The tab's code, as text. */
   code: string;
+  /** The highlighter's markup for the tab's code (trusted, not escaped), in place of `code`. */
+  html?: string;
 }
 
 export interface CodeBlockArgs {
@@ -42,7 +44,7 @@ export function codeBlock(
     labelHtml,
     code,
     html,
-    tabs = [],
+    tabs: allTabs = [],
     selected,
     tabsLabel,
     copy,
@@ -51,6 +53,8 @@ export function codeBlock(
   attributes: Attributes = {},
 ): string {
   const { classes, extra } = rootAttributes('plinth-code-block', attributes);
+  // The CSS shows the code of the first six tabs, so a block has at most six.
+  const tabs = allTabs.slice(0, 6);
   const labelContent = labelHtml?.trim() ? labelHtml : label?.trim() ? escape(label) : '';
   const name = `${id?.trim() || 'plinth-code-block'}-language`;
   const checked = Math.max(
@@ -80,7 +84,7 @@ export function codeBlock(
       ) + '<span class="plinth-code-block-status" role="status"></span>'
     : '';
   const panels = tabs.length
-    ? tabs.map((tab) => pre(escape(tab.code))).join('')
+    ? tabs.map((tab) => pre(tab.html ?? escape(tab.code))).join('')
     : pre(html ?? escape(code));
   return [
     `<div${id?.trim() ? ` id="${escape(id.trim())}"` : ''} class="${classes}"${extra}>`,

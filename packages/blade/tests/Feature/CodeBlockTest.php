@@ -133,6 +133,23 @@ it('prints a tab\'s highlighted code as it is, and escapes plain code', function
         ->toContain('<code>&lt;b&gt;x&lt;/b&gt;</code>');
 });
 
+it('shows at most six tabs', function () {
+    $tabs = array_map(fn (int $i) => ['label' => "T{$i}", 'code' => "c{$i}"], range(0, 6));
+    $html = Blade::render('<x-plinth::code-block :tabs="$tabs" />', ['tabs' => $tabs]);
+
+    expect(substr_count($html, '<input'))->toBe(6)
+        ->and(substr_count($html, '<pre'))->toBe(6)
+        ->and($html)->not->toContain('c6');
+});
+
+it('prints a tab\'s html key as it is, as Vue and React do', function () {
+    $html = Blade::render('<x-plinth::code-block :tabs="$tabs" />', ['tabs' => [
+        ['label' => 'PHP', 'code' => 'echo', 'html' => '<span class="line">echo</span>'],
+    ]]);
+
+    expect($html)->toContain('<code><span class="line">echo</span></code>');
+});
+
 it('takes the copy button\'s words', function () {
     $html = Blade::render('<x-plinth::code-block copy-label="Copiar" copied-label="Copiado">x</x-plinth::code-block>');
 

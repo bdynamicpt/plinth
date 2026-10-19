@@ -2,7 +2,8 @@ import { act, fireEvent, render } from '@testing-library/react';
 import { createRef } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { checkedTab, codeBlockText, PlinthCodeBlock } from '../src/index.ts';
+import { checkedTab, codeBlockText } from '../src/code-block.ts';
+import { PlinthCodeBlock } from '../src/index.ts';
 
 const tabs = [
   { label: 'Blade', code: '<x-plinth::badge />' },
@@ -81,6 +82,38 @@ describe('PlinthCodeBlock', () => {
     expect(checked('Svelte')).toEqual([true, false]);
     expect(checked()).toEqual([true, false]);
     expect(checkedTab(tabs, 'Vue')).toBe(1);
+  });
+
+  it('shows at most six tabs', () => {
+    const { container } = render(
+      <PlinthCodeBlock
+        tabs={Array.from({ length: 7 }, (_, i) => ({ label: `T${i}`, code: `c${i}` }))}
+      />,
+    );
+
+    expect(container.querySelectorAll('input')).toHaveLength(6);
+    expect(container.querySelectorAll('pre')).toHaveLength(6);
+  });
+
+  it('prints a tab’s highlighted markup as it is', () => {
+    const html = renderToStaticMarkup(
+      <PlinthCodeBlock
+        tabs={[{ label: 'PHP', code: 'echo', html: '<span class="line">echo</span>' }, tabs[1]!]}
+      />,
+    );
+
+    expect(html).toContain('<code><span class="line">echo</span></code>');
+    expect(html).toContain('<code>&lt;PlinthBadge /&gt;</code>');
+  });
+
+  it('takes selected as the starting tab only, as the browser keeps the reader’s choice', () => {
+    const { container, rerender } = render(<PlinthCodeBlock tabs={tabs} selected="Vue" />);
+    rerender(<PlinthCodeBlock tabs={tabs} selected="Blade" />);
+
+    expect([...container.querySelectorAll('input')].map((input) => input.checked)).toEqual([
+      false,
+      true,
+    ]);
   });
 
   it('takes the tabs’ accessible name', () => {

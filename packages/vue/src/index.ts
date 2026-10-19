@@ -46,7 +46,7 @@ export {
 };
 export { avatarGlyph, avatarSizes, initialsFrom, type AvatarSize } from './avatar';
 export { buttonVariants, type ButtonVariant } from './button';
-export { checkedTab, codeBlockText, type CodeBlockTab } from './code-block';
+export { type CodeBlockTab } from './code-block';
 export {
   dataTableCellKind,
   dataTableCellKinds,

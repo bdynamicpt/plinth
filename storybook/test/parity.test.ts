@@ -556,6 +556,18 @@ const cases: ParityCase[] = [
     { class: 'ms-2', 'data-testid': 'install', 'aria-describedby': 'install-help' },
   ),
   codeBlockCase('Code block/blank label and id', { ...codeBlockDefaults, id: ' ', label: '  ' }),
+  codeBlockCase('Code block/highlighted tab and seven tabs', {
+    ...codeBlockDefaults,
+    id: 'many',
+    tabs: [
+      {
+        label: 'PHP',
+        code: 'echo',
+        html: '<span style="color: var(--plinth-color-accent-text)">echo</span>',
+      },
+      ...Array.from({ length: 6 }, (_, i) => ({ label: `Tab ${i}`, code: `code ${i}` })),
+    ],
+  }),
   codeBlockCase('Code block/unknown selected tab', {
     ...codeBlockDefaults,
     id: 'pick',
@@ -1211,6 +1223,7 @@ describe('parity with the stories', () => {
       'Code block/LabelWithBadge',
       'Code block/with extra attributes',
       'Code block/blank label and id',
+      'Code block/highlighted tab and seven tabs',
       'Code block/unknown selected tab',
     ]);
   });

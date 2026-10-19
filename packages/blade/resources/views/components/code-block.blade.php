@@ -12,7 +12,8 @@
 @php
     $rootId = filled($id) ? trim($id) : null;
     $name = ($rootId ?? 'plinth-code-block-'.\Illuminate\Support\Str::lower(\Illuminate\Support\Str::random(8))).'-language';
-    $tabs = collect($tabs)->values();
+    // The CSS shows the code of the first six tabs, so a block has at most six.
+    $tabs = collect($tabs)->values()->take(6);
     $checked = max(0, (int) $tabs->search(fn ($tab) => $tab['label'] === $selected));
     $hasLabel = $label instanceof \Illuminate\View\ComponentSlot ? $label->hasActualContent() : filled($label);
     // What Vue and React do in the Blade layer, with Alpine: the button shows when the clipboard
@@ -44,7 +45,7 @@
     </div>
     @if ($tabs->isNotEmpty())
         @foreach ($tabs as $tab)
-            <pre class="plinth-code-block-code" dir="ltr" tabindex="0"><code>{{ $tab['code'] }}</code></pre>
+            <pre class="plinth-code-block-code" dir="ltr" tabindex="0"><code>{{ isset($tab['html']) ? new \Illuminate\Support\HtmlString($tab['html']) : $tab['code'] }}</code></pre>
         @endforeach
     @else
         <pre class="plinth-code-block-code" dir="ltr" tabindex="0"><code>{{ $slot }}</code></pre>

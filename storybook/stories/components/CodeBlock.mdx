@@ -78,7 +78,16 @@ the same order:
 
 The tabs are native radio buttons (ADR 2). The browser moves between them with the arrow keys and
 keeps the checked one; CSS shows the `<pre>` in the checked tab's place. There is no script, so
-the tabs work in the plain HTML too. A block has up to six tabs.
+the tabs work in the plain HTML too.
+
+- A block has up to six tabs; the layers drop the rest.
+- `selected` is the tab that starts checked. After that the browser keeps the reader's choice,
+  and a new `selected` doesn't move it.
+- The radios share a name: the block's id with `-language`. Blade, Vue and React generate one
+  when the block has no id; in plain HTML, give each block on a page its own name, or their tabs
+  become one group.
+- Inside a `<form>` the radios are part of it: the form sends `<name>=on`, and a reset checks the
+  starting tab again.
 
 <Canvas of={CodeBlockStories.Tabs} />
 
@@ -120,7 +129,8 @@ React.
 ## Accessibility
 
 - The `<pre>` takes `tabindex="0"`, so a keyboard user can reach it and scroll it sideways; it
-  shows the focus ring inset.
+  shows the focus ring inset. A screen reader reads the code itself; the label above names it
+  for a sighted reader.
 - The tabs are a radio group named _Language_ (`tabs-label`): Tab reaches the checked one, the
   arrow keys pick another, and a screen reader announces each as a radio button, _1 of 4_.
   The radio covers its tab, so the tab shows the focus ring, and on a touch screen each tab
@@ -133,22 +143,26 @@ React.
 
 ## In Blade, Vue and React
 
-| Prop           | Blade                                   | Vue                          | React                 | Default    |
-| -------------- | --------------------------------------- | ---------------------------- | --------------------- | ---------- |
-| the code       | the slot                                | the default slot, or `html`  | `children`, or `html` | —          |
-| `label`        | `label`, or `<x-slot:label>`            | `label`, or the `label` slot | `label` (a node)      | —          |
-| `tabs`         | `tabs`: `[['label' => …, 'code' => …]]` | `tabs`: `{ label, code }[]`  | `tabs`                | none       |
-| `selected`     | `selected`                              | `selected`                   | `selected`            | first tab  |
-| `tabs-label`   | `tabs-label`                            | `tabs-label`                 | `tabsLabel`           | _Language_ |
-| `copy`         | `:copy="false"`                         | `:copy="false"`              | `copy={false}`        | `true`     |
-| `copy-label`   | `copy-label`                            | `copy-label`                 | `copyLabel`           | _Copy_     |
-| `copied-label` | `copied-label`                          | `copied-label`               | `copiedLabel`         | _Copied_   |
-| `id`           | `id`                                    | `id`                         | `id`                  | —          |
+| Prop           | Blade                                                | Vue                                | React                 | Default    |
+| -------------- | ---------------------------------------------------- | ---------------------------------- | --------------------- | ---------- |
+| the code       | the slot                                             | the default slot, or `html`        | `children`, or `html` | —          |
+| `label`        | `label`, or `<x-slot:label>`                         | `label`, or the `label` slot       | `label` (a node)      | —          |
+| `tabs`         | `tabs`: `[['label' => …, 'code' => …, 'html' => …]]` | `tabs`: `{ label, code, html? }[]` | `tabs`                | none       |
+| `selected`     | `selected`                                           | `selected`                         | `selected`            | first tab  |
+| `tabs-label`   | `tabs-label`                                         | `tabs-label`                       | `tabsLabel`           | _Language_ |
+| `copy`         | `:copy="false"`                                      | `:copy="false"`                    | `copy={false}`        | `true`     |
+| `copy-label`   | `copy-label`                                         | `copy-label`                       | `copyLabel`           | _Copy_     |
+| `copied-label` | `copied-label`                                       | `copied-label`                     | `copiedLabel`         | _Copied_   |
+| `id`           | `id`                                                 | `id`                               | `id`                  | —          |
 
 In Blade the slot is printed as it is given: `{{ $code }}` escapes plain code, and
-`{!! $highlighted !!}` prints a highlighter's markup. A tab's `code` is escaped, unless it is an
-`HtmlString`. In Vue and React the code is text, and `html` takes a highlighter's markup instead
-(trusted: never pass it what a user typed).
+`{!! $highlighted !!}` prints a highlighter's markup. In Vue and React the code is text, and
+`html` takes a highlighter's markup instead. A tab's `code` is text in all three, and its `html`
+takes the markup instead (trusted: never pass it what a user typed).
+
+The `<pre>` keeps every space and line break it is given. Pass multi-line code as a string (a
+variable in Blade, a bound value in Vue and React): code written straight into a Vue template or
+JSX loses its line breaks, and in Blade the template's indentation ends up in the block.
 
 <Source
   language="html"

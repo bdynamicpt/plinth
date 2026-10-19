@@ -2,7 +2,8 @@ import { flushPromises, mount } from '@vue/test-utils';
 import { h } from 'vue';
 import { renderToString } from 'vue/server-renderer';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { checkedTab, codeBlockText, PlinthCodeBlock } from '../src/index.ts';
+import { checkedTab, codeBlockText } from '../src/code-block.ts';
+import { PlinthCodeBlock } from '../src/index.ts';
 
 const tabs = [
   { label: 'Blade', code: '<x-plinth::badge />' },
@@ -88,6 +89,38 @@ describe('PlinthCodeBlock', () => {
     expect(checked('Svelte')).toEqual([true, false]);
     expect(checked()).toEqual([true, false]);
     expect(checkedTab(tabs, 'Vue')).toBe(1);
+  });
+
+  it('shows at most six tabs', () => {
+    const wrapper = mount(PlinthCodeBlock, {
+      props: { tabs: Array.from({ length: 7 }, (_, i) => ({ label: `T${i}`, code: `c${i}` })) },
+    });
+
+    expect(wrapper.findAll('input')).toHaveLength(6);
+    expect(wrapper.findAll('pre')).toHaveLength(6);
+  });
+
+  it('prints a tab’s highlighted markup as it is', () => {
+    const wrapper = mount(PlinthCodeBlock, {
+      props: {
+        tabs: [{ label: 'PHP', code: 'echo', html: '<span class="line">echo</span>' }, tabs[1]!],
+      },
+    });
+
+    expect(wrapper.findAll('code').map((code) => code.html())).toEqual([
+      '<code><span class="line">echo</span></code>',
+      '<code>&lt;PlinthBadge /&gt;</code>',
+    ]);
+  });
+
+  it('takes selected as the starting tab only, as the browser keeps the reader’s choice', async () => {
+    const wrapper = mount(PlinthCodeBlock, { props: { tabs, selected: 'Vue' } });
+    await wrapper.setProps({ selected: 'Blade', copyLabel: 'Copy code' });
+    const checked = wrapper
+      .findAll('input')
+      .map((input) => (input.element as HTMLInputElement).checked);
+
+    expect(checked).toEqual([false, true]);
   });
 
   it('takes the tabs’ accessible name', () => {

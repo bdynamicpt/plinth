@@ -9,7 +9,7 @@ import {
   type ReactNode,
 } from 'react';
 import { PlinthButton } from './PlinthButton';
-import { checkedTab, codeBlockText, type CodeBlockTab } from './code-block';
+import { checkedTab, codeBlockTabs, codeBlockText, type CodeBlockTab } from './code-block';
 import { classNames, hasContent } from './markup';
 
 interface CodeBlockOptions {
@@ -17,9 +17,9 @@ interface CodeBlockOptions {
   label?: ReactNode;
   /** The highlighter's markup for the code (trusted, not escaped), in place of `children`. */
   html?: string;
-  /** Language tabs, each with its own code; `children` is then not used. */
+  /** Language tabs (up to six), each with its own code; `children` is then not used. */
   tabs?: CodeBlockTab[];
-  /** The label of the tab that starts checked; the first when it is missing or unknown. */
+  /** The tab that starts checked (later the browser keeps it); the first when unknown. */
   selected?: string;
   /** The tabs' accessible name. */
   tabsLabel?: string;
@@ -49,7 +49,7 @@ export function PlinthCodeBlock({
   id,
   label,
   html,
-  tabs = [],
+  tabs: allTabs = [],
   selected,
   tabsLabel = 'Language',
   copy = true,
@@ -63,6 +63,7 @@ export function PlinthCodeBlock({
   const generatedId = useId();
   const rootId = id?.trim() || undefined;
   const name = `${rootId ?? `plinth-code-block-${generatedId}`}-language`;
+  const tabs = codeBlockTabs(allTabs);
   const checked = checkedTab(tabs, selected);
 
   // The clipboard is only there in the browser, so the button shows once mounted.
@@ -125,7 +126,11 @@ export function PlinthCodeBlock({
         ) : null}
       </div>
       {tabs.length ? (
-        tabs.map((tab, i) => <Code key={i}>{tab.code}</Code>)
+        tabs.map((tab, i) => (
+          <Code key={i} html={tab.html}>
+            {tab.code}
+          </Code>
+        ))
       ) : (
         <Code html={html}>{children}</Code>
       )}

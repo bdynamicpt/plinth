@@ -1,5 +1,4 @@
 import type { Decorator, Meta, StoryObj } from '@storybook/html-vite';
-import { codeBlockText } from '@bdynamic/plinth-vue';
 import { badge } from './badge.ts';
 import { codeBlock, type CodeBlockArgs, type CodeBlockTab } from './code-block.ts';
 import '@bdynamic/plinth-css/src/components/badge.css';
@@ -11,6 +10,17 @@ import '@bdynamic/plinth-css/src/components/code-block.css';
  * that shows. A demonstration for the stories; the plain HTML works without it, and no Plinth
  * script ships (ADR 2).
  */
+/** The code of the checked tab's <pre>, or of the only one. */
+const codeBlockText = (button: Element) => {
+  const block = button.closest('.plinth-code-block')!;
+  const inputs = [...block.querySelectorAll<HTMLInputElement>('.plinth-code-block-tab-input')];
+  const index = Math.max(
+    0,
+    inputs.findIndex((input) => input.checked),
+  );
+  return block.querySelectorAll('.plinth-code-block-code')[index]?.textContent ?? '';
+};
+
 const withCopy: Decorator = (story, { args }) => {
   const wrapper = document.createElement('div');
   wrapper.innerHTML = story() as string;
