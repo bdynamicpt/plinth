@@ -111,10 +111,13 @@
     --plinth-ref-font-size-24: 1.5rem;
     --plinth-ref-font-size-30: 1.875rem;
     --plinth-ref-font-size-36: 2.25rem;
+    --plinth-ref-font-size-48: 3rem;
+    --plinth-ref-font-size-64: 4rem;
     --plinth-ref-font-weight-400: 400;
     --plinth-ref-font-weight-500: 500;
     --plinth-ref-font-weight-600: 600;
     --plinth-ref-font-weight-700: 700;
+    --plinth-ref-font-leading-105: 1.05;
     --plinth-ref-font-leading-125: 1.25;
     --plinth-ref-font-leading-150: 1.5;
     --plinth-ref-font-tracking-0: 0;
@@ -160,10 +163,13 @@
     --plinth-font-size-2xl: var(--plinth-ref-font-size-24);
     --plinth-font-size-3xl: var(--plinth-ref-font-size-30);
     --plinth-font-size-4xl: var(--plinth-ref-font-size-36);
+    --plinth-font-size-5xl: var(--plinth-ref-font-size-48);
+    --plinth-font-size-6xl: var(--plinth-ref-font-size-64);
     --plinth-font-weight-regular: var(--plinth-ref-font-weight-400);
     --plinth-font-weight-medium: var(--plinth-ref-font-weight-500);
     --plinth-font-weight-semibold: var(--plinth-ref-font-weight-600);
     --plinth-font-weight-bold: var(--plinth-ref-font-weight-700);
+    --plinth-font-leading-display: var(--plinth-ref-font-leading-105);
     --plinth-font-leading-tight: var(--plinth-ref-font-leading-125);
     --plinth-font-leading-normal: var(--plinth-ref-font-leading-150);
     --plinth-font-tracking-normal: var(--plinth-ref-font-tracking-0);
