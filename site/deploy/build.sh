@@ -15,6 +15,12 @@ export TURBO_TELEMETRY_DISABLED=1 STORYBOOK_DISABLE_TELEMETRY=1
 # `npm ci` also runs `composer install` in packages/blade and here (their postinstall).
 cd "$root"
 npm ci --no-audit --no-fund
+
+# The Blade package comes from ../packages/blade as a copy (symlink: false), and `composer install`
+# keeps the old copy while the lock file is unchanged. Refresh it before the build: the site's
+# views use its components and the site's CSS bundles its plinth.css.
+(cd "$site" && composer reinstall bdynamicpt/plinth --no-interaction --no-progress)
+
 npx turbo run build build-storybook \
     --filter=@bdynamic/plinth-site... \
     --filter=@bdynamic/plinth-storybook
@@ -42,7 +48,4 @@ php artisan site:search-index
 
 # PHP without the dev tools, then Laravel's caches (config, events, routes and views).
 composer install --no-dev --no-interaction --no-progress --prefer-dist --optimize-autoloader
-# The Blade package comes from ../packages/blade as a copy (symlink: false), and `composer install`
-# keeps the old copy while the lock file is unchanged, so a new component would be missing.
-composer reinstall bdynamicpt/plinth --no-interaction --no-progress --optimize-autoloader
 php artisan optimize
