@@ -67,9 +67,10 @@ Check what Stylelint cannot:
 11. **Parity.** The Blade, Vue and React components print the story's markup and nothing else:
     no extra elements, attributes, classes or inline styles. Defaults and fallbacks match between
     the three (an unknown variant falls back the same way), all escape text, all pass through
-    extra classes and attributes on the root, and none holds styles. Every story that takes args
-    has a parity case, the case list in `parity.test.ts` names it, and the component is in
-    `reactComponents` there so React is checked too.
+    extra classes and attributes on the root, a project's attribute wins over one the component
+    sets (docs/adr/0002) and a parity case clashes one, and none holds styles. Every story that
+    takes args has a parity case, the case list in `parity.test.ts` names it, and the component
+    is in `reactComponents` there so React is checked too.
 12. **React forwarding.** The React component takes Vue's prop names; the default slot is
     `children` and named slots are node props; every other prop, `ref` included, is spread onto
     the documented root, and `className` is merged with Plinth's classes rather than replacing

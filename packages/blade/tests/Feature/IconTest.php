@@ -55,3 +55,9 @@ it('keeps extra classes and attributes, Livewire and Alpine ones included', func
         ->toContain('wire:key="icon"')
         ->toContain('x-show="open"');
 });
+
+it("lets the project's attribute win over its own", function () use ($svg) {
+    expect(Blade::render("<x-plinth::icon aria-hidden=\"false\">{$svg}</x-plinth::icon>"))
+        ->toContain('aria-hidden="false"')
+        ->not->toContain('aria-hidden="true"');
+});

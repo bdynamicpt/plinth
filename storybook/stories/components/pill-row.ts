@@ -36,12 +36,12 @@ export function pill(
   const open = [
     tag === 'button' ? `<button type="${escape(type)}"` : '<a',
     ` class="${classes}"`,
+    extra,
     href && !disabled ? ` href="${escape(href)}"` : '',
     tag === 'button' ? ` aria-pressed="${selected}"` : '',
     selected && tag === 'a' ? ' aria-current="page"' : '',
     disabled && tag === 'button' ? ' disabled' : '',
     disabled && tag === 'a' ? ' role="link" aria-disabled="true"' : '',
-    extra,
     '>',
   ].join('');
   return [
@@ -58,9 +58,9 @@ export function pillRow({ label, nav, pills }: PillRowArgs, attributes: Attribut
   const { classes, extra } = rootAttributes('plinth-pill-row', attributes);
   return [
     `<${tag} class="${classes}"`,
+    extra,
     nav ? '' : ' role="group"',
     label ? ` aria-label="${escape(label)}"` : '',
-    extra,
     '>',
     pills.map((p) => pill(p)).join(''),
     `</${tag}>`,

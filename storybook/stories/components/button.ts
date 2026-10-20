@@ -65,7 +65,7 @@ export function button(
       ? iconSpan(icon, size, mirrorIcon)
       : '';
   return [
-    `${open} data-variant="${variant}" data-size="${size}"${state}${extra}>`,
+    `${open}${extra} data-variant="${variant}" data-size="${size}"${state}>`,
     lead,
     `<span class="plinth-button-label">${escape(label)}</span>`,
     trailingIcon ? iconSpan(trailingIcon, size, mirrorTrailing) : '',

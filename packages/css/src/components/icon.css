@@ -6,8 +6,9 @@
  *   <svg viewBox="0 0 24 24">…</svg>
  * </span>
  *
- * Meaningful, with a label (an img role makes the SVG inside presentational). Blade and Vue take
- * it as `label`, or as an `aria-label` attribute; a blank label leaves the icon decorative:
+ * Meaningful, with a label (an img role makes the SVG inside presentational). Blade, Vue and
+ * React take it as `label`, or as an `aria-label` attribute; a blank label leaves the icon
+ * decorative:
  * <span class="plinth-icon" data-size="md" role="img" aria-label="Warning">
  *   <svg viewBox="0 0 24 24">…</svg>
  * </span>

@@ -18,7 +18,10 @@ export interface IconButtonArgs {
   svg: string;
 }
 
-/** The icon button's markup contract. Blade and Vue must print exactly this (see parity.test.ts). */
+/**
+ * The icon button's markup contract. Blade, Vue and React must print exactly this (see
+ * parity.test.ts).
+ */
 export function iconButton(
   { label, variant, size, href, disabled, busy, pressed, mirror, svg }: IconButtonArgs,
   attributes: Attributes = {},
@@ -43,5 +46,5 @@ export function iconButton(
   const inner = isBusy
     ? '<span class="plinth-button-spinner" aria-hidden="true"></span>'
     : `<span class="plinth-icon" data-size="${iconSizeFor(size)}"${mirror ? ' data-mirror' : ''} aria-hidden="true">${svg}</span>`;
-  return `${open} data-variant="${variant}" data-size="${size}"${state}${extra}>${inner}${href ? '</a>' : '</button>'}`;
+  return `${open}${extra} data-variant="${variant}" data-size="${size}"${state}>${inner}${href ? '</a>' : '</button>'}`;
 }

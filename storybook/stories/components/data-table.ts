@@ -51,7 +51,7 @@ export interface DataTableArgs {
 /** The sort button, the label of a sortable column. */
 export function dataTableSortButton(label: string, attributes: Attributes = {}): string {
   const { classes, extra } = rootAttributes('plinth-data-table-sort', attributes);
-  return `<button type="button" class="${classes}"${extra}><span class="plinth-data-table-sort-label">${escape(label)}</span>${dataTableSortIcon}</button>`;
+  return `<button class="${classes}"${extra} type="button"><span class="plinth-data-table-sort-label">${escape(label)}</span>${dataTableSortIcon}</button>`;
 }
 
 const flags = (numeric: boolean, hideOnPhone: boolean) =>
@@ -65,7 +65,7 @@ export function dataTableColumn(
 ): string {
   const { classes, extra } = rootAttributes('plinth-data-table-column', attributes);
   const ariaSort = sort === undefined ? '' : ` aria-sort="${dataTableSort(sort)}"`;
-  return `<th class="${classes}" role="columnheader" scope="col"${ariaSort}${flags(numeric, hideOnPhone)}${extra}>${content}</th>`;
+  return `<th class="${classes}"${extra} role="columnheader" scope="col"${ariaSort}${flags(numeric, hideOnPhone)}>${content}</th>`;
 }
 
 /** A column from its args: a sortable one holds the sort button. */
@@ -81,7 +81,7 @@ export function dataTableCell(
 ): string {
   const { classes, extra } = rootAttributes('plinth-data-table-cell', attributes);
   return [
-    `<td class="${classes}" role="cell" data-kind="${dataTableCellKind(kind)}"${flags(numeric, hideOnPhone)}${extra}>`,
+    `<td class="${classes}"${extra} role="cell" data-kind="${dataTableCellKind(kind)}"${flags(numeric, hideOnPhone)}>`,
     label?.trim()
       ? `<span class="plinth-data-table-label" aria-hidden="true">${escape(label)}</span>`
       : '',
@@ -98,7 +98,7 @@ export function dataTableRow(
 ): string {
   const { classes, extra } = rootAttributes('plinth-data-table-row', attributes);
   const ariaSelected = selected === undefined ? '' : ` aria-selected="${String(selected)}"`;
-  return `<tr class="${classes}" role="row"${ariaSelected}${extra}>${content}</tr>`;
+  return `<tr class="${classes}"${extra} role="row"${ariaSelected}>${content}</tr>`;
 }
 
 export const dataTableRowFor = (row: DataTableRowArgs) =>
@@ -108,7 +108,7 @@ export const dataTableRowFor = (row: DataTableRowArgs) =>
 export function dataTableEmpty(text: string, columns: number, attributes: Attributes = {}): string {
   const { classes, extra } = rootAttributes('plinth-data-table-empty', attributes);
   const span = Number.isFinite(columns) ? Math.max(1, Math.trunc(columns)) : 1;
-  return `<tr class="${classes}" role="row"${extra}><td class="plinth-data-table-empty-cell" role="cell" colspan="${span}">${escape(text)}</td></tr>`;
+  return `<tr class="${classes}"${extra} role="row"><td class="plinth-data-table-empty-cell" role="cell" colspan="${span}">${escape(text)}</td></tr>`;
 }
 
 /** The table, from the markup of its column headers and of its rows. */
@@ -120,7 +120,7 @@ export function dataTableShell(
 ): string {
   const { classes, extra } = rootAttributes('plinth-data-table', attributes);
   return [
-    `<table class="${classes}" role="table"${extra}>`,
+    `<table class="${classes}"${extra} role="table">`,
     caption?.trim()
       ? `<caption class="plinth-data-table-caption">${escape(caption)}</caption>`
       : '',

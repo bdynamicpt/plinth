@@ -75,4 +75,10 @@ describe('PlinthIcon', () => {
     expect(icon.id).toBe('extra');
     expect(ref.current).toBe(icon);
   });
+
+  it("lets the project's attribute win over its own", () => {
+    const icon = root(<PlinthIcon aria-hidden="false">{svg}</PlinthIcon>);
+
+    expect(icon.getAttribute('aria-hidden')).toBe('false');
+  });
 });

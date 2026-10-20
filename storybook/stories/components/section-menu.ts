@@ -40,12 +40,12 @@ export function sectionMenuItem(
   const open = [
     tag === 'button' ? `<button type="${escape(type)}"` : '<a',
     ` class="${classes}"`,
+    extra,
     tag === 'a' && !disabled ? ` href="${escape(href ?? '')}"` : '',
     tag === 'button' ? ` aria-pressed="${current}"` : '',
     current && tag === 'a' ? ' aria-current="page"' : '',
     disabled && tag === 'button' ? ' disabled' : '',
     disabled && tag === 'a' ? ' role="link" aria-disabled="true"' : '',
-    extra,
     '>',
   ].join('');
   return [
@@ -67,9 +67,9 @@ export function sectionMenu(
   const { classes, extra } = rootAttributes('plinth-section-menu', attributes);
   return [
     `<${tag} class="${classes}"`,
+    extra,
     nav ? '' : ' role="group"',
     label?.trim() ? ` aria-label="${escape(label)}"` : '',
-    extra,
     '>',
     items.map((item) => sectionMenuItem(item)).join(''),
     `</${tag}>`,

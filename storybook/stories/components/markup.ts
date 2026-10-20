@@ -6,7 +6,12 @@ export type Attributes = Record<string, string>;
 export const escape = (text: string) =>
   text.replace(/[&<>"']/g, (char) => `&#${char.charCodeAt(0)};`);
 
-/** The root's class list and the rest of the extra attributes, written out. */
+/**
+ * The root's class list and the rest of the extra attributes, written out. Print `extra` straight
+ * after the class, before Plinth's own attributes: an HTML parser keeps the first of two
+ * attributes with the same name, so a project's attribute wins a clash, as in Blade, Vue and React
+ * (docs/adr/0002).
+ */
 export function rootAttributes(
   base: string,
   attributes: Attributes,

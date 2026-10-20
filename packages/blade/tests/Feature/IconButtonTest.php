@@ -60,3 +60,12 @@ it('escapes the label and passes Livewire and Alpine attributes to its root', fu
         ->toContain('wire:click="close"')
         ->toContain('x-on:click="open = false"');
 });
+
+it("lets the project's attribute win over its own, on a button and a link", function () use ($svg) {
+    expect(Blade::render("<x-plinth::icon-button label=\"Bold\" :pressed=\"false\" aria-pressed=\"mixed\">{$svg}</x-plinth::icon-button>"))
+        ->toContain('aria-pressed="mixed"')
+        ->not->toContain('aria-pressed="false"');
+    expect(Blade::render("<x-plinth::icon-button label=\"Next\" href=\"/next\" disabled role=\"button\">{$svg}</x-plinth::icon-button>"))
+        ->toContain('role="button"')
+        ->not->toContain('role="link"');
+});

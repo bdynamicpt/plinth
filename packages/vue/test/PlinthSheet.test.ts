@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { PlinthSheet, sheetCloseIcon, sheetPlacement } from '../src/index.ts';
 
 const close =
-  '<button type="button" class="plinth-button plinth-icon-button plinth-sheet-close" commandfor="filters" command="close" data-variant="ghost" data-size="md" aria-label="Close">' +
+  '<button type="button" class="plinth-button plinth-icon-button plinth-sheet-close" data-variant="ghost" data-size="md" aria-label="Close" commandfor="filters" command="close">' +
   `<span class="plinth-icon" data-size="md" aria-hidden="true">${sheetCloseIcon}</span></button>`;
 
 const sheetWith = (props: Record<string, unknown> = {}, slots: Record<string, string> = {}) =>

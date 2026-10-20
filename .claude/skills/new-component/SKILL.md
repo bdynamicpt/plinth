@@ -54,7 +54,8 @@ Then by hand:
 - `packages/react/src/index.ts`: export `Plinth<Name>` and its `Plinth<Name>Props` type.
 - `storybook/test/parity.test.ts`: import the stories and the markup function, add a
   `storyArgs<<Name>Args>(…)` block mapping each story's args to Vue and Blade props, a case with
-  extra attributes (like `badgeWithAttributes`: a class, an id, `data-*`, `aria-*`), and every
+  extra attributes (like `badgeWithAttributes`: a class, an id, `data-*`, `aria-*`), a case with
+  an attribute that clashes with one the root sets (the project's value wins), and every
   case's name to the "has a case for every story" list. Add the Vue and React components to
   `reactComponents`, so every case also renders the React component with the Vue props
   (attributes with `class` as `className`, the default slot as `children`, named slots as node
@@ -86,11 +87,11 @@ Change all five together so they keep printing the same markup:
 - **Vue:** `withDefaults(defineProps<…>())`, the same defaults and fallback as Blade, the root
   as the single element so classes and attributes fall through. No `<style>`.
 - **React:** a function component typed as `ComponentProps<'<root element>'>` plus Vue's props,
-  with the same defaults and fallback. Spread the remaining props onto the root (`ref` included,
-  React 19 needs no `forwardRef`) and merge `className` with `classNames()`. The default slot is
-  `children`, a named slot is a prop that takes a node (`hasContent()` tells an empty one), and a
-  Vue event is an `on…` callback. Nothing reads `window` or `document` while rendering;
-  behaviour goes in an effect. No styles.
+  with the same defaults and fallback. Spread the remaining props onto the root after Plinth's
+  own, so the project's win (`ref` included, React 19 needs no `forwardRef`), and merge
+  `className` with `classNames()`. The default slot is `children`, a named slot is a prop that
+  takes a node (`hasContent()` tells an empty one), and a Vue event is an `on…` callback.
+  Nothing reads `window` or `document` while rendering; behaviour goes in an effect. No styles.
 - **Stories:** one for every variant and state, each with args (the parity test covers stories
   without their own `render`); galleries such as `AllTones` may have a `render`. The
   `docs.description.component` says what it is, when to use it, and anything a user must add

@@ -15,13 +15,13 @@ export interface IconArgs {
 import { escape, rootAttributes, type Attributes } from './markup.ts';
 
 /**
- * The icon's markup contract. Blade and Vue must print exactly this (see parity.test.ts). A label
- * can also come as an aria-label attribute; a blank one leaves the icon decorative.
+ * The icon's markup contract. Blade, Vue and React must print exactly this (see parity.test.ts).
+ * A label can also come as an aria-label attribute; a blank one leaves the icon decorative.
  */
 export function icon({ size, label, mirror, svg }: IconArgs, attributes: Attributes = {}): string {
   const { 'aria-label': ariaLabel, ...others } = attributes;
   const name = (label ?? ariaLabel ?? '').trim() ? (label ?? ariaLabel) : undefined;
   const { classes, extra } = rootAttributes('plinth-icon', others);
   const meaning = name ? ` role="img" aria-label="${escape(name)}"` : ' aria-hidden="true"';
-  return `<span class="${classes}" data-size="${size}"${mirror ? ' data-mirror' : ''}${meaning}${extra}>${svg}</span>`;
+  return `<span class="${classes}"${extra} data-size="${size}"${mirror ? ' data-mirror' : ''}${meaning}>${svg}</span>`;
 }

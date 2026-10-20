@@ -105,4 +105,20 @@ describe('PlinthIconButton', () => {
     expect(wrapper.attributes()).toMatchObject({ role: 'link', 'aria-disabled': 'true' });
     expect(wrapper.attributes('aria-busy')).toBeUndefined();
   });
+
+  it("lets the project's attribute win over its own, on a button and a link", () => {
+    const button = mount(PlinthIconButton, {
+      props: { label: 'Bold', pressed: false },
+      attrs: { 'aria-pressed': 'mixed' },
+      slots,
+    });
+    const link = mount(PlinthIconButton, {
+      props: { href: '/next', label: 'Next', disabled: true },
+      attrs: { role: 'button' },
+      slots,
+    });
+
+    expect(button.attributes('aria-pressed')).toBe('mixed');
+    expect(link.attributes('role')).toBe('button');
+  });
 });

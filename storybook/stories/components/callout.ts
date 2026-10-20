@@ -32,7 +32,7 @@ export function callout(
   const { classes, extra } = rootAttributes('plinth-callout', attributes);
   const content = textHtml?.trim() ? textHtml : text.trim() ? escape(text) : '';
   return [
-    `<div class="${classes}" data-tone="${tone}" role="${role}"${extra}>`,
+    `<div class="${classes}"${extra} data-tone="${tone}" role="${role}">`,
     `<span class="plinth-icon plinth-callout-icon" data-size="md" aria-hidden="true">${icon?.trim() ? icon : calloutIcons[tone]}</span>`,
     '<div class="plinth-callout-body">',
     title?.trim() ? `<p class="plinth-callout-title">${escape(title)}</p>` : '',

@@ -40,10 +40,11 @@ export function sheet(
     { class: 'plinth-sheet-close', commandfor: id, command: 'close' },
   );
   return [
-    `<dialog id="${escape(id)}" class="${classes}" data-placement="${sheetPlacement(placement)}"`,
+    `<dialog class="${classes}"${extra} id="${escape(id)}"`,
+    ` data-placement="${sheetPlacement(placement)}"`,
     ` closedby="${escape(closedby)}" aria-labelledby="${escape(id)}-title"`,
     hasDescription ? ` aria-describedby="${escape(id)}-description"` : '',
-    `${extra}>`,
+    '>',
     '<div class="plinth-sheet-header">',
     `<h2 id="${escape(id)}-title" class="plinth-sheet-title">${escape(title)}</h2>`,
     hasDescription

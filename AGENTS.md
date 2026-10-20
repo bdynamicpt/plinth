@@ -94,7 +94,9 @@ site/       Plinth's website, a Laravel app built with Plinth (docs/adr/0007); n
   its other props (`className` merged with Plinth's, `id`, `data-*`, `aria-*`, handlers, `ref`)
   onto the same root, takes Vue's props by the same names, turns Vue's default slot into
   `children` and named slots into props that take a node, and has `on…` callbacks for Vue's
-  events. Each component has a parity case with extra attributes.
+  events. When a project's attribute clashes with one the component sets, the project's wins in
+  every layer (`class` is added instead); docs/adr/0002. Each component has a parity case with
+  extra attributes, and one with a clashing attribute.
 - Every focusable element shows the focus ring on `:focus-visible` (outline in
   `--plinth-color-focus-ring` at `--plinth-focus-ring-width`, offset `--plinth-focus-ring-offset`,
   `-offset-filled` on solid filled controls, or `-offset-inset` on full-width rows); the test runner checks it.
