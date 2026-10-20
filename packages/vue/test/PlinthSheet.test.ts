@@ -19,10 +19,14 @@ describe('PlinthSheet', () => {
       { description: 'Narrow the list down.' },
       { footer: '<button type="button">Apply</button>' },
     );
-    const html = wrapper.html().replace(/\n\s*/g, '');
+    const html = wrapper
+      .html()
+      .replace(/\n\s*/g, '')
+      .replace(/<!--.*?-->/g, '');
 
     expect(html).toBe(
       '<dialog id="filters" class="plinth-sheet" data-side="end" closedby="any" aria-labelledby="filters-title" aria-describedby="filters-description">' +
+        '<div class="plinth-sheet-panel">' +
         '<div class="plinth-sheet-header">' +
         '<h2 id="filters-title" class="plinth-sheet-title">Filters</h2>' +
         '<p id="filters-description" class="plinth-sheet-description">Narrow the list down.</p>' +
@@ -30,6 +34,7 @@ describe('PlinthSheet', () => {
         '</div>' +
         '<div class="plinth-sheet-body"><p>Body</p></div>' +
         '<div class="plinth-sheet-footer"><button type="button">Apply</button></div>' +
+        '</div>' +
         '</dialog>',
     );
   });
@@ -63,6 +68,16 @@ describe('PlinthSheet', () => {
     expect(sidePhone('left')).toBeUndefined();
     expect(sidePhone()).toBeUndefined();
     expect(sheetSidePhone(undefined)).toBeUndefined();
+  });
+
+  it('has the grab handle where its side on a phone is the bottom', () => {
+    const handle = (props: Record<string, unknown>) =>
+      sheetWith(props).find('.plinth-sheet-panel > .plinth-sheet-handle');
+
+    expect(handle({ side: 'bottom' }).attributes('aria-hidden')).toBe('true');
+    expect(handle({ side: 'end', sidePhone: 'bottom' }).exists()).toBe(true);
+    expect(handle({ side: 'bottom', sidePhone: 'start' }).exists()).toBe(false);
+    expect(handle({ side: 'end' }).exists()).toBe(false);
   });
 
   it("takes the close button's label", () => {

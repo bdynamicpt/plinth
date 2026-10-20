@@ -12,6 +12,7 @@ import PlinthDataTableEmpty from './PlinthDataTableEmpty.vue';
 import PlinthDataTableRow from './PlinthDataTableRow.vue';
 import PlinthDataTableSort from './PlinthDataTableSort.vue';
 import PlinthDialog from './PlinthDialog.vue';
+import PlinthDrawer from './PlinthDrawer.vue';
 import PlinthHeader from './PlinthHeader.vue';
 import PlinthIcon from './PlinthIcon.vue';
 import PlinthIconButton from './PlinthIconButton.vue';
@@ -38,6 +39,7 @@ export {
   PlinthDataTableRow,
   PlinthDataTableSort,
   PlinthDialog,
+  PlinthDrawer,
   PlinthHeader,
   PlinthIcon,
   PlinthIconButton,
@@ -82,11 +84,22 @@ export {
   type DataTableSort,
 } from './data-table';
 export { dialogCloseIcon, dialogSidePhone, dialogSidePhones, type DialogSidePhone } from './dialog';
+export {
+  drawerCloseIcon,
+  drawerDesktop,
+  drawerDesktops,
+  drawerSnap,
+  drawerSnapPoints,
+  drawerSnaps,
+  type DrawerDesktop,
+  type DrawerSnap,
+} from './drawer';
 export { headingLevel, headingLevels, type HeadingLevel } from './heading';
 export { controlSizes, iconSizeFor, resolveSize, sizes, type ControlSize, type Size } from './size';
 export { iconSizes, type IconSize } from './icon';
 export { listRowChevron } from './list-row';
 export { sheetCloseIcon, sheetSide, sheetSidePhone, sheetSides, type SheetSide } from './sheet';
+export { swipeToClose, useSwipeToClose } from './swipe';
 export { tones, type Tone } from './tones';
 
 /** Registers every Plinth component globally: `app.use(Plinth)`. */
@@ -105,6 +118,7 @@ export const Plinth: Plugin = {
     app.component('PlinthDataTableRow', PlinthDataTableRow);
     app.component('PlinthDataTableSort', PlinthDataTableSort);
     app.component('PlinthDialog', PlinthDialog);
+    app.component('PlinthDrawer', PlinthDrawer);
     app.component('PlinthHeader', PlinthHeader);
     app.component('PlinthIcon', PlinthIcon);
     app.component('PlinthIconButton', PlinthIconButton);

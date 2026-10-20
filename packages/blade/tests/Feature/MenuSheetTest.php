@@ -15,7 +15,8 @@ it('prints a sheet with the user, the nav and the account', function () {
     ));
 
     expect($html)
-        ->toStartWith('<dialog id="menu" class="plinth-sheet plinth-menu-sheet" data-side="end" data-side-phone="bottom" closedby="any" aria-labelledby="menu-title">')
+        ->toStartWith('<dialog id="menu" class="plinth-sheet plinth-menu-sheet" data-side="end" data-side-phone="bottom" closedby="any" x-init="')
+        ->toContain('aria-labelledby="menu-title"><div class="plinth-sheet-panel"><div class="plinth-sheet-handle" aria-hidden="true"></div>')
         ->toContain('<h2 id="menu-title" class="plinth-sheet-title">Menu</h2>')
         ->toContain('aria-label="Close" commandfor="menu" command="close"')
         ->toContain(
@@ -30,7 +31,7 @@ it('prints a sheet with the user, the nav and the account', function () {
         ->toEndWith(
             '<nav class="plinth-menu-sheet-nav" aria-labelledby="menu-title"><a href="/inbox">Inbox</a></nav>'
             .'<div class="plinth-menu-sheet-account"><button type="button">Sign out</button></div>'
-            .'</div></dialog>'
+            .'</div></div></dialog>'
         )
         ->not->toContain('plinth-sheet-footer');
 });

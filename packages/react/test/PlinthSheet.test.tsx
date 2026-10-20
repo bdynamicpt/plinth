@@ -28,6 +28,7 @@ describe('PlinthSheet', () => {
       ),
     ).toBe(
       '<dialog id="filters" data-side="end" closedby="any" aria-labelledby="filters-title" aria-describedby="filters-description" class="plinth-sheet">' +
+        '<div class="plinth-sheet-panel">' +
         '<div class="plinth-sheet-header">' +
         '<h2 id="filters-title" class="plinth-sheet-title">Filters</h2>' +
         '<p id="filters-description" class="plinth-sheet-description">Narrow the list down.</p>' +
@@ -35,8 +36,21 @@ describe('PlinthSheet', () => {
         '</div>' +
         '<div class="plinth-sheet-body"><p>Body</p></div>' +
         '<div class="plinth-sheet-footer"><button type="button">Apply</button></div>' +
+        '</div>' +
         '</dialog>',
     );
+  });
+
+  it('has the grab handle where its side on a phone is the bottom', () => {
+    const handle = (side: SheetSide, sidePhone?: SheetSide) =>
+      root(<PlinthSheet title="Filters" side={side} sidePhone={sidePhone} />).querySelector(
+        '.plinth-sheet-panel > .plinth-sheet-handle',
+      );
+
+    expect(handle('bottom')?.getAttribute('aria-hidden')).toBe('true');
+    expect(handle('end', 'bottom')).not.toBeNull();
+    expect(handle('bottom', 'start')).toBeNull();
+    expect(handle('end')).toBeNull();
   });
 
   it('leaves out a blank description and a footer that prints nothing', () => {

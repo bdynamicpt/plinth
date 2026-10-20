@@ -58,6 +58,11 @@ export function dialog(
     ` closedby="${escape(closedby)}" aria-labelledby="${escape(id)}-title"`,
     hasDescription ? ` aria-describedby="${escape(id)}-description"` : '',
     '>',
+    '<div class="plinth-dialog-panel">',
+    // A bottom sheet on a phone that can be dismissed has the grab handle (modal.css).
+    dismissible && side === 'bottom'
+      ? '<div class="plinth-dialog-handle" aria-hidden="true"></div>'
+      : '',
     '<div class="plinth-dialog-header">',
     `<h2 id="${escape(id)}-title" class="plinth-dialog-title">${escape(title)}</h2>`,
     hasDescription
@@ -67,6 +72,7 @@ export function dialog(
     '</div>',
     `<div class="plinth-dialog-body">${body}</div>`,
     footer?.trim() ? `<div class="plinth-dialog-footer">${footer}</div>` : '',
+    '</div>',
     '</dialog>',
   ].join('');
 }

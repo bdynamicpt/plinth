@@ -11,6 +11,7 @@ export { PlinthDataTableEmpty, type PlinthDataTableEmptyProps } from './PlinthDa
 export { PlinthDataTableRow, type PlinthDataTableRowProps } from './PlinthDataTableRow';
 export { PlinthDataTableSort, type PlinthDataTableSortProps } from './PlinthDataTableSort';
 export { PlinthDialog, type PlinthDialogProps } from './PlinthDialog';
+export { PlinthDrawer, type PlinthDrawerProps } from './PlinthDrawer';
 export { PlinthHeader, type PlinthHeaderProps } from './PlinthHeader';
 export { PlinthIcon, type PlinthIconProps } from './PlinthIcon';
 export { PlinthIconButton, type PlinthIconButtonProps } from './PlinthIconButton';
@@ -58,5 +59,16 @@ export { headingLevel, headingLevels, type HeadingLevel } from './heading';
 export { controlSizes, iconSizeFor, resolveSize, sizes, type ControlSize, type Size } from './size';
 export { iconSizes, type IconSize } from './icon';
 export { listRowChevron } from './list-row';
+export {
+  drawerCloseIcon,
+  drawerDesktop,
+  drawerDesktops,
+  drawerSnap,
+  drawerSnapPoints,
+  drawerSnaps,
+  type DrawerDesktop,
+  type DrawerSnap,
+} from './drawer';
+export { swipeToClose, useSwipeToClose } from './swipe';
 export { sheetCloseIcon, sheetSide, sheetSidePhone, sheetSides, type SheetSide } from './sheet';
 export { tones, type Tone } from './tones';
