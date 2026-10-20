@@ -85,6 +85,21 @@ describe('swipeToClose', () => {
     if (descriptor) Object.defineProperty(window, 'onscrollend', descriptor);
   });
 
+  it('asks to close where the browser can, and goes back to open when cancel keeps it', () => {
+    const dialog = bottomPanel();
+    styles('y mandatory');
+    const requestClose = vi.fn();
+    Object.assign(dialog, { requestClose });
+    dialog.scrollTop = -500;
+    swipeToClose(dialog);
+
+    dialog.click();
+
+    expect(requestClose).toHaveBeenCalledOnce();
+    expect(dialog.close).not.toHaveBeenCalled();
+    expect(dialog.scrollTop).toBe(0);
+  });
+
   it('closes on a tap on the root above the panel when closedby is any', () => {
     const dialog = bottomPanel();
     styles('y mandatory');

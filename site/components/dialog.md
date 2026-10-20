@@ -79,8 +79,7 @@ An unknown value falls back to `center`, which prints no attribute; `bottom` is
 
 A dismissible dialog at the bottom of a phone has a grab handle, and the person swipes it down to
 close it, as the [drawer](drawer.md) explains: dragging is the browser's scrolling, and each layer
-adds the few lines that close it when it is swiped off. Without the script the handle still
-shows, and the close button and Escape close it. A dialog that isn't dismissible has no handle.
+adds the few lines that close it when it is swiped off. Without the script the handle still shows and the close button and Escape close it, but a tap above the panel doesn't: on a phone the panel's root covers the backdrop. A dialog that isn't dismissible has no handle.
 
 ```blade example
 <x-plinth::button variant="secondary" commandfor="example-bottom" command="show-modal">Edit project</x-plinth::button>

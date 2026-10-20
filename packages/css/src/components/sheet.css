@@ -134,16 +134,34 @@
     border-end-end-radius: var(--plinth-radius-container);
   }
 
-  /*
-   * On the bottom edge of a phone the sheet is dragged down to close (modal.css): the root fills
-   * the screen, see-through, and its panel is the surface, as tall as its content up to the
-   * screen's height less a gap.
-   */
   .plinth-sheet:where([data-side='bottom']:not([data-side-phone]), [data-side-phone='bottom']) {
     --plinth-modal-offset: 0 100%;
 
-    inset: 0;
+    inset-block: auto 0;
+    inset-inline: 0;
     inline-size: 100%;
+    max-block-size: calc(
+      100dvh - max(var(--plinth-space-12), env(safe-area-inset-top) + var(--plinth-space-4))
+    );
+    padding-block: 0;
+    padding-inline: var(--plinth-sheet-safe-area-inline-start)
+      var(--plinth-sheet-safe-area-inline-end);
+    border-width: 0;
+    border-block-start-width: var(--plinth-border-width-thin);
+    border-radius: 0;
+    border-start-start-radius: var(--plinth-radius-container);
+    border-start-end-radius: var(--plinth-radius-container);
+  }
+
+  /*
+   * With its grab handle, a bottom sheet on a phone is dragged down to close (modal.css): the root
+   * fills the screen, see-through, and its panel is the surface, as tall as its content up to the
+   * screen's height less a gap.
+   */
+  .plinth-sheet:where([data-side='bottom']:not([data-side-phone]), [data-side-phone='bottom']):has(
+      > * > .plinth-sheet-handle
+    ) {
+    inset: 0;
     max-block-size: none;
     padding: 0;
     border-width: 0;

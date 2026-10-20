@@ -123,12 +123,15 @@ export const Full: Story = {
   },
 };
 
-/** A panel on the end edge from 768px up, like the sheet: `desktop="sheet"`. */
+/**
+ * A panel on the end edge from 768px up, like the sheet: `desktop="sheet"`. On a phone it rests at
+ * a peek or half the screen, with no full height.
+ */
 export const SheetOnDesktop: Story = {
   args: {
     id: 'route-sheet',
     desktop: 'sheet',
-    snapPoints: ['half', 'full'],
+    snapPoints: ['peek', 'half'],
     snap: 'half',
     footer: footer('route-sheet'),
   },
@@ -137,4 +140,13 @@ export const SheetOnDesktop: Story = {
 /** With no description and no footer. */
 export const TitleOnly: Story = {
   args: { id: 'route-title-only', description: undefined, footer: undefined },
+};
+
+/** Right-to-left text: from 768px up the sheet presentation is on the left edge, and slides from it. */
+export const RightToLeft: Story = {
+  args: { desktop: 'sheet' },
+  render: (args) => {
+    const rtl = { ...args, id: 'route-rtl', footer: footer('route-rtl') };
+    return `<div dir="rtl">${opener(rtl)}${drawer(rtl)}</div>`;
+  },
 };

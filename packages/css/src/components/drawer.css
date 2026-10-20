@@ -95,7 +95,7 @@
   /*
    * Peek and half are the panel's top that far from the screen's bottom edge. The snap areas are
    * the handle (peek) and the header (half), the first parts of the panel, so their margins add
-   * what lies above them: the handle's margin, then the handle.
+   * what lies above them: the handle's margin, then the handle (modal.css; change them together).
    */
   .plinth-drawer[data-snap-points~='peek'] .plinth-drawer-handle {
     scroll-snap-align: start;

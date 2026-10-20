@@ -639,6 +639,11 @@ const cases: ParityCase[] = [
       closedby: 'closerequest',
     },
   ),
+  dialogCase('Dialog/bottom on a phone, not dismissible', {
+    ...dialogDefaults,
+    sidePhone: 'bottom',
+    dismissible: false,
+  }),
   dialogCase('Dialog/with a clashing attribute', dialogDefaults, {
     'aria-labelledby': 'project-heading',
   }),
@@ -1645,6 +1650,7 @@ describe('parity with the stories', () => {
       'Dialog/LongContent',
       'Dialog/LongTitle',
       'Dialog/with extra attributes',
+      'Dialog/bottom on a phone, not dismissible',
       'Dialog/with a clashing attribute',
       'Dialog/not dismissible, with a clashing role',
       'Dialog/blank description, no footer',

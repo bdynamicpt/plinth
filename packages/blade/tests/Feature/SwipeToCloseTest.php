@@ -10,6 +10,8 @@ it('is the Vue and React layers\' swipeToClose, as an Alpine x-init', function (
         "getComputedStyle(dialog).scrollSnapType.startsWith('y')",
         'panel.getBoundingClientRect().top >= dialog.getBoundingClientRect().bottom - 1',
         "'onscrollend' in window ? 'scrollend' : 'scroll'",
+        'if (dialog.requestClose) dialog.requestClose();',
+        'if (dialog.open) dialog.scrollTop = 0;',
         "event.target === dialog && dragging() && dialog.getAttribute('closedby') === 'any'",
         "{ peek: handle, half: header }[dialog.dataset.snap ?? '']",
         'parseFloat(getComputedStyle(area).scrollMarginBlockStart)',

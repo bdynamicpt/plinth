@@ -2145,7 +2145,7 @@
   /*
    * Peek and half are the panel's top that far from the screen's bottom edge. The snap areas are
    * the handle (peek) and the header (half), the first parts of the panel, so their margins add
-   * what lies above them: the handle's margin, then the handle.
+   * what lies above them: the handle's margin, then the handle (modal.css; change them together).
    */
   .plinth-drawer[data-snap-points~='peek'] .plinth-drawer-handle {
     scroll-snap-align: start;
@@ -2748,10 +2748,12 @@
  * close button and Escape close the panel. What the platform can't do, the layers add (a few
  * lines, docs/adr/0002 section 6: x-init in Blade, useSwipeToClose in Vue and React):
  * - on scrollend (scroll where it is missing), when the panel has gone off the bottom edge, they
- *   call close();
+ *   call requestClose() (close() where it is missing), so cancel fires first, as for Escape; when
+ *   the app prevents it, the panel goes back to where it opened;
  * - a tap on the root itself, above the panel, closes it when closedby="any", since the browser
  *   reads that tap as one on the dialog, not its backdrop;
- * - on toggle to open, a drawer with data-snap scrolls to that snap point.
+ * - on toggle to open, a drawer with data-snap scrolls to that snap point (a browser that fires no
+ *   toggle on a dialog opens it at its largest).
  * The snapping is the browser's own scrolling, and the layers' scroll is instant.
  */
 
@@ -3574,16 +3576,34 @@
     border-end-end-radius: var(--plinth-radius-container);
   }
 
-  /*
-   * On the bottom edge of a phone the sheet is dragged down to close (modal.css): the root fills
-   * the screen, see-through, and its panel is the surface, as tall as its content up to the
-   * screen's height less a gap.
-   */
   .plinth-sheet:where([data-side='bottom']:not([data-side-phone]), [data-side-phone='bottom']) {
     --plinth-modal-offset: 0 100%;
 
-    inset: 0;
+    inset-block: auto 0;
+    inset-inline: 0;
     inline-size: 100%;
+    max-block-size: calc(
+      100dvh - max(var(--plinth-space-12), env(safe-area-inset-top) + var(--plinth-space-4))
+    );
+    padding-block: 0;
+    padding-inline: var(--plinth-sheet-safe-area-inline-start)
+      var(--plinth-sheet-safe-area-inline-end);
+    border-width: 0;
+    border-block-start-width: var(--plinth-border-width-thin);
+    border-radius: 0;
+    border-start-start-radius: var(--plinth-radius-container);
+    border-start-end-radius: var(--plinth-radius-container);
+  }
+
+  /*
+   * With its grab handle, a bottom sheet on a phone is dragged down to close (modal.css): the root
+   * fills the screen, see-through, and its panel is the surface, as tall as its content up to the
+   * screen's height less a gap.
+   */
+  .plinth-sheet:where([data-side='bottom']:not([data-side-phone]), [data-side-phone='bottom']):has(
+      > * > .plinth-sheet-handle
+    ) {
+    inset: 0;
     max-block-size: none;
     padding: 0;
     border-width: 0;

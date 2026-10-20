@@ -15,6 +15,10 @@ Every bottom panel on a phone now has a grab handle and closes when it is swiped
 whose side on a phone is the bottom, the menu sheet and a dismissible dialog with
 `side-phone="bottom"`. The dialog and the sheet print their parts in a new panel
 (`plinth-dialog-panel`, `plinth-sheet-panel`), the root's only child, with the handle in it
-(`plinth-dialog-handle`, `plinth-sheet-handle`). A project's CSS that selected the parts as the
-root's children (`.plinth-sheet > .plinth-sheet-body`) selects them inside the panel now. New
-token: `--plinth-drawer-peek-height`.
+(`plinth-dialog-handle`, `plinth-sheet-handle`). New token: `--plinth-drawer-peek-height`.
+
+**Breaking:** the dialog's and the sheet's parts are inside the panel now, so a project's CSS that
+selected them as the root's children (`.plinth-sheet > .plinth-sheet-body`) selects them inside the
+panel (`.plinth-sheet .plinth-sheet-body`), and hand-written markup adds the panel. On a phone, a
+tap above a bottom panel closes it through the layers' script, no longer through the browser's
+`closedby="any"` alone.

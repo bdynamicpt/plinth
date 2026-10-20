@@ -45,10 +45,12 @@
  * close button and Escape close the panel. What the platform can't do, the layers add (a few
  * lines, docs/adr/0002 section 6: x-init in Blade, useSwipeToClose in Vue and React):
  * - on scrollend (scroll where it is missing), when the panel has gone off the bottom edge, they
- *   call close();
+ *   call requestClose() (close() where it is missing), so cancel fires first, as for Escape; when
+ *   the app prevents it, the panel goes back to where it opened;
  * - a tap on the root itself, above the panel, closes it when closedby="any", since the browser
  *   reads that tap as one on the dialog, not its backdrop;
- * - on toggle to open, a drawer with data-snap scrolls to that snap point.
+ * - on toggle to open, a drawer with data-snap scrolls to that snap point (a browser that fires no
+ *   toggle on a dialog opens it at its largest).
  * The snapping is the browser's own scrolling, and the layers' scroll is instant.
  */
 

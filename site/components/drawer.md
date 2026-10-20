@@ -58,8 +58,11 @@ That last step is the one thing the platform can't do, so each layer adds a few 
 dialog's `scrollend`: an Alpine `x-init` in Blade (the page needs Alpine, which Livewire and
 Filament load), and `useSwipeToClose` in Vue and React. They also close it on a tap above the
 panel, which the browser counts as a tap on the dialog rather than its backdrop, and open it at
-its snap point. Without the script the handle still shows, and the close button and Escape close
-it.
+its snap point (on the dialog's `toggle` event; a browser without it opens the drawer at its largest
+snap point). Without the script the handle still shows and the close button and Escape close it,
+but a tap above the panel doesn't. A swipe or a tap closes it with `requestClose()` where the
+browser has it, so the dialog fires `cancel` first, as for Escape; preventing it keeps the drawer
+open.
 
 ## Snap points
 

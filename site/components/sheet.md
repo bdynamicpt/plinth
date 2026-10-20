@@ -85,7 +85,7 @@ needs no script.
 A sheet on the bottom edge of a phone (`side="bottom"`, or `side-phone="bottom"`) has a grab
 handle, and the person swipes it down to close it, as the [drawer](drawer.md) explains: dragging is
 the browser's scrolling, and each layer adds the few lines that close it when it is swiped off.
-Without the script the handle still shows, and the close button and Escape close it.
+Without the script the handle still shows and the close button and Escape close it, but a tap above the panel doesn't: on a phone the panel's root covers the backdrop.
 
 ```blade example
 <x-plinth::button variant="secondary" commandfor="example-sort" command="show-modal">Sort</x-plinth::button>
