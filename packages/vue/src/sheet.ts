@@ -1,10 +1,18 @@
-/** Where the sheet shows from 768px up. `center` is the default; on a phone both are a bottom sheet. */
-export const sheetPlacements = ['center', 'end'] as const;
-export type SheetPlacement = (typeof sheetPlacements)[number];
+/**
+ * The edge a sheet comes from. `end` is the default; `start` and `end` are logical, so they swap
+ * in right-to-left text. The same list is the side on a phone (`sidePhone`), which has no default.
+ */
+export const sheetSides = ['start', 'end', 'top', 'bottom'] as const;
+export type SheetSide = (typeof sheetSides)[number];
 
-/** A placement from the list, or `center` when it is not one of them. */
-export function sheetPlacement(value: string | undefined): SheetPlacement {
-  return sheetPlacements.includes(value as SheetPlacement) ? (value as SheetPlacement) : 'center';
+/** A side from the list, or `end` when it is not one of them. */
+export function sheetSide(value: string | undefined): SheetSide {
+  return sheetSidePhone(value) ?? 'end';
+}
+
+/** A side from the list, or nothing (no `data-side-phone`) when it is not one of them. */
+export function sheetSidePhone(value: string | undefined): SheetSide | undefined {
+  return sheetSides.includes(value as SheetSide) ? (value as SheetSide) : undefined;
 }
 
 /** The close button's icon, a cross. Blade's sheet prints the same markup. */

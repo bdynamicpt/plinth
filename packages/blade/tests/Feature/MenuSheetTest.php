@@ -15,7 +15,7 @@ it('prints a sheet with the user, the nav and the account', function () {
     ));
 
     expect($html)
-        ->toStartWith('<dialog id="menu" class="plinth-sheet plinth-menu-sheet" data-placement="end" closedby="any" aria-labelledby="menu-title">')
+        ->toStartWith('<dialog id="menu" class="plinth-sheet plinth-menu-sheet" data-side="end" data-side-phone="bottom" closedby="any" aria-labelledby="menu-title">')
         ->toContain('<h2 id="menu-title" class="plinth-sheet-title">Menu</h2>')
         ->toContain('aria-label="Close" commandfor="menu" command="close"')
         ->toContain(
@@ -104,7 +104,7 @@ it('escapes the user\'s name, detail and href, and the id', function () {
 
 it('merges extra attributes onto the dialog', function () use ($menu) {
     expect($menu('class="is-shell" wire:ignore.self closedby="closerequest" data-testid="menu"'))
-        ->toStartWith('<dialog id="menu" class="plinth-sheet plinth-menu-sheet is-shell" data-placement="end" closedby="closerequest"')
+        ->toStartWith('<dialog id="menu" class="plinth-sheet plinth-menu-sheet is-shell" data-side="end" data-side-phone="bottom" closedby="closerequest"')
         ->toContain('wire:ignore.self')
         ->toContain('data-testid="menu"');
 });

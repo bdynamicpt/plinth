@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 import { Comment, createStaticVNode, Fragment, h } from 'vue';
 import { describe, expect, it, vi } from 'vitest';
-import { PlinthSheet, sheetCloseIcon, sheetPlacement } from '../src/index.ts';
+import { PlinthSheet, sheetCloseIcon, sheetSide, sheetSidePhone } from '../src/index.ts';
 
 const close =
   '<button type="button" class="plinth-button plinth-icon-button plinth-sheet-close" data-variant="ghost" data-size="md" aria-label="Close" commandfor="filters" command="close">' +
@@ -22,7 +22,7 @@ describe('PlinthSheet', () => {
     const html = wrapper.html().replace(/\n\s*/g, '');
 
     expect(html).toBe(
-      '<dialog id="filters" class="plinth-sheet" data-placement="center" closedby="any" aria-labelledby="filters-title" aria-describedby="filters-description">' +
+      '<dialog id="filters" class="plinth-sheet" data-side="end" closedby="any" aria-labelledby="filters-title" aria-describedby="filters-description">' +
         '<div class="plinth-sheet-header">' +
         '<h2 id="filters-title" class="plinth-sheet-title">Filters</h2>' +
         '<p id="filters-description" class="plinth-sheet-description">Narrow the list down.</p>' +
@@ -44,13 +44,25 @@ describe('PlinthSheet', () => {
     }
   });
 
-  it('takes a placement, and falls back to center', () => {
-    const placement = (value: string) =>
-      sheetWith({ placement: value }).attributes('data-placement');
+  it('takes a side, and falls back to end', () => {
+    const side = (value: string) => sheetWith({ side: value }).attributes('data-side');
 
-    expect(placement('end')).toBe('end');
-    expect(placement('start')).toBe('center');
-    expect(sheetPlacement(undefined)).toBe('center');
+    expect(side('start')).toBe('start');
+    expect(side('top')).toBe('top');
+    expect(side('bottom')).toBe('bottom');
+    expect(side('left')).toBe('end');
+    expect(sheetSide(undefined)).toBe('end');
+  });
+
+  it('takes a side on a phone, and leaves it out when it is missing or unknown', () => {
+    const sidePhone = (value?: string) =>
+      sheetWith({ sidePhone: value }).attributes('data-side-phone');
+
+    expect(sidePhone('bottom')).toBe('bottom');
+    expect(sidePhone('start')).toBe('start');
+    expect(sidePhone('left')).toBeUndefined();
+    expect(sidePhone()).toBeUndefined();
+    expect(sheetSidePhone(undefined)).toBeUndefined();
   });
 
   it("takes the close button's label", () => {

@@ -2,7 +2,7 @@
 // Markup contract: packages/css/src/components/sheet.css
 import { computed, ref, useId, useSlots } from 'vue';
 import PlinthIconButton from './PlinthIconButton.vue';
-import { sheetPlacement, type SheetPlacement } from './sheet';
+import { sheetSide, sheetSidePhone, type SheetSide } from './sheet';
 import { hasContent } from './slots';
 
 const props = withDefaults(
@@ -15,10 +15,18 @@ const props = withDefaults(
     description?: string;
     /** The close button's accessible name. */
     closeLabel?: string;
-    /** Where the sheet shows from 768px up. */
-    placement?: SheetPlacement;
+    /** The edge the sheet comes from, at every width. */
+    side?: SheetSide;
+    /** The edge below 768px, when it is another one. */
+    sidePhone?: SheetSide;
   }>(),
-  { id: undefined, description: undefined, closeLabel: 'Close', placement: 'center' },
+  {
+    id: undefined,
+    description: undefined,
+    closeLabel: 'Close',
+    side: 'end',
+    sidePhone: undefined,
+  },
 );
 
 const emit = defineEmits<{
@@ -33,7 +41,8 @@ if (!props.title?.trim()) {
 const slots = useSlots();
 const generatedId = useId();
 const sheetId = computed(() => props.id?.trim() || `plinth-sheet-${generatedId}`);
-const dataPlacement = computed(() => sheetPlacement(props.placement));
+const dataSide = computed(() => sheetSide(props.side));
+const dataSidePhone = computed(() => sheetSidePhone(props.sidePhone));
 const hasDescription = computed(() => Boolean(props.description?.trim()));
 
 const dialog = ref<HTMLDialogElement>();
@@ -51,7 +60,8 @@ defineExpose({
     :id="sheetId"
     ref="dialog"
     class="plinth-sheet"
-    :data-placement="dataPlacement"
+    :data-side="dataSide"
+    :data-side-phone="dataSidePhone"
     closedby="any"
     :aria-labelledby="`${sheetId}-title`"
     :aria-describedby="hasDescription ? `${sheetId}-description` : undefined"

@@ -259,7 +259,7 @@
     },
     "dialog": {
       "$value": "{ref.size.480}",
-      "$description": "The width of a dialog or a centred sheet (480 px)."
+      "$description": "The width of a dialog (480 px)."
     },
     "panel": {
       "$value": "{ref.size.400}",

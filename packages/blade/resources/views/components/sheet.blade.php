@@ -4,7 +4,8 @@
     'title' => null,
     'description' => null,
     'closeLabel' => 'Close',
-    'placement' => 'center',
+    'side' => 'end',
+    'sidePhone' => null,
 ])
 @php
     if (blank($title)) {
@@ -15,7 +16,8 @@
     $root = array_filter([
         'id' => $id,
         'class' => 'plinth-sheet',
-        'data-placement' => \BDynamic\Plinth\Enums\SheetPlacement::resolve($placement)->value,
+        'data-side' => \BDynamic\Plinth\Enums\SheetSide::resolve($side)->value,
+        'data-side-phone' => \BDynamic\Plinth\Enums\SheetSide::resolveOptional($sidePhone)?->value,
         'closedby' => 'any',
         'aria-labelledby' => $id.'-title',
         'aria-describedby' => $hasDescription ? $id.'-description' : null,

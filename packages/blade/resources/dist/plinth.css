@@ -208,7 +208,6 @@
     --plinth-list-row-height: var(--plinth-size-row);
     --plinth-pill-height: var(--plinth-control-md);
     --plinth-dialog-width: var(--plinth-size-dialog);
-    --plinth-sheet-width: var(--plinth-size-dialog);
     --plinth-sheet-side-width: var(--plinth-size-panel);
     --plinth-section-menu-height: var(--plinth-space-14);
     --plinth-section-menu-item-height: var(--plinth-control-lg);
@@ -2256,8 +2255,8 @@
  * Menu sheet: the app shell's menu, a sheet with the signed-in user, the navigation and the
  * account actions. A side panel from 768px up, a bottom sheet on a phone.
  *
- * <dialog id="menu" class="plinth-sheet plinth-menu-sheet" data-placement="end" closedby="any"
- *   aria-labelledby="menu-title">
+ * <dialog id="menu" class="plinth-sheet plinth-menu-sheet" data-side="end"
+ *   data-side-phone="bottom" closedby="any" aria-labelledby="menu-title">
  *   <div class="plinth-sheet-header">
  *     <h2 id="menu-title" class="plinth-sheet-title">Menu</h2>
  *     <button … class="plinth-button plinth-icon-button plinth-sheet-close" commandfor="menu"
@@ -2283,7 +2282,7 @@
  *   </div>
  * </dialog>
  *
- * It is a sheet (sheet.css), always data-placement="end", with no footer; everything the sheet's
+ * It is a sheet (sheet.css), always data-side="end" data-side-phone="bottom", with no footer; everything the sheet's
  * contract says holds, and it needs modal.css, sheet.css, list-row.css, list-card.css, avatar.css,
  * button.css and icon.css. The root's id is required in practice: the header's menu button opens
  * it with <button commandfor="menu" command="show-modal">, the close button points at it too, and
@@ -2907,11 +2906,11 @@
 
 /* sheet.css */
 /*
- * Sheet: a modal panel that slides up from the bottom on a phone, and shows as a centred dialog
- * or a side panel from 768px up.
+ * Sheet: a modal panel on the edge of the screen the developer picks, for filters, side
+ * information or navigation. Optionally on another edge below 768px.
  *
- * <dialog id="filters" class="plinth-sheet" data-placement="center" closedby="any"
- *   aria-labelledby="filters-title" aria-describedby="filters-description">
+ * <dialog id="filters" class="plinth-sheet" data-side="end" data-side-phone="bottom"
+ *   closedby="any" aria-labelledby="filters-title" aria-describedby="filters-description">
  *   <div class="plinth-sheet-header">
  *     <h2 id="filters-title" class="plinth-sheet-title">Filters</h2>
  *     <p id="filters-description" class="plinth-sheet-description">Narrow the list down.</p>
@@ -2934,23 +2933,34 @@
  *
  * Open it with showModal() or a <button commandfor="filters" command="show-modal">. Open is the
  * native state, [open]; the browser puts the sheet in the top layer, makes the page inert, traps
- * focus, closes on Escape and returns focus. The dialog fires close when it closes.
+ * focus, closes on Escape and returns focus. The dialog fires close when it closes. For a modal
+ * centred on the screen, use the dialog (dialog.css).
  *
- * Placement (data-placement), from 768px up: center (default, also when missing) is a dialog in
- * the middle of the screen, sheet.width wide; end is a full-height panel on the inline-end edge,
- * sheet.side-width wide. On a phone both are a bottom sheet.
+ * Side (data-side), at every width: end (default, also when missing or unknown) and start are
+ * full-height panels on the inline-end and inline-start edges, sheet.side-width wide and at
+ * most the screen's width less a gap, so the page shows beside them; top and bottom are the screen's width on the
+ * top and bottom edges, as tall as their content up to the screen's height less a gap. The sides
+ * are logical: in right-to-left text end is the left edge and start the right.
+ *
+ * Side on a phone (data-side-phone, optional): the side below 768px, one of the same four; from
+ * 768px up data-side holds. data-side="end" data-side-phone="bottom" is a side panel on a tablet
+ * or desktop and a bottom sheet on a phone. Leave it out to keep data-side at every width.
+ *
+ * The edge the sheet sits on has no border or radius; the edge facing the page has a hairline
+ * (in forced colours too), and a top or bottom sheet rounds the corners facing the page. Each side clears the safe areas
+ * it touches (the notch, the status bar and the home indicator, with viewport-fit=cover).
  *
  * The description is a secondary line, at the size of a list row's description.
  *
  * The surface, the backdrop, the scroll lock, the motion, the safe areas and the parts come from
  * the modal base (modal.css), which the dialog shares; load it with this file. The body scrolls,
  * the header and footer stay put, and the page under an open sheet doesn't scroll. The sheet
- * slides (and the centred one fades) in and out on the motion tokens, which drop to 0ms under
+ * slides in from its edge and back out on the motion tokens, which drop to 0ms under
  * prefers-reduced-motion. This file sets only where the sheet sits and how big it is.
  *
- * On a phone the sheet sits on the bottom edge and its height is capped by 100dvh, which clears
- * the home indicator (env(safe-area-inset-bottom)) but not, on its own, the on-screen keyboard:
- * iOS lays the keyboard over the page. A page with a form in a sheet sets
+ * A sheet on the bottom edge has its height capped by 100dvh, which clears the home indicator
+ * (env(safe-area-inset-bottom)) but not, on its own, the on-screen keyboard: iOS lays the
+ * keyboard over the page. A page with a form in a sheet sets
  * <meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
  * where the browser supports it, and keeps the sheet's fields near its top.
  *
@@ -2960,7 +2970,66 @@
  */
 
 @layer plinth {
+  /*
+   * The end side, the default. The sides are written twice: as the phone's side (data-side-phone,
+   * or data-side without it), and from 768px up as data-side again for a sheet with
+   * data-side-phone. The phone's rules use :where() so the later ones win on order alone.
+   */
   .plinth-sheet {
+    /* Translate isn't logical: -1 (under :dir(rtl), below) turns the slide around. */
+    --plinth-sheet-direction: 1;
+    --plinth-sheet-safe-area-inline-start: env(safe-area-inset-left);
+    --plinth-sheet-safe-area-inline-end: env(safe-area-inset-right);
+    --plinth-modal-offset: calc(100% * var(--plinth-sheet-direction)) 0;
+    --plinth-modal-safe-area-end: env(safe-area-inset-bottom);
+
+    inset-block: 0;
+    inset-inline: auto 0;
+    inline-size: min(100% - var(--plinth-space-12), var(--plinth-sheet-side-width));
+    block-size: auto;
+    max-block-size: none;
+    padding-block: env(safe-area-inset-top) 0;
+    padding-inline: 0 var(--plinth-sheet-safe-area-inline-end);
+    margin: 0;
+    border-width: 0;
+    border-inline-start-width: var(--plinth-border-width-thin);
+    border-radius: 0;
+  }
+
+  .plinth-sheet:where([data-side='start']:not([data-side-phone]), [data-side-phone='start']) {
+    --plinth-modal-offset: calc(-100% * var(--plinth-sheet-direction)) 0;
+    --plinth-modal-safe-area-end: env(safe-area-inset-bottom);
+
+    inset-block: 0;
+    inset-inline: 0 auto;
+    inline-size: min(100% - var(--plinth-space-12), var(--plinth-sheet-side-width));
+    max-block-size: none;
+    padding-block: env(safe-area-inset-top) 0;
+    padding-inline: var(--plinth-sheet-safe-area-inline-start) 0;
+    border-width: 0;
+    border-inline-end-width: var(--plinth-border-width-thin);
+    border-radius: 0;
+  }
+
+  .plinth-sheet:where([data-side='top']:not([data-side-phone]), [data-side-phone='top']) {
+    --plinth-modal-offset: 0 -100%;
+    --plinth-modal-safe-area-end: initial;
+
+    inset-block: 0 auto;
+    inset-inline: 0;
+    inline-size: 100%;
+    max-block-size: calc(100dvh - var(--plinth-space-12));
+    padding-block: env(safe-area-inset-top) 0;
+    padding-inline: var(--plinth-sheet-safe-area-inline-start)
+      var(--plinth-sheet-safe-area-inline-end);
+    border-width: 0;
+    border-block-end-width: var(--plinth-border-width-thin);
+    border-radius: 0;
+    border-end-start-radius: var(--plinth-radius-container);
+    border-end-end-radius: var(--plinth-radius-container);
+  }
+
+  .plinth-sheet:where([data-side='bottom']:not([data-side-phone]), [data-side-phone='bottom']) {
     --plinth-modal-offset: 0 100%;
     --plinth-modal-safe-area-end: env(safe-area-inset-bottom);
 
@@ -2968,57 +3037,78 @@
     inset-inline: 0;
     inline-size: 100%;
     max-block-size: calc(100dvh - var(--plinth-space-12));
-    margin: 0;
-    border-block-end-width: 0;
-    border-end-start-radius: 0;
-    border-end-end-radius: 0;
+    padding-block: 0;
+    padding-inline: var(--plinth-sheet-safe-area-inline-start)
+      var(--plinth-sheet-safe-area-inline-end);
+    border-width: 0;
+    border-block-start-width: var(--plinth-border-width-thin);
+    border-radius: 0;
+    border-start-start-radius: var(--plinth-radius-container);
+    border-start-end-radius: var(--plinth-radius-container);
+  }
+
+  /* Right-to-left text turns the slide around and swaps the safe areas. */
+  .plinth-sheet:dir(rtl) {
+    --plinth-sheet-direction: -1;
+    --plinth-sheet-safe-area-inline-start: env(safe-area-inset-right);
+    --plinth-sheet-safe-area-inline-end: env(safe-area-inset-left);
   }
 
   @media (min-width: 768px) {
-    .plinth-sheet {
-      --plinth-modal-offset: 0 var(--plinth-space-4);
-      --plinth-modal-closed-opacity: 0;
-      --plinth-modal-safe-area-end: initial;
-
-      inset: 0;
-      inline-size: min(100% - 2 * var(--plinth-space-8), var(--plinth-sheet-width));
-      max-block-size: calc(100dvh - 2 * var(--plinth-space-8));
-      margin: auto;
-      border-block-end-width: var(--plinth-border-width-thin);
-      border-radius: var(--plinth-radius-container);
-    }
-
-    .plinth-sheet[data-placement='end'] {
-      --plinth-modal-offset: 100% 0;
-      --plinth-modal-closed-opacity: 1;
-
-      /* The full-height panel still reaches the bottom edge. */
+    .plinth-sheet[data-side-phone] {
+      --plinth-modal-offset: calc(100% * var(--plinth-sheet-direction)) 0;
       --plinth-modal-safe-area-end: env(safe-area-inset-bottom);
 
       inset-block: 0;
       inset-inline: auto 0;
-      inline-size: min(100%, var(--plinth-sheet-side-width));
-      block-size: auto;
+      inline-size: min(100% - var(--plinth-space-12), var(--plinth-sheet-side-width));
       max-block-size: none;
-
-      /* Clears the notch on a phone held sideways. */
-      padding-inline-end: env(safe-area-inset-right);
-      margin: 0;
+      padding-block: env(safe-area-inset-top) 0;
+      padding-inline: 0 var(--plinth-sheet-safe-area-inline-end);
       border-width: 0;
       border-inline-start-width: var(--plinth-border-width-thin);
       border-radius: 0;
     }
 
-    .plinth-sheet[data-placement='end']:dir(rtl) {
-      --plinth-modal-offset: -100% 0;
+    .plinth-sheet[data-side-phone][data-side='start'] {
+      --plinth-modal-offset: calc(-100% * var(--plinth-sheet-direction)) 0;
 
-      padding-inline-end: env(safe-area-inset-left);
+      inset-inline: 0 auto;
+      padding-inline: var(--plinth-sheet-safe-area-inline-start) 0;
+      border-inline-start-width: 0;
+      border-inline-end-width: var(--plinth-border-width-thin);
     }
-  }
 
-  @media (forced-colors: active) {
-    .plinth-sheet {
-      border-width: var(--plinth-border-width-thin);
+    .plinth-sheet[data-side-phone][data-side='top'] {
+      --plinth-modal-offset: 0 -100%;
+      --plinth-modal-safe-area-end: initial;
+
+      inset-block: 0 auto;
+      inset-inline: 0;
+      inline-size: 100%;
+      max-block-size: calc(100dvh - var(--plinth-space-12));
+      padding-inline: var(--plinth-sheet-safe-area-inline-start)
+        var(--plinth-sheet-safe-area-inline-end);
+      border-block-end-width: var(--plinth-border-width-thin);
+      border-inline-start-width: 0;
+      border-end-start-radius: var(--plinth-radius-container);
+      border-end-end-radius: var(--plinth-radius-container);
+    }
+
+    .plinth-sheet[data-side-phone][data-side='bottom'] {
+      --plinth-modal-offset: 0 100%;
+
+      inset-block: auto 0;
+      inset-inline: 0;
+      inline-size: 100%;
+      max-block-size: calc(100dvh - var(--plinth-space-12));
+      padding-block: 0;
+      padding-inline: var(--plinth-sheet-safe-area-inline-start)
+        var(--plinth-sheet-safe-area-inline-end);
+      border-block-start-width: var(--plinth-border-width-thin);
+      border-inline-start-width: 0;
+      border-start-start-radius: var(--plinth-radius-container);
+      border-start-end-radius: var(--plinth-radius-container);
     }
   }
 }

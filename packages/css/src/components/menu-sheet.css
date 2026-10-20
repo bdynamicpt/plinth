@@ -2,8 +2,8 @@
  * Menu sheet: the app shell's menu, a sheet with the signed-in user, the navigation and the
  * account actions. A side panel from 768px up, a bottom sheet on a phone.
  *
- * <dialog id="menu" class="plinth-sheet plinth-menu-sheet" data-placement="end" closedby="any"
- *   aria-labelledby="menu-title">
+ * <dialog id="menu" class="plinth-sheet plinth-menu-sheet" data-side="end"
+ *   data-side-phone="bottom" closedby="any" aria-labelledby="menu-title">
  *   <div class="plinth-sheet-header">
  *     <h2 id="menu-title" class="plinth-sheet-title">Menu</h2>
  *     <button … class="plinth-button plinth-icon-button plinth-sheet-close" commandfor="menu"
@@ -29,7 +29,7 @@
  *   </div>
  * </dialog>
  *
- * It is a sheet (sheet.css), always data-placement="end", with no footer; everything the sheet's
+ * It is a sheet (sheet.css), always data-side="end" data-side-phone="bottom", with no footer; everything the sheet's
  * contract says holds, and it needs modal.css, sheet.css, list-row.css, list-card.css, avatar.css,
  * button.css and icon.css. The root's id is required in practice: the header's menu button opens
  * it with <button commandfor="menu" command="show-modal">, the close button points at it too, and

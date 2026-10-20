@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
-import { sheetPlacements } from '@bdynamic/plinth-vue';
+import { sheetSides } from '@bdynamic/plinth-vue';
 import { badge } from './badge.ts';
 import { button } from './button.ts';
 import { icon } from './icon.ts';
@@ -58,7 +58,7 @@ const meta = {
     id: 'filters',
     title: 'Filters',
     closeLabel: 'Close',
-    placement: 'center',
+    side: 'end',
     body: filters,
     footer: footer('filters'),
   },
@@ -66,7 +66,12 @@ const meta = {
     title: { control: 'text' },
     description: { control: 'text' },
     closeLabel: { control: 'text' },
-    placement: { control: 'inline-radio', options: [...sheetPlacements] },
+    side: { control: 'inline-radio', options: [...sheetSides] },
+    sidePhone: {
+      control: 'inline-radio',
+      options: ['none', ...sheetSides],
+      mapping: { none: undefined },
+    },
     body: { control: false },
     footer: { control: false },
   },
@@ -75,7 +80,8 @@ const meta = {
     everyWidth: { height: 720 },
     docs: {
       description: {
-        component: 'A modal panel on a native dialog: slides up on a phone, a dialog from 768px.',
+        component:
+          'A modal panel on a native dialog, on the edge you pick with `side` (end, start, top or bottom) at every width; `side-phone` picks another edge below 768px. For a modal centred on the screen, use the dialog.',
       },
     },
   },
@@ -84,8 +90,63 @@ const meta = {
 export default meta;
 type Story = StoryObj<SheetArgs>;
 
-/** A centred dialog from 768px up, a bottom sheet on a phone. */
+/** On the end edge, the default: the right in left-to-right text. */
 export const Default: Story = {};
+
+/** On the start edge: the left in left-to-right text. */
+export const Start: Story = {
+  args: { id: 'filters-start', side: 'start', footer: footer('filters-start') },
+};
+
+/** On the top edge, the screen's width and as tall as its content. */
+export const Top: Story = {
+  args: { id: 'filters-top', side: 'top', footer: footer('filters-top') },
+};
+
+/** On the bottom edge, the screen's width, clearing the home indicator. */
+export const Bottom: Story = {
+  args: { id: 'filters-bottom', side: 'bottom', footer: footer('filters-bottom') },
+};
+
+/** A side panel from 768px up, a bottom sheet on a phone: `side="end" side-phone="bottom"`. */
+export const EndBottomOnPhone: Story = {
+  args: {
+    id: 'filters-end-bottom',
+    side: 'end',
+    sidePhone: 'bottom',
+    footer: footer('filters-end-bottom'),
+  },
+};
+
+/** On the start edge from 768px up, a bottom sheet on a phone. */
+export const StartBottomOnPhone: Story = {
+  args: {
+    id: 'filters-start-bottom',
+    side: 'start',
+    sidePhone: 'bottom',
+    footer: footer('filters-start-bottom'),
+  },
+};
+
+/** On the top edge from 768px up, a bottom sheet on a phone, nearer the thumb. */
+export const TopBottomOnPhone: Story = {
+  args: {
+    id: 'filters-top-bottom',
+    side: 'top',
+    sidePhone: 'bottom',
+    footer: footer('filters-top-bottom'),
+  },
+};
+
+/** On the bottom edge from 768px up, a panel on the start edge on a phone. */
+export const BottomStartOnPhone: Story = {
+  args: {
+    id: 'filters-bottom-start',
+    side: 'bottom',
+    sidePhone: 'start',
+    footer: footer('filters-bottom-start'),
+  },
+};
 
 export const WithDescription: Story = {
   args: {
@@ -93,11 +154,6 @@ export const WithDescription: Story = {
     description: 'Only the items that match are shown in the list.',
     footer: footer('filters-described'),
   },
-};
-
-/** A full-height panel on the inline-end edge from 768px up, a bottom sheet on a phone. */
-export const SidePanel: Story = {
-  args: { id: 'filters-side', placement: 'end', footer: footer('filters-side') },
 };
 
 /** No footer: the rows act on their own, and the close button ends it. */
@@ -117,24 +173,12 @@ export const WithoutFooter: Story = {
   },
 };
 
-/** A short confirmation: the description says what happens, the footer holds the choice. */
-export const Confirmation: Story = {
-  args: {
-    id: 'delete-item',
-    title: 'Delete this item?',
-    description: 'It is removed for everyone in the workspace. This cannot be undone.',
-    body: '<p>Its history and comments are deleted with it.</p>',
-    footer:
-      action('Cancel', 'secondary', { commandfor: 'delete-item', command: 'close' }) +
-      action('Delete', 'danger'),
-  },
-};
-
 /** More content than fits: the body scrolls, the header and footer stay put. */
 export const LongContent: Story = {
   args: {
     id: 'long',
     title: 'Notifications',
+    sidePhone: 'bottom',
     footer: footer('long'),
     // Spacing between the cards is the page's layout, not the sheet's.
     body: `<div style="display: grid; gap: var(--plinth-space-4);">${[1, 2, 3]
@@ -161,7 +205,6 @@ export const LongTitle: Story = {
   },
 };
 
-/** Right-to-left text: the close button sits on the left, and a side panel opens on the left. */
 /**
  * closedby="closerequest" on the root: Escape and the buttons close it, a tap on the backdrop
  * doesn't. For a form with unsaved changes.
@@ -181,13 +224,22 @@ export const NoBackdropClose: Story = {
   },
 };
 
+/** Right-to-left text: the end edge is the left, and the close button sits on the left. */
 export const RightToLeft: Story = {
+  render: (args) => {
+    const rtl = { ...args, id: 'filters-rtl', footer: footer('filters-rtl') };
+    return `<div dir="rtl">${opener(rtl)}${sheet(rtl)}</div>`;
+  },
+};
+
+/** Right-to-left text on the start edge: the right. */
+export const RightToLeftStart: Story = {
   render: (args) => {
     const rtl = {
       ...args,
-      id: 'filters-rtl',
-      placement: 'end' as const,
-      footer: footer('filters-rtl'),
+      id: 'filters-rtl-start',
+      side: 'start' as const,
+      footer: footer('filters-rtl-start'),
     };
     return `<div dir="rtl">${opener(rtl)}${sheet(rtl)}</div>`;
   },

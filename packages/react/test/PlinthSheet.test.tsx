@@ -2,7 +2,7 @@ import { fireEvent, render } from '@testing-library/react';
 import { createRef, type ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { PlinthSheet, sheetCloseIcon, type SheetPlacement } from '../src/index.ts';
+import { PlinthSheet, sheetCloseIcon, type SheetSide } from '../src/index.ts';
 
 const close =
   '<button type="button" class="plinth-button plinth-icon-button plinth-sheet-close" data-variant="ghost" data-size="md" aria-label="Close" commandfor="filters" command="close">' +
@@ -27,7 +27,7 @@ describe('PlinthSheet', () => {
         </PlinthSheet>,
       ),
     ).toBe(
-      '<dialog id="filters" data-placement="center" closedby="any" aria-labelledby="filters-title" aria-describedby="filters-description" class="plinth-sheet">' +
+      '<dialog id="filters" data-side="end" closedby="any" aria-labelledby="filters-title" aria-describedby="filters-description" class="plinth-sheet">' +
         '<div class="plinth-sheet-header">' +
         '<h2 id="filters-title" class="plinth-sheet-title">Filters</h2>' +
         '<p id="filters-description" class="plinth-sheet-description">Narrow the list down.</p>' +
@@ -61,12 +61,24 @@ describe('PlinthSheet', () => {
     expect(html).toContain('class="plinth-sheet-description">&lt;i&gt;B&lt;/i&gt;</p>');
   });
 
-  it('takes a placement, and falls back to center', () => {
-    const placement = (value: string) =>
-      root(<PlinthSheet title="Filters" placement={value as SheetPlacement} />).dataset.placement;
+  it('takes a side, and falls back to end', () => {
+    const side = (value: string) =>
+      root(<PlinthSheet title="Filters" side={value as SheetSide} />).dataset.side;
 
-    expect(placement('end')).toBe('end');
-    expect(placement('start')).toBe('center');
+    expect(side('start')).toBe('start');
+    expect(side('top')).toBe('top');
+    expect(side('bottom')).toBe('bottom');
+    expect(side('left')).toBe('end');
+  });
+
+  it('takes a side on a phone, and leaves it out when it is missing or unknown', () => {
+    const sidePhone = (value?: string) =>
+      root(<PlinthSheet title="Filters" sidePhone={value as SheetSide} />).dataset.sidePhone;
+
+    expect(sidePhone('bottom')).toBe('bottom');
+    expect(sidePhone('start')).toBe('start');
+    expect(sidePhone('left')).toBeUndefined();
+    expect(sidePhone()).toBeUndefined();
   });
 
   it("takes the close button's label", () => {

@@ -7,7 +7,7 @@ use BDynamic\Plinth\Enums\DataTableCellKind;
 use BDynamic\Plinth\Enums\DataTableSort;
 use BDynamic\Plinth\Enums\DialogSidePhone;
 use BDynamic\Plinth\Enums\HeadingLevel;
-use BDynamic\Plinth\Enums\SheetPlacement;
+use BDynamic\Plinth\Enums\SheetSide;
 use BDynamic\Plinth\Enums\Size;
 use BDynamic\Plinth\Enums\Tone;
 use Illuminate\Support\Facades\Blade;
@@ -24,12 +24,19 @@ it('defaults each choice the way the components do', function () {
         ->and(ButtonVariant::default())->toBe(ButtonVariant::Primary)
         ->and(Size::default())->toBe(Size::Medium)
         ->and(HeadingLevel::default())->toBe(HeadingLevel::Two)
-        ->and(SheetPlacement::default())->toBe(SheetPlacement::Center)
+        ->and(SheetSide::default())->toBe(SheetSide::End)
         ->and(DialogSidePhone::default())->toBe(DialogSidePhone::Center)
         ->and(DataTableSort::default())->toBe(DataTableSort::None)
         ->and(DataTableCellKind::default())->toBe(DataTableCellKind::Field)
         ->and(CalloutTone::default())->toBe(CalloutTone::Neutral)
         ->and(CalloutRole::default())->toBe(CalloutRole::Note);
+});
+
+it('resolves an optional side to a case or nothing', function () {
+    expect(SheetSide::resolveOptional(SheetSide::Top))->toBe(SheetSide::Top)
+        ->and(SheetSide::resolveOptional('bottom'))->toBe(SheetSide::Bottom)
+        ->and(SheetSide::resolveOptional('left'))->toBeNull()
+        ->and(SheetSide::resolveOptional(null))->toBeNull();
 });
 
 it('sizes a control\'s icons to the control', function () {
@@ -72,7 +79,7 @@ it('matches the lists the Vue layer and the stories use', function () {
     foreach (HeadingLevel::values() as $value) {
         expect($vue('heading.ts'))->toContain("'{$value}'");
     }
-    foreach (SheetPlacement::values() as $value) {
+    foreach (SheetSide::values() as $value) {
         expect($vue('sheet.ts'))->toContain("'{$value}'");
     }
     foreach (DialogSidePhone::values() as $value) {

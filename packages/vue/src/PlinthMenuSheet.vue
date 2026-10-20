@@ -64,7 +64,8 @@ defineExpose({
     class="plinth-menu-sheet"
     :title="title"
     :close-label="closeLabel"
-    placement="end"
+    side="end"
+    side-phone="bottom"
     @close="emit('close', $event)"
   >
     <PlinthListRow

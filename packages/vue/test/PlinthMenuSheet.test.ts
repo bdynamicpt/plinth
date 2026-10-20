@@ -20,7 +20,7 @@ describe('PlinthMenuSheet', () => {
     const html = body(wrapper.html());
 
     expect(html).toMatch(
-      /^<dialog id="menu" class="plinth-sheet plinth-menu-sheet" data-placement="end" closedby="any" aria-labelledby="menu-title">/,
+      /^<dialog id="menu" class="plinth-sheet plinth-menu-sheet" data-side="end" data-side-phone="bottom" closedby="any" aria-labelledby="menu-title">/,
     );
     expect(wrapper.find('h2').text()).toBe('Menu');
     expect(wrapper.find('.plinth-sheet-close').attributes('aria-label')).toBe('Close');

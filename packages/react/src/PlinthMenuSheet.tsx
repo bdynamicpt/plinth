@@ -26,7 +26,7 @@ interface MenuSheetOptions {
 
 /** A sheet from the end: `children` are the navigation. `onClose` is the dialog's close event. */
 export type PlinthMenuSheetProps = MenuSheetOptions &
-  Omit<PlinthSheetProps, keyof MenuSheetOptions | 'description' | 'placement' | 'footer'>;
+  Omit<PlinthSheetProps, keyof MenuSheetOptions | 'description' | 'side' | 'sidePhone' | 'footer'>;
 
 const filled = (value: string | undefined) => (value?.trim() ? value : undefined);
 
@@ -52,7 +52,8 @@ export function PlinthMenuSheet({
       id={menuId}
       title={title}
       closeLabel={closeLabel}
-      placement="end"
+      side="end"
+      sidePhone="bottom"
       {...rest}
       className={classNames('plinth-menu-sheet', className)}
     >

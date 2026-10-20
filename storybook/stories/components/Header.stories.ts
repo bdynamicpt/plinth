@@ -112,7 +112,8 @@ const menuSheet = sheet({
   id: 'menu',
   title: 'Menu',
   closeLabel: 'Close',
-  placement: 'end',
+  side: 'end',
+  sidePhone: 'bottom',
   body: listCard({
     headingLevel: 'h3',
     rows: ['Inbox', 'Archive', 'Settings'].map((title) => row(title)),

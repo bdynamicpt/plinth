@@ -35,15 +35,10 @@
     }
   },
   "sheet": {
-    "width": {
-      "$type": "dimension",
-      "$value": "{size.dialog}",
-      "$description": "A centred sheet's width from 768 px up; on a phone the sheet is the screen's width."
-    },
     "side-width": {
       "$type": "dimension",
       "$value": "{size.panel}",
-      "$description": "A side sheet's width (data-placement=\"end\") from 768 px up."
+      "$description": "The width of a sheet on the start or end side, at most the screen's width less a gap."
     }
   },
   "section-menu": {

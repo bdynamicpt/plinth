@@ -216,7 +216,7 @@ const sheetDefaults: SheetArgs = {
   id: 'filters',
   title: 'Filters',
   closeLabel: 'Close',
-  placement: 'center',
+  side: 'end',
   body: '<p>Body</p>',
   footer: '<button type="button">Apply</button>',
 };
@@ -559,9 +559,10 @@ const cases: ParityCase[] = [
   }),
   sheetCase('Sheet/empty footer', { ...sheetDefaults, footer: '  ' }),
   sheetCase('Sheet/id with spaces', { ...sheetDefaults, id: 'filters' }, {}, ' filters '),
-  sheetCase('Sheet/unknown placement', {
+  sheetCase('Sheet/unknown sides', {
     ...sheetDefaults,
-    placement: 'start' as SheetArgs['placement'],
+    side: 'left' as SheetArgs['side'],
+    sidePhone: 'right' as SheetArgs['sidePhone'],
   }),
   ...storyArgs<DialogArgs>(dialogStories).map(([story, args]) =>
     dialogCase(`Dialog/${story}`, args),
@@ -1056,7 +1057,8 @@ function sheetCase(
     title: args.title,
     ...(args.description ? { description: args.description } : {}),
     closeLabel: args.closeLabel,
-    placement: args.placement,
+    side: args.side,
+    ...(args.sidePhone ? { sidePhone: args.sidePhone } : {}),
   };
   const named: Record<string, string> = args.footer ? { footer: args.footer } : {};
   return {
@@ -1423,10 +1425,15 @@ describe('parity with the stories', () => {
       'Section menu item/button with extra attributes',
       'Section menu item/with a clashing attribute',
       'Sheet/Default',
+      'Sheet/Start',
+      'Sheet/Top',
+      'Sheet/Bottom',
+      'Sheet/EndBottomOnPhone',
+      'Sheet/StartBottomOnPhone',
+      'Sheet/TopBottomOnPhone',
+      'Sheet/BottomStartOnPhone',
       'Sheet/WithDescription',
-      'Sheet/SidePanel',
       'Sheet/WithoutFooter',
-      'Sheet/Confirmation',
       'Sheet/LongContent',
       'Sheet/LongTitle',
       'Sheet/with extra attributes',
@@ -1434,7 +1441,7 @@ describe('parity with the stories', () => {
       'Sheet/blank description, no footer',
       'Sheet/empty footer',
       'Sheet/id with spaces',
-      'Sheet/unknown placement',
+      'Sheet/unknown sides',
       'Dialog/Default',
       'Dialog/WithDescription',
       'Dialog/NotDismissible',
