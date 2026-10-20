@@ -1,5 +1,6 @@
 /**
- * Serves storybook-static on a free port and runs the Storybook test runner against it.
+ * Serves storybook-static on a free port, runs the Storybook test runner against it, then checks
+ * that no docs page scrolls sideways.
  *
  * A fixed port collides when two checkouts (or two agents in separate worktrees) test at the
  * same time, and a crashed run can leave its server holding the port. Here the system picks the
@@ -8,6 +9,7 @@
 import { spawn } from 'node:child_process';
 import { createRequire } from 'node:module';
 import type { AddressInfo } from 'node:net';
+import { checkDocsWidth } from './check-docs-width.ts';
 
 const require = createRequire(import.meta.url);
 const { createServer } = require('http-server') as {
@@ -36,6 +38,14 @@ const stop = () => runner.kill('SIGTERM');
 process.on('SIGINT', stop);
 process.on('SIGTERM', stop);
 
-const code = await new Promise<number>((resolve) => runner.on('exit', (c) => resolve(c ?? 1)));
+let code = await new Promise<number>((resolve) => runner.on('exit', (c) => resolve(c ?? 1)));
+
+// The runner visits stories only, so the docs pages get their own check.
+if (code === 0) {
+  const failures = await checkDocsWidth(`http://127.0.0.1:${port}`);
+  for (const failure of failures) console.error(`Docs page too wide: ${failure}`);
+  if (failures.length > 0) code = 1;
+}
+
 server.close();
 process.exit(code);
