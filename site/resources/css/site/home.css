@@ -206,11 +206,20 @@
     }
 
     .site-works-item {
+        display: inline-flex;
+        gap: var(--plinth-space-2);
+        align-items: center;
         font-size: var(--plinth-font-size-lg);
         font-weight: var(--plinth-font-weight-semibold);
         color: var(--plinth-color-text-muted);
         letter-spacing: var(--plinth-font-tracking-snug);
         list-style: none;
+    }
+
+    .site-works-logo {
+        flex-shrink: 0;
+        inline-size: 1.25em;
+        block-size: 1.25em;
     }
 
     /* The sections below the hero. */
