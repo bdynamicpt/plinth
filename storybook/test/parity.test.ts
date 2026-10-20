@@ -890,6 +890,7 @@ const cases: ParityCase[] = [
     { class: 'ms-2', 'data-testid': 'install', 'aria-describedby': 'install-help' },
   ),
   codeBlockCase('Code block/blank label and id', { ...codeBlockDefaults, id: ' ', label: '  ' }),
+  codeBlockCase('Code block/blank label slot', { ...codeBlockDefaults, labelHtml: ' ' }),
   codeBlockCase('Code block/highlighted tab and seven tabs', {
     ...codeBlockDefaults,
     id: 'many',
@@ -1785,6 +1786,7 @@ describe('parity with the stories', () => {
       'Code block/LabelWithBadge',
       'Code block/with extra attributes',
       'Code block/blank label and id',
+      'Code block/blank label slot',
       'Code block/highlighted tab and seven tabs',
       'Code block/unknown selected tab',
       'Callout/Neutral',

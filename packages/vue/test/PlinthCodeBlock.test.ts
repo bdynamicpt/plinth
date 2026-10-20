@@ -162,6 +162,17 @@ describe('PlinthCodeBlock', () => {
     expect(empty.find('.plinth-code-block-label').exists()).toBe(false);
   });
 
+  it('prints the label prop when the label slot is blank', () => {
+    const wrapper = mount(PlinthCodeBlock, {
+      props: { label: 'brand.css' },
+      slots: { label: ' ', default: 'x' },
+    });
+
+    expect(wrapper.get('.plinth-code-block-label').html()).toBe(
+      '<span class="plinth-code-block-label">brand.css</span>',
+    );
+  });
+
   it('shows a label slot the parent adds later', async () => {
     const file = ref('');
     const wrapper = mount({

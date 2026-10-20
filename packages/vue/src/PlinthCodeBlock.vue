@@ -78,9 +78,11 @@ async function copyCode(event: MouseEvent) {
 <template>
   <div :id="rootId" class="plinth-code-block">
     <div class="plinth-code-block-header">
-      <span v-if="label?.trim() || hasContent(slots.label?.())" class="plinth-code-block-label"
-        ><slot name="label">{{ label }}</slot></span
-      >
+      <!-- Checked as it renders: slots aren't reactive, and the parent may add the label later. -->
+      <span v-if="hasContent(slots.label?.())" class="plinth-code-block-label"
+        ><slot name="label"
+      /></span>
+      <span v-else-if="label?.trim()" class="plinth-code-block-label">{{ label }}</span>
       <div
         v-if="shownTabs.length"
         class="plinth-code-block-tabs"
