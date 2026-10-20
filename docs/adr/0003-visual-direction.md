@@ -76,6 +76,12 @@ the visible size no longer has to match it.
 - Inside an app the **primary button is inverted neutral**: light on dark, dark on light. There
   the accent marks state, never the main action: focus, links, the active nav item, the selected
   row or filter, mentions, progress and the active mode of a switch or tab.
+- **A selected item is never shown by colour alone.** A pressed toggle, the current nav item or
+  a selected filter takes the selection tint (`accent-subtle`, with `accent-text`) inside a 2px
+  accent edge (`border-width.thick`), drawn by the border and an inset ring so nothing moves. The
+  tint alone sits within 1.3:1 of the surface, so the edge is the cue WCAG 1.4.11 asks for: the
+  accent is tested at 3:1 against the surfaces. A pressed button can be pressed again, so it keeps
+  a hover and a press step on the tint (`accent-subtle-hover`, `accent-subtle-active`).
 - **Marketing pages use the accent for their primary action** (sign up, start a trial, the
   pricing tier to pick). The button gets an `accent` variant for this, and it is the only place a
   solid accent fill is the default.
@@ -114,6 +120,9 @@ light and dark, and screenshots in pull requests still cover both.
 - Amended 2026-10-19: display sizes (48 and 64px) and a display line height were added for
   marketing pages, after the mood board's marketing page showed that 36px gives a hero no more
   weight than an app's page title. The app scale is unchanged.
+- Amended 2026-10-21: a selected item has a 2px accent edge as well as its tint, and a pressed
+  button has hover and press steps on the tint (#113), after a review found the icon button's
+  pressed state shown by colour alone.
 - The values in the table above are a reference for the feel, not for copying: Plinth takes the
   pattern, not another product's palette or typeface choices beyond what is open source.
 

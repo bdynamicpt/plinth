@@ -43,8 +43,9 @@ other navigation (_Project sections_).
 ```
 
 Tab moves through the pills, and Space or Enter toggles a filter. The selected pill takes the
-selection tint with an accent edge, where the others have a neutral one; in forced colours it takes
-the system highlight.
+selection tint inside a 2px accent edge, where the others have a 1px neutral one; in forced colours
+it takes the system highlight. A selected filter still answers hover and press, with a step on the
+tint, since pressing it again turns it off.
 
 ## Disabled
 
@@ -128,7 +129,8 @@ import { PlinthPill, PlinthPillRow } from '@bdynamic/plinth/react';
 - A filter pill is a toggle button that always says whether it is on (`aria-pressed`).
 - A navigation pill is a link, and the current one says so (`aria-current="page"`).
 - The row is a named group, or a named `<nav>`, so it reads apart from the rest of the page.
-- The selected pill has an accent edge as well as its tint, so colour is not its only cue.
+- The selected pill has a 2px accent edge, where the others have a 1px neutral one, so colour is
+  not its only cue: the tint alone is too close to the surface to see.
 - Every pill keeps a 40 × 40px touch target, and the focus ring stays inside the scrolling row.
 
 The markup contract is at the top of

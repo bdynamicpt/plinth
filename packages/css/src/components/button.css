@@ -40,9 +40,10 @@
  * </a>
  *
  * aria-label is required: it is the only name the button has. A toggle has aria-pressed
- * ("true" or "false"), and pressed shows the selection tint (accent-subtle, accent-text), with
- * the Highlight system colour in forced colours. A link is never a toggle: aria-pressed is
- * never printed on one.
+ * ("true" or "false"), and pressed shows the selection tint (accent-subtle, accent-text) inside
+ * a 2px accent edge (border-width.thick), so colour is not its only cue; it still answers hover
+ * and press with a step on the tint. In forced colours it takes the Highlight system colour. A
+ * link is never a toggle: aria-pressed is never printed on one.
  */
 
 @layer plinth {
@@ -203,13 +204,16 @@
     padding-inline: 0;
   }
 
+  /* The border and an inset ring make the 2px edge, so pressed doesn't move the icon. */
   .plinth-icon-button[aria-pressed='true'] {
     --plinth-button-surface: var(--plinth-color-accent-subtle);
-    --plinth-button-surface-hover: var(--plinth-color-accent-subtle);
-    --plinth-button-surface-active: var(--plinth-color-accent-subtle);
+    --plinth-button-surface-hover: var(--plinth-color-accent-subtle-hover);
+    --plinth-button-surface-active: var(--plinth-color-accent-subtle-active);
     --plinth-button-text: var(--plinth-color-accent-text);
-    --plinth-button-edge: transparent;
-    --plinth-button-inner-edge: none;
+    --plinth-button-edge: var(--plinth-color-accent);
+    --plinth-button-inner-edge: inset 0 0 0
+      calc(var(--plinth-border-width-thick) - var(--plinth-border-width-thin))
+      var(--plinth-color-accent);
   }
 
   .plinth-button-label {

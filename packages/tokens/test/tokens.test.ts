@@ -252,6 +252,8 @@ describe('contrast', () => {
     ['on-primary', 'primary-active'],
     ['accent-text', 'surface'],
     ['accent-text', 'accent-subtle'],
+    ['accent-text', 'accent-subtle-hover'],
+    ['accent-text', 'accent-subtle-active'],
     ['on-accent', 'accent'],
     ['on-accent', 'accent-hover'],
     ['on-accent', 'accent-active'],
@@ -290,6 +292,12 @@ describe('contrast', () => {
       'danger-surface',
     ])('the focus ring stands out on %s (3:1)', (bg) => {
       expect(contrast(value('focus-ring'), value(bg))).toBeGreaterThanOrEqual(3);
+    });
+
+    // WCAG 1.4.11: a selected item's accent edge is its non-colour cue, so it needs 3:1 against
+    // the surface around it; the tint alone does not reach it.
+    it.each(['surface', 'surface-raised'])('the selected edge stands out on %s (3:1)', (bg) => {
+      expect(contrast(value('accent'), value(bg))).toBeGreaterThanOrEqual(3);
     });
   });
 });

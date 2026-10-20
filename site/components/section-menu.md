@@ -2,7 +2,7 @@
 
 The 56px row under the header that switches between the sections of a page: _Overview_, _Tasks_,
 _Files_, _Settings_. Its items are 40px tall, quiet muted text until one is current, which takes
-the selection tint and an accent edge. It never wraps: when the items don't fit, it scrolls
+the selection tint inside a 2px accent edge. It never wraps: when the items don't fit, it scrolls
 sideways.
 
 ## When not to use it
@@ -41,8 +41,9 @@ false: the menu becomes a `<div role="group">`, and each item a toggle button th
 </x-plinth::section-menu>
 ```
 
-The app owns which section is current and sets it. The current item takes the selection tint and
-an accent edge, so colour is not its only cue; in forced colours it takes the system highlight.
+The app owns which section is current and sets it. The current item takes the selection tint
+inside a 2px accent edge, so colour is not its only cue; in forced colours it takes the system
+highlight. A current button still answers hover and press, with a step on the tint.
 
 ## Disabled
 
@@ -129,7 +130,8 @@ import { PlinthSectionMenu, PlinthSectionMenuItem } from '@bdynamic/plinth/react
 - As links, the menu is a named `<nav>` and the current item says so (`aria-current="page"`).
 - As buttons, the menu is a named group and each item a toggle that says whether it is on
   (`aria-pressed`).
-- The current item has an accent edge as well as its tint, so colour is not its only cue.
+- The current item has a 2px accent edge as well as its tint, so colour is not its only cue: the
+  tint alone is too close to the surface to see.
 - Every item keeps a 40px touch target, and the focus ring stays inside the scrolling row.
 
 The markup contract is at the top of

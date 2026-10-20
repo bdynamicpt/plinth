@@ -24,7 +24,9 @@
  * States, set by the app:
  * - selected: a button pill always prints aria-pressed, "true" or "false"; a link pill prints
  *   aria-current="page" for the page being shown. Selected takes the selection tint
- *   (accent-subtle, accent-text) and an accent edge, where the others have a neutral one.
+ *   (accent-subtle, accent-text) inside a 2px accent edge (border-width.thick), where the others
+ *   have a 1px neutral one, so colour is not its only cue. A pressed button still answers hover
+ *   and press with a step on the tint (accent-subtle-hover, accent-subtle-active).
  * - disabled: `disabled` on a <button>; on a link, no href, role="link" and aria-disabled="true".
  * - hover only where the device can hover; the focus ring on :focus-visible.
  *
@@ -110,10 +112,24 @@
     background-color: var(--plinth-color-surface-sunken);
   }
 
+  /* The border and an inset ring make the 2px edge, so selecting doesn't move the label. */
   .plinth-pill:is([aria-pressed='true'], [aria-current='page']) {
     color: var(--plinth-color-accent-text);
     background-color: var(--plinth-color-accent-subtle);
     border-color: var(--plinth-color-accent);
+    box-shadow: inset 0 0 0 calc(var(--plinth-border-width-thick) - var(--plinth-border-width-thin))
+      var(--plinth-color-accent);
+  }
+
+  /* A pressed button can be pressed again, so it answers hover and press with a step on the tint. */
+  @media (hover: hover) {
+    button.plinth-pill:enabled[aria-pressed='true']:hover {
+      background-color: var(--plinth-color-accent-subtle-hover);
+    }
+  }
+
+  button.plinth-pill:enabled[aria-pressed='true']:active {
+    background-color: var(--plinth-color-accent-subtle-active);
   }
 
   .plinth-pill:disabled,

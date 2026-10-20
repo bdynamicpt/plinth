@@ -24,6 +24,8 @@
   --plinth-color-accent-hover: #115e59;
   --plinth-color-accent-active: #134e4a;
   --plinth-color-accent-subtle: #e6f4f1;
+  --plinth-color-accent-subtle-hover: #d3ece6;
+  --plinth-color-accent-subtle-active: #bfe3db;
   --plinth-color-primary: #0f766e;
   --plinth-color-primary-hover: #115e59;
   --plinth-color-primary-active: #134e4a;
@@ -47,6 +49,8 @@
   --plinth-color-accent-hover: #115e59;
   --plinth-color-accent-active: #134e4a;
   --plinth-color-accent-subtle: #0f2e2b;
+  --plinth-color-accent-subtle-hover: #123b37;
+  --plinth-color-accent-subtle-active: #164843;
   --plinth-color-primary: #2dd4bf;
   --plinth-color-primary-hover: #5eead4;
   --plinth-color-primary-active: #99f6e4;

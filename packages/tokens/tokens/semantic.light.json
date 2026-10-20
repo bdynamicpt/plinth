@@ -127,6 +127,14 @@
     "accent-subtle": {
       "$value": "{ref.color.brand.50}",
       "$description": "A tinted surface for selected states, such as the active nav item, with accent-text on it."
+    },
+    "accent-subtle-hover": {
+      "$value": "{ref.color.brand.100}",
+      "$description": "The selection tint under the pointer, on a pressed button that can be pressed again. Override together with accent-subtle."
+    },
+    "accent-subtle-active": {
+      "$value": "{ref.color.brand.200}",
+      "$description": "The selection tint while a pressed button is being pressed. Override together with accent-subtle."
     }
   },
   "elevation": {

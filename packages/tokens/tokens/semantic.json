@@ -65,7 +65,7 @@
     },
     "thick": {
       "$value": "{ref.border-width.2}",
-      "$description": "Strokes that must stay visible, such as a spinner."
+      "$description": "Strokes that must stay visible, such as a spinner, and the edge of a selected item, so selection is never shown by colour alone."
     }
   },
   "opacity": {
