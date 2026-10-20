@@ -1,0 +1,143 @@
+/* The home page's brand switcher: pill rows beside two restyled cards, and the CSS below them. */
+
+@layer site {
+    .site-switcher {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--plinth-space-6);
+        align-items: start;
+    }
+
+    .site-switcher-controls {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-5);
+        min-inline-size: 0;
+    }
+
+    .site-switcher-group {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-1);
+    }
+
+    .site-switcher-label {
+        font-size: var(--plinth-font-size-sm);
+        font-weight: var(--plinth-font-weight-medium);
+        color: var(--plinth-color-text);
+    }
+
+    /* The rows line up with their labels, and wrap rather than hide a choice off the edge. */
+    .site-switcher-pills {
+        flex-wrap: wrap;
+        padding-inline: 0;
+    }
+
+    .site-swatch {
+        display: inline-block;
+        flex: none;
+        inline-size: var(--plinth-space-3);
+        block-size: var(--plinth-space-3);
+        margin-inline-end: var(--plinth-space-2);
+        vertical-align: middle;
+        background: var(--site-swatch);
+        border-radius: var(--plinth-radius-pill);
+    }
+
+    /* The preview takes the theme picked (data-theme), so it paints its own surface. */
+    .site-switcher-preview {
+        box-sizing: border-box;
+        min-inline-size: 0;
+        padding: var(--plinth-space-4);
+        margin: 0;
+        color: var(--plinth-color-text);
+        background: var(--plinth-color-surface);
+        border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+        border-radius: calc(var(--plinth-radius-container) + var(--plinth-space-2));
+        transition: background-color var(--plinth-duration-normal) var(--plinth-easing-standard);
+    }
+
+    .site-switcher-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+        gap: var(--plinth-space-4);
+    }
+
+    .site-switcher-card {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-4);
+        min-inline-size: 0;
+        padding: var(--plinth-space-4);
+        background: var(--plinth-color-surface-raised);
+        border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+        border-radius: var(--plinth-radius-container);
+    }
+
+    .site-switcher-card-spread {
+        justify-content: space-between;
+    }
+
+    .site-switcher-person {
+        display: flex;
+        gap: var(--plinth-space-3);
+        align-items: center;
+    }
+
+    .site-switcher-person-text {
+        min-inline-size: 0;
+    }
+
+    .site-switcher-name,
+    .site-tile-plan-name {
+        margin: 0;
+        font-weight: var(--plinth-font-weight-semibold);
+    }
+
+    .site-switcher-announcement {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-3);
+    }
+
+    .site-switcher-headline,
+    .site-tile-headline {
+        margin: 0;
+        font-size: var(--plinth-font-size-2xl);
+        font-weight: var(--plinth-font-weight-semibold);
+        line-height: var(--plinth-font-leading-tight);
+        letter-spacing: var(--plinth-font-tracking-tight);
+        text-wrap: balance;
+    }
+
+    .site-buttons,
+    .site-switcher-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--plinth-space-2);
+        align-items: center;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .site-switcher-preview {
+            transition: none;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .site-switcher-preview {
+            padding: var(--plinth-space-6);
+        }
+    }
+
+    @media (min-width: 1280px) {
+        .site-switcher {
+            grid-template-columns: 20rem minmax(0, 1fr);
+            gap: var(--plinth-space-10);
+        }
+
+        .site-switcher-code {
+            grid-column: 1 / -1;
+        }
+    }
+}

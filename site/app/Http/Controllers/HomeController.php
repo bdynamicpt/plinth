@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\BrandSwitcher;
 use App\Components\Catalogue;
 use App\Components\Component;
 use App\Decisions\Decisions;
@@ -10,7 +11,7 @@ use Illuminate\Contracts\View\View;
 
 final class HomeController
 {
-    public function __invoke(Decisions $decisions, Snippets $snippets, Catalogue $catalogue): View
+    public function __invoke(Decisions $decisions, Snippets $snippets, Catalogue $catalogue, BrandSwitcher $switcher): View
     {
         return view('home', [
             'decisions' => $decisions->latest(4),
@@ -22,6 +23,7 @@ final class HomeController
             ],
             'html' => $snippets->get('button.html'),
             'brand' => $snippets->get('brand.css'),
+            'switcher' => $switcher,
         ]);
     }
 }
