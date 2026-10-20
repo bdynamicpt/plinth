@@ -93,6 +93,7 @@ describe('tiers', () => {
       'pill.height',
       'dialog.width',
       'sheet.side-width',
+      'drawer.peek-height',
       'section-menu.height',
       'section-menu.item-height',
       ...['neutral', 'info', 'success', 'warning', 'danger'].flatMap((tone) => [

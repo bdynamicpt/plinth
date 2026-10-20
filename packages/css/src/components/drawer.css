@@ -1,0 +1,156 @@
+/*
+ * Drawer: a phone-first panel on the bottom edge that the person drags, like a maps app's panel,
+ * with optional snap points (a peek, half and full height). From 768px up it is a dialog or a
+ * sheet.
+ *
+ * <dialog id="route" class="plinth-drawer" data-desktop="dialog"
+ *   data-snap-points="peek half full" data-snap="peek" closedby="any"
+ *   aria-labelledby="route-title" aria-describedby="route-description">
+ *   <div class="plinth-drawer-panel">
+ *     <div class="plinth-drawer-handle" aria-hidden="true"></div>
+ *     <div class="plinth-drawer-header">
+ *       <h2 id="route-title" class="plinth-drawer-title">Route</h2>
+ *       <p id="route-description" class="plinth-drawer-description">12 min by bike.</p>
+ *       <button type="button" class="plinth-button plinth-icon-button plinth-drawer-close"
+ *         data-variant="ghost" data-size="md" aria-label="Close" commandfor="route"
+ *         command="close">
+ *         <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
+ *       </button>
+ *     </div>
+ *     <div class="plinth-drawer-body">…</div>
+ *     <div class="plinth-drawer-footer">…</div>
+ *   </div>
+ * </dialog>
+ *
+ * The root is the <dialog>, and it needs an id: commandfor and aria-labelledby point at it, and
+ * the title's and description's ids are the root's id with -title and -description. The panel is
+ * the root's only child and holds the parts; the handle is always there, first, and decorative
+ * (aria-hidden): Escape and the close button, which is always there too, are the ways to close it
+ * without dragging. The title is required; the description (and its aria-describedby) and the
+ * footer are optional. The close button is an icon button (button.css and icon.css). It needs
+ * modal.css, the base it shares with the dialog and the sheet, where the dragging is described:
+ * this file sets where the drawer sits, how big it is and its snap points.
+ *
+ * Open it with showModal() or a <button commandfor="route" command="show-modal">. Open is the
+ * native state, [open]; the browser puts the drawer in the top layer, makes the page inert, traps
+ * focus, closes on Escape and returns focus. The dialog fires close when it closes, whichever way
+ * it closed.
+ *
+ * On a phone (below 768px) it is the screen's width on the bottom edge and slides up. Dragged
+ * down past its lowest snap point it closes; the layers do that part (modal.css). With no snap
+ * points it is as tall as its content, up to the screen's height less a gap.
+ *
+ * Snap points (data-snap-points, optional): any of peek, half and full, separated by spaces.
+ * With them the panel is the screen's height less a gap, and it rests where it is let go at the
+ * nearest one: peek shows drawer.peek-height of it (the handle, the header and the top of the
+ * body), half the screen's height, full all of it. The body scrolls inside the panel at any of
+ * them, so a drawer with a long body is dragged by its handle and header. data-snap is the snap
+ * point it opens at, one of those listed (the layers print the largest listed when it is missing
+ * or unknown); the browser opens it at full, or the largest listed, and the layers then scroll it
+ * to data-snap. The drawer remembers nothing: where it rests is the person's.
+ *
+ * Desktop (data-desktop): its presentation from 768px up. dialog (the default, also when missing
+ * or unknown) centres it like the dialog, at dialog.width; sheet makes it a full-height panel on
+ * the inline-end edge, sheet.side-width wide, like the sheet. From 768px up there is no handle
+ * and no dragging, the snap points don't apply, and a tap on the backdrop closes it
+ * (closedby="any"; Safari doesn't have it yet, so the close button is always there).
+ *
+ * The motion runs on the motion tokens, which drop to 0ms under prefers-reduced-motion; the
+ * snapping is the browser's scrolling.
+ *
+ * In Livewire, a re-render would morph the open dialog back to the server's markup and drop its
+ * open attribute: put wire:ignore.self on the drawer (or keep it outside the component that
+ * re-renders), and always pass an id, since a generated one changes on every render.
+ */
+
+@layer plinth {
+  .plinth-drawer {
+    --plinth-modal-offset: 0 100%;
+    --plinth-modal-safe-area-end: env(safe-area-inset-bottom);
+
+    /* Translate isn't logical: -1 (under :dir(rtl), below) turns the sheet's slide around. */
+    --plinth-drawer-direction: 1;
+
+    inset: 0;
+    inline-size: 100%;
+    block-size: auto;
+    max-block-size: none;
+    margin: 0;
+    border-width: 0;
+    border-radius: 0;
+  }
+
+  /* With snap points the panel is its full height, and the snap points are where it rests. */
+  .plinth-drawer[data-snap-points] > .plinth-drawer-panel {
+    block-size: calc(
+      100% - max(var(--plinth-space-12), env(safe-area-inset-top) + var(--plinth-space-4))
+    );
+  }
+
+  /* Full is the panel's end on the screen's bottom edge, the base's open position. */
+  .plinth-drawer[data-snap-points]:not([data-snap-points~='full']) > .plinth-drawer-panel {
+    scroll-snap-align: none;
+  }
+
+  /*
+   * Peek and half are the panel's top that far from the screen's bottom edge. The snap areas are
+   * the handle (peek) and the header (half), the first parts of the panel, so their margins add
+   * what lies above them: the handle's margin, then the handle.
+   */
+  .plinth-drawer[data-snap-points~='peek'] .plinth-drawer-handle {
+    scroll-snap-align: start;
+    scroll-margin-block-start: calc(
+      100dvh - var(--plinth-drawer-peek-height) + var(--plinth-space-2)
+    );
+  }
+
+  .plinth-drawer[data-snap-points~='half'] .plinth-drawer-header {
+    scroll-snap-align: start;
+    scroll-margin-block-start: calc(50dvh + var(--plinth-space-2) + var(--plinth-space-1));
+  }
+
+  .plinth-drawer:dir(rtl) {
+    --plinth-drawer-direction: -1;
+  }
+
+  @media (min-width: 768px) {
+    .plinth-drawer {
+      --plinth-modal-offset: 0 var(--plinth-space-4);
+      --plinth-modal-closed-opacity: 0;
+      --plinth-modal-safe-area-end: initial;
+
+      inset: 0;
+      inline-size: min(100% - 2 * var(--plinth-space-8), var(--plinth-dialog-width));
+      block-size: fit-content;
+      max-block-size: calc(100dvh - 2 * var(--plinth-space-8));
+      margin: auto;
+      border-width: var(--plinth-border-width-thin);
+      border-radius: var(--plinth-radius-container);
+    }
+
+    .plinth-drawer[data-desktop='sheet'] {
+      --plinth-modal-offset: calc(100% * var(--plinth-drawer-direction)) 0;
+      --plinth-modal-closed-opacity: 1;
+      --plinth-modal-safe-area-end: env(safe-area-inset-bottom);
+
+      inset-block: 0;
+      inset-inline: auto 0;
+      inline-size: min(100% - var(--plinth-space-12), var(--plinth-sheet-side-width));
+      block-size: auto;
+      max-block-size: none;
+      padding-block: env(safe-area-inset-top) 0;
+      margin: 0;
+      border-width: 0;
+      border-inline-start-width: var(--plinth-border-width-thin);
+      border-radius: 0;
+    }
+
+    .plinth-drawer[data-snap-points] > .plinth-drawer-panel {
+      block-size: auto;
+    }
+
+    .plinth-drawer[data-snap-points] :is(.plinth-drawer-handle, .plinth-drawer-header) {
+      scroll-snap-align: none;
+    }
+  }
+}

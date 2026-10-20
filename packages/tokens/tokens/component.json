@@ -41,6 +41,13 @@
       "$description": "The width of a sheet on the start or end side, at most the screen's width less a gap."
     }
   },
+  "drawer": {
+    "peek-height": {
+      "$type": "dimension",
+      "$value": "{size.peek}",
+      "$description": "How much of a drawer shows at its peek snap point on a phone: the handle, the header and the top of the body."
+    }
+  },
   "section-menu": {
     "height": {
       "$type": "dimension",

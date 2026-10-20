@@ -78,18 +78,29 @@
     border-end-end-radius: 0;
   }
 
+  /* One that can be dismissed is dragged down to close (modal.css): the root fills the screen. */
+  .plinth-dialog[data-side-phone='bottom']:has(> * > .plinth-dialog-handle) {
+    inset: 0;
+    block-size: auto;
+    max-block-size: none;
+    border-width: 0;
+    border-radius: 0;
+  }
+
   @media (min-width: 768px) {
     .plinth-dialog,
-    .plinth-dialog[data-side-phone='bottom'] {
+    .plinth-dialog[data-side-phone='bottom'],
+    .plinth-dialog[data-side-phone='bottom']:has(> * > .plinth-dialog-handle) {
       --plinth-modal-offset: 0 var(--plinth-space-4);
       --plinth-modal-closed-opacity: 0;
       --plinth-modal-safe-area-end: initial;
 
       inset: 0;
       inline-size: min(100% - 2 * var(--plinth-space-8), var(--plinth-dialog-width));
+      block-size: fit-content;
       max-block-size: calc(100dvh - 2 * var(--plinth-space-8));
       margin: auto;
-      border-block-end-width: var(--plinth-border-width-thin);
+      border-width: var(--plinth-border-width-thin);
       border-radius: var(--plinth-radius-container);
     }
   }
