@@ -38,17 +38,7 @@ it('knows its files, its stories, its layers and its playground', function () {
         ->and($iconButton?->stories())->toBe('/storybook/?path=/docs/components-icon-button--docs')
         ->and($iconButton?->layers())->toBe(['HTML', 'Blade', 'Vue', 'React'])
         ->and($iconButton?->playground)->toBeInstanceOf(Playground::class)
-        ->and($header?->layers())->toBe(['HTML', 'Blade', 'Vue'])
-        ->and($header?->files)->toHaveCount(3)
+        ->and($header?->layers())->toBe(['HTML', 'Blade', 'Vue', 'React'])
+        ->and($header?->files)->toContain('packages/react/src/PlinthHeader.tsx')
         ->and($header?->playground)->toBeNull();
-});
-
-it('knows whether every component in an example has a React layer', function () {
-    $catalogue = app(Catalogue::class);
-
-    expect($catalogue->inReact('button', 'badge'))->toBeTrue()
-        ->and($catalogue->inReact('button', 'list-row'))->toBeFalse()
-        ->and($catalogue->inReact('pill'))->toBeFalse()
-        ->and($catalogue->inReact('data-table-row'))->toBeFalse()
-        ->and($catalogue->inReact('unknown'))->toBeFalse();
 });

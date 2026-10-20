@@ -54,11 +54,11 @@ it('shows the playground as the query string asks, in every layer', function () 
         ->assertSeeInOrder(['Blade', 'Vue', 'React', 'HTML']);
 });
 
-it('has no playground for a component without choices, and no React for one without the layer', function () {
+it('has no playground for a component without choices', function () {
     $this->get('/components/header')
         ->assertOk()
         ->assertDontSee('id="playground"', false)
-        ->assertSee('HTML · Blade · Vue<', false);
+        ->assertSee('HTML · Blade · Vue · React<', false);
 });
 
 it('is not found for a component it doesn\'t have, or one without its page', function () {

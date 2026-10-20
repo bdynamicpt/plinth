@@ -38,7 +38,7 @@ The sheets on this page stay closed until you press their button.
 | `.plinth-sheet-body`        | `<div>`    | yes      | The content; scrolls when it is taller than the screen                 |
 | `.plinth-sheet-footer`      | `<div>`    | no       | Usually the actions: full width on a phone, at the end from 768px      |
 
-Blade and Vue generate an `id` when you leave it out, but pass your own when a button elsewhere
+Every layer generates an `id` when you leave it out, but pass your own when a button elsewhere
 opens the sheet. Set the close button's name with **`close-label`** in the page's language.
 
 ## Placement
@@ -86,7 +86,11 @@ component that re-renders), and always pass an `id`: a generated one changes on 
 Alpine, `x-ref="filters"` on the sheet and `$refs.filters.showModal()`.
 
 In Vue, the component exposes **`showModal()`** and **`close()`**, and emits **`close`** (with the
-dialog's native event) whenever the dialog closes.
+dialog's native event) whenever the dialog closes. In React, the **`ref`** is the `<dialog>`
+itself, with its own `showModal()` and `close()`, and **`onClose`** is the dialog's close event.
+React's types don't list `command` and `commandfor` yet
+([#99](https://github.com/bdynamicpt/plinth/issues/99)); they work as they are, but TypeScript
+wants them spread in (`{...{ commandfor: 'filters', command: 'show-modal' }}`), or use the ref.
 
 ```blade tab="Blade"
 <x-plinth::button variant="secondary" commandfor="filters" command="show-modal">Filters</x-plinth::button>
@@ -111,6 +115,27 @@ dialog's native event) whenever the dialog closes.
 </PlinthSheet>
 ```
 
+```tsx tab="React"
+import { useRef } from 'react';
+import { PlinthButton, PlinthSheet } from '@bdynamic/plinth/react';
+
+const filters = useRef<HTMLDialogElement>(null);
+
+<PlinthButton variant="secondary" onClick={() => filters.current?.showModal()}>
+    Filters
+</PlinthButton>;
+
+<PlinthSheet
+    ref={filters}
+    id="filters"
+    title="Filters"
+    onClose={applyFilters}
+    footer={<PlinthButton onClick={() => filters.current?.close()}>Apply</PlinthButton>}
+>
+    …
+</PlinthSheet>;
+```
+
 ## Scrolling and the keyboard
 
 The body scrolls on its own, and scrolling past its end doesn't move the page. While a sheet is
@@ -132,21 +157,21 @@ backdrop in `--plinth-color-overlay`.
 
 ## Props
 
-The same names in Blade and Vue. The React layer is coming in
-[#66](https://github.com/bdynamicpt/plinth/issues/66).
+The same names in every layer. React takes the Vue props, with the body as `children` and the
+footer as a prop that takes a node.
 
-| Prop        | Blade                                          | Vue                   | Default   |
-| ----------- | ---------------------------------------------- | --------------------- | --------- |
-| id          | `id="filters"`                                 | `id="filters"`        | generated |
-| title       | `title="Filters"` (required)                   | `title="Filters"`     | none      |
-| description | `description="…"`                              | `description="…"`     | none      |
-| closeLabel  | `close-label="Close"`                          | `close-label="Close"` | `Close`   |
-| placement   | `placement="end"` (or a `SheetPlacement` case) | `placement="end"`     | `center`  |
-| body        | the slot                                       | the default slot      | none      |
-| footer      | `<x-slot:footer>`                              | `#footer` slot        | none      |
+| Prop        | Blade                                          | Vue                   | React                | Default   |
+| ----------- | ---------------------------------------------- | --------------------- | -------------------- | --------- |
+| id          | `id="filters"`                                 | `id="filters"`        | `id="filters"`       | generated |
+| title       | `title="Filters"` (required)                   | `title="Filters"`     | `title="Filters"`    | none      |
+| description | `description="…"`                              | `description="…"`     | `description="…"`    | none      |
+| closeLabel  | `close-label="Close"`                          | `close-label="Close"` | `closeLabel="Close"` | `Close`   |
+| placement   | `placement="end"` (or a `SheetPlacement` case) | `placement="end"`     | `placement="end"`    | `center`  |
+| body        | the slot                                       | the default slot      | `children`           | none      |
+| footer      | `<x-slot:footer>`                              | `#footer` slot        | `footer` (a node)    | none      |
 
-Blade and Vue need a `title` and throw without one. Extra attributes, such as `closedby`, reach the
-`<dialog>`.
+Every layer needs a `title` and throws without one. Extra attributes, such as `closedby`, reach the
+`<dialog>`; in React so do `onClose` and the `ref`.
 
 ## Accessibility
 

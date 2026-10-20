@@ -4,8 +4,8 @@
 | Plinth's components, as the site lists them: each has a page from its Markdown in
 | site/components, a card on the components page, and, where it has variants, sizes or states, a
 | playground. The playground's template is Blade, rendered live and printed in every layer
-| (App\Components\Playground). `react` says the component has its React layer (#66 ports the rest);
-| `css` names its stylesheet when that isn't the component's own name.
+| (App\Components\Playground). `css` names its stylesheet when that isn't the component's own
+| name.
 */
 
 $variants = ['primary', 'accent', 'secondary', 'ghost', 'danger', 'danger-ghost'];
@@ -23,7 +23,6 @@ return [
             'name' => 'Button',
             'group' => 'Actions',
             'description' => 'Does something: saves, submits, opens a sheet. Six variants, three sizes.',
-            'react' => true,
             'playground' => [
                 'template' => '<x-plinth::button{attributes}>{label}</x-plinth::button>',
                 'options' => [
@@ -49,7 +48,6 @@ return [
             'name' => 'Icon button',
             'group' => 'Actions',
             'description' => 'A button with only an icon, for toolbars, headers and closing a sheet.',
-            'react' => true,
             'css' => 'button',
             'playground' => [
                 'template' => '<x-plinth::icon-button label="Search"{attributes}><x-site.glyph name="search" /></x-plinth::icon-button>',
@@ -86,7 +84,6 @@ return [
             'name' => 'Badge',
             'group' => 'Content',
             'description' => 'A short label for the status of something, next to what it describes.',
-            'react' => true,
             'playground' => [
                 'template' => '<x-plinth::badge{attributes}>{label}</x-plinth::badge>',
                 'options' => [
@@ -109,7 +106,6 @@ return [
             'name' => 'Callout',
             'group' => 'Content',
             'description' => 'A short message set apart from the page: a note, a tip, a warning.',
-            'react' => true,
             'playground' => [
                 'template' => '<x-plinth::callout{attributes} title="{title}">{text}</x-plinth::callout>',
                 'options' => [
@@ -132,7 +128,6 @@ return [
             'name' => 'Code block',
             'group' => 'Content',
             'description' => 'Code to read and copy, with a label or tabs, highlighted on the server.',
-            'react' => true,
         ],
 
         'data-table' => [
@@ -145,7 +140,6 @@ return [
             'name' => 'Icon',
             'group' => 'Content',
             'description' => 'Sizes and colours a project\'s own SVG, and mirrors arrows in right-to-left text.',
-            'react' => true,
             'playground' => [
                 'template' => '<x-plinth::icon{attributes}><x-site.glyph name="check" /></x-plinth::icon>',
                 'options' => [

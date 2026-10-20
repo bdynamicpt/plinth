@@ -163,7 +163,7 @@ it('renders a Blade example live, with its code in each layer', function () {
         ->toContain('<span class="plinth-badge" data-tone="success">')
         ->toContain('aria-label="Markup in"')
         ->toContain('>React<')
-        ->and(substr_count($html, '>React<'))->toBe(1);
+        ->and(substr_count($html, '>React<'))->toBe(2);
 });
 
 it('links a component\'s Markdown to its page', function () {

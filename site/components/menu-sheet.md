@@ -65,20 +65,20 @@ The body scrolls as one, and the account follows the navigation.
 
 ## Props
 
-The same names in Blade and Vue. The React layer is coming in
-[#66](https://github.com/bdynamicpt/plinth/issues/66).
+The same names in every layer. React takes the Vue props, with the navigation as `children` and
+the account as a prop that takes a node.
 
-| Prop       | Blade                           | Vue                             | Default   |
-| ---------- | ------------------------------- | ------------------------------- | --------- |
-| id         | `id="menu"`                     | `id="menu"`                     | generated |
-| title      | `title="Menu"`                  | `title="Menu"`                  | `Menu`    |
-| closeLabel | `close-label="Close"`           | `close-label="Close"`           | `Close`   |
-| userName   | `user-name="Ana Lima"`          | `user-name="Ana Lima"`          | none      |
-| userDetail | `user-detail="ana@example.com"` | `user-detail="ana@example.com"` | none      |
-| userSrc    | `user-src="/avatars/ana.jpg"`   | `user-src="/avatars/ana.jpg"`   | none      |
-| userHref   | `user-href="/profile"`          | `user-href="/profile"`          | none      |
-| navigation | the slot                        | the default slot                | none      |
-| account    | `<x-slot:account>`              | `#account` slot                 | none      |
+| Prop       | Blade                           | Vue                             | React                          | Default   |
+| ---------- | ------------------------------- | ------------------------------- | ------------------------------ | --------- |
+| id         | `id="menu"`                     | `id="menu"`                     | `id="menu"`                    | generated |
+| title      | `title="Menu"`                  | `title="Menu"`                  | `title="Menu"`                 | `Menu`    |
+| closeLabel | `close-label="Close"`           | `close-label="Close"`           | `closeLabel="Close"`           | `Close`   |
+| userName   | `user-name="Ana Lima"`          | `user-name="Ana Lima"`          | `userName="Ana Lima"`          | none      |
+| userDetail | `user-detail="ana@example.com"` | `user-detail="ana@example.com"` | `userDetail="ana@example.com"` | none      |
+| userSrc    | `user-src="/avatars/ana.jpg"`   | `user-src="/avatars/ana.jpg"`   | `userSrc="/avatars/ana.jpg"`   | none      |
+| userHref   | `user-href="/profile"`          | `user-href="/profile"`          | `userHref="/profile"`          | none      |
+| navigation | the slot                        | the default slot                | `children`                     | none      |
+| account    | `<x-slot:account>`              | `#account` slot                 | `account` (a node)             | none      |
 
 ```blade tab="Blade"
 <x-plinth::menu-sheet id="menu" :user-name="$user->name" :user-detail="$user->email" user-href="/profile" wire:ignore.self>
@@ -106,8 +106,38 @@ The same names in Blade and Vue. The React layer is coming in
 </PlinthMenuSheet>
 ```
 
+```tsx tab="React"
+import { PlinthListCard, PlinthListRow, PlinthMenuSheet } from '@bdynamic/plinth/react';
+
+<PlinthMenuSheet
+    id="menu"
+    userName={user.name}
+    userDetail={user.email}
+    onClose={onClose}
+    account={
+        <PlinthListCard headingLevel="h3">
+            <li>
+                <PlinthListRow button onClick={signOut}>
+                    Sign out
+                </PlinthListRow>
+            </li>
+        </PlinthListCard>
+    }
+>
+    <PlinthListCard headingLevel="h3">
+        <li>
+            <PlinthListRow href="/projects" current={page === 'projects'}>
+                Projects
+            </PlinthListRow>
+        </li>
+    </PlinthListCard>
+</PlinthMenuSheet>;
+```
+
 In Livewire, put `wire:ignore.self` on the menu sheet, as on any sheet, so a re-render keeps it
-open. In Vue, a ref's `showModal()` and `close()` open and close it, and it emits `close`.
+open. In Vue, a ref's `showModal()` and `close()` open and close it, and it emits `close`. In
+React, the `ref` is the `<dialog>` itself, so `ref.current.showModal()` and `close()` do the same,
+and `onClose` is the dialog's close event.
 
 ## Accessibility
 

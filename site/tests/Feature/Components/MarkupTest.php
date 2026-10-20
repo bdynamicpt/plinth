@@ -80,7 +80,3 @@ it('prints what Blade rendered as HTML, without Alpine\'s attributes, keeping co
         ->not->toContain('x-data')
         ->and($markup->html('<img src="a.png" alt=""><span aria-label="">x</span>'))->toBe('<img src="a.png" alt="">'."\n".'<span aria-label="">x</span>');
 });
-
-it('lists the Plinth components an example uses', function () use ($example) {
-    expect(app(Markup::class)->components($example.'<x-plinth::badge /><x-plinth::badge />'))->toBe(['button', 'avatar', 'badge']);
-});

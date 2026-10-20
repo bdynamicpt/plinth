@@ -85,16 +85,16 @@ points right.
 
 ## Props
 
-The same names in Blade and Vue. The React layer is coming in
-[#66](https://github.com/bdynamicpt/plinth/issues/66).
+The same names in every layer. React takes the Vue props, with the slots as props that take a
+node.
 
-| Prop    | Blade                         | Vue                | Default |
-| ------- | ----------------------------- | ------------------ | ------- |
-| title   | `title="Invoices"` (required) | `title="Invoices"` | none    |
-| leading | `<x-slot:leading>`            | `#leading` slot    | none    |
-| actions | `<x-slot:actions>`            | `#actions` slot    | none    |
+| Prop    | Blade                         | Vue                | React              | Default |
+| ------- | ----------------------------- | ------------------ | ------------------ | ------- |
+| title   | `title="Invoices"` (required) | `title="Invoices"` | `title="Invoices"` | none    |
+| leading | `<x-slot:leading>`            | `#leading` slot    | `leading` (a node) | none    |
+| actions | `<x-slot:actions>`            | `#actions` slot    | `actions` (a node) | none    |
 
-Both need a `title` and throw without one. Extra attributes reach the `<header>`.
+Every layer needs a `title` and throws without one. Extra attributes reach the `<header>`.
 
 ```blade tab="Blade"
 <x-plinth::header title="Message">
@@ -116,6 +116,24 @@ Both need a `title` and throw without one. Extra attributes reach the `<header>`
     <PlinthIconButton label="Archive" @click="archive">…</PlinthIconButton>
   </template>
 </PlinthHeader>
+```
+
+```tsx tab="React"
+import { PlinthHeader, PlinthIconButton } from '@bdynamic/plinth/react';
+
+<PlinthHeader
+    title="Message"
+    leading={
+        <PlinthIconButton label="Back" href="/inbox" mirror>
+            <BackIcon />
+        </PlinthIconButton>
+    }
+    actions={
+        <PlinthIconButton label="Archive" onClick={archive}>
+            <ArchiveIcon />
+        </PlinthIconButton>
+    }
+/>;
 ```
 
 ## Accessibility

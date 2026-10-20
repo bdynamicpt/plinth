@@ -3,9 +3,20 @@ import { fileURLToPath } from 'node:url';
 import { JSDOM } from 'jsdom';
 import { createElement, type ReactNode } from 'react';
 
+const collapse = (value: string): string => value.replace(/\s+/g, ' ').trim();
+
+/** A style attribute's declarations as `property: value; …`, however they were spaced. */
+const style = (value: string): string =>
+  value
+    .split(';')
+    .map((declaration) => declaration.split(/:(.*)/s).slice(0, 2).map(collapse).join(': '))
+    .filter((declaration) => declaration !== '')
+    .join('; ');
+
 /**
  * Canonical form of some HTML, for comparing markup from different sources: attributes are
- * sorted, whitespace is collapsed (and dropped between tags), and comments are removed.
+ * sorted, whitespace is collapsed (and dropped between tags, and around a style's colons and
+ * semicolons), and comments are removed.
  */
 export function normalize(html: string): string {
   const { document, Node } = new JSDOM('').window;
@@ -22,7 +33,7 @@ export function normalize(html: string): string {
     const element = node as Element;
     const tag = element.tagName.toLowerCase();
     const attributes = [...element.attributes]
-      .map(({ name, value }) => ` ${name}="${value.replace(/\s+/g, ' ').trim()}"`)
+      .map(({ name, value }) => ` ${name}="${name === 'style' ? style(value) : collapse(value)}"`)
       .sort()
       .join('');
     return `<${tag}${attributes}>${[...element.childNodes].map(print).join('')}</${tag}>`;
@@ -71,13 +82,16 @@ export function renderBlade(cases: BladeCase[]): string[] {
 }
 
 /**
- * A React prop name for an HTML attribute: `class` is `className`, `for` is `htmlFor`, and a
+ * A React prop name for an HTML attribute: `class` is `className`, `for` is `htmlFor`,
+ * `readonly` is `readOnly`, `tabindex` is `tabIndex`, and a
  * dashed SVG attribute such as `stroke-width` is camel case. `data-*` and `aria-*` stay as they
  * are.
  */
 export function reactProp(name: string): string {
   if (name === 'class') return 'className';
   if (name === 'for') return 'htmlFor';
+  if (name === 'readonly') return 'readOnly';
+  if (name === 'tabindex') return 'tabIndex';
   if (name.startsWith('data-') || name.startsWith('aria-')) return name;
   return name.replace(/-([a-z])/g, (_, char: string) => char.toUpperCase());
 }
@@ -86,6 +100,26 @@ export function reactProp(name: string): string {
 export function reactProps(attributes: Record<string, unknown>): Record<string, unknown> {
   return Object.fromEntries(
     Object.entries(attributes).map(([name, value]) => [reactProp(name), value]),
+  );
+}
+
+/** The boolean attributes the stories' markup uses, as React props. */
+const booleanAttributes = ['disabled', 'hidden', 'checked', 'open', 'required', 'readOnly'];
+
+/**
+ * A style attribute as React's style object: `margin-block: 1rem` is `marginBlock`, and a custom
+ * property such as `--plinth-x` stays as it is.
+ */
+export function reactStyle(style: string): Record<string, string> {
+  return Object.fromEntries(
+    style
+      .split(';')
+      .map((declaration) => declaration.split(/:(.*)/s).map((part) => part.trim()))
+      .filter(([property, value]) => property && value)
+      .map(([property, value]) => [
+        property!.startsWith('--') ? property! : reactProp(property!),
+        value!,
+      ]),
   );
 }
 
@@ -105,6 +139,11 @@ export function htmlToReact(html: string): ReactNode {
     const props = reactProps(
       Object.fromEntries([...element.attributes].map(({ name, value }) => [name, value])),
     );
+    // React takes a boolean attribute as true, and the style as an object.
+    for (const name of booleanAttributes) {
+      if (name in props) props[name] = true;
+    }
+    if (typeof props.style === 'string') props.style = reactStyle(props.style);
     const children = [...element.childNodes].map(convert);
     return createElement(element.localName, { ...props, key }, ...children);
   };

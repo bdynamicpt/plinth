@@ -74,17 +74,17 @@ overrides `--plinth-color-surface-raised`, `--plinth-color-border` or
 
 ## Props
 
-The same names in Blade and Vue; the React layer is coming in
-[#66](https://github.com/bdynamicpt/plinth/issues/66).
+The same names in every layer. React takes the Vue props, with the rows as `children`.
 
-| Prop         | Blade                                           | Vue                     | Default |
-| ------------ | ----------------------------------------------- | ----------------------- | ------- |
-| heading      | `heading="Preferences"`                         | `heading="Preferences"` | none    |
-| headingLevel | `heading-level="h3"` (or a `HeadingLevel` case) | `heading-level="h3"`    | `h2`    |
-| footer       | `footer="…"`                                    | `footer="…"`            | none    |
-| rows         | the slot, an `<li>` per row                     | the default slot        | none    |
+| Prop         | Blade                                           | Vue                     | React                   | Default |
+| ------------ | ----------------------------------------------- | ----------------------- | ----------------------- | ------- |
+| heading      | `heading="Preferences"`                         | `heading="Preferences"` | `heading="Preferences"` | none    |
+| headingLevel | `heading-level="h3"` (or a `HeadingLevel` case) | `heading-level="h3"`    | `headingLevel="h3"`     | `h2`    |
+| footer       | `footer="…"`                                    | `footer="…"`            | `footer="…"`            | none    |
+| rows         | the slot, an `<li>` per row                     | the default slot        | `children`              | none    |
 
-An unknown level falls back to `h2`. `class`, `id`, `data-*` and `aria-*` reach the root `<div>`.
+An unknown level falls back to `h2`. `class` (`className` in React), `id`, `data-*` and `aria-*`
+reach the root `<div>`.
 
 ## Accessibility
 

@@ -84,18 +84,18 @@ The row is `--plinth-section-menu-height` (56px) and its items `--plinth-section
 ## Props
 
 The menu and each item are their own components, so the app's attributes and listeners
-(`wire:click`, `x-on:click`, `@click`) land on the item. The same names in Blade and Vue; the React
-layer is coming in [#66](https://github.com/bdynamicpt/plinth/issues/66).
+(`wire:click`, `x-on:click`, `@click`, `onClick`) land on the item. The same names in every
+layer; React takes the Vue props, with the label as `children`.
 
-| Component | Prop     | Blade                           | Vue                          | Default |
-| --------- | -------- | ------------------------------- | ---------------------------- | ------- |
-| menu      | label    | `label="Project"`               | `label="Project"`            | none    |
-| menu      | nav      | `:nav="false"` for buttons      | `:nav="false"`               | on      |
-| item      | count    | `count="8"` or `:count="$open"` | `:count="8"`                 | none    |
-| item      | href     | `href="/tasks"`                 | `href="/tasks"`              | none    |
-| item      | current  | `current` or `:current="$on"`   | `current` or `:current="on"` | off     |
-| item      | disabled | `disabled`                      | `disabled`                   | off     |
-| item      | label    | the slot                        | the default slot             | none    |
+| Component | Prop     | Blade                           | Vue                          | React             | Default |
+| --------- | -------- | ------------------------------- | ---------------------------- | ----------------- | ------- |
+| menu      | label    | `label="Project"`               | `label="Project"`            | `label="Project"` | none    |
+| menu      | nav      | `:nav="false"` for buttons      | `:nav="false"`               | `nav={false}`     | on      |
+| item      | count    | `count="8"` or `:count="$open"` | `:count="8"`                 | `count={8}`       | none    |
+| item      | href     | `href="/tasks"`                 | `href="/tasks"`              | `href="/tasks"`   | none    |
+| item      | current  | `current` or `:current="$on"`   | `current` or `:current="on"` | `current={on}`    | off     |
+| item      | disabled | `disabled`                      | `disabled`                   | `disabled`        | off     |
+| item      | label    | the slot                        | the default slot             | `children`        | none    |
 
 ```blade tab="Blade"
 <x-plinth::section-menu label="Project">
@@ -109,6 +109,19 @@ layer is coming in [#66](https://github.com/bdynamicpt/plinth/issues/66).
   <PlinthSectionMenuItem :current="view === 'day'" @click="view = 'day'">Day</PlinthSectionMenuItem>
   <PlinthSectionMenuItem :current="view === 'week'" @click="view = 'week'">Week</PlinthSectionMenuItem>
 </PlinthSectionMenu>
+```
+
+```tsx tab="React"
+import { PlinthSectionMenu, PlinthSectionMenuItem } from '@bdynamic/plinth/react';
+
+<PlinthSectionMenu label="View" nav={false}>
+    <PlinthSectionMenuItem current={view === 'day'} onClick={() => setView('day')}>
+        Day
+    </PlinthSectionMenuItem>
+    <PlinthSectionMenuItem current={view === 'week'} onClick={() => setView('week')}>
+        Week
+    </PlinthSectionMenuItem>
+</PlinthSectionMenu>;
 ```
 
 ## Accessibility

@@ -40,7 +40,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<SectionMenuArgs>;
 
-/** Links in a <nav>; the current section has aria-current="page". */
+/** Links in a `<nav>`; the current section has `aria-current="page"`. */
 export const Default: Story = {};
 
 export const WithCounts: Story = {
@@ -53,7 +53,7 @@ export const WithCounts: Story = {
   },
 };
 
-/** Buttons that switch the view in place: a <div role="group">, each with aria-pressed. */
+/** Buttons that switch the view in place: a `<div role="group">`, each with `aria-pressed`. */
 export const Buttons: Story = {
   args: {
     label: 'View',

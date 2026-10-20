@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
+import * as vueAvatar from '../../vue/src/avatar.ts';
 import * as vueCallout from '../../vue/src/callout.ts';
+import * as vueDataTable from '../../vue/src/data-table.ts';
+import * as vueHeading from '../../vue/src/heading.ts';
+import * as vueListRow from '../../vue/src/list-row.ts';
+import * as vueSheet from '../../vue/src/sheet.ts';
 import * as vueButton from '../../vue/src/button.ts';
 import * as vueIcon from '../../vue/src/icon.ts';
 import * as vueSize from '../../vue/src/size.ts';
@@ -7,6 +12,8 @@ import * as vueTones from '../../vue/src/tones.ts';
 import { buttonVariant } from '../src/button.ts';
 import { classNames, hasContent } from '../src/markup.ts';
 import {
+  avatarGlyph,
+  avatarSizes,
   buttonVariants,
   calloutIcons,
   calloutRole,
@@ -14,9 +21,20 @@ import {
   calloutTone,
   calloutTones,
   controlSizes,
+  dataTableCellKind,
+  dataTableCellKinds,
+  dataTableSort,
+  dataTableSortIcon,
+  dataTableSorts,
+  headingLevel,
+  headingLevels,
   iconSizeFor,
   iconSizes,
+  listRowChevron,
   resolveSize,
+  sheetCloseIcon,
+  sheetPlacement,
+  sheetPlacements,
   sizes,
   tones,
 } from '../src/index.ts';
@@ -31,6 +49,15 @@ describe('the shared lists', () => {
     expect(calloutTones).toEqual(vueCallout.calloutTones);
     expect(calloutRoles).toEqual(vueCallout.calloutRoles);
     expect(calloutIcons).toEqual(vueCallout.calloutIcons);
+    expect(avatarSizes).toEqual(vueAvatar.avatarSizes);
+    expect(avatarGlyph).toBe(vueAvatar.avatarGlyph);
+    expect(dataTableSorts).toEqual(vueDataTable.dataTableSorts);
+    expect(dataTableCellKinds).toEqual(vueDataTable.dataTableCellKinds);
+    expect(dataTableSortIcon).toBe(vueDataTable.dataTableSortIcon);
+    expect(headingLevels).toEqual(vueHeading.headingLevels);
+    expect(listRowChevron).toBe(vueListRow.listRowChevron);
+    expect(sheetPlacements).toEqual(vueSheet.sheetPlacements);
+    expect(sheetCloseIcon).toBe(vueSheet.sheetCloseIcon);
   });
 
   it('fall back the way the Vue layer does', () => {
@@ -41,6 +68,10 @@ describe('the shared lists', () => {
     expect(calloutTone('info')).toBe('info');
     expect(calloutRole('log')).toBe('note');
     expect(calloutRole('alert')).toBe('alert');
+    expect(dataTableSort('sideways')).toBe('none');
+    expect(dataTableCellKind('header')).toBe('field');
+    expect(headingLevel('h1')).toBe('h2');
+    expect(sheetPlacement('start')).toBe('center');
     expect(sizes.map(iconSizeFor)).toEqual(['sm', 'sm', 'md', 'md', 'md']);
   });
 });
@@ -62,5 +93,13 @@ describe('the markup helpers', () => {
       false,
     ]);
     expect(['x', 0].map(hasContent)).toEqual([true, true]);
+    expect([[], [false, null, ' '], <></>, <>{false}</>, <>{[]}</>].map(hasContent)).toEqual([
+      false,
+      false,
+      false,
+      false,
+      false,
+    ]);
+    expect([['x'], <>x</>, <i />].map(hasContent)).toEqual([true, true, true]);
   });
 });

@@ -15,7 +15,7 @@ final readonly class Catalogue
 {
     /**
      * @param  list<string>  $groups
-     * @param  array<string, array{name: string, group: string, description: string, react?: bool, css?: string, playground?: array{template: string, options?: array<string, Option>, states?: list<string>}}>  $components
+     * @param  array<string, array{name: string, group: string, description: string, css?: string, playground?: array{template: string, options?: array<string, Option>, states?: list<string>}}>  $components
      */
     public function __construct(
         #[Config('components.groups')] private array $groups,
@@ -52,33 +52,14 @@ final readonly class Catalogue
         return $this->all()->get($this->index($component) + 1);
     }
 
-    /** Whether every Plinth component in a list has a React layer. */
-    public function inReact(string ...$slugs): bool
-    {
-        $parents = ['pill' => 'pill-row', 'section-menu-item' => 'section-menu'];
-
-        foreach ($slugs as $slug) {
-            $slug = $parents[$slug] ?? (string) preg_replace('/^data-table-.+$/', 'data-table', $slug);
-
-            $component = $this->find($slug);
-
-            if ($component === null || ! $component->react) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     private function index(Component $component): int
     {
         return (int) $this->all()->search(fn (Component $item): bool => $item->slug === $component->slug);
     }
 
-    /** @param  array{name: string, group: string, description: string, react?: bool, css?: string, playground?: array{template: string, options?: array<string, Option>, states?: list<string>}}  $component */
+    /** @param  array{name: string, group: string, description: string, css?: string, playground?: array{template: string, options?: array<string, Option>, states?: list<string>}}  $component */
     private function component(string $slug, array $component): Component
     {
-        $react = $component['react'] ?? false;
         $studly = Str::studly($slug);
         $playground = $component['playground'] ?? null;
 
@@ -87,12 +68,11 @@ final readonly class Catalogue
             $component['name'],
             $component['group'],
             $component['description'],
-            $react,
             [
                 'packages/css/src/components/'.($component['css'] ?? $slug).'.css',
                 "packages/blade/resources/views/components/{$slug}.blade.php",
                 "packages/vue/src/Plinth{$studly}.vue",
-                ...($react ? ["packages/react/src/Plinth{$studly}.tsx"] : []),
+                "packages/react/src/Plinth{$studly}.tsx",
             ],
             $playground === null ? null : new Playground(
                 $playground['template'],
