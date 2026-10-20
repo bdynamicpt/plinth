@@ -67,4 +67,10 @@ describe('PlinthIcon', () => {
     expect(wrapper.classes()).toEqual(['plinth-icon', 'ms-2']);
     expect(wrapper.attributes('id')).toBe('extra');
   });
+
+  it("lets the project's attribute win over its own", () => {
+    const wrapper = mount(PlinthIcon, { attrs: { 'aria-hidden': 'false' }, slots });
+
+    expect(wrapper.attributes('aria-hidden')).toBe('false');
+  });
 });

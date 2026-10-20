@@ -23,15 +23,17 @@ export function PlinthIcon({
   // The label can also come as an aria-label attribute; a blank one leaves the icon decorative.
   const value = label ?? ariaLabel;
   const name = value?.trim() ? value : undefined;
+  // The project's own attributes come after Plinth's and win, as in Blade and Vue; its class
+  // (taken out of them) is added to Plinth's.
   return (
     <span
-      {...rest}
       className={classNames('plinth-icon', className)}
       data-size={iconSize(size)}
       data-mirror={mirror ? '' : undefined}
       role={name ? 'img' : undefined}
       aria-label={name}
       aria-hidden={name ? undefined : 'true'}
+      {...rest}
     >
       {children}
     </span>

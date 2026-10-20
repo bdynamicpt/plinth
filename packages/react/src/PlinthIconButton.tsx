@@ -59,14 +59,16 @@ export function PlinthIconButton({
     </span>
   );
 
+  // The project's own attributes come after Plinth's and win, as in Blade and Vue; its class
+  // (taken out of them) is added to Plinth's.
   if (href) {
     return (
       <a
-        {...(rest as ComponentProps<'a'>)}
         {...common}
         href={disabled ? undefined : href}
         role={disabled ? 'link' : undefined}
         aria-disabled={isBusy || disabled ? 'true' : undefined}
+        {...(rest as ComponentProps<'a'>)}
       >
         {content}
       </a>
@@ -76,11 +78,11 @@ export function PlinthIconButton({
   return (
     <button
       type="button"
-      {...(rest as ComponentProps<'button'>)}
       {...common}
       aria-pressed={pressed === null ? undefined : pressed ? 'true' : 'false'}
       disabled={disabled || undefined}
       aria-disabled={isBusy ? 'true' : undefined}
+      {...(rest as ComponentProps<'button'>)}
     >
       {content}
     </button>

@@ -98,7 +98,10 @@ import { htmlToReact, normalize, reactProps, renderBlade, withoutAlpine } from '
  * fails. Stories with their own render (galleries such as AllTones) are not single cases.
  *
  * Each component also has a case with extra attributes, as a project adds them (a class, an id,
- * data-* and aria-*), so attribute forwarding cannot drift between the layers either.
+ * data-* and aria-*), so attribute forwarding cannot drift between the layers either, and a case
+ * with an attribute that clashes with one the component sets on its root, where the project's
+ * value wins (docs/adr/0002). The header, list card and code block set no attribute on their root
+ * but the class (the code block's id is a prop), so they have no clashing case.
  *
  * React takes the same props as Vue (docs/adr/0006), so a case's React side is its Vue side
  * with slots as `children` and node props. The React layer is being ported (#65, #66):
@@ -230,18 +233,33 @@ const calloutDefaults: CalloutArgs = {
 };
 
 const cases: ParityCase[] = [
-  ...storyArgs<BadgeArgs>(badgeStories).map(([story, args]) => ({
-    story: `Badge/${story}`,
-    markup: badge(args),
-    vue: { component: PlinthBadge, props: { tone: args.tone, dot: args.dot }, slot: args.label },
-    blade: { component: 'badge', props: { tone: args.tone, dot: args.dot }, slot: args.label },
-  })),
-  badgeWithAttributes(),
+  ...storyArgs<BadgeArgs>(badgeStories).map(([story, args]) => badgeCase(`Badge/${story}`, args)),
+  badgeCase(
+    'Badge/with extra attributes',
+    { label: 'Paid', tone: 'success', dot: true },
+    {
+      class: 'ms-2',
+      id: 'order-status',
+      'data-testid': 'order-status',
+      'data-status': 'paid',
+      'aria-label': 'Order status: Paid',
+    },
+  ),
+  badgeCase(
+    'Badge/with a clashing attribute',
+    { label: 'Paid', tone: 'success', dot: false },
+    { 'data-tone': 'danger' },
+  ),
   ...storyArgs<IconArgs>(iconStories).map(([story, args]) => iconCase(`Icon/${story}`, args)),
   iconCase(
     'Icon/with extra attributes',
     { size: 'lg', label: 'Done', mirror: false, svg: sampleIcons.check },
     { class: 'ms-2', id: 'saved-icon', 'data-testid': 'saved-icon', title: 'Saved' },
+  ),
+  iconCase(
+    'Icon/with a clashing attribute',
+    { size: 'md', mirror: false, svg: sampleIcons.check },
+    { 'aria-hidden': 'false' },
   ),
   ...storyArgs<ButtonArgs>(buttonStories).map(([story, args]) =>
     buttonCase(`Button/${story}`, args),
@@ -257,8 +275,8 @@ const cases: ParityCase[] = [
       type: 'submit',
     },
   ),
-  // A project's own value for an attribute the button also sets wins, in every layer.
   buttonCase('Button/with its own aria-disabled', buttonDefaults, { 'aria-disabled': 'true' }),
+  buttonCase('Button/with a clashing attribute', buttonDefaults, { 'data-variant': 'danger' }),
   buttonCase('Button/small with an icon', {
     ...buttonDefaults,
     size: 'sm',
@@ -299,6 +317,19 @@ const cases: ParityCase[] = [
     },
     { 'aria-label': 'More actions' },
   ),
+  iconButtonCase(
+    'Icon button/with a clashing attribute',
+    {
+      label: 'Bold',
+      variant: 'ghost',
+      size: 'md',
+      disabled: false,
+      busy: false,
+      pressed: false,
+      svg: sampleIcons.check,
+    },
+    { 'aria-pressed': 'mixed' },
+  ),
   ...storyArgs<AvatarArgs>(avatarStories).map(([story, args]) =>
     avatarCase(`Avatar/${story}`, args),
   ),
@@ -306,6 +337,11 @@ const cases: ParityCase[] = [
     'Avatar/with extra attributes',
     { name: 'Élio Ramos', size: 'lg', status: 'warning', statusLabel: 'Away', decorative: false },
     { class: 'ms-2', id: 'me', 'data-testid': 'me' },
+  ),
+  avatarCase(
+    'Avatar/with a clashing attribute',
+    { name: 'Sam Lee', size: 'md', decorative: false },
+    { 'aria-label': 'Sam Lee, on call' },
   ),
   ...storyArgs<ListRowArgs>(listRowStories).map(([story, args]) =>
     listRowCase(`List row/${story}`, args),
@@ -325,6 +361,11 @@ const cases: ParityCase[] = [
     'List row/link with extra attributes',
     { ...listRowDefaults, href: '#notifications', chevron: true },
     { class: 'ms-2', 'data-testid': 'notifications', type: 'text/html' },
+  ),
+  listRowCase(
+    'List row/with a clashing attribute',
+    { ...listRowDefaults, href: '#notifications', current: true },
+    { 'aria-current': 'step' },
   ),
   listRowCase('List row/current button', { ...listRowDefaults, button: true, current: true }),
   listRowCase('List row/current static row', { ...listRowDefaults, current: true }),
@@ -361,6 +402,11 @@ const cases: ParityCase[] = [
     { nav: false, pills: [pillDefaults] },
     { class: 'mb-4', id: 'status', 'data-testid': 'status', 'aria-labelledby': 'status-title' },
   ),
+  pillRowCase(
+    'Pill row/with a clashing attribute',
+    { nav: false, pills: [pillDefaults] },
+    { role: 'toolbar' },
+  ),
   pillCase('Pill/Default', pillDefaults),
   pillCase('Pill/Selected', { ...pillDefaults, selected: true }),
   pillCase('Pill/WithCount', { ...pillDefaults, count: 12 }),
@@ -385,6 +431,7 @@ const cases: ParityCase[] = [
     { ...pillDefaults, href: '#open' },
     { class: 'ms-2', 'data-testid': 'open', type: 'text/html' },
   ),
+  pillCase('Pill/with a clashing attribute', pillDefaults, { 'aria-pressed': 'mixed' }),
   ...storyArgs<SectionMenuArgs>(sectionMenuStories).map(([story, args]) =>
     sectionMenuCase(`Section menu/${story}`, args),
   ),
@@ -392,6 +439,11 @@ const cases: ParityCase[] = [
     'Section menu/with extra attributes',
     { nav: true, items: [sectionMenuItemDefaults] },
     { class: 'sticky', id: 'sections', 'data-testid': 'sections', 'aria-labelledby': 'title' },
+  ),
+  sectionMenuCase(
+    'Section menu/with a clashing attribute',
+    { nav: false, items: [sectionMenuItemDefaults] },
+    { role: 'toolbar' },
   ),
   sectionMenuCase('Section menu/blank label', { label: ' ', nav: true, items: [] }),
   sectionMenuItemCase('Section menu item/blank href', { ...sectionMenuItemDefaults, href: ' ' }),
@@ -422,6 +474,11 @@ const cases: ParityCase[] = [
     { ...sectionMenuItemDefaults, href: undefined },
     { class: 'ms-2', 'data-testid': 'week', type: 'submit' },
   ),
+  sectionMenuItemCase(
+    'Section menu item/with a clashing attribute',
+    { ...sectionMenuItemDefaults, current: true },
+    { 'aria-current': 'location' },
+  ),
   ...storyArgs<SheetArgs>(sheetStories).map(([story, args]) => sheetCase(`Sheet/${story}`, args)),
   sheetCase(
     'Sheet/with extra attributes',
@@ -433,6 +490,9 @@ const cases: ParityCase[] = [
       closedby: 'closerequest',
     },
   ),
+  sheetCase('Sheet/with a clashing attribute', sheetDefaults, {
+    'aria-labelledby': 'filters-heading',
+  }),
   sheetCase('Sheet/blank description, no footer', {
     ...sheetDefaults,
     description: '  ',
@@ -452,6 +512,9 @@ const cases: ParityCase[] = [
     'data-testid': 'menu',
     'aria-describedby': 'menu-hint',
     closedby: 'closerequest',
+  }),
+  menuSheetCase('Menu sheet/with a clashing attribute', menuSheetDefaults, {
+    'aria-labelledby': 'menu-heading',
   }),
   menuSheetCase('Menu sheet/blank user parts and account', {
     ...menuSheetDefaults,
@@ -478,6 +541,11 @@ const cases: ParityCase[] = [
     'Data table/with extra attributes',
     { caption: undefined, columns: [dataTableColumnDefaults], rows: [] },
     { class: 'mt-4', id: 'orders', 'data-testid': 'orders', 'aria-label': 'Orders' },
+  ),
+  dataTableCase(
+    'Data table/with a clashing attribute',
+    { caption: undefined, columns: [dataTableColumnDefaults], rows: [] },
+    { role: 'grid' },
   ),
   dataTableCase('Data table/blank caption', {
     caption: '  ',
@@ -509,12 +577,16 @@ const cases: ParityCase[] = [
     { ...dataTableColumnDefaults, sort: 'none' },
     { class: 'w-32', id: 'date', 'data-key': 'date', 'aria-describedby': 'date-help' },
   ),
+  dataTableColumnCase('Data table column/with a clashing attribute', dataTableColumnDefaults, {
+    scope: 'colgroup',
+  }),
   dataTableSortCase('Data table sort/Default', 'Date'),
   dataTableSortCase('Data table sort/with extra attributes', 'Date', {
     class: 'is-busy',
     'data-key': 'date',
     'aria-describedby': 'date-help',
   }),
+  dataTableSortCase('Data table sort/with a clashing attribute', 'Date', { type: 'submit' }),
   dataTableRowCase('Data table row/Default', {}),
   dataTableRowCase('Data table row/Selected', { selected: true }),
   dataTableRowCase('Data table row/NotSelected', { selected: false }),
@@ -522,6 +594,11 @@ const cases: ParityCase[] = [
     'Data table row/with extra attributes',
     { selected: true },
     { class: 'is-new', id: 'order-1042', 'data-key': '1042', 'aria-describedby': 'order-help' },
+  ),
+  dataTableRowCase(
+    'Data table row/with a clashing attribute',
+    { selected: true },
+    { 'aria-selected': 'false' },
   ),
   dataTableCellCase('Data table cell/Field', dataTableCellDefaults),
   dataTableCellCase('Data table cell/Title', { ...dataTableCellDefaults, kind: 'title' }),
@@ -551,6 +628,9 @@ const cases: ParityCase[] = [
     'data-key': 'date',
     'aria-describedby': 'date-help',
   }),
+  dataTableCellCase('Data table cell/with a clashing attribute', dataTableCellDefaults, {
+    role: 'gridcell',
+  }),
   dataTableEmptyCase('Data table empty/Default', 'No orders yet.', 5),
   dataTableEmptyCase('Data table empty/no columns', 'No orders yet.', 0),
   dataTableEmptyCase('Data table empty/with extra attributes', 'No orders yet.', 3, {
@@ -558,6 +638,9 @@ const cases: ParityCase[] = [
     id: 'empty',
     'data-testid': 'empty',
     'aria-describedby': 'empty-help',
+  }),
+  dataTableEmptyCase('Data table empty/with a clashing attribute', 'No orders yet.', 3, {
+    role: 'presentation',
   }),
   iconCase(
     'Icon/with an aria-label attribute',
@@ -604,6 +687,7 @@ const cases: ParityCase[] = [
     'data-testid': 'sending-time',
     'aria-labelledby': 'sending-time-title',
   }),
+  calloutCase('Callout/with a clashing attribute', calloutDefaults, { 'data-tone': 'danger' }),
   calloutCase('Callout/unknown tone and role', {
     ...calloutDefaults,
     tone: 'loud' as CalloutArgs['tone'],
@@ -1058,17 +1142,9 @@ function calloutCase(story: string, args: CalloutArgs, attributes: Attributes = 
   };
 }
 
-function badgeWithAttributes(): ParityCase {
-  const args: BadgeArgs = { label: 'Paid', tone: 'success', dot: true };
-  const attributes: Attributes = {
-    class: 'ms-2',
-    id: 'order-status',
-    'data-testid': 'order-status',
-    'data-status': 'paid',
-    'aria-label': 'Order status: Paid',
-  };
+function badgeCase(story: string, args: BadgeArgs, attributes: Attributes = {}): ParityCase {
   return {
-    story: 'Badge/with extra attributes',
+    story,
     markup: badge(args, attributes),
     vue: {
       component: PlinthBadge,
@@ -1095,6 +1171,7 @@ describe('parity with the stories', () => {
       'Badge/Danger',
       'Badge/WithDot',
       'Badge/with extra attributes',
+      'Badge/with a clashing attribute',
       'Icon/Default',
       'Icon/Small',
       'Icon/Large',
@@ -1102,6 +1179,7 @@ describe('parity with the stories', () => {
       'Icon/Filled',
       'Icon/Mirrored',
       'Icon/with extra attributes',
+      'Icon/with a clashing attribute',
       'Button/Primary',
       'Button/Accent',
       'Button/Secondary',
@@ -1118,6 +1196,7 @@ describe('parity with the stories', () => {
       'Button/Busy',
       'Button/with extra attributes',
       'Button/with its own aria-disabled',
+      'Button/with a clashing attribute',
       'Button/small with an icon',
       'Button/busy with an icon',
       'Button/busy link',
@@ -1135,6 +1214,7 @@ describe('parity with the stories', () => {
       'Icon button/Busy',
       'Icon button/with extra attributes',
       'Icon button/with an aria-label attribute',
+      'Icon button/with a clashing attribute',
       'Avatar/Initials',
       'Avatar/Image',
       'Avatar/GivenInitials',
@@ -1146,6 +1226,7 @@ describe('parity with the stories', () => {
       'Avatar/WithStatus',
       'Avatar/Decorative',
       'Avatar/with extra attributes',
+      'Avatar/with a clashing attribute',
       'List row/Default',
       'List row/WithDescription',
       'List row/WithIcon',
@@ -1162,6 +1243,7 @@ describe('parity with the stories', () => {
       'List row/LongValue',
       'List row/with extra attributes',
       'List row/link with extra attributes',
+      'List row/with a clashing attribute',
       'List row/current button',
       'List row/current static row',
       'List row/disabled static row',
@@ -1184,6 +1266,7 @@ describe('parity with the stories', () => {
       'Pill row/DisabledLink',
       'Pill row/Overflowing',
       'Pill row/with extra attributes',
+      'Pill row/with a clashing attribute',
       'Pill/Default',
       'Pill/Selected',
       'Pill/WithCount',
@@ -1194,6 +1277,7 @@ describe('parity with the stories', () => {
       'Pill/DisabledLink',
       'Pill/with extra attributes',
       'Pill/link with extra attributes',
+      'Pill/with a clashing attribute',
       'Section menu/Default',
       'Section menu/WithCounts',
       'Section menu/Buttons',
@@ -1202,6 +1286,7 @@ describe('parity with the stories', () => {
       'Section menu/DisabledButton',
       'Section menu/Overflowing',
       'Section menu/with extra attributes',
+      'Section menu/with a clashing attribute',
       'Section menu/blank label',
       'Section menu item/blank href',
       'Section menu item/Default',
@@ -1214,6 +1299,7 @@ describe('parity with the stories', () => {
       'Section menu item/DisabledButton',
       'Section menu item/with extra attributes',
       'Section menu item/button with extra attributes',
+      'Section menu item/with a clashing attribute',
       'Sheet/Default',
       'Sheet/WithDescription',
       'Sheet/SidePanel',
@@ -1222,6 +1308,7 @@ describe('parity with the stories', () => {
       'Sheet/LongContent',
       'Sheet/LongTitle',
       'Sheet/with extra attributes',
+      'Sheet/with a clashing attribute',
       'Sheet/blank description, no footer',
       'Sheet/empty footer',
       'Sheet/id with spaces',
@@ -1235,6 +1322,7 @@ describe('parity with the stories', () => {
       'Menu sheet/LongNavigation',
       'Menu sheet/LongName',
       'Menu sheet/with extra attributes',
+      'Menu sheet/with a clashing attribute',
       'Menu sheet/blank user parts and account',
       'Menu sheet/blank user name',
       'Menu sheet/id with spaces',
@@ -1253,6 +1341,7 @@ describe('parity with the stories', () => {
       'Data table/Empty',
       'Data table/LongText',
       'Data table/with extra attributes',
+      'Data table/with a clashing attribute',
       'Data table/blank caption',
       'Data table column/Default',
       'Data table column/Numeric',
@@ -1262,12 +1351,15 @@ describe('parity with the stories', () => {
       'Data table column/Descending',
       'Data table column/unknown sort',
       'Data table column/with extra attributes',
+      'Data table column/with a clashing attribute',
       'Data table sort/Default',
       'Data table sort/with extra attributes',
+      'Data table sort/with a clashing attribute',
       'Data table row/Default',
       'Data table row/Selected',
       'Data table row/NotSelected',
       'Data table row/with extra attributes',
+      'Data table row/with a clashing attribute',
       'Data table cell/Field',
       'Data table cell/Title',
       'Data table cell/Actions',
@@ -1276,9 +1368,11 @@ describe('parity with the stories', () => {
       'Data table cell/blank label',
       'Data table cell/unknown kind',
       'Data table cell/with extra attributes',
+      'Data table cell/with a clashing attribute',
       'Data table empty/Default',
       'Data table empty/no columns',
       'Data table empty/with extra attributes',
+      'Data table empty/with a clashing attribute',
       'Icon/with an aria-label attribute',
       'Code block/Default',
       'Code block/WithoutLabel',
@@ -1304,6 +1398,7 @@ describe('parity with the stories', () => {
       'Callout/CustomIcon',
       'Callout/LongText',
       'Callout/with extra attributes',
+      'Callout/with a clashing attribute',
       'Callout/unknown tone and role',
       'Callout/blank title and text',
       'Callout/title only',

@@ -43,7 +43,7 @@ export function avatar(
   const dot = status
     ? `<span class="plinth-avatar-status" data-tone="${status}" aria-hidden="true"></span>`
     : '';
-  return `<span class="${classes}" data-size="${size}"${meaning}${extra}>${face}${dot}</span>`;
+  return `<span class="${classes}"${extra} data-size="${size}"${meaning}>${face}${dot}</span>`;
 }
 
 /** A sample portrait drawn in SVG, so stories and tests need no network. */

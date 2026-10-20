@@ -43,5 +43,5 @@ export function iconButton(
   const inner = isBusy
     ? '<span class="plinth-button-spinner" aria-hidden="true"></span>'
     : `<span class="plinth-icon" data-size="${iconSizeFor(size)}"${mirror ? ' data-mirror' : ''} aria-hidden="true">${svg}</span>`;
-  return `${open} data-variant="${variant}" data-size="${size}"${state}${extra}>${inner}${href ? '</a>' : '</button>'}`;
+  return `${open}${extra} data-variant="${variant}" data-size="${size}"${state}>${inner}${href ? '</a>' : '</button>'}`;
 }

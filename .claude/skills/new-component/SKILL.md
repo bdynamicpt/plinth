@@ -90,8 +90,8 @@ Change all five together so they keep printing the same markup:
   with the same defaults and fallback. Spread the remaining props onto the root after Plinth's
   own, so the project's win (`ref` included, React 19 needs no `forwardRef`), and merge
   `className` with `classNames()`. The default slot is `children`, a named slot is a prop that
-  takes a node (`hasContent()` tells an empty one), and a Vue event is an `on…` callback. Nothing reads `window` or `document` while rendering;
-  behaviour goes in an effect. No styles.
+  takes a node (`hasContent()` tells an empty one), and a Vue event is an `on…` callback.
+  Nothing reads `window` or `document` while rendering; behaviour goes in an effect. No styles.
 - **Stories:** one for every variant and state, each with args (the parity test covers stories
   without their own `render`); galleries such as `AllTones` may have a `render`. The
   `docs.description.component` says what it is, when to use it, and anything a user must add

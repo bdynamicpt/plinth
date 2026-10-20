@@ -87,7 +87,7 @@ export function codeBlock(
     ? tabs.map((tab) => pre(tab.html ?? escape(tab.code))).join('')
     : pre(html ?? escape(code));
   return [
-    `<div${id?.trim() ? ` id="${escape(id.trim())}"` : ''} class="${classes}"${extra}>`,
+    `<div class="${classes}"${extra}${id?.trim() ? ` id="${escape(id.trim())}"` : ''}>`,
     '<div class="plinth-code-block-header">',
     labelContent ? `<span class="plinth-code-block-label">${labelContent}</span>` : '',
     tabGroup,

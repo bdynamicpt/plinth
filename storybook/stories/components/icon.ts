@@ -23,5 +23,5 @@ export function icon({ size, label, mirror, svg }: IconArgs, attributes: Attribu
   const name = (label ?? ariaLabel ?? '').trim() ? (label ?? ariaLabel) : undefined;
   const { classes, extra } = rootAttributes('plinth-icon', others);
   const meaning = name ? ` role="img" aria-label="${escape(name)}"` : ' aria-hidden="true"';
-  return `<span class="${classes}" data-size="${size}"${mirror ? ' data-mirror' : ''}${meaning}${extra}>${svg}</span>`;
+  return `<span class="${classes}"${extra} data-size="${size}"${mirror ? ' data-mirror' : ''}${meaning}>${svg}</span>`;
 }

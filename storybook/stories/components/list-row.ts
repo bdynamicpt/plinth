@@ -36,11 +36,11 @@ export function listRow(
   const open = [
     tag === 'button' ? `<button type="${escape(type)}"` : `<${tag}`,
     ` class="${classes}"`,
+    extra,
     href && !disabled ? ` href="${escape(href)}"` : '',
     current && tag !== 'button' ? ' aria-current="page"' : '',
     disabled && tag === 'button' ? ' disabled' : '',
     disabled && tag === 'a' ? ' role="link" aria-disabled="true"' : '',
-    extra,
     '>',
   ].join('');
   const end = trailing || chevron;

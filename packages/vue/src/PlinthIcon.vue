@@ -21,6 +21,7 @@ const name = computed(() => {
   const value = props.label ?? (attrs['aria-label'] as string | undefined);
   return value?.trim() ? value : undefined;
 });
+// The project's own attributes are bound last, so they win over Plinth's (docs/adr/0002).
 const rest = computed(() =>
   Object.fromEntries(Object.entries(attrs).filter(([name]) => name !== 'aria-label')),
 );
@@ -29,12 +30,12 @@ const rest = computed(() =>
 <template>
   <span
     class="plinth-icon"
-    v-bind="rest"
     :data-size="dataSize"
     :data-mirror="mirror ? '' : undefined"
     :role="name ? 'img' : undefined"
     :aria-label="name"
     :aria-hidden="name ? undefined : 'true'"
+    v-bind="rest"
     ><slot
   /></span>
 </template>

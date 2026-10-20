@@ -154,4 +154,20 @@ describe('PlinthIconButton', () => {
     expect(onClick).toHaveBeenCalledTimes(1);
     expect(ref.current).toBe(button);
   });
+
+  it("lets the project's attribute win over its own, on a button and a link", () => {
+    const button = root(
+      <PlinthIconButton label="Bold" pressed={false} aria-pressed="mixed">
+        {svg}
+      </PlinthIconButton>,
+    );
+    const link = root(
+      <PlinthIconButton href="/next" label="Next" disabled role="button">
+        {svg}
+      </PlinthIconButton>,
+    );
+
+    expect(button.getAttribute('aria-pressed')).toBe('mixed');
+    expect(link.getAttribute('role')).toBe('button');
+  });
 });
