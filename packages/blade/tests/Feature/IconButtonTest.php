@@ -20,6 +20,11 @@ it('takes an aria-label attribute as its label', function () use ($svg) {
         ->toContain('aria-label="Close"');
 });
 
+it('takes an aria-label attribute when the label is blank', function () use ($svg) {
+    expect(Blade::render("<x-plinth::icon-button label=\"\" aria-label=\"Next\">{$svg}</x-plinth::icon-button>"))
+        ->toContain('aria-label="Next"');
+});
+
 it('takes every variant and size, with icons sized to it', function (string $variant, string $size) use ($svg) {
     $html = Blade::render("<x-plinth::icon-button label=\"Go\" variant=\"{$variant}\" size=\"{$size}\">{$svg}</x-plinth::icon-button>");
 

@@ -68,7 +68,8 @@ small icon buttons in a row are still easy to hit; leave a little space between 
 ## Links, states and direction
 
 With an `href` it is a link (for example _Next page_). `disabled` and `busy` work as on the
-button. Set `mirror` on an icon that points a direction, so it flips in right-to-left text.
+button. A link is never a toggle: `pressed` is ignored on one and `aria-pressed` is never printed.
+Set `mirror` on an icon that points a direction, so it flips in right-to-left text.
 
 ```blade example
 <x-plinth::icon-button label="Next page" href="#" mirror><x-site.glyph name="arrow-right" /></x-plinth::icon-button>
@@ -120,7 +121,8 @@ import { PlinthIconButton } from '@bdynamic/plinth/react';
 - The `label` is the accessible name, printed as `aria-label`; the icon inside is hidden from
   screen readers.
 - A toggle prints `aria-pressed="true"` or `"false"`, so its state is announced; without
-  `pressed` there is no `aria-pressed`.
+  `pressed` there is no `aria-pressed`. In forced colours, pressed takes the system's highlight
+  colour, since the tint is dropped there.
 - Busy sets `aria-busy` and `aria-disabled` and keeps focus; a disabled link has no `href`,
   `role="link"` and `aria-disabled="true"`.
 - The focus ring shows on `:focus-visible`, offset on the filled variants.

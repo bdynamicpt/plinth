@@ -28,7 +28,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A button with only an icon, for toolbars, headers and closing a sheet. It always has a label.',
+          'A button with only an icon, for toolbars, headers and closing a sheet. It always has a label. With `pressed` (true or false) it is a toggle and prints `aria-pressed`; pressed shows the selection tint. With an `href` it is a link instead, which is never a toggle, so `pressed` is ignored there.',
       },
     },
   },

@@ -11,7 +11,7 @@
 ])
 @php
     // The label is the button's only name, as `label` or an aria-label attribute.
-    $name = $label ?? $attributes->get('aria-label');
+    $name = filled($label) ? $label : $attributes->get('aria-label');
     if (blank($name)) {
         throw new InvalidArgumentException('<x-plinth::icon-button> needs a label: it is the only name the button has.');
     }

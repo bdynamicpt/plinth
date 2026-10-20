@@ -635,8 +635,17 @@
  *   <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
  * </button>
  *
+ * With an href it is a link instead, with the same disabled state as the button's link:
+ *
+ * <a class="plinth-button plinth-icon-button" href="…" data-variant="secondary"
+ *   data-size="md" aria-label="Next page">
+ *   <span class="plinth-icon" data-size="md" data-mirror aria-hidden="true"><svg>…</svg></span>
+ * </a>
+ *
  * aria-label is required: it is the only name the button has. A toggle has aria-pressed
- * ("true" or "false"), and pressed shows the selection tint (accent-subtle, accent-text).
+ * ("true" or "false"), and pressed shows the selection tint (accent-subtle, accent-text), with
+ * the Highlight system colour in forced colours. A link is never a toggle: aria-pressed is
+ * never printed on one.
  */
 
 @layer plinth {
@@ -837,6 +846,13 @@
     .plinth-button[aria-disabled='true']:not([aria-busy='true']) {
       color: GrayText;
       border-color: GrayText;
+    }
+
+    /* The pressed tint is dropped in forced colours, so pressed takes the selection colours. */
+    .plinth-icon-button[aria-pressed='true'] {
+      color: HighlightText;
+      background-color: Highlight;
+      border-color: Highlight;
     }
 
     .plinth-button-spinner {
