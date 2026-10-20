@@ -125,15 +125,29 @@ Set up once by the repository's owner:
 
 ### Forge, the fallback
 
-The same layout deploys on Forge: point the site's web directory at `/site/public`, keep its
-`.env` in `site/`, and use this deploy script:
+The site runs on Forge with zero-downtime deployments: each deploy builds a new release folder,
+and the site switches to it only when the build succeeds, so visitors never see a half-built
+site. Create the site with zero-downtime deployments on (Forge can't turn it on later), the web
+directory `/site/public` (Forge serves it from `current/`), and two shared paths: `.env` linked as
+`site/.env`, and `storage` as `site/storage`. The deploy script:
 
 ```bash
-cd $FORGE_SITE_PATH
-git pull origin $FORGE_SITE_BRANCH
-cd site
+$CREATE_RELEASE()
+
+cd $FORGE_RELEASE_DIRECTORY/site
+mkdir -p storage/app/public storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs
 bash deploy/build.sh
-$FORGE_PHP_FPM reload
+
+$ACTIVATE_RELEASE()
+
+$RESTART_QUEUES()
+
+touch /tmp/fpmlock 2>/dev/null || true
+( flock -w 10 9 || exit 1
+    sudo -S service $FORGE_PHP_FPM reload ) 9</tmp/fpmlock
 ```
+
+Reloading PHP-FPM after the switch matters: opcache would otherwise keep serving the old
+release's cached config.
 
 The server needs PHP 8.4, Composer and Node 22.18 or later.
