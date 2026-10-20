@@ -128,7 +128,7 @@
 
     /*
      * A dialog or a sheet, drawn open in the card: centred for the dialog, on the end edge for
-     * the sheet, at the bottom for the menu sheet.
+     * the sheet, at the bottom for the menu sheet and the drawer.
      */
     .site-catalogue-sheet {
         display: flex;
@@ -160,6 +160,16 @@
         border-block-end: 0;
         border-end-start-radius: 0;
         border-end-end-radius: 0;
+    }
+
+    /* The drawer's grab handle, as the drawer draws it on a phone. */
+    .site-catalogue-sheet-handle {
+        align-self: center;
+        inline-size: var(--plinth-space-10);
+        block-size: var(--plinth-space-1);
+        margin-block-start: calc(-1 * var(--plinth-space-2));
+        background-color: var(--plinth-color-border-strong);
+        border-radius: var(--plinth-radius-pill);
     }
 
     .site-component-card-preview:has(.is-end) {
