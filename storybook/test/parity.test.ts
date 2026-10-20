@@ -12,6 +12,7 @@ import {
   PlinthDataTableRow,
   PlinthDataTableSort,
   PlinthDialog,
+  PlinthDrawer,
   PlinthHeader,
   PlinthIcon,
   PlinthIconButton,
@@ -38,6 +39,7 @@ import {
   PlinthDataTableRow as ReactDataTableRow,
   PlinthDataTableSort as ReactDataTableSort,
   PlinthDialog as ReactDialog,
+  PlinthDrawer as ReactDrawer,
   PlinthHeader as ReactHeader,
   PlinthIcon as ReactIcon,
   PlinthIconButton as ReactIconButton,
@@ -111,6 +113,8 @@ import {
   type SectionMenuArgs,
   type SectionMenuItemArgs,
 } from '../stories/components/section-menu.ts';
+import * as drawerStories from '../stories/components/Drawer.stories.ts';
+import { drawer, type DrawerArgs } from '../stories/components/drawer.ts';
 import * as sheetStories from '../stories/components/Sheet.stories.ts';
 import { sheet, type SheetArgs } from '../stories/components/sheet.ts';
 import { sampleIcons } from '../stories/components/icons.ts';
@@ -166,6 +170,7 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthDataTableRow, ReactDataTableRow],
   [PlinthDataTableSort, ReactDataTableSort],
   [PlinthDialog, ReactDialog],
+  [PlinthDrawer, ReactDrawer],
   [PlinthHeader, ReactHeader],
   [PlinthIcon, ReactIcon],
   [PlinthIconButton, ReactIconButton],
@@ -224,6 +229,15 @@ const sheetDefaults: SheetArgs = {
   side: 'end',
   body: '<p>Body</p>',
   footer: '<button type="button">Apply</button>',
+};
+
+const drawerDefaults: DrawerArgs = {
+  id: 'route',
+  title: 'Route',
+  closeLabel: 'Close',
+  desktop: 'dialog',
+  body: '<p>Body</p>',
+  footer: '<button type="button">Start</button>',
 };
 
 const dialogDefaults: DialogArgs = {
@@ -580,6 +594,37 @@ const cases: ParityCase[] = [
     ...sheetDefaults,
     side: 'left' as SheetArgs['side'],
     sidePhone: 'right' as SheetArgs['sidePhone'],
+  }),
+  ...storyArgs<DrawerArgs>(drawerStories).map(([story, args]) =>
+    drawerCase(`Drawer/${story}`, args),
+  ),
+  drawerCase(
+    'Drawer/with extra attributes',
+    { ...drawerDefaults, description: '12 min by bike.', snapPoints: ['peek', 'full'] },
+    {
+      class: 'is-busy',
+      'data-testid': 'route',
+      'aria-busy': 'true',
+      closedby: 'closerequest',
+    },
+  ),
+  drawerCase(
+    'Drawer/with a clashing attribute',
+    { ...drawerDefaults, snapPoints: ['peek', 'full'], snap: 'peek' },
+    { 'data-snap': 'full' },
+  ),
+  drawerCase('Drawer/blank description, no footer', {
+    ...drawerDefaults,
+    description: '  ',
+    footer: undefined,
+  }),
+  drawerCase('Drawer/empty footer', { ...drawerDefaults, footer: '  ' }),
+  drawerCase('Drawer/id with spaces', { ...drawerDefaults, id: 'route' }, {}, ' route '),
+  drawerCase('Drawer/unknown desktop and snap points', {
+    ...drawerDefaults,
+    desktop: 'side' as DrawerArgs['desktop'],
+    snapPoints: ['top', 'full', 'half'] as DrawerArgs['snapPoints'],
+    snap: 'peek',
   }),
   ...storyArgs<DialogArgs>(dialogStories).map(([story, args]) =>
     dialogCase(`Dialog/${story}`, args),
@@ -1150,6 +1195,37 @@ function dialogCase(
   };
 }
 
+/** The drawer's parity; its body and footer are markup, passed in as the slots. */
+function drawerCase(
+  story: string,
+  args: DrawerArgs,
+  attributes: Attributes = {},
+  id: string = args.id,
+): ParityCase {
+  const props = {
+    id,
+    title: args.title,
+    ...(args.description ? { description: args.description } : {}),
+    closeLabel: args.closeLabel,
+    desktop: args.desktop,
+    ...(args.snapPoints ? { snapPoints: args.snapPoints } : {}),
+    ...(args.snap ? { snap: args.snap } : {}),
+  };
+  const named: Record<string, string> = args.footer ? { footer: args.footer } : {};
+  return {
+    story,
+    markup: drawer(args, attributes),
+    vue: {
+      component: PlinthDrawer,
+      props: { ...props, ...attributes },
+      slot: args.body,
+      html: true,
+      named,
+    },
+    blade: { component: 'drawer', props, attributes, slot: args.body, named },
+  };
+}
+
 /** The sheet's own parity; its body and footer are markup, passed in as the slots. */
 function sheetCase(
   story: string,
@@ -1549,6 +1625,18 @@ describe('parity with the stories', () => {
       'Sheet/empty footer',
       'Sheet/id with spaces',
       'Sheet/unknown sides',
+      'Drawer/Default',
+      'Drawer/Peek',
+      'Drawer/Half',
+      'Drawer/Full',
+      'Drawer/SheetOnDesktop',
+      'Drawer/TitleOnly',
+      'Drawer/with extra attributes',
+      'Drawer/with a clashing attribute',
+      'Drawer/blank description, no footer',
+      'Drawer/empty footer',
+      'Drawer/id with spaces',
+      'Drawer/unknown desktop and snap points',
       'Dialog/Default',
       'Dialog/WithDescription',
       'Dialog/NotDismissible',

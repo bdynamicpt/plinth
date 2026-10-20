@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
+import { swipeToClose } from '@bdynamic/plinth-vue';
 import { samplePhoto } from './avatar.ts';
 import { header } from './header.ts';
 import { iconButton } from './icon-button.ts';
@@ -61,7 +62,11 @@ const meta = {
   // The story opens its menu, as the menu button would. In the docs page the menus stay closed
   // until their button is pressed.
   play: ({ canvasElement }) => {
-    canvasElement.querySelector<HTMLDialogElement>('dialog.plinth-menu-sheet')?.showModal();
+    const dialog = canvasElement.querySelector<HTMLDialogElement>('dialog.plinth-menu-sheet');
+    if (!dialog) return;
+    // What the layers add: a bottom panel on a phone closes when it is swiped off.
+    swipeToClose(dialog);
+    dialog.showModal();
   },
   args: {
     id: 'menu',
