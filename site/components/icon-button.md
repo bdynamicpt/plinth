@@ -19,7 +19,7 @@ more (⋯), search, edit, a star for favourite.
 Every icon button needs a **`label`**. It is the button's only name: screen readers read it, voice
 control uses it, and it is the text to show in a tooltip (pass it as `title` too if you want the
 browser's). Blade refuses to render an icon button without one, Vue warns, and React's types
-require the prop; in Vue and React, make sure it is not blank.
+require the prop. A blank `label` falls back to an `aria-label` attribute in every layer.
 
 ```blade example
 <x-plinth::icon-button label="Search"><x-site.glyph name="search" /></x-plinth::icon-button>
@@ -125,7 +125,8 @@ import { PlinthIconButton } from '@bdynamic/plinth/react';
   colour, since the tint is dropped there.
 - Busy sets `aria-busy` and `aria-disabled` and keeps focus; a disabled link has no `href`,
   `role="link"` and `aria-disabled="true"`.
-- The focus ring shows on `:focus-visible`, offset on the filled variants.
+- The focus ring shows on `:focus-visible`, against the edge on ghost, secondary and
+  danger-ghost, and offset further on the filled variants.
 - Every size keeps a 40 × 40px touch target on a touch screen.
 
 The markup contract is in

@@ -20,6 +20,23 @@ describe('PlinthIconButton', () => {
     expect(wrapper.attributes('aria-label')).toBe('Close');
   });
 
+  it('takes an aria-label attribute when the label is blank', () => {
+    const wrapper = mount(PlinthIconButton, {
+      props: { label: '' },
+      attrs: { 'aria-label': 'Next' },
+      slots,
+    });
+
+    expect(wrapper.attributes('aria-label')).toBe('Next');
+  });
+
+  it('escapes the label', () => {
+    const wrapper = mount(PlinthIconButton, { props: { label: '"><b>x</b>' }, slots });
+
+    expect(wrapper.html()).toContain('aria-label="&quot;><b>x</b>"');
+    expect(wrapper.find('b').exists()).toBe(false);
+  });
+
   it.each(buttonVariants.flatMap((variant) => controlSizes.map((size) => [variant, size])))(
     'takes the %s variant at the %s size',
     (variant, size) => {
@@ -55,12 +72,13 @@ describe('PlinthIconButton', () => {
 
   it('is a link with an href', () => {
     const wrapper = mount(PlinthIconButton, {
-      props: { label: 'Next page', href: '/page/2' },
+      props: { label: 'Next page', href: '/page/2', pressed: true },
       slots,
     });
 
     expect(wrapper.element.tagName).toBe('A');
     expect(wrapper.attributes('type')).toBeUndefined();
+    expect(wrapper.attributes('aria-pressed')).toBeUndefined();
   });
 
   it('passes classes and listeners to its root', async () => {

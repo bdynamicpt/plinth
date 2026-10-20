@@ -10,7 +10,7 @@
  * With an href it is <a class="plinth-button" href="…"> instead; the icons are optional.
  *
  * data-mirror on an icon flips it in right-to-left text, for arrows (mirror-icon and
- * mirror-trailing in Blade, Vue and React).
+ * mirror-trailing in Blade, Vue and React; mirror on the icon button).
  *
  * Variants (data-variant): primary (default, also when missing; inverted neutral unless a brand
  * colours it), accent (the brand's colour, for marketing and brand moments), secondary, ghost, danger, and
@@ -245,8 +245,12 @@
       border-color: GrayText;
     }
 
-    /* The pressed tint is dropped in forced colours, so pressed takes the selection colours. */
-    .plinth-icon-button[aria-pressed='true'] {
+    /* The pressed tint is dropped in forced colours, so pressed takes the selection colours,
+       unless it is disabled, which keeps GrayText. */
+    .plinth-icon-button[aria-pressed='true']:not(
+        :disabled,
+        [aria-disabled='true']:not([aria-busy='true'])
+      ) {
       color: HighlightText;
       background-color: Highlight;
       border-color: Highlight;

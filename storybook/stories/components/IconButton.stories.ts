@@ -65,6 +65,9 @@ export const Link: Story = {
   },
 };
 export const Disabled: Story = { args: { disabled: true } };
+export const DisabledPressed: Story = {
+  args: { label: 'Favourite', svg: sampleIcons.star, pressed: true, disabled: true },
+};
 export const Busy: Story = { args: { variant: 'secondary', busy: true, label: 'Saving' } };
 
 /** Every variant at every size. */

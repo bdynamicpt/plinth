@@ -54,6 +54,8 @@ it('is a link with an href', function () use ($svg) {
         ->toStartWith('<a ')
         ->toContain('href="/page/2"')
         ->not->toContain('type="button"');
+    expect(Blade::render("<x-plinth::icon-button label=\"Next page\" href=\"/page/2\" :pressed=\"true\">{$svg}</x-plinth::icon-button>"))
+        ->not->toContain('aria-pressed');
 });
 
 it('escapes the label and passes Livewire and Alpine attributes to its root', function () use ($svg) {

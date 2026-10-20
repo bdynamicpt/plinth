@@ -86,7 +86,7 @@ describe('PlinthIconButton', () => {
 
   it('is a link with an href, without a type or aria-pressed', () => {
     const link = root(
-      <PlinthIconButton label="Next page" href="/page/2">
+      <PlinthIconButton label="Next page" href="/page/2" pressed>
         {svg}
       </PlinthIconButton>,
     );
