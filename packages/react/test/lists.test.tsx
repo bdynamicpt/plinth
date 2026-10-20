@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import * as vueAvatar from '../../vue/src/avatar.ts';
 import * as vueCallout from '../../vue/src/callout.ts';
 import * as vueDataTable from '../../vue/src/data-table.ts';
+import * as vueConfirmDialog from '../../vue/src/confirm-dialog.ts';
 import * as vueDialog from '../../vue/src/dialog.ts';
 import * as vueHeading from '../../vue/src/heading.ts';
 import * as vueListRow from '../../vue/src/list-row.ts';
@@ -21,6 +22,12 @@ import {
   calloutRoles,
   calloutTone,
   calloutTones,
+  confirmDialogFieldLabels,
+  confirmDialogKind,
+  confirmDialogKinds,
+  confirmDialogPattern,
+  confirmDialogTone,
+  confirmDialogTones,
   controlSizes,
   dataTableCellKind,
   dataTableCellKinds,
@@ -65,6 +72,11 @@ describe('the shared lists', () => {
     expect(sheetCloseIcon).toBe(vueSheet.sheetCloseIcon);
     expect(dialogSidePhones).toEqual(vueDialog.dialogSidePhones);
     expect(dialogCloseIcon).toBe(vueDialog.dialogCloseIcon);
+    expect(confirmDialogKinds).toEqual(vueConfirmDialog.confirmDialogKinds);
+    expect(confirmDialogTones).toEqual(vueConfirmDialog.confirmDialogTones);
+    expect(confirmDialogFieldLabels).toEqual(vueConfirmDialog.confirmDialogFieldLabels);
+    const phrase = 'a.b*c (d) [e] {f} |g\\h/i^$+? <j>';
+    expect(confirmDialogPattern(phrase)).toBe(vueConfirmDialog.confirmDialogPattern(phrase));
   });
 
   it('fall back the way the Vue layer does', () => {
@@ -84,6 +96,10 @@ describe('the shared lists', () => {
     expect(sheetSidePhone('bottom')).toBe('bottom');
     expect(dialogSidePhone('top')).toBe('center');
     expect(dialogSidePhone('bottom')).toBe('bottom');
+    expect(confirmDialogKind('pin')).toBe('simple');
+    expect(confirmDialogKind('password')).toBe('password');
+    expect(confirmDialogTone('loud')).toBe('neutral');
+    expect(confirmDialogTone('danger')).toBe('danger');
     expect(sizes.map(iconSizeFor)).toEqual(['sm', 'sm', 'md', 'md', 'md']);
   });
 });

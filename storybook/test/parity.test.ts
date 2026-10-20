@@ -4,6 +4,7 @@ import {
   PlinthButton,
   PlinthCallout,
   PlinthCodeBlock,
+  PlinthConfirmDialog,
   PlinthDataTable,
   PlinthDataTableCell,
   PlinthDataTableColumn,
@@ -29,6 +30,7 @@ import {
   PlinthButton as ReactButton,
   PlinthCallout as ReactCallout,
   PlinthCodeBlock as ReactCodeBlock,
+  PlinthConfirmDialog as ReactConfirmDialog,
   PlinthDataTable as ReactDataTable,
   PlinthDataTableCell as ReactDataTableCell,
   PlinthDataTableColumn as ReactDataTableColumn,
@@ -84,6 +86,8 @@ import {
   type DataTableColumnArgs,
   type DataTableRowArgs,
 } from '../stories/components/data-table.ts';
+import * as confirmDialogStories from '../stories/components/ConfirmDialog.stories.ts';
+import { confirmDialog, type ConfirmDialogArgs } from '../stories/components/confirm-dialog.ts';
 import * as dialogStories from '../stories/components/Dialog.stories.ts';
 import { dialog, type DialogArgs } from '../stories/components/dialog.ts';
 import * as headerStories from '../stories/components/Header.stories.ts';
@@ -154,6 +158,7 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthButton, ReactButton],
   [PlinthCallout, ReactCallout],
   [PlinthCodeBlock, ReactCodeBlock],
+  [PlinthConfirmDialog, ReactConfirmDialog],
   [PlinthDataTable, ReactDataTable],
   [PlinthDataTableCell, ReactDataTableCell],
   [PlinthDataTableColumn, ReactDataTableColumn],
@@ -229,6 +234,18 @@ const dialogDefaults: DialogArgs = {
   sidePhone: 'center',
   body: '<p>Body</p>',
   footer: '<button type="button">Save</button>',
+};
+
+const confirmDialogDefaults: ConfirmDialogArgs = {
+  id: 'archive',
+  title: 'Archive 3 tickets?',
+  message: 'You can bring them back.',
+  kind: 'simple',
+  confirmLabel: 'Archive',
+  cancelLabel: 'Cancel',
+  tone: 'neutral',
+  busy: false,
+  sidePhone: 'center',
 };
 
 const menuSheetDefaults: MenuSheetArgs = {
@@ -595,6 +612,57 @@ const cases: ParityCase[] = [
   dialogCase('Dialog/unknown side', {
     ...dialogDefaults,
     sidePhone: 'top' as DialogArgs['sidePhone'],
+  }),
+  ...storyArgs<ConfirmDialogArgs>(confirmDialogStories).map(([story, args]) =>
+    confirmDialogCase(`Confirm dialog/${story}`, args),
+  ),
+  confirmDialogCase(
+    'Confirm dialog/with extra attributes',
+    { ...confirmDialogDefaults, kind: 'password' },
+    { class: 'is-busy', 'data-testid': 'archive', 'aria-busy': 'true' },
+  ),
+  confirmDialogCase('Confirm dialog/with a clashing attribute', confirmDialogDefaults, {
+    role: 'dialog',
+    closedby: 'any',
+  }),
+  confirmDialogCase('Confirm dialog/a phrase with pattern characters', {
+    ...confirmDialogDefaults,
+    kind: 'type',
+    phrase: ' a.b*c (d) [e] {f} |g\\h/i^$+? <j> ',
+  }),
+  confirmDialogCase('Confirm dialog/a label without the phrase', {
+    ...confirmDialogDefaults,
+    kind: 'type',
+    phrase: 'harbour',
+    fieldLabel: 'Type the name to confirm',
+  }),
+  confirmDialogCase('Confirm dialog/an error on the type kind', {
+    ...confirmDialogDefaults,
+    kind: 'type',
+    phrase: 'harbour',
+    error: 'That is not the name.',
+  }),
+  confirmDialogCase('Confirm dialog/an error without a field, and blank labels', {
+    ...confirmDialogDefaults,
+    error: 'Ignored',
+    fieldLabel: '  ',
+  }),
+  confirmDialogCase('Confirm dialog/a blank error', {
+    ...confirmDialogDefaults,
+    kind: 'password',
+    error: '  ',
+  }),
+  confirmDialogCase(
+    'Confirm dialog/id with spaces',
+    { ...confirmDialogDefaults, id: 'archive' },
+    {},
+    ' archive ',
+  ),
+  confirmDialogCase('Confirm dialog/unknown choices', {
+    ...confirmDialogDefaults,
+    kind: 'pin' as ConfirmDialogArgs['kind'],
+    tone: 'loud' as ConfirmDialogArgs['tone'],
+    sidePhone: 'top' as ConfirmDialogArgs['sidePhone'],
   }),
   ...storyArgs<MenuSheetArgs>(menuSheetStories).map(([story, args]) =>
     menuSheetCase(`Menu sheet/${story}`, args),
@@ -1012,6 +1080,43 @@ function menuSheetCase(
       named,
     },
     blade: { component: 'menu-sheet', props, attributes, slot: args.nav, named },
+  };
+}
+
+/** The confirmation dialog's parity; it has no slots. */
+function confirmDialogCase(
+  story: string,
+  args: ConfirmDialogArgs,
+  attributes: Attributes = {},
+  id: string = args.id,
+): ParityCase {
+  const props = {
+    id,
+    ...Object.fromEntries(
+      (
+        [
+          'title',
+          'message',
+          'kind',
+          'phrase',
+          'fieldLabel',
+          'confirmLabel',
+          'cancelLabel',
+          'tone',
+          'error',
+          'busy',
+          'sidePhone',
+        ] as const
+      )
+        .filter((name) => args[name] !== undefined)
+        .map((name) => [name, args[name]]),
+    ),
+  };
+  return {
+    story,
+    markup: confirmDialog(args, attributes),
+    vue: { component: PlinthConfirmDialog, props: { ...props, ...attributes }, slot: '' },
+    blade: { component: 'confirm-dialog', props, attributes, slot: '' },
   };
 }
 
@@ -1458,6 +1563,25 @@ describe('parity with the stories', () => {
       'Dialog/empty footer',
       'Dialog/id with spaces',
       'Dialog/unknown side',
+      'Confirm dialog/Default',
+      'Confirm dialog/Danger',
+      'Confirm dialog/TypeToConfirm',
+      'Confirm dialog/TypeToConfirmTyping',
+      'Confirm dialog/TypeToConfirmMatching',
+      'Confirm dialog/Password',
+      'Confirm dialog/PasswordBusy',
+      'Confirm dialog/PasswordError',
+      'Confirm dialog/BottomOnPhone',
+      'Confirm dialog/LongText',
+      'Confirm dialog/with extra attributes',
+      'Confirm dialog/with a clashing attribute',
+      'Confirm dialog/a phrase with pattern characters',
+      'Confirm dialog/a label without the phrase',
+      'Confirm dialog/an error on the type kind',
+      'Confirm dialog/an error without a field, and blank labels',
+      'Confirm dialog/a blank error',
+      'Confirm dialog/id with spaces',
+      'Confirm dialog/unknown choices',
       'Menu sheet/Default',
       'Menu sheet/WithPhoto',
       'Menu sheet/StaticUser',

@@ -10,7 +10,7 @@ it('lists every component with a live preview, and what is coming', function () 
         ->assertSee('<title>Components · Plinth</title>', false)
         ->assertSee('<a class="site-header-link" href="/components"  aria-current="page" >Components</a>', false)
         ->assertSee('Coming next')
-        ->assertSee('href="https://github.com/bdynamicpt/plinth/issues/62"', false);
+        ->assertSee('href="https://github.com/bdynamicpt/plinth/issues/63"', false);
 
     foreach (app(Catalogue::class)->all() as $component) {
         $response->assertSee('<a class="site-component-card-link" href="'.$component->url().'">'.$component->name.'</a>', false);

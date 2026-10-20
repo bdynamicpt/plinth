@@ -165,6 +165,7 @@
     --plinth-font-size-4xl: var(--plinth-ref-font-size-36);
     --plinth-font-size-5xl: var(--plinth-ref-font-size-48);
     --plinth-font-size-6xl: var(--plinth-ref-font-size-64);
+    --plinth-font-size-field: var(--plinth-ref-font-size-16);
     --plinth-font-weight-regular: var(--plinth-ref-font-weight-400);
     --plinth-font-weight-medium: var(--plinth-ref-font-weight-500);
     --plinth-font-weight-semibold: var(--plinth-ref-font-weight-600);
@@ -1267,6 +1268,191 @@
       color: HighlightText;
       background-color: Highlight;
       border-color: Highlight;
+    }
+  }
+}
+
+/* confirm-dialog.css */
+/*
+ * Confirmation dialog: a dialog that asks a person to confirm an action before it happens, in
+ * three kinds: simple ("Archive 3 tickets?"), type to confirm ("Type harbour to delete this
+ * project") and password ("Enter your password to change the billing email").
+ *
+ * <dialog id="delete" class="plinth-dialog plinth-confirm-dialog" role="alertdialog"
+ *   closedby="closerequest" aria-labelledby="delete-title" aria-describedby="delete-message">
+ *   <form method="dialog" class="plinth-confirm-dialog-form">
+ *     <div class="plinth-dialog-header">
+ *       <h2 id="delete-title" class="plinth-dialog-title">Delete this project?</h2>
+ *     </div>
+ *     <div class="plinth-dialog-body">
+ *       <p id="delete-message" class="plinth-confirm-dialog-message">Its tickets go too.</p>
+ *       <div class="plinth-confirm-dialog-field">
+ *         <label for="delete-field" class="plinth-confirm-dialog-label">
+ *           Type <strong>harbour</strong> to confirm</label>
+ *         <input id="delete-field" class="plinth-confirm-dialog-input" type="text"
+ *           name="confirmation" required pattern="harbour" autocomplete="off"
+ *           autocapitalize="none" spellcheck="false">
+ *       </div>
+ *       <p id="delete-error" class="plinth-confirm-dialog-error" role="alert">…</p>
+ *     </div>
+ *     <div class="plinth-dialog-footer">
+ *       <button type="button" class="plinth-button" data-variant="secondary" data-size="md"
+ *         commandfor="delete" command="close" value="cancel">
+ *         <span class="plinth-button-label">Cancel</span></button>
+ *       <button type="submit" class="plinth-button plinth-confirm-dialog-confirm"
+ *         data-variant="danger" data-size="md" value="confirm">
+ *         <span class="plinth-button-label">Delete</span></button>
+ *     </div>
+ *   </form>
+ * </dialog>
+ *
+ * It is a dialog (dialog.css, on modal.css, with button.css for its actions) that is never
+ * dismissible: role="alertdialog", closedby="closerequest" and no close button, so a tap on the
+ * backdrop leaves it open, and it closes through its buttons, Escape acting as Cancel. The root
+ * needs an id; the title's, message's, field's and error's ids are the root's id with -title,
+ * -message, -field and -error. The title and the message are required: they are the alert
+ * dialog's name and description. data-side-phone="bottom" makes it a bottom sheet below 768px, as
+ * on the dialog. A project may set its own role and closedby.
+ *
+ * Its content is a <form method="dialog">. Cancel is a button with command="close" and
+ * value="cancel", which closes the dialog with returnValue "cancel" and never submits, so it works
+ * whatever is in the field; Escape closes it with an empty returnValue.
+ * Confirm is the form's only submit button, so Enter in the field confirms too: once the browser
+ * has checked the field, the form fires submit (it bubbles to the dialog, where the app listens)
+ * and the dialog closes with returnValue "confirm". The browser focuses the first control when it
+ * opens: the field, or Cancel when there is none. The browser doesn't empty the field when the
+ * dialog closes, so the app calls reset() on the form on close: the phrase is typed afresh each
+ * time, and a password doesn't stay in the page.
+ *
+ * Kinds (no attribute: the markup is what differs):
+ * - simple: the message only.
+ * - type to confirm: a text field with required and pattern, the phrase with its pattern
+ *   characters escaped. The browser blocks the submit until the text matches, and while the form
+ *   is :invalid the confirm button looks disabled, through CSS alone (it isn't disabled: a press
+ *   shows the browser's message and focuses the field). The label shows the phrase in <strong>;
+ *   a label of the app's own must keep it (:phrase), or nobody can tell what to type.
+ * - password: a field with type="password", name="password", autocomplete="current-password" and
+ *   required, so the confirm button looks disabled until something is typed. Plinth never checks
+ *   a password: the app calls preventDefault() on the submit, sets
+ *   the confirm button busy while it checks, then closes the dialog (close("confirm")) or shows
+ *   the error.
+ *
+ * States:
+ * - error: a message under the field, in danger-text with role="alert" so it is announced when it
+ *   appears; the field has aria-invalid="true", aria-describedby pointing at it, and a thick
+ *   danger edge (thick, so it isn't only a colour).
+ * - busy: the confirm button's busy state (button.css: aria-busy, aria-disabled and a spinner).
+ *   The app ignores another submit while it is busy.
+ * - tone: neutral (default) makes the confirm button primary; danger makes it the danger
+ *   variant, for an action that destroys something.
+ *
+ * Fields are 16px text on a phone, so iOS doesn't zoom the page when one takes focus, and md from
+ * 768px up; they are control.md tall, and 40px on a touch screen.
+ */
+
+@layer plinth {
+  /* The form takes the dialog's place as the column of parts, so the body still scrolls. */
+  .plinth-confirm-dialog-form {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-block-size: 0;
+    margin: 0;
+  }
+
+  .plinth-confirm-dialog-message {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-confirm-dialog-field {
+    display: grid;
+    gap: var(--plinth-space-2);
+    margin-block-start: var(--plinth-space-4);
+  }
+
+  .plinth-confirm-dialog-label {
+    font-size: var(--plinth-font-size-sm);
+    font-weight: var(--plinth-font-weight-medium);
+    line-height: var(--plinth-font-leading-normal);
+    color: var(--plinth-color-text-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-confirm-dialog-label strong {
+    font-family: var(--plinth-font-family-mono);
+    font-weight: var(--plinth-font-weight-semibold);
+    color: var(--plinth-color-text);
+  }
+
+  .plinth-confirm-dialog-input {
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-block-size: var(--plinth-control-md);
+    padding-block: 0;
+    padding-inline: var(--plinth-space-3);
+    margin: 0;
+    font-family: var(--plinth-font-family-body);
+    font-size: var(--plinth-font-size-field);
+    line-height: var(--plinth-font-leading-tight);
+    color: var(--plinth-color-text);
+    background-color: var(--plinth-color-surface-sunken);
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-border-strong);
+    border-radius: var(--plinth-radius-control);
+    transition: border-color var(--plinth-duration-fast) var(--plinth-easing-standard);
+  }
+
+  /* The phrase is typed as it shows in the label. */
+  .plinth-confirm-dialog-input[type='text'] {
+    font-family: var(--plinth-font-family-mono);
+  }
+
+  .plinth-confirm-dialog-input:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset);
+  }
+
+  .plinth-confirm-dialog-input[aria-invalid='true'] {
+    border-color: var(--plinth-color-danger);
+    border-width: var(--plinth-border-width-thick);
+  }
+
+  .plinth-confirm-dialog-error {
+    margin-block: var(--plinth-space-2) 0;
+    font-size: var(--plinth-font-size-sm);
+    line-height: var(--plinth-font-leading-normal);
+    color: var(--plinth-color-danger-text);
+    overflow-wrap: anywhere;
+  }
+
+  /* Until the field matches, the confirm button looks disabled; it keeps its contrast. */
+  .plinth-confirm-dialog-form:invalid .plinth-confirm-dialog-confirm:not([aria-busy='true']) {
+    --plinth-button-surface: var(--plinth-color-surface-sunken);
+    --plinth-button-surface-hover: var(--plinth-color-surface-sunken);
+    --plinth-button-surface-active: var(--plinth-color-surface-sunken);
+    --plinth-button-text: var(--plinth-color-text-muted);
+    --plinth-button-edge: var(--plinth-color-border);
+    --plinth-button-inner-edge: none;
+
+    cursor: not-allowed;
+  }
+
+  @media (pointer: coarse) {
+    .plinth-confirm-dialog-input {
+      min-block-size: var(--plinth-touch-target);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .plinth-confirm-dialog-input {
+      font-size: var(--plinth-font-size-md);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .plinth-confirm-dialog-form:invalid .plinth-confirm-dialog-confirm:not([aria-busy='true']) {
+      color: GrayText;
+      border-color: GrayText;
     }
   }
 }

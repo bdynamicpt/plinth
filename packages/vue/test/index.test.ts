@@ -7,6 +7,7 @@ import {
   PlinthButton,
   PlinthCallout,
   PlinthCodeBlock,
+  PlinthConfirmDialog,
   PlinthDataTable,
   PlinthDataTableCell,
   PlinthDataTableColumn,
@@ -37,6 +38,7 @@ describe('the Plinth plugin', () => {
     expect(app.component('PlinthButton')).toBe(PlinthButton);
     expect(app.component('PlinthCallout')).toBe(PlinthCallout);
     expect(app.component('PlinthCodeBlock')).toBe(PlinthCodeBlock);
+    expect(app.component('PlinthConfirmDialog')).toBe(PlinthConfirmDialog);
     expect(app.component('PlinthDataTable')).toBe(PlinthDataTable);
     expect(app.component('PlinthDataTableCell')).toBe(PlinthDataTableCell);
     expect(app.component('PlinthDataTableColumn')).toBe(PlinthDataTableColumn);
