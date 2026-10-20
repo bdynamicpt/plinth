@@ -102,8 +102,8 @@
         <div class="site-container site-works-inner">
             <h2 id="works-title" class="site-meta site-works-heading">Works with</h2>
             <ul class="site-works-list" role="list">
-                @foreach (['Laravel', 'Filament', 'Vue 3', 'React 19', 'Tailwind v4', 'Plain HTML'] as $name)
-                    <li class="site-works-item">{{ $name }}</li>
+                @foreach (['laravel' => 'Laravel', 'filament' => 'Filament', 'vue' => 'Vue 3', 'react' => 'React 19', 'tailwind' => 'Tailwind v4', 'html' => 'Plain HTML'] as $logo => $name)
+                    <li class="site-works-item"><x-site.logo :name="$logo" class="site-works-logo" />{{ $name }}</li>
                 @endforeach
             </ul>
         </div>
