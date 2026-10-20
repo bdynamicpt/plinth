@@ -21,6 +21,10 @@ tokens, so a brand's overrides still reach them.
 
 Each tone's background and hairline border: a faint, translucent tint of the tone's colour, so a
 full-width callout stays quiet on any surface. Badges keep the stronger status surfaces.
+The tints mix the tone's semantic colour (`--plinth-color-info` and the rest), so a brand that
+overrides those on `:root` changes the tints too; an override on one section of a page changes
+only the icon there. Only these per-tone tokens are meant to be overridden: the callout sets its
+own `--plinth-callout-surface` and `-border` from them on every callout.
 
 <!-- tokens: component callout -->
 

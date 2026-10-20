@@ -226,11 +226,11 @@ describe('tiers', () => {
     for (const tone of ['info', 'success', 'warning', 'danger']) {
       for (const part of ['surface', 'border']) {
         const t = token(`callout.${tone}-${part}`);
-        expect(t.darkCss, t.name).toMatch(
-          new RegExp(
-            `^color-mix\\(in srgb, var\\(--plinth-color-${tone}\\) \\d+%, transparent\\)$`,
-          ),
+        const tint = new RegExp(
+          `^color-mix\\(in srgb, var\\(--plinth-color-${tone}\\) \\d+%, transparent\\)$`,
         );
+        expect(t.css, t.name).toMatch(tint);
+        expect(t.darkCss, t.name).toMatch(tint);
       }
     }
   });
