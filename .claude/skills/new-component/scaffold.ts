@@ -79,27 +79,26 @@ type Story = StoryObj<${Name}Args>;
 export const Default: Story = {};
 `,
 
-  [`storybook/stories/components/${Name}.mdx`]: `import { Canvas, Controls, Meta, Source } from '@storybook/addon-docs/blocks';
-import { AtEveryWidth } from '../../blocks/AtEveryWidth.tsx';
-import * as ${Name}Stories from './${Name}.stories';
+  [`site/components/${name}.md`]: `# ${title}
 
-<Meta of={${Name}Stories} />
+TODO what it is and where it goes, in a sentence or two (site/components/badge.md is the model
+for every page).
 
-# ${title}
+## When not to use it
 
-TODO what it is, where it goes, and what it is not (Badge.mdx is the model for every page).
+- TODO what it is not, and the component to use instead.
 
-<Canvas of={${Name}Stories.Default} />
-<Controls of={${Name}Stories.Default} />
+## TODO one section per variant or state
 
-<AtEveryWidth of={${Name}Stories.Default} />
+TODO when to pick it.
+
+\`\`\`blade example
+<x-plinth::${name}>Content</x-plinth::${name}>
+\`\`\`
 
 ## Markup contract
 
-Blade, Vue and React print exactly this markup, and the parity tests hold them to it. The CSS in
-\`packages/css/src/components/${name}.css\` styles it.
-
-<Source language="html" dark code={\`<div class="plinth-${name}">Content</div>\`} />
+Blade, Vue and React print exactly this markup, and the parity tests hold them to it.
 
 | Part             | Element | Required | What it is |
 | ---------------- | ------- | -------- | ---------- |
@@ -107,38 +106,40 @@ Blade, Vue and React print exactly this markup, and the parity tests hold them t
 
 TODO a table of the data-* variants, states and ARIA attributes, with their values and defaults.
 
-## TODO one section per variant or state
+## Props
 
-<Canvas of={${Name}Stories.Default} />
+The same names in every layer. React takes the Vue props, with the content as \`children\`.
+
+| Prop  | Blade    | Vue              | React      | Default |
+| ----- | -------- | ---------------- | ---------- | ------- |
+| label | the slot | the default slot | \`children\` | none    |
+
+TODO which attributes reach which element, the events Vue emits and React's \`on…\` callbacks.
+
+\`\`\`blade tab="Blade"
+<x-plinth::${name} class="ms-2">Content</x-plinth::${name}>
+\`\`\`
+
+\`\`\`vue tab="Vue"
+<Plinth${Name} class="ms-2">Content</Plinth${Name}>
+\`\`\`
+
+\`\`\`tsx tab="React"
+import { Plinth${Name} } from '@bdynamic/plinth/react';
+
+<Plinth${Name} className="ms-2">Content</Plinth${Name}>;
+\`\`\`
 
 ## Accessibility
 
 - TODO the accessible name, what screen readers announce, the keyboard, the focus ring, touch
   targets, and anything the app must add.
 
-## In Blade, Vue and React
+The markup contract is at the top of
+[\`packages/css/src/components/${name}.css\`](../../packages/css/src/components/${name}.css).
+`,
 
-| Prop  | Blade    | Vue              | React      | Default |
-| ----- | -------- | ---------------- | ---------- | ------- |
-| label | the slot | the default slot | \`children\` | —       |
-
-<Source
-  language="html"
-  dark
-  code={\`<x-plinth::${name}>Content</x-plinth::${name}>
-
-<Plinth${Name}>Content</Plinth${Name}>\`}
-/>
-
-<Source
-  language="tsx"
-  dark
-  code={\`import { Plinth${Name} } from '@bdynamic/plinth/react';
-
-<Plinth${Name} className="ms-2">Content</Plinth${Name}>\`}
-/>
-
-TODO which attributes reach which element, the events Vue emits and React's \`on…\` callbacks.
+  [`site/resources/views/catalogue/previews/${name}.blade.php`]: `<x-plinth::${name}>Content</x-plinth::${name}>
 `,
 
   [`packages/blade/resources/views/components/${name}.blade.php`]: `{{-- Markup contract: packages/css/src/components/${name}.css --}}
@@ -273,4 +274,7 @@ Still to do by hand (SKILL.md, step 2):
   packages/vue/test/index.test.ts     the plugin test checks Plinth${Name} too
   packages/react/src/index.ts         export Plinth${Name} and its props type
   storybook/test/parity.test.ts       a case for every ${Name} story, its name in the list, and
-                                      the Vue and React components in reactComponents`);
+                                      the Vue and React components in reactComponents
+  site/config/components.php          an entry for '${name}' (name, group, description, and a
+                                      playground if it has variants, sizes or states)
+  site/tests/Feature/Components/      the component count in CatalogueTest.php`);
