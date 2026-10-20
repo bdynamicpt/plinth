@@ -18,6 +18,7 @@ it('prints the dialog, the header, the body and the footer', function () use ($c
     expect(squish($html))->toBe(
         '<dialog id="project" class="plinth-dialog" closedby="any"'
         .' aria-labelledby="project-title" aria-describedby="project-description">'
+        .'<div class="plinth-dialog-panel">'
         .'<div class="plinth-dialog-header">'
         .'<h2 id="project-title" class="plinth-dialog-title">Edit project</h2>'
         .'<p id="project-description" class="plinth-dialog-description">The name shows to everyone.</p>'
@@ -25,6 +26,7 @@ it('prints the dialog, the header, the body and the footer', function () use ($c
         .'</div>'
         .'<div class="plinth-dialog-body"><p>Body</p></div>'
         .'<div class="plinth-dialog-footer"><button type="button">Save</button></div>'
+        .'</div>'
         .'</dialog>'
     );
 });
@@ -37,10 +39,21 @@ it('is an alert dialog with no close button when it is not dismissible', functio
     expect($html)->toBe(
         '<dialog id="leave" class="plinth-dialog" role="alertdialog" closedby="closerequest"'
         .' aria-labelledby="leave-title">'
+        .'<div class="plinth-dialog-panel">'
         .'<div class="plinth-dialog-header"><h2 id="leave-title" class="plinth-dialog-title">Leave?</h2></div>'
         .'<div class="plinth-dialog-body">Body</div>'
-        .'</dialog>'
+        .'</div></dialog>'
     );
+});
+
+it('has the grab handle and the swipe when it is a bottom sheet on a phone that can be dismissed', function () {
+    $dialog = fn (string $props) => Blade::render('<x-plinth::dialog id="project" title="Edit" '.$props.'>Body</x-plinth::dialog>');
+
+    expect(squish($dialog('side-phone="bottom"')))
+        ->toContain('<div class="plinth-dialog-panel"><div class="plinth-dialog-handle" aria-hidden="true"></div><div class="plinth-dialog-header">')
+        ->toContain('x-init="(('.e('dialog) => {'))
+        ->and($dialog('side-phone="bottom" :dismissible="false"'))->not->toContain('plinth-dialog-handle')->not->toContain('x-init')
+        ->and($dialog(''))->not->toContain('plinth-dialog-handle')->not->toContain('x-init');
 });
 
 it('leaves out an empty or blank description and a missing footer', function () {
@@ -54,7 +67,7 @@ it('leaves out an empty or blank description and a missing footer', function () 
             ->not->toContain('aria-describedby')
             ->not->toContain('plinth-dialog-description')
             ->not->toContain('plinth-dialog-footer')
-            ->toEndWith('<div class="plinth-dialog-body">Body</div></dialog>');
+            ->toEndWith('<div class="plinth-dialog-body">Body</div></div></dialog>');
     }
 });
 

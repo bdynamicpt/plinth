@@ -4,6 +4,7 @@ import { computed, ref, useId, useSlots } from 'vue';
 import PlinthIconButton from './PlinthIconButton.vue';
 import { dialogSidePhone, type DialogSidePhone } from './dialog';
 import { hasContent } from './slots';
+import { useSwipeToClose } from './swipe';
 
 const props = withDefaults(
   defineProps<{
@@ -45,6 +46,8 @@ const side = computed(() => dialogSidePhone(props.sidePhone));
 const hasDescription = computed(() => Boolean(props.description?.trim()));
 
 const dialog = ref<HTMLDialogElement>();
+// A bottom panel on a phone is dragged down to close (modal.css).
+useSwipeToClose(dialog);
 
 defineExpose({
   /** Opens the dialog as a modal. */
@@ -66,32 +69,39 @@ defineExpose({
     :aria-describedby="hasDescription ? `${dialogId}-description` : undefined"
     @close="emit('close', $event)"
   >
-    <div class="plinth-dialog-header">
-      <h2 :id="`${dialogId}-title`" class="plinth-dialog-title">{{ title }}</h2>
-      <p v-if="hasDescription" :id="`${dialogId}-description`" class="plinth-dialog-description">
-        {{ description }}
-      </p>
-      <PlinthIconButton
-        v-if="dismissible"
-        class="plinth-dialog-close"
-        :label="closeLabel"
-        variant="ghost"
-        :commandfor="dialogId"
-        command="close"
-        ><svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M6 6l12 12M18 6L6 18"></path></svg
-      ></PlinthIconButton>
-    </div>
-    <div class="plinth-dialog-body"><slot /></div>
-    <div v-if="hasContent(slots.footer?.())" class="plinth-dialog-footer">
-      <slot name="footer" />
+    <div class="plinth-dialog-panel">
+      <div
+        v-if="dismissible && side === 'bottom'"
+        class="plinth-dialog-handle"
+        aria-hidden="true"
+      ></div>
+      <div class="plinth-dialog-header">
+        <h2 :id="`${dialogId}-title`" class="plinth-dialog-title">{{ title }}</h2>
+        <p v-if="hasDescription" :id="`${dialogId}-description`" class="plinth-dialog-description">
+          {{ description }}
+        </p>
+        <PlinthIconButton
+          v-if="dismissible"
+          class="plinth-dialog-close"
+          :label="closeLabel"
+          variant="ghost"
+          :commandfor="dialogId"
+          command="close"
+          ><svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M6 6l12 12M18 6L6 18"></path></svg
+        ></PlinthIconButton>
+      </div>
+      <div class="plinth-dialog-body"><slot /></div>
+      <div v-if="hasContent(slots.footer?.())" class="plinth-dialog-footer">
+        <slot name="footer" />
+      </div>
     </div>
   </dialog>
 </template>

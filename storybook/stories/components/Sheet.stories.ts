@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
-import { sheetSides } from '@bdynamic/plinth-vue';
+import { sheetSides, swipeToClose } from '@bdynamic/plinth-vue';
 import { badge } from './badge.ts';
 import { button } from './button.ts';
 import { icon } from './icon.ts';
@@ -52,7 +52,11 @@ const meta = {
   // The story opens its sheet, as an app would with showModal(). In the docs page the sheets stay
   // closed until their button is pressed.
   play: ({ canvasElement }) => {
-    canvasElement.querySelector<HTMLDialogElement>('dialog.plinth-sheet')?.showModal();
+    const dialog = canvasElement.querySelector<HTMLDialogElement>('dialog.plinth-sheet');
+    if (!dialog) return;
+    // What the layers add: a bottom panel on a phone closes when it is swiped off.
+    swipeToClose(dialog);
+    dialog.showModal();
   },
   args: {
     id: 'filters',

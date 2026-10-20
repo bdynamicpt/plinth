@@ -4,6 +4,7 @@ import { computed, ref, useId, useSlots } from 'vue';
 import PlinthIconButton from './PlinthIconButton.vue';
 import { sheetSide, sheetSidePhone, type SheetSide } from './sheet';
 import { hasContent } from './slots';
+import { useSwipeToClose } from './swipe';
 
 const props = withDefaults(
   defineProps<{
@@ -46,6 +47,9 @@ const dataSidePhone = computed(() => sheetSidePhone(props.sidePhone));
 const hasDescription = computed(() => Boolean(props.description?.trim()));
 
 const dialog = ref<HTMLDialogElement>();
+const handle = computed(() => (dataSidePhone.value ?? dataSide.value) === 'bottom');
+// A bottom panel on a phone is dragged down to close (modal.css).
+useSwipeToClose(dialog);
 
 defineExpose({
   /** Opens the sheet as a modal dialog. */
@@ -67,31 +71,34 @@ defineExpose({
     :aria-describedby="hasDescription ? `${sheetId}-description` : undefined"
     @close="emit('close', $event)"
   >
-    <div class="plinth-sheet-header">
-      <h2 :id="`${sheetId}-title`" class="plinth-sheet-title">{{ title }}</h2>
-      <p v-if="hasDescription" :id="`${sheetId}-description`" class="plinth-sheet-description">
-        {{ description }}
-      </p>
-      <PlinthIconButton
-        class="plinth-sheet-close"
-        :label="closeLabel"
-        variant="ghost"
-        :commandfor="sheetId"
-        command="close"
-        ><svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M6 6l12 12M18 6L6 18"></path></svg
-      ></PlinthIconButton>
-    </div>
-    <div class="plinth-sheet-body"><slot /></div>
-    <div v-if="hasContent(slots.footer?.())" class="plinth-sheet-footer">
-      <slot name="footer" />
+    <div class="plinth-sheet-panel">
+      <div v-if="handle" class="plinth-sheet-handle" aria-hidden="true"></div>
+      <div class="plinth-sheet-header">
+        <h2 :id="`${sheetId}-title`" class="plinth-sheet-title">{{ title }}</h2>
+        <p v-if="hasDescription" :id="`${sheetId}-description`" class="plinth-sheet-description">
+          {{ description }}
+        </p>
+        <PlinthIconButton
+          class="plinth-sheet-close"
+          :label="closeLabel"
+          variant="ghost"
+          :commandfor="sheetId"
+          command="close"
+          ><svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M6 6l12 12M18 6L6 18"></path></svg
+        ></PlinthIconButton>
+      </div>
+      <div class="plinth-sheet-body"><slot /></div>
+      <div v-if="hasContent(slots.footer?.())" class="plinth-sheet-footer">
+        <slot name="footer" />
+      </div>
     </div>
   </dialog>
 </template>

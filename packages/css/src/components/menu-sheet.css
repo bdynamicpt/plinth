@@ -4,27 +4,30 @@
  *
  * <dialog id="menu" class="plinth-sheet plinth-menu-sheet" data-side="end"
  *   data-side-phone="bottom" closedby="any" aria-labelledby="menu-title">
- *   <div class="plinth-sheet-header">
- *     <h2 id="menu-title" class="plinth-sheet-title">Menu</h2>
- *     <button … class="plinth-button plinth-icon-button plinth-sheet-close" commandfor="menu"
- *       command="close">…</button>
- *   </div>
- *   <div class="plinth-sheet-body">
- *     <a class="plinth-list-row plinth-menu-sheet-user" href="/profile">
- *       <span class="plinth-list-row-leading">
- *         <span class="plinth-avatar" data-size="lg" aria-hidden="true">…</span>
- *       </span>
- *       <span class="plinth-list-row-content">
- *         <span class="plinth-list-row-title">Sam Lee</span>
- *         <span class="plinth-list-row-description">sam@example.com</span>
- *       </span>
- *       <span class="plinth-list-row-trailing">…chevron…</span>
- *     </a>
- *     <nav class="plinth-menu-sheet-nav" aria-labelledby="menu-title">
- *       <div class="plinth-list-card">…link rows, one with aria-current="page"…</div>
- *     </nav>
- *     <div class="plinth-menu-sheet-account">
- *       <div class="plinth-list-card">…Settings, Sign out…</div>
+ *   <div class="plinth-sheet-panel">
+ *     <div class="plinth-sheet-handle" aria-hidden="true"></div>
+ *     <div class="plinth-sheet-header">
+ *       <h2 id="menu-title" class="plinth-sheet-title">Menu</h2>
+ *       <button … class="plinth-button plinth-icon-button plinth-sheet-close" commandfor="menu"
+ *         command="close">…</button>
+ *     </div>
+ *     <div class="plinth-sheet-body">
+ *       <a class="plinth-list-row plinth-menu-sheet-user" href="/profile">
+ *         <span class="plinth-list-row-leading">
+ *           <span class="plinth-avatar" data-size="lg" aria-hidden="true">…</span>
+ *         </span>
+ *         <span class="plinth-list-row-content">
+ *           <span class="plinth-list-row-title">Sam Lee</span>
+ *           <span class="plinth-list-row-description">sam@example.com</span>
+ *         </span>
+ *         <span class="plinth-list-row-trailing">…chevron…</span>
+ *       </a>
+ *       <nav class="plinth-menu-sheet-nav" aria-labelledby="menu-title">
+ *         <div class="plinth-list-card">…link rows, one with aria-current="page"…</div>
+ *       </nav>
+ *       <div class="plinth-menu-sheet-account">
+ *         <div class="plinth-list-card">…Settings, Sign out…</div>
+ *       </div>
  *     </div>
  *   </div>
  * </dialog>
@@ -52,7 +55,7 @@
  */
 
 @layer plinth {
-  .plinth-menu-sheet > .plinth-sheet-body {
+  .plinth-menu-sheet .plinth-sheet-body {
     display: flex;
     flex-direction: column;
     gap: var(--plinth-space-5);

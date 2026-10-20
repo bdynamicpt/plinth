@@ -49,6 +49,11 @@ export function sheet(
     ` closedby="${escape(closedby)}" aria-labelledby="${escape(id)}-title"`,
     hasDescription ? ` aria-describedby="${escape(id)}-description"` : '',
     '>',
+    '<div class="plinth-sheet-panel">',
+    // A bottom sheet on a phone has the grab handle, and is dragged down to close (modal.css).
+    (phone ?? sheetSide(side)) === 'bottom'
+      ? '<div class="plinth-sheet-handle" aria-hidden="true"></div>'
+      : '',
     '<div class="plinth-sheet-header">',
     `<h2 id="${escape(id)}-title" class="plinth-sheet-title">${escape(title)}</h2>`,
     hasDescription
@@ -58,6 +63,7 @@ export function sheet(
     '</div>',
     `<div class="plinth-sheet-body">${body}</div>`,
     footer?.trim() ? `<div class="plinth-sheet-footer">${footer}</div>` : '',
+    '</div>',
     '</dialog>',
   ].join('');
 }

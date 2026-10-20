@@ -19,10 +19,14 @@ describe('PlinthDialog', () => {
       { description: 'The name shows to everyone.' },
       { footer: '<button type="button">Save</button>' },
     );
-    const html = wrapper.html().replace(/\n\s*/g, '');
+    const html = wrapper
+      .html()
+      .replace(/\n\s*/g, '')
+      .replace(/<!--.*?-->/g, '');
 
     expect(html).toBe(
       '<dialog id="project" class="plinth-dialog" closedby="any" aria-labelledby="project-title" aria-describedby="project-description">' +
+        '<div class="plinth-dialog-panel">' +
         '<div class="plinth-dialog-header">' +
         '<h2 id="project-title" class="plinth-dialog-title">Edit project</h2>' +
         '<p id="project-description" class="plinth-dialog-description">The name shows to everyone.</p>' +
@@ -30,6 +34,7 @@ describe('PlinthDialog', () => {
         '</div>' +
         '<div class="plinth-dialog-body"><p>Body</p></div>' +
         '<div class="plinth-dialog-footer"><button type="button">Save</button></div>' +
+        '</div>' +
         '</dialog>',
     );
   });
@@ -40,6 +45,15 @@ describe('PlinthDialog', () => {
     expect(wrapper.attributes('role')).toBe('alertdialog');
     expect(wrapper.attributes('closedby')).toBe('closerequest');
     expect(wrapper.find('.plinth-dialog-close').exists()).toBe(false);
+  });
+
+  it('has the grab handle when it is a bottom sheet on a phone that can be dismissed', () => {
+    const handle = (props: Record<string, unknown>) =>
+      dialogWith(props).find('.plinth-dialog-panel > .plinth-dialog-handle');
+
+    expect(handle({ sidePhone: 'bottom' }).attributes('aria-hidden')).toBe('true');
+    expect(handle({ sidePhone: 'bottom', dismissible: false }).exists()).toBe(false);
+    expect(handle({ sidePhone: 'center' }).exists()).toBe(false);
   });
 
   it('leaves out an empty or blank description and a missing footer', () => {

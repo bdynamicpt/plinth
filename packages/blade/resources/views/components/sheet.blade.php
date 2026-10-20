@@ -13,26 +13,36 @@
     }
     $id = filled($id) ? trim($id) : 'plinth-sheet-'.\Illuminate\Support\Str::lower(\Illuminate\Support\Str::random(8));
     $hasDescription = filled($description);
+    $side = \BDynamic\Plinth\Enums\SheetSide::resolve($side);
+    $sidePhone = \BDynamic\Plinth\Enums\SheetSide::resolveOptional($sidePhone);
+    // A bottom sheet on a phone has the grab handle, and is dragged down to close (modal.css).
+    $handle = ($sidePhone ?? $side) === \BDynamic\Plinth\Enums\SheetSide::Bottom;
     $root = array_filter([
         'id' => $id,
         'class' => 'plinth-sheet',
-        'data-side' => \BDynamic\Plinth\Enums\SheetSide::resolve($side)->value,
-        'data-side-phone' => \BDynamic\Plinth\Enums\SheetSide::resolveOptional($sidePhone)?->value,
+        'data-side' => $side->value,
+        'data-side-phone' => $sidePhone?->value,
         'closedby' => 'any',
+        'x-init' => $handle ? \BDynamic\Plinth\Support\SwipeToClose::ALPINE : null,
         'aria-labelledby' => $id.'-title',
         'aria-describedby' => $hasDescription ? $id.'-description' : null,
     ], fn ($value) => $value !== null);
 @endphp
 <dialog {{ $attributes->merge($root) }}>
-    <div class="plinth-sheet-header">
-        <h2 id="{{ $id }}-title" class="plinth-sheet-title">{{ $title }}</h2>
-        @if ($hasDescription)
-            <p id="{{ $id }}-description" class="plinth-sheet-description">{{ $description }}</p>
+    <div class="plinth-sheet-panel">
+        @if ($handle)
+            <div class="plinth-sheet-handle" aria-hidden="true"></div>
         @endif
-        <x-plinth::icon-button class="plinth-sheet-close" :label="$closeLabel" variant="ghost" :commandfor="$id" command="close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></x-plinth::icon-button>
+        <div class="plinth-sheet-header">
+            <h2 id="{{ $id }}-title" class="plinth-sheet-title">{{ $title }}</h2>
+            @if ($hasDescription)
+                <p id="{{ $id }}-description" class="plinth-sheet-description">{{ $description }}</p>
+            @endif
+            <x-plinth::icon-button class="plinth-sheet-close" :label="$closeLabel" variant="ghost" :commandfor="$id" command="close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></x-plinth::icon-button>
+        </div>
+        <div class="plinth-sheet-body">{{ $slot }}</div>
+        @if (isset($footer) && $footer->hasActualContent())
+            <div class="plinth-sheet-footer">{{ $footer }}</div>
+        @endif
     </div>
-    <div class="plinth-sheet-body">{{ $slot }}</div>
-    @if (isset($footer) && $footer->hasActualContent())
-        <div class="plinth-sheet-footer">{{ $footer }}</div>
-    @endif
 </dialog>

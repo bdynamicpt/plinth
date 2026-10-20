@@ -8,6 +8,8 @@ use BDynamic\Plinth\Enums\ConfirmDialogTone;
 use BDynamic\Plinth\Enums\DataTableCellKind;
 use BDynamic\Plinth\Enums\DataTableSort;
 use BDynamic\Plinth\Enums\DialogSidePhone;
+use BDynamic\Plinth\Enums\DrawerDesktop;
+use BDynamic\Plinth\Enums\DrawerSnap;
 use BDynamic\Plinth\Enums\HeadingLevel;
 use BDynamic\Plinth\Enums\SheetSide;
 use BDynamic\Plinth\Enums\Size;
@@ -28,6 +30,7 @@ it('defaults each choice the way the components do', function () {
         ->and(HeadingLevel::default())->toBe(HeadingLevel::Two)
         ->and(SheetSide::default())->toBe(SheetSide::End)
         ->and(DialogSidePhone::default())->toBe(DialogSidePhone::Center)
+        ->and(DrawerDesktop::default())->toBe(DrawerDesktop::Dialog)
         ->and(DataTableSort::default())->toBe(DataTableSort::None)
         ->and(DataTableCellKind::default())->toBe(DataTableCellKind::Field)
         ->and(CalloutTone::default())->toBe(CalloutTone::Neutral)
@@ -89,6 +92,9 @@ it('matches the lists the Vue layer and the stories use', function () {
     foreach (DialogSidePhone::values() as $value) {
         expect($vue('dialog.ts'))->toContain("'{$value}'");
     }
+    foreach ([...DrawerDesktop::values(), ...DrawerSnap::values()] as $value) {
+        expect($vue('drawer.ts'))->toContain("'{$value}'");
+    }
     foreach ([...CalloutTone::values(), ...CalloutRole::values()] as $value) {
         expect($vue('callout.ts'))->toContain("'{$value}'");
     }
@@ -108,4 +114,13 @@ it('matches the lists the Vue layer and the stories use', function () {
     foreach ([...DataTableSort::values(), ...DataTableCellKind::values()] as $value) {
         expect($vue('data-table.ts'))->toContain("'{$value}'");
     }
+});
+
+it('reads a drawer\'s snap points and the one it opens at', function () {
+    expect(DrawerSnap::points('full peek'))->toBe([DrawerSnap::Peek, DrawerSnap::Full])
+        ->and(DrawerSnap::points([DrawerSnap::Half, 'half', 'top']))->toBe([DrawerSnap::Half])
+        ->and(DrawerSnap::points(null))->toBe([])
+        ->and(DrawerSnap::opensAt('peek', [DrawerSnap::Peek, DrawerSnap::Half]))->toBe(DrawerSnap::Peek)
+        ->and(DrawerSnap::opensAt(null, [DrawerSnap::Peek, DrawerSnap::Half]))->toBe(DrawerSnap::Half)
+        ->and(DrawerSnap::opensAt(DrawerSnap::Full, []))->toBeNull();
 });

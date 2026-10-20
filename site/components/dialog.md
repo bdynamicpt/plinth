@@ -28,6 +28,8 @@ The dialogs on this page stay closed until you press their button.
 | Part                         | Element    | Required | What it is                                                             |
 | ---------------------------- | ---------- | -------- | ---------------------------------------------------------------------- |
 | `.plinth-dialog`             | `<dialog>` | yes      | The root. Needs an `id`; a project's classes and attributes land on it |
+| `.plinth-dialog-panel`       | `<div>`    | yes      | The root's only child, holding the parts                               |
+| `.plinth-dialog-handle`      | `<div>`    | no       | On a dismissible bottom sheet on a phone: the grab handle, decorative  |
 | `.plinth-dialog-title`       | `<h2>`     | yes      | The dialog's accessible name                                           |
 | `.plinth-dialog-description` | `<p>`      | no       | Its accessible description (`aria-describedby`)                        |
 | `.plinth-dialog-close`       | `<button>` | no       | An icon button, named "Close" by default; only on a dismissible dialog |
@@ -74,6 +76,10 @@ alert's message.
 
 An unknown value falls back to `center`, which prints no attribute; `bottom` is
 `data-side-phone="bottom"` on the root. CSS makes the switch, so it is the same in every layer.
+
+A dismissible dialog at the bottom of a phone has a grab handle, and the person swipes it down to
+close it, as the [drawer](drawer.md) explains: dragging is the browser's scrolling, and each layer
+adds the few lines that close it when it is swiped off. Without the script the handle still shows and the close button and Escape close it, but a tap above the panel doesn't: on a phone the panel's root covers the backdrop. A dialog that isn't dismissible has no handle.
 
 ```blade example
 <x-plinth::button variant="secondary" commandfor="example-bottom" command="show-modal">Edit project</x-plinth::button>

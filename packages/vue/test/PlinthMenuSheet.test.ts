@@ -38,7 +38,7 @@ describe('PlinthMenuSheet', () => {
     expect(html).toContain(
       '<nav class="plinth-menu-sheet-nav" aria-labelledby="menu-title"><a href="/inbox">Inbox</a></nav>' +
         '<div class="plinth-menu-sheet-account"><button type="button">Sign out</button></div>' +
-        '</div></dialog>',
+        '</div></div></dialog>',
     );
   });
 

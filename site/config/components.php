@@ -222,6 +222,19 @@ return [
             ],
         ],
 
+        'drawer' => [
+            'name' => 'Drawer',
+            'group' => 'Overlays',
+            'description' => 'A bottom panel the person drags on a phone, with snap points; a dialog or a sheet on a desktop.',
+            'playground' => [
+                'template' => "<x-plinth::button variant=\"secondary\" commandfor=\"playground-drawer\" command=\"show-modal\">Show the route</x-plinth::button>\n<x-plinth::drawer id=\"playground-drawer\" title=\"Route to the library\" description=\"12 min by bike, 3.4 km.\"{attributes}>\n    <p>Head north on Harbour Road, cross the old bridge, and the library is on the left.</p>\n</x-plinth::drawer>",
+                'options' => [
+                    'snap-points' => ['values' => ['none', 'peek half full', 'half full'], 'default' => 'none'],
+                    'desktop' => ['values' => ['dialog', 'sheet'], 'default' => 'dialog'],
+                ],
+            ],
+        ],
+
         'menu-sheet' => [
             'name' => 'Menu sheet',
             'group' => 'Overlays',
@@ -247,8 +260,6 @@ return [
     | The components that are coming, by their issue.
     */
 
-    'coming' => [
-        63 => ['name' => 'Drawer', 'description' => 'A draggable bottom panel with snap points.'],
-    ],
+    'coming' => [],
 
 ];

@@ -4,21 +4,28 @@
  *
  * <dialog id="filters" class="plinth-sheet" data-side="end" data-side-phone="bottom"
  *   closedby="any" aria-labelledby="filters-title" aria-describedby="filters-description">
- *   <div class="plinth-sheet-header">
- *     <h2 id="filters-title" class="plinth-sheet-title">Filters</h2>
- *     <p id="filters-description" class="plinth-sheet-description">Narrow the list down.</p>
- *     <button type="button" class="plinth-button plinth-icon-button plinth-sheet-close"
- *       data-variant="ghost" data-size="md" aria-label="Close" commandfor="filters"
- *       command="close">
- *       <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
- *     </button>
+ *   <div class="plinth-sheet-panel">
+ *     <div class="plinth-sheet-handle" aria-hidden="true"></div>
+ *     <div class="plinth-sheet-header">
+ *       <h2 id="filters-title" class="plinth-sheet-title">Filters</h2>
+ *       <p id="filters-description" class="plinth-sheet-description">Narrow the list down.</p>
+ *       <button type="button" class="plinth-button plinth-icon-button plinth-sheet-close"
+ *         data-variant="ghost" data-size="md" aria-label="Close" commandfor="filters"
+ *         command="close">
+ *         <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
+ *       </button>
+ *     </div>
+ *     <div class="plinth-sheet-body">…</div>
+ *     <div class="plinth-sheet-footer">…</div>
  *   </div>
- *   <div class="plinth-sheet-body">…</div>
- *   <div class="plinth-sheet-footer">…</div>
  * </dialog>
  *
  * The root is the <dialog>, and it needs an id: commandfor and aria-labelledby point at it, and
- * the title's and description's ids are the root's id with -title and -description. The title is
+ * the title's and description's ids are the root's id with -title and -description. The panel is
+ * the root's only child and holds the parts. The handle is there only where the sheet's side on a
+ * phone is the bottom (data-side="bottom" with no data-side-phone, or data-side-phone="bottom"):
+ * decorative (aria-hidden), shown below 768px, where the sheet is dragged down to close
+ * (modal.css). The title is
  * required; the description (and its aria-describedby) and the footer are optional. The close
  * button is an icon button (button.css and icon.css) and is always there: closedby="any" (tap the
  * backdrop) is an enhancement Safari doesn't have yet. A project may set closedby="closerequest"
@@ -146,6 +153,21 @@
     border-start-end-radius: var(--plinth-radius-container);
   }
 
+  /*
+   * With its grab handle, a bottom sheet on a phone is dragged down to close (modal.css): the root
+   * fills the screen, see-through, and its panel is the surface, as tall as its content up to the
+   * screen's height less a gap.
+   */
+  .plinth-sheet:where([data-side='bottom']:not([data-side-phone]), [data-side-phone='bottom']):has(
+      > * > .plinth-sheet-handle
+    ) {
+    inset: 0;
+    max-block-size: none;
+    padding: 0;
+    border-width: 0;
+    border-radius: 0;
+  }
+
   /* Right-to-left text turns the slide around and swaps the safe areas. */
   .plinth-sheet:dir(rtl) {
     --plinth-sheet-direction: -1;
@@ -196,7 +218,7 @@
       border-end-end-radius: var(--plinth-radius-container);
     }
 
-    .plinth-sheet[data-side-phone][data-side='bottom'] {
+    .plinth-sheet[data-side='bottom'] {
       --plinth-modal-offset: 0 100%;
 
       inset-block: auto 0;

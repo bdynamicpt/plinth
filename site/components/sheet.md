@@ -34,6 +34,8 @@ The sheets on this page stay closed until you press their button.
 | Part                        | Element    | Required | What it is                                                             |
 | --------------------------- | ---------- | -------- | ---------------------------------------------------------------------- |
 | `.plinth-sheet`             | `<dialog>` | yes      | The root. Needs an `id`; a project's classes and attributes land on it |
+| `.plinth-sheet-panel`       | `<div>`    | yes      | The root's only child, holding the parts                               |
+| `.plinth-sheet-handle`      | `<div>`    | no       | Where the side on a phone is the bottom: the grab handle, decorative   |
 | `.plinth-sheet-title`       | `<h2>`     | yes      | The sheet's accessible name                                            |
 | `.plinth-sheet-description` | `<p>`      | no       | Its accessible description (`aria-describedby`)                        |
 | `.plinth-sheet-close`       | `<button>` | yes      | An icon button, always there, named "Close" by default                 |
@@ -79,6 +81,11 @@ holds; in plain HTML, `data-side-phone` takes only the four sides.
 
 CSS makes the switch from `data-side-phone` on the root, so it is the same in every layer and
 needs no script.
+
+A sheet on the bottom edge of a phone (`side="bottom"`, or `side-phone="bottom"`) has a grab
+handle, and the person swipes it down to close it, as the [drawer](drawer.md) explains: dragging is
+the browser's scrolling, and each layer adds the few lines that close it when it is swiped off.
+Without the script the handle still shows and the close button and Escape close it, but a tap above the panel doesn't: on a phone the panel's root covers the backdrop.
 
 ```blade example
 <x-plinth::button variant="secondary" commandfor="example-sort" command="show-modal">Sort</x-plinth::button>

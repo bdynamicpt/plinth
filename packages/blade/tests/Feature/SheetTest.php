@@ -18,6 +18,7 @@ it('prints the dialog, the header, the body and the footer', function () use ($c
     expect(squish($html))->toBe(
         '<dialog id="filters" class="plinth-sheet" data-side="end" closedby="any"'
         .' aria-labelledby="filters-title" aria-describedby="filters-description">'
+        .'<div class="plinth-sheet-panel">'
         .'<div class="plinth-sheet-header">'
         .'<h2 id="filters-title" class="plinth-sheet-title">Filters</h2>'
         .'<p id="filters-description" class="plinth-sheet-description">Narrow the list down.</p>'
@@ -25,6 +26,7 @@ it('prints the dialog, the header, the body and the footer', function () use ($c
         .'</div>'
         .'<div class="plinth-sheet-body"><p>Body</p></div>'
         .'<div class="plinth-sheet-footer"><button type="button">Apply</button></div>'
+        .'</div>'
         .'</dialog>'
     );
 });
@@ -40,7 +42,7 @@ it('leaves out an empty or blank description and a missing footer', function () 
             ->not->toContain('aria-describedby')
             ->not->toContain('plinth-sheet-description')
             ->not->toContain('plinth-sheet-footer')
-            ->toEndWith('<div class="plinth-sheet-body">Body</div></dialog>');
+            ->toEndWith('<div class="plinth-sheet-body">Body</div></div></dialog>');
     }
 });
 
@@ -69,6 +71,16 @@ it('takes a side on a phone, and leaves it out when it is missing or unknown', f
         ->and($sidePhone(null))->not->toContain('data-side-phone')
         ->and(Blade::render('<x-plinth::sheet id="filters" title="Filters">Body</x-plinth::sheet>'))
         ->not->toContain('data-side-phone');
+});
+
+it('has the grab handle and the swipe where its side on a phone is the bottom', function () {
+    $sheet = fn (string $props) => squish(Blade::render('<x-plinth::sheet id="filters" title="Filters" '.$props.'>Body</x-plinth::sheet>'));
+    $handle = '<div class="plinth-sheet-panel"><div class="plinth-sheet-handle" aria-hidden="true"></div><div class="plinth-sheet-header">';
+
+    expect($sheet('side="bottom"'))->toContain($handle)->toContain('x-init="')
+        ->and($sheet('side="end" side-phone="bottom"'))->toContain($handle)
+        ->and($sheet('side="bottom" side-phone="start"'))->not->toContain('plinth-sheet-handle')->not->toContain('x-init')
+        ->and($sheet('side="end"'))->not->toContain('plinth-sheet-handle');
 });
 
 it('takes the close button\'s label', function () {

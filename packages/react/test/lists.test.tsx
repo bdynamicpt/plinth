@@ -4,6 +4,8 @@ import * as vueCallout from '../../vue/src/callout.ts';
 import * as vueDataTable from '../../vue/src/data-table.ts';
 import * as vueConfirmDialog from '../../vue/src/confirm-dialog.ts';
 import * as vueDialog from '../../vue/src/dialog.ts';
+import * as vueDrawer from '../../vue/src/drawer.ts';
+import * as vueSwipe from '../../vue/src/swipe.ts';
 import * as vueHeading from '../../vue/src/heading.ts';
 import * as vueListRow from '../../vue/src/list-row.ts';
 import * as vueSheet from '../../vue/src/sheet.ts';
@@ -12,6 +14,7 @@ import * as vueIcon from '../../vue/src/icon.ts';
 import * as vueSize from '../../vue/src/size.ts';
 import * as vueTones from '../../vue/src/tones.ts';
 import { buttonVariant } from '../src/button.ts';
+import { swipeToClose } from '../src/swipe.ts';
 import { classNames, hasContent } from '../src/markup.ts';
 import {
   avatarGlyph,
@@ -37,6 +40,12 @@ import {
   dialogCloseIcon,
   dialogSidePhone,
   dialogSidePhones,
+  drawerCloseIcon,
+  drawerDesktop,
+  drawerDesktops,
+  drawerSnap,
+  drawerSnapPoints,
+  drawerSnaps,
   headingLevel,
   headingLevels,
   iconSizeFor,
@@ -72,6 +81,11 @@ describe('the shared lists', () => {
     expect(sheetCloseIcon).toBe(vueSheet.sheetCloseIcon);
     expect(dialogSidePhones).toEqual(vueDialog.dialogSidePhones);
     expect(dialogCloseIcon).toBe(vueDialog.dialogCloseIcon);
+    expect(drawerDesktops).toEqual(vueDrawer.drawerDesktops);
+    expect(drawerSnaps).toEqual(vueDrawer.drawerSnaps);
+    expect(drawerCloseIcon).toBe(vueDrawer.drawerCloseIcon);
+    // The swipe is written once per layer; the React copy is the Vue one.
+    expect(swipeToClose.toString()).toBe(vueSwipe.swipeToClose.toString());
     expect(confirmDialogKinds).toEqual(vueConfirmDialog.confirmDialogKinds);
     expect(confirmDialogTones).toEqual(vueConfirmDialog.confirmDialogTones);
     expect(confirmDialogFieldLabels).toEqual(vueConfirmDialog.confirmDialogFieldLabels);
@@ -96,6 +110,9 @@ describe('the shared lists', () => {
     expect(sheetSidePhone('bottom')).toBe('bottom');
     expect(dialogSidePhone('top')).toBe('center');
     expect(dialogSidePhone('bottom')).toBe('bottom');
+    expect(drawerDesktop('side')).toBe(vueDrawer.drawerDesktop('side'));
+    expect(drawerSnapPoints('full peek')).toEqual(vueDrawer.drawerSnapPoints('full peek'));
+    expect(drawerSnap('top', ['peek'])).toBe(vueDrawer.drawerSnap('top', ['peek']));
     expect(confirmDialogKind('pin')).toBe('simple');
     expect(confirmDialogKind('password')).toBe('password');
     expect(confirmDialogTone('loud')).toBe('neutral');

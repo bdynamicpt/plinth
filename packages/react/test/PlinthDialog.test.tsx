@@ -28,6 +28,7 @@ describe('PlinthDialog', () => {
       ),
     ).toBe(
       '<dialog id="project" closedby="any" aria-labelledby="project-title" aria-describedby="project-description" class="plinth-dialog">' +
+        '<div class="plinth-dialog-panel">' +
         '<div class="plinth-dialog-header">' +
         '<h2 id="project-title" class="plinth-dialog-title">Edit project</h2>' +
         '<p id="project-description" class="plinth-dialog-description">The name shows to everyone.</p>' +
@@ -35,6 +36,7 @@ describe('PlinthDialog', () => {
         '</div>' +
         '<div class="plinth-dialog-body"><p>Body</p></div>' +
         '<div class="plinth-dialog-footer"><button type="button">Save</button></div>' +
+        '</div>' +
         '</dialog>',
     );
   });
@@ -45,6 +47,17 @@ describe('PlinthDialog', () => {
     expect(dialog.getAttribute('role')).toBe('alertdialog');
     expect(dialog.getAttribute('closedby')).toBe('closerequest');
     expect(dialog.querySelector('.plinth-dialog-close')).toBeNull();
+  });
+
+  it('has the grab handle when it is a bottom sheet on a phone that can be dismissed', () => {
+    const handle = (sidePhone: DialogSidePhone, dismissible = true) =>
+      root(
+        <PlinthDialog title="Edit" sidePhone={sidePhone} dismissible={dismissible} />,
+      ).querySelector('.plinth-dialog-panel > .plinth-dialog-handle');
+
+    expect(handle('bottom')?.getAttribute('aria-hidden')).toBe('true');
+    expect(handle('bottom', false)).toBeNull();
+    expect(handle('center')).toBeNull();
   });
 
   it('leaves out a blank description and a footer that prints nothing', () => {

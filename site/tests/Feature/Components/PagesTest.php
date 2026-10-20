@@ -3,20 +3,29 @@
 use App\Components\Catalogue;
 use App\Components\Component;
 
-it('lists every component with a live preview, and what is coming', function () {
+it('lists every component with a live preview', function () {
     $response = $this->get('/components')
         ->assertOk()
         ->assertHeaderMissing('Set-Cookie')
         ->assertSee('<title>Components · Plinth</title>', false)
         ->assertSee('<a class="site-header-link" href="/components"  aria-current="page" >Components</a>', false)
-        ->assertSee('Coming next')
-        ->assertSee('href="https://github.com/bdynamicpt/plinth/issues/63"', false);
+        ->assertDontSee('Coming next');
 
     foreach (app(Catalogue::class)->all() as $component) {
         $response->assertSee('<a class="site-component-card-link" href="'.$component->url().'">'.$component->name.'</a>', false);
     }
 
     $response->assertSee('class="plinth-button"', false);
+});
+
+it('lists what is coming, by its issue', function () {
+    config(['components.coming' => [99 => ['name' => 'Tabs', 'description' => 'Switches between views.']]]);
+
+    $this->get('/components')
+        ->assertOk()
+        ->assertSee('Coming next')
+        ->assertSee('href="https://github.com/bdynamicpt/plinth/issues/99"', false)
+        ->assertSee('Switches between views.');
 });
 
 it('filters the components by group', function () {

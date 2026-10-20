@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
-import { dialogSidePhones } from '@bdynamic/plinth-vue';
+import { dialogSidePhones, swipeToClose } from '@bdynamic/plinth-vue';
 import { button } from './button.ts';
 import { dialog, type DialogArgs } from './dialog.ts';
 import { listCard } from './list-card.ts';
@@ -57,7 +57,11 @@ const meta = {
   // The story opens its dialog, as an app would with showModal(). In the docs page the dialogs
   // stay closed until their button is pressed.
   play: ({ canvasElement }) => {
-    canvasElement.querySelector<HTMLDialogElement>('dialog.plinth-dialog')?.showModal();
+    const dialog = canvasElement.querySelector<HTMLDialogElement>('dialog.plinth-dialog');
+    if (!dialog) return;
+    // What the layers add: a bottom panel on a phone closes when it is swiped off.
+    swipeToClose(dialog);
+    dialog.showModal();
   },
   args: {
     id: 'project',

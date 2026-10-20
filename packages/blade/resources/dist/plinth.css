@@ -86,6 +86,7 @@
     --plinth-ref-size-40: 2.5rem;
     --plinth-ref-size-44: 2.75rem;
     --plinth-ref-size-56: 3.5rem;
+    --plinth-ref-size-160: 10rem;
     --plinth-ref-size-400: 25rem;
     --plinth-ref-size-480: 30rem;
     --plinth-ref-radius-0: 0;
@@ -197,6 +198,7 @@
     --plinth-size-avatar-xl: var(--plinth-ref-size-56);
     --plinth-size-dialog: var(--plinth-ref-size-480);
     --plinth-size-panel: var(--plinth-ref-size-400);
+    --plinth-size-peek: var(--plinth-ref-size-160);
     --plinth-layer-base: 0;
     --plinth-layer-sticky: 100;
     --plinth-layer-overlay: 200;
@@ -210,6 +212,7 @@
     --plinth-pill-height: var(--plinth-control-md);
     --plinth-dialog-width: var(--plinth-size-dialog);
     --plinth-sheet-side-width: var(--plinth-size-panel);
+    --plinth-drawer-peek-height: var(--plinth-size-peek);
     --plinth-section-menu-height: var(--plinth-space-14);
     --plinth-section-menu-item-height: var(--plinth-control-lg);
   }
@@ -1936,21 +1939,27 @@
  *
  * <dialog id="settings" class="plinth-dialog" closedby="any"
  *   aria-labelledby="settings-title" aria-describedby="settings-description">
- *   <div class="plinth-dialog-header">
- *     <h2 id="settings-title" class="plinth-dialog-title">Settings</h2>
- *     <p id="settings-description" class="plinth-dialog-description">Changes apply at once.</p>
- *     <button type="button" class="plinth-button plinth-icon-button plinth-dialog-close"
- *       data-variant="ghost" data-size="md" aria-label="Close" commandfor="settings"
- *       command="close">
- *       <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
- *     </button>
+ *   <div class="plinth-dialog-panel">
+ *     <div class="plinth-dialog-handle" aria-hidden="true"></div>
+ *     <div class="plinth-dialog-header">
+ *       <h2 id="settings-title" class="plinth-dialog-title">Settings</h2>
+ *       <p id="settings-description" class="plinth-dialog-description">Changes apply at once.</p>
+ *       <button type="button" class="plinth-button plinth-icon-button plinth-dialog-close"
+ *         data-variant="ghost" data-size="md" aria-label="Close" commandfor="settings"
+ *         command="close">
+ *         <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
+ *       </button>
+ *     </div>
+ *     <div class="plinth-dialog-body">…</div>
+ *     <div class="plinth-dialog-footer">…</div>
  *   </div>
- *   <div class="plinth-dialog-body">…</div>
- *   <div class="plinth-dialog-footer">…</div>
  * </dialog>
  *
  * The root is the <dialog>, and it needs an id: commandfor and aria-labelledby point at it, and
- * the title's and description's ids are the root's id with -title and -description. The title is
+ * the title's and description's ids are the root's id with -title and -description. The panel is
+ * the root's only child and holds the parts. The handle is there only on a dismissible dialog
+ * with data-side-phone="bottom": decorative (aria-hidden), shown below 768px, where the dialog is
+ * dragged down to close (modal.css). The title is
  * required; the description (and its aria-describedby) and the footer are optional. The close
  * button is an icon button (button.css and icon.css). It needs modal.css, the base it shares with
  * the sheet: the surface, the backdrop, the scroll lock, the motion, the safe areas and the parts
@@ -2010,19 +2019,188 @@
     border-end-end-radius: 0;
   }
 
+  /* One that can be dismissed is dragged down to close (modal.css): the root fills the screen. */
+  .plinth-dialog[data-side-phone='bottom']:has(> * > .plinth-dialog-handle) {
+    inset: 0;
+    block-size: auto;
+    max-block-size: none;
+    border-width: 0;
+    border-radius: 0;
+  }
+
   @media (min-width: 768px) {
     .plinth-dialog,
-    .plinth-dialog[data-side-phone='bottom'] {
+    .plinth-dialog[data-side-phone='bottom'],
+    .plinth-dialog[data-side-phone='bottom']:has(> * > .plinth-dialog-handle) {
       --plinth-modal-offset: 0 var(--plinth-space-4);
       --plinth-modal-closed-opacity: 0;
       --plinth-modal-safe-area-end: initial;
 
       inset: 0;
       inline-size: min(100% - 2 * var(--plinth-space-8), var(--plinth-dialog-width));
+      block-size: fit-content;
       max-block-size: calc(100dvh - 2 * var(--plinth-space-8));
       margin: auto;
-      border-block-end-width: var(--plinth-border-width-thin);
+      border-width: var(--plinth-border-width-thin);
       border-radius: var(--plinth-radius-container);
+    }
+  }
+}
+
+/* drawer.css */
+/*
+ * Drawer: a phone-first panel on the bottom edge that the person drags, like a maps app's panel,
+ * with optional snap points (a peek, half and full height). From 768px up it is a dialog or a
+ * sheet.
+ *
+ * <dialog id="route" class="plinth-drawer" data-desktop="dialog"
+ *   data-snap-points="peek half full" data-snap="peek" closedby="any"
+ *   aria-labelledby="route-title" aria-describedby="route-description">
+ *   <div class="plinth-drawer-panel">
+ *     <div class="plinth-drawer-handle" aria-hidden="true"></div>
+ *     <div class="plinth-drawer-header">
+ *       <h2 id="route-title" class="plinth-drawer-title">Route</h2>
+ *       <p id="route-description" class="plinth-drawer-description">12 min by bike.</p>
+ *       <button type="button" class="plinth-button plinth-icon-button plinth-drawer-close"
+ *         data-variant="ghost" data-size="md" aria-label="Close" commandfor="route"
+ *         command="close">
+ *         <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
+ *       </button>
+ *     </div>
+ *     <div class="plinth-drawer-body">…</div>
+ *     <div class="plinth-drawer-footer">…</div>
+ *   </div>
+ * </dialog>
+ *
+ * The root is the <dialog>, and it needs an id: commandfor and aria-labelledby point at it, and
+ * the title's and description's ids are the root's id with -title and -description. The panel is
+ * the root's only child and holds the parts; the handle is always there, first, and decorative
+ * (aria-hidden): Escape and the close button, which is always there too, are the ways to close it
+ * without dragging. The title is required; the description (and its aria-describedby) and the
+ * footer are optional. The close button is an icon button (button.css and icon.css). It needs
+ * modal.css, the base it shares with the dialog and the sheet, where the dragging is described:
+ * this file sets where the drawer sits, how big it is and its snap points.
+ *
+ * Open it with showModal() or a <button commandfor="route" command="show-modal">. Open is the
+ * native state, [open]; the browser puts the drawer in the top layer, makes the page inert, traps
+ * focus, closes on Escape and returns focus. The dialog fires close when it closes, whichever way
+ * it closed.
+ *
+ * On a phone (below 768px) it is the screen's width on the bottom edge and slides up. Dragged
+ * down past its lowest snap point it closes; the layers do that part (modal.css). With no snap
+ * points it is as tall as its content, up to the screen's height less a gap.
+ *
+ * Snap points (data-snap-points, optional): any of peek, half and full, separated by spaces.
+ * With them the panel is the screen's height less a gap, and it rests where it is let go at the
+ * nearest one: peek shows drawer.peek-height of it (the handle, the header and the top of the
+ * body), half the screen's height, full all of it. The body scrolls inside the panel at any of
+ * them, so a drawer with a long body is dragged by its handle and header. data-snap is the snap
+ * point it opens at, one of those listed (the layers print the largest listed when it is missing
+ * or unknown); the browser opens it at full, or the largest listed, and the layers then scroll it
+ * to data-snap. The drawer remembers nothing: where it rests is the person's.
+ *
+ * Desktop (data-desktop): its presentation from 768px up. dialog (the default, also when missing
+ * or unknown) centres it like the dialog, at dialog.width; sheet makes it a full-height panel on
+ * the inline-end edge, sheet.side-width wide, like the sheet. From 768px up there is no handle
+ * and no dragging, the snap points don't apply, and a tap on the backdrop closes it
+ * (closedby="any"; Safari doesn't have it yet, so the close button is always there).
+ *
+ * The motion runs on the motion tokens, which drop to 0ms under prefers-reduced-motion; the
+ * snapping is the browser's scrolling.
+ *
+ * In Livewire, a re-render would morph the open dialog back to the server's markup and drop its
+ * open attribute: put wire:ignore.self on the drawer (or keep it outside the component that
+ * re-renders), and always pass an id, since a generated one changes on every render.
+ */
+
+@layer plinth {
+  .plinth-drawer {
+    --plinth-modal-offset: 0 100%;
+    --plinth-modal-safe-area-end: env(safe-area-inset-bottom);
+
+    /* Translate isn't logical: -1 (under :dir(rtl), below) turns the sheet's slide around. */
+    --plinth-drawer-direction: 1;
+
+    inset: 0;
+    inline-size: 100%;
+    block-size: auto;
+    max-block-size: none;
+    margin: 0;
+    border-width: 0;
+    border-radius: 0;
+  }
+
+  /* With snap points the panel is its full height, and the snap points are where it rests. */
+  .plinth-drawer[data-snap-points] > .plinth-drawer-panel {
+    block-size: calc(
+      100% - max(var(--plinth-space-12), env(safe-area-inset-top) + var(--plinth-space-4))
+    );
+  }
+
+  /* Full is the panel's end on the screen's bottom edge, the base's open position. */
+  .plinth-drawer[data-snap-points]:not([data-snap-points~='full']) > .plinth-drawer-panel {
+    scroll-snap-align: none;
+  }
+
+  /*
+   * Peek and half are the panel's top that far from the screen's bottom edge. The snap areas are
+   * the handle (peek) and the header (half), the first parts of the panel, so their margins add
+   * what lies above them: the handle's margin, then the handle (modal.css; change them together).
+   */
+  .plinth-drawer[data-snap-points~='peek'] .plinth-drawer-handle {
+    scroll-snap-align: start;
+    scroll-margin-block-start: calc(
+      100dvh - var(--plinth-drawer-peek-height) + var(--plinth-space-2)
+    );
+  }
+
+  .plinth-drawer[data-snap-points~='half'] .plinth-drawer-header {
+    scroll-snap-align: start;
+    scroll-margin-block-start: calc(50dvh + var(--plinth-space-2) + var(--plinth-space-1));
+  }
+
+  .plinth-drawer:dir(rtl) {
+    --plinth-drawer-direction: -1;
+  }
+
+  @media (min-width: 768px) {
+    .plinth-drawer {
+      --plinth-modal-offset: 0 var(--plinth-space-4);
+      --plinth-modal-closed-opacity: 0;
+      --plinth-modal-safe-area-end: initial;
+
+      inset: 0;
+      inline-size: min(100% - 2 * var(--plinth-space-8), var(--plinth-dialog-width));
+      block-size: fit-content;
+      max-block-size: calc(100dvh - 2 * var(--plinth-space-8));
+      margin: auto;
+      border-width: var(--plinth-border-width-thin);
+      border-radius: var(--plinth-radius-container);
+    }
+
+    .plinth-drawer[data-desktop='sheet'] {
+      --plinth-modal-offset: calc(100% * var(--plinth-drawer-direction)) 0;
+      --plinth-modal-closed-opacity: 1;
+      --plinth-modal-safe-area-end: env(safe-area-inset-bottom);
+
+      inset-block: 0;
+      inset-inline: auto 0;
+      inline-size: min(100% - var(--plinth-space-12), var(--plinth-sheet-side-width));
+      block-size: auto;
+      max-block-size: none;
+      padding-block: env(safe-area-inset-top) 0;
+      margin: 0;
+      border-width: 0;
+      border-inline-start-width: var(--plinth-border-width-thin);
+      border-radius: 0;
+    }
+
+    .plinth-drawer[data-snap-points] > .plinth-drawer-panel {
+      block-size: auto;
+    }
+
+    .plinth-drawer[data-snap-points] :is(.plinth-drawer-handle, .plinth-drawer-header) {
+      scroll-snap-align: none;
     }
   }
 }
@@ -2443,27 +2621,30 @@
  *
  * <dialog id="menu" class="plinth-sheet plinth-menu-sheet" data-side="end"
  *   data-side-phone="bottom" closedby="any" aria-labelledby="menu-title">
- *   <div class="plinth-sheet-header">
- *     <h2 id="menu-title" class="plinth-sheet-title">Menu</h2>
- *     <button … class="plinth-button plinth-icon-button plinth-sheet-close" commandfor="menu"
- *       command="close">…</button>
- *   </div>
- *   <div class="plinth-sheet-body">
- *     <a class="plinth-list-row plinth-menu-sheet-user" href="/profile">
- *       <span class="plinth-list-row-leading">
- *         <span class="plinth-avatar" data-size="lg" aria-hidden="true">…</span>
- *       </span>
- *       <span class="plinth-list-row-content">
- *         <span class="plinth-list-row-title">Sam Lee</span>
- *         <span class="plinth-list-row-description">sam@example.com</span>
- *       </span>
- *       <span class="plinth-list-row-trailing">…chevron…</span>
- *     </a>
- *     <nav class="plinth-menu-sheet-nav" aria-labelledby="menu-title">
- *       <div class="plinth-list-card">…link rows, one with aria-current="page"…</div>
- *     </nav>
- *     <div class="plinth-menu-sheet-account">
- *       <div class="plinth-list-card">…Settings, Sign out…</div>
+ *   <div class="plinth-sheet-panel">
+ *     <div class="plinth-sheet-handle" aria-hidden="true"></div>
+ *     <div class="plinth-sheet-header">
+ *       <h2 id="menu-title" class="plinth-sheet-title">Menu</h2>
+ *       <button … class="plinth-button plinth-icon-button plinth-sheet-close" commandfor="menu"
+ *         command="close">…</button>
+ *     </div>
+ *     <div class="plinth-sheet-body">
+ *       <a class="plinth-list-row plinth-menu-sheet-user" href="/profile">
+ *         <span class="plinth-list-row-leading">
+ *           <span class="plinth-avatar" data-size="lg" aria-hidden="true">…</span>
+ *         </span>
+ *         <span class="plinth-list-row-content">
+ *           <span class="plinth-list-row-title">Sam Lee</span>
+ *           <span class="plinth-list-row-description">sam@example.com</span>
+ *         </span>
+ *         <span class="plinth-list-row-trailing">…chevron…</span>
+ *       </a>
+ *       <nav class="plinth-menu-sheet-nav" aria-labelledby="menu-title">
+ *         <div class="plinth-list-card">…link rows, one with aria-current="page"…</div>
+ *       </nav>
+ *       <div class="plinth-menu-sheet-account">
+ *         <div class="plinth-list-card">…Settings, Sign out…</div>
+ *       </div>
  *     </div>
  *   </div>
  * </dialog>
@@ -2491,7 +2672,7 @@
  */
 
 @layer plinth {
-  .plinth-menu-sheet > .plinth-sheet-body {
+  .plinth-menu-sheet .plinth-sheet-body {
     display: flex;
     flex-direction: column;
     gap: var(--plinth-space-5);
@@ -2521,12 +2702,23 @@
 
 /* modal.css */
 /*
- * Modal base: what the dialog (dialog.css) and the sheet (sheet.css) share, written once so they
- * can't drift apart (docs/adr/0005): the root's surface and motion, the backdrop, the scroll lock,
- * the safe areas, and the header, title, description, close button, body and footer. It has no
- * markup of its own and no class: each component keeps its own root and part classes
- * (plinth-dialog, plinth-dialog-header, …; plinth-sheet, plinth-sheet-header, …), listed here in
- * :is(). A page that loads the components one by one loads modal.css with them.
+ * Modal base: what the dialog (dialog.css), the sheet (sheet.css) and the drawer (drawer.css)
+ * share, written once so they can't drift apart (docs/adr/0005): the root's surface and motion,
+ * the backdrop, the scroll lock, the safe areas, the panel and the grab handle, and the header,
+ * title, description, close button, body and footer. It has no markup of its own and no class:
+ * each component keeps its own root and part classes (plinth-dialog, plinth-dialog-panel, …;
+ * plinth-sheet, plinth-sheet-panel, …), listed here in :is(). A page that loads the components
+ * one by one loads modal.css with them.
+ *
+ * The parts sit in a panel, the root's only child:
+ *   <dialog class="plinth-sheet" …>
+ *     <div class="plinth-sheet-panel">
+ *       <div class="plinth-sheet-handle" aria-hidden="true"></div>   (a bottom panel on a phone)
+ *       <div class="plinth-sheet-header">…</div>
+ *       <div class="plinth-sheet-body">…</div>
+ *       <div class="plinth-sheet-footer">…</div>                       (optional)
+ *     </div>
+ *   </dialog>
  *
  * The rules sit in a layer inside plinth (plinth.modal), so a component's own rules win over them
  * whatever the order the files load in, and a project's utilities win over both.
@@ -2546,19 +2738,36 @@
  * stable keeps it from shifting. The body scrolls, with overscroll-behavior: contain; the header
  * and footer stay put; the margins of the body's first and last child are reset, so its padding is
  * its edge. On a phone the footer's actions share its width; from 768px up they sit at its end.
+ *
+ * A bottom panel on a phone (a sheet whose side below 768px is the bottom, a dialog with
+ * data-side-phone="bottom" that can be dismissed, and the drawer) has a grab handle, and the
+ * person drags it down to close it. The layers print the handle only there; its presence is what
+ * turns the dragging on, below 768px. Dragging is native scrolling: the root fills the screen and
+ * is a scroll-snap container, see-through, with a spacer as tall as the screen above the panel,
+ * so the browser gives the momentum and the snapping. Without script the handle shows and the
+ * close button and Escape close the panel. What the platform can't do, the layers add (a few
+ * lines, docs/adr/0002 section 6: x-init in Blade, useSwipeToClose in Vue and React):
+ * - on scrollend (scroll where it is missing), when the panel has gone off the bottom edge, they
+ *   call requestClose() (close() where it is missing), so cancel fires first, as for Escape; when
+ *   the app prevents it, the panel goes back to where it opened;
+ * - a tap on the root itself, above the panel, closes it when closedby="any", since the browser
+ *   reads that tap as one on the dialog, not its backdrop;
+ * - on toggle to open, a drawer with data-snap scrolls to that snap point (a browser that fires no
+ *   toggle on a dialog opens it at its largest).
+ * The snapping is the browser's own scrolling, and the layers' scroll is instant.
  */
 
 @layer plinth {
   @layer modal {
-    html:has(:is(.plinth-dialog, .plinth-sheet)) {
+    html:has(:is(.plinth-dialog, .plinth-sheet, .plinth-drawer)) {
       scrollbar-gutter: stable;
     }
 
-    html:has(:is(.plinth-dialog, .plinth-sheet):modal) {
+    html:has(:is(.plinth-dialog, .plinth-sheet, .plinth-drawer):modal) {
       overflow: hidden;
     }
 
-    :is(.plinth-dialog, .plinth-sheet) {
+    :is(.plinth-dialog, .plinth-sheet, .plinth-drawer) {
       --plinth-modal-offset: 0 0;
       --plinth-modal-closed-opacity: 1;
       --plinth-modal-safe-area-end: initial;
@@ -2584,7 +2793,7 @@
         display var(--plinth-duration-normal) allow-discrete;
     }
 
-    :is(.plinth-dialog, .plinth-sheet)[open] {
+    :is(.plinth-dialog, .plinth-sheet, .plinth-drawer)[open] {
       display: flex;
       opacity: 1;
       translate: 0 0;
@@ -2592,13 +2801,13 @@
     }
 
     @starting-style {
-      :is(.plinth-dialog, .plinth-sheet)[open] {
+      :is(.plinth-dialog, .plinth-sheet, .plinth-drawer)[open] {
         opacity: var(--plinth-modal-closed-opacity);
         translate: var(--plinth-modal-offset);
       }
     }
 
-    :is(.plinth-dialog, .plinth-sheet)::backdrop {
+    :is(.plinth-dialog, .plinth-sheet, .plinth-drawer)::backdrop {
       background-color: var(--plinth-color-overlay);
       opacity: 0;
       transition:
@@ -2607,17 +2816,29 @@
         display var(--plinth-duration-normal) allow-discrete;
     }
 
-    :is(.plinth-dialog, .plinth-sheet)[open]::backdrop {
+    :is(.plinth-dialog, .plinth-sheet, .plinth-drawer)[open]::backdrop {
       opacity: 1;
     }
 
     @starting-style {
-      :is(.plinth-dialog, .plinth-sheet)[open]::backdrop {
+      :is(.plinth-dialog, .plinth-sheet, .plinth-drawer)[open]::backdrop {
         opacity: 0;
       }
     }
 
-    :is(.plinth-dialog-header, .plinth-sheet-header) {
+    /*
+     * The panel holds the parts, the root's only child. It is the column the body scrolls in;
+     * the root is the surface, except for a bottom panel on a phone (below).
+     */
+    :is(.plinth-dialog-panel, .plinth-sheet-panel, .plinth-drawer-panel) {
+      display: flex;
+      flex: 1 1 auto;
+      flex-direction: column;
+      min-block-size: 0;
+      margin: 0;
+    }
+
+    :is(.plinth-dialog-header, .plinth-sheet-header, .plinth-drawer-header) {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       gap: var(--plinth-space-1) var(--plinth-space-3);
@@ -2628,13 +2849,13 @@
     }
 
     /* With no close button, the header's padding is even. */
-    :is(.plinth-dialog-header, .plinth-sheet-header):not(
-      :has(> :is(.plinth-dialog-close, .plinth-sheet-close))
+    :is(.plinth-dialog-header, .plinth-sheet-header, .plinth-drawer-header):not(
+      :has(> :is(.plinth-dialog-close, .plinth-sheet-close, .plinth-drawer-close))
     ) {
       padding-inline-end: var(--plinth-space-4);
     }
 
-    :is(.plinth-dialog-title, .plinth-sheet-title) {
+    :is(.plinth-dialog-title, .plinth-sheet-title, .plinth-drawer-title) {
       grid-column: 1;
       margin: 0;
       font-size: var(--plinth-font-size-lg);
@@ -2644,7 +2865,7 @@
       overflow-wrap: anywhere;
     }
 
-    :is(.plinth-dialog-description, .plinth-sheet-description) {
+    :is(.plinth-dialog-description, .plinth-sheet-description, .plinth-drawer-description) {
       grid-column: 1;
       margin: 0;
       font-size: var(--plinth-font-size-sm);
@@ -2653,12 +2874,12 @@
       overflow-wrap: anywhere;
     }
 
-    :is(.plinth-dialog-close, .plinth-sheet-close) {
+    :is(.plinth-dialog-close, .plinth-sheet-close, .plinth-drawer-close) {
       grid-row: 1;
       grid-column: 2;
     }
 
-    :is(.plinth-dialog-body, .plinth-sheet-body) {
+    :is(.plinth-dialog-body, .plinth-sheet-body, .plinth-drawer-body) {
       flex: 1 1 auto;
       min-block-size: 0;
       padding: var(--plinth-space-4);
@@ -2669,11 +2890,11 @@
     }
 
     /* The body's padding is its edge: the first and last child's margins don't add to it. */
-    :is(.plinth-dialog-body, .plinth-sheet-body) > :first-child {
+    :is(.plinth-dialog-body, .plinth-sheet-body, .plinth-drawer-body) > :first-child {
       margin-block-start: 0;
     }
 
-    :is(.plinth-dialog-body, .plinth-sheet-body) > :last-child {
+    :is(.plinth-dialog-body, .plinth-sheet-body, .plinth-drawer-body) > :last-child {
       margin-block-end: 0;
     }
 
@@ -2682,20 +2903,20 @@
      * do, Safari doesn't yet), so a long body of text only is better with a link or a control in
      * it.
      */
-    :is(.plinth-dialog-body, .plinth-sheet-body):focus-visible {
+    :is(.plinth-dialog-body, .plinth-sheet-body, .plinth-drawer-body):focus-visible {
       outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
       outline-offset: var(--plinth-focus-ring-offset-inset);
     }
 
     /* The last part clears the home indicator when the root reaches the bottom edge. */
-    :is(.plinth-dialog-body, .plinth-sheet-body):last-child {
+    :is(.plinth-dialog-body, .plinth-sheet-body, .plinth-drawer-body):last-child {
       padding-block-end: max(
         var(--plinth-space-4),
         var(--plinth-modal-safe-area-end, var(--plinth-space-4))
       );
     }
 
-    :is(.plinth-dialog-footer, .plinth-sheet-footer) {
+    :is(.plinth-dialog-footer, .plinth-sheet-footer, .plinth-drawer-footer) {
       display: flex;
       flex-wrap: wrap;
       gap: var(--plinth-space-2);
@@ -2707,13 +2928,141 @@
     }
 
     /* On a phone the footer's actions share its width. */
-    :is(.plinth-dialog-footer, .plinth-sheet-footer) > * {
+    :is(.plinth-dialog-footer, .plinth-sheet-footer, .plinth-drawer-footer) > * {
       flex: 1 1 0;
     }
 
+    /*
+     * A bottom panel on a phone, dragged down to close: a root whose panel holds a handle (the
+     * layers print one only where the panel is on the bottom edge below 768px, and can be
+     * dismissed). The root fills the screen and is a scroll-snap container, see-through; its
+     * ::before is a spacer as tall as the screen above the panel, so scrolling it down is the
+     * panel going off the bottom edge. The flex column runs bottom up (column-reverse), so the
+     * root opens scrolled to its end, with the panel showing. Two snap positions: the panel's
+     * end on the screen's bottom edge (open), and the spacer filling the screen (closed); the
+     * layers close the dialog when the scrolling settles there. The panel is the surface, and the
+     * body hands a swipe on to the root once it is scrolled to its top.
+     */
+    :is(.plinth-dialog, .plinth-sheet, .plinth-drawer):has(
+      > * > :is(.plinth-dialog-handle, .plinth-sheet-handle, .plinth-drawer-handle)
+    ) {
+      flex-direction: column-reverse;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scroll-snap-type: y mandatory;
+      scrollbar-width: none;
+      background-color: transparent;
+      box-shadow: none;
+    }
+
+    /* As a scrolling area the root can take focus (Chrome and Firefox), so it shows the ring. */
+    :is(.plinth-dialog, .plinth-sheet, .plinth-drawer):has(
+        > * > :is(.plinth-dialog-handle, .plinth-sheet-handle, .plinth-drawer-handle)
+      ):focus-visible {
+      outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+      outline-offset: var(--plinth-focus-ring-offset-inset);
+    }
+
+    :is(.plinth-dialog, .plinth-sheet, .plinth-drawer):has(
+        > * > :is(.plinth-dialog-handle, .plinth-sheet-handle, .plinth-drawer-handle)
+      )::before {
+      flex: none;
+      order: 1;
+      block-size: 100%;
+      content: '';
+      scroll-snap-align: start;
+    }
+
+    :is(.plinth-dialog-panel, .plinth-sheet-panel, .plinth-drawer-panel):has(
+      > :is(.plinth-dialog-handle, .plinth-sheet-handle, .plinth-drawer-handle)
+    ) {
+      flex: none;
+      max-block-size: calc(
+        100% - max(var(--plinth-space-12), env(safe-area-inset-top) + var(--plinth-space-4))
+      );
+      padding-inline: max(env(safe-area-inset-left), env(safe-area-inset-right));
+      scroll-snap-align: end;
+      background-color: var(--plinth-color-surface-raised);
+      border-block-start: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+      border-start-start-radius: var(--plinth-radius-container);
+      border-start-end-radius: var(--plinth-radius-container);
+      box-shadow: var(--plinth-elevation-3);
+    }
+
+    /*
+     * The grab handle, a short pill centred at the top; decorative, since Escape and the close
+     * button close the panel too. From 768px up it is hidden.
+     */
+    :is(.plinth-dialog-handle, .plinth-sheet-handle, .plinth-drawer-handle) {
+      display: block;
+      flex: none;
+      align-self: center;
+      inline-size: var(--plinth-space-10);
+      block-size: var(--plinth-space-1);
+      margin-block-start: var(--plinth-space-2);
+      background-color: var(--plinth-color-border-strong);
+      border-radius: var(--plinth-radius-pill);
+    }
+
+    :is(.plinth-dialog-panel, .plinth-sheet-panel, .plinth-drawer-panel):has(
+        > :is(.plinth-dialog-handle, .plinth-sheet-handle, .plinth-drawer-handle)
+      )
+      > :is(.plinth-dialog-body, .plinth-sheet-body, .plinth-drawer-body) {
+      overscroll-behavior: auto;
+    }
+
+    @media (forced-colors: active) {
+      :is(.plinth-dialog-handle, .plinth-sheet-handle, .plinth-drawer-handle) {
+        background-color: CanvasText;
+      }
+    }
+
     @media (min-width: 768px) {
-      :is(.plinth-dialog-footer, .plinth-sheet-footer) > * {
+      :is(.plinth-dialog-footer, .plinth-sheet-footer, .plinth-drawer-footer) > * {
         flex: none;
+      }
+
+      /* From 768px up no panel is dragged: the root is the surface again. */
+      :is(.plinth-dialog, .plinth-sheet, .plinth-drawer):has(
+        > * > :is(.plinth-dialog-handle, .plinth-sheet-handle, .plinth-drawer-handle)
+      ) {
+        flex-direction: column;
+        overflow: hidden;
+        overscroll-behavior: auto;
+        scroll-snap-type: none;
+        scrollbar-width: auto;
+        background-color: var(--plinth-color-surface-raised);
+        box-shadow: var(--plinth-elevation-3);
+      }
+
+      :is(.plinth-dialog, .plinth-sheet, .plinth-drawer):has(
+          > * > :is(.plinth-dialog-handle, .plinth-sheet-handle, .plinth-drawer-handle)
+        )::before {
+        content: none;
+      }
+
+      :is(.plinth-dialog-panel, .plinth-sheet-panel, .plinth-drawer-panel):has(
+        > :is(.plinth-dialog-handle, .plinth-sheet-handle, .plinth-drawer-handle)
+      ) {
+        flex: 1 1 auto;
+        max-block-size: none;
+        padding-inline: 0;
+        scroll-snap-align: none;
+        background-color: transparent;
+        border-block-start: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      :is(.plinth-dialog-handle, .plinth-sheet-handle, .plinth-drawer-handle) {
+        display: none;
+      }
+
+      :is(.plinth-dialog-panel, .plinth-sheet-panel, .plinth-drawer-panel):has(
+          > :is(.plinth-dialog-handle, .plinth-sheet-handle, .plinth-drawer-handle)
+        )
+        > :is(.plinth-dialog-body, .plinth-sheet-body, .plinth-drawer-body) {
+        overscroll-behavior: contain;
       }
     }
   }
@@ -3097,21 +3446,28 @@
  *
  * <dialog id="filters" class="plinth-sheet" data-side="end" data-side-phone="bottom"
  *   closedby="any" aria-labelledby="filters-title" aria-describedby="filters-description">
- *   <div class="plinth-sheet-header">
- *     <h2 id="filters-title" class="plinth-sheet-title">Filters</h2>
- *     <p id="filters-description" class="plinth-sheet-description">Narrow the list down.</p>
- *     <button type="button" class="plinth-button plinth-icon-button plinth-sheet-close"
- *       data-variant="ghost" data-size="md" aria-label="Close" commandfor="filters"
- *       command="close">
- *       <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
- *     </button>
+ *   <div class="plinth-sheet-panel">
+ *     <div class="plinth-sheet-handle" aria-hidden="true"></div>
+ *     <div class="plinth-sheet-header">
+ *       <h2 id="filters-title" class="plinth-sheet-title">Filters</h2>
+ *       <p id="filters-description" class="plinth-sheet-description">Narrow the list down.</p>
+ *       <button type="button" class="plinth-button plinth-icon-button plinth-sheet-close"
+ *         data-variant="ghost" data-size="md" aria-label="Close" commandfor="filters"
+ *         command="close">
+ *         <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
+ *       </button>
+ *     </div>
+ *     <div class="plinth-sheet-body">…</div>
+ *     <div class="plinth-sheet-footer">…</div>
  *   </div>
- *   <div class="plinth-sheet-body">…</div>
- *   <div class="plinth-sheet-footer">…</div>
  * </dialog>
  *
  * The root is the <dialog>, and it needs an id: commandfor and aria-labelledby point at it, and
- * the title's and description's ids are the root's id with -title and -description. The title is
+ * the title's and description's ids are the root's id with -title and -description. The panel is
+ * the root's only child and holds the parts. The handle is there only where the sheet's side on a
+ * phone is the bottom (data-side="bottom" with no data-side-phone, or data-side-phone="bottom"):
+ * decorative (aria-hidden), shown below 768px, where the sheet is dragged down to close
+ * (modal.css). The title is
  * required; the description (and its aria-describedby) and the footer are optional. The close
  * button is an icon button (button.css and icon.css) and is always there: closedby="any" (tap the
  * backdrop) is an enhancement Safari doesn't have yet. A project may set closedby="closerequest"
@@ -3239,6 +3595,21 @@
     border-start-end-radius: var(--plinth-radius-container);
   }
 
+  /*
+   * With its grab handle, a bottom sheet on a phone is dragged down to close (modal.css): the root
+   * fills the screen, see-through, and its panel is the surface, as tall as its content up to the
+   * screen's height less a gap.
+   */
+  .plinth-sheet:where([data-side='bottom']:not([data-side-phone]), [data-side-phone='bottom']):has(
+      > * > .plinth-sheet-handle
+    ) {
+    inset: 0;
+    max-block-size: none;
+    padding: 0;
+    border-width: 0;
+    border-radius: 0;
+  }
+
   /* Right-to-left text turns the slide around and swaps the safe areas. */
   .plinth-sheet:dir(rtl) {
     --plinth-sheet-direction: -1;
@@ -3289,7 +3660,7 @@
       border-end-end-radius: var(--plinth-radius-container);
     }
 
-    .plinth-sheet[data-side-phone][data-side='bottom'] {
+    .plinth-sheet[data-side='bottom'] {
       --plinth-modal-offset: 0 100%;
 
       inset-block: auto 0;
