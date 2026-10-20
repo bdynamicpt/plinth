@@ -129,7 +129,7 @@ const settings = [
   listRow({ ...meta.args, title: 'Sign out', button: true }),
 ];
 
-/** Rows in a list, each in its own <li>, with the dividers between them. */
+/** Rows in a list, each in its own `<li>`, with the dividers between them. */
 export const List: Story = {
   render: () =>
     `<ul role="list" style="margin: 0; padding: 0; list-style: none;">${settings.map((row) => `<li>${row}</li>`).join('')}</ul>`,

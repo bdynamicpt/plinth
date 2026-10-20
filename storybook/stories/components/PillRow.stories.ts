@@ -59,7 +59,7 @@ export const MultipleSelected: Story = {
   },
 };
 
-/** A row of links: a <nav>, and the pill for the page being shown has aria-current="page". */
+/** A row of links: a `<nav>`, and the pill for the page being shown has `aria-current="page"`. */
 export const Navigation: Story = {
   args: {
     label: 'Project sections',
