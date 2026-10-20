@@ -1,6 +1,6 @@
 {{--
-    The search (⌘K): a sheet with a field and the results, grouped by section. The siteSearch
-    script loads the index (/search.json) the first time the sheet takes focus, and filters it as
+    The search (⌘K): a dialog (a bottom sheet on a phone) with a field and the results, grouped by section. The siteSearch
+    script loads the index (/search.json) the first time the dialog takes focus, and filters it as
     you type. The header's search buttons, and ⌘K or Ctrl+K, open it.
 --}}
 @php
@@ -14,9 +14,10 @@
         'Components' => route('components.index', [], false),
     ];
 @endphp
-<x-plinth::sheet
+<x-plinth::dialog
     id="site-search"
     title="Search"
+    side-phone="bottom"
     class="site-search"
     x-data="siteSearch({{ Js::from(route('search', [], false)) }})"
     x-on:focusin.once="load"
@@ -68,4 +69,4 @@
             </x-plinth::list-card>
         </template>
     </div>
-</x-plinth::sheet>
+</x-plinth::dialog>

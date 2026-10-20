@@ -125,7 +125,10 @@
         position: static;
     }
 
-    /* A sheet, drawn open in the card: centred, or at the bottom for the menu sheet. */
+    /*
+     * A dialog or a sheet, drawn open in the card: centred for the dialog, on the end edge for
+     * the sheet, at the bottom for the menu sheet.
+     */
     .site-catalogue-sheet {
         display: flex;
         flex-direction: column;
@@ -156,6 +159,20 @@
         border-block-end: 0;
         border-end-start-radius: 0;
         border-end-end-radius: 0;
+    }
+
+    .site-component-card-preview:has(.is-end) {
+        align-items: stretch;
+        justify-content: flex-end;
+        padding-block: 0;
+        padding-inline-end: 0;
+    }
+
+    .site-catalogue-sheet.is-end {
+        inline-size: 60%;
+        border-block: 0;
+        border-inline-end: 0;
+        border-radius: 0;
     }
 
     .site-catalogue-sheet-user {

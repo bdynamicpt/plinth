@@ -72,10 +72,10 @@ Alpine.data('shortcut', () => ({
 }));
 
 /*
- * The search (⌘K): the index is loaded once, the first time the sheet takes focus; every word of
+ * The search (⌘K): the index is loaded once, the first time the dialog takes focus; every word of
  * the query must appear in an entry, and a match in the title counts most. Results are grouped by
  * section, the group with the best match first. The arrow keys move between the field and the
- * results, Enter in the field opens the first one, and ⌘K or Ctrl+K opens and closes the sheet.
+ * results, Enter in the field opens the first one, and ⌘K or Ctrl+K opens and closes the dialog.
  */
 const perGroup = 6;
 
@@ -196,7 +196,7 @@ Alpine.data('siteSearch', (url) => ({
         else links[Math.min(next, links.length - 1)].focus();
     },
 
-    /* A result can be on the page that is showing (a section of it): close the sheet on the way. */
+    /* A result can be on the page that is showing (a section of it): close the dialog on the way. */
     pick(event) {
         if (event.target.closest('a.plinth-list-row')) this.$root.close();
     },

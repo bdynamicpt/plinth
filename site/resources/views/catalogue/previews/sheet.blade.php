@@ -1,4 +1,4 @@
-<div class="site-catalogue-sheet">
+<div class="site-catalogue-sheet is-end">
     <span class="site-title">Filter invoices</span>
     <x-plinth::pill-row label="Status">
         <x-plinth::pill selected>Due</x-plinth::pill>

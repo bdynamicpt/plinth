@@ -208,11 +208,12 @@ return [
         'sheet' => [
             'name' => 'Sheet',
             'group' => 'Overlays',
-            'description' => 'A modal panel on a native dialog: slides up on a phone, a dialog from 768px.',
+            'description' => 'A modal panel on the edge you pick, at every width, and another on a phone.',
             'playground' => [
                 'template' => "<x-plinth::button variant=\"secondary\" commandfor=\"playground-sheet\" command=\"show-modal\">Filters</x-plinth::button>\n<x-plinth::sheet id=\"playground-sheet\" title=\"Filters\"{attributes}>\n    <p>Show the invoices that are due this month.</p>\n</x-plinth::sheet>",
                 'options' => [
-                    'placement' => ['values' => ['center', 'end'], 'default' => 'center'],
+                    'side' => ['values' => ['end', 'start', 'top', 'bottom'], 'default' => 'end'],
+                    'side-phone' => ['values' => ['none', 'start', 'end', 'top', 'bottom'], 'default' => 'none'],
                 ],
             ],
         ],
