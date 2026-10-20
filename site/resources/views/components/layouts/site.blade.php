@@ -28,7 +28,7 @@
 
     <x-site.header :overlay="$overlay" :current="$current" />
 
-    <main id="content" tabindex="-1">
+    <main id="content" class="site-main" tabindex="-1">
         {{ $slot }}
     </main>
 
