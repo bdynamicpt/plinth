@@ -127,9 +127,8 @@ Alpine, `x-ref="filters"` on the sheet and `$refs.filters.showModal()`.
 In Vue, the component exposes **`showModal()`** and **`close()`**, and emits **`close`** (with the
 dialog's native event) whenever the dialog closes. In React, the **`ref`** is the `<dialog>`
 itself, with its own `showModal()` and `close()`, and **`onClose`** is the dialog's close event.
-React's types don't list `command` and `commandfor` yet
-([#99](https://github.com/bdynamicpt/plinth/issues/99)); they work as they are, but TypeScript
-wants them spread in (`{...{ commandfor: 'filters', command: 'show-modal' }}`), or use the ref.
+`PlinthButton` and `PlinthIconButton` take `commandfor` and `command` as typed props, since React's
+own types don't list them yet.
 
 ```blade tab="Blade"
 <x-plinth::button variant="secondary" commandfor="filters" command="show-modal">Filters</x-plinth::button>
@@ -155,21 +154,21 @@ wants them spread in (`{...{ commandfor: 'filters', command: 'show-modal' }}`), 
 ```
 
 ```tsx tab="React"
-import { useRef } from 'react';
 import { PlinthButton, PlinthSheet } from '@bdynamic/plinth/react';
 
-const filters = useRef<HTMLDialogElement>(null);
-
-<PlinthButton variant="secondary" onClick={() => filters.current?.showModal()}>
+<PlinthButton variant="secondary" commandfor="filters" command="show-modal">
     Filters
 </PlinthButton>;
 
 <PlinthSheet
-    ref={filters}
     id="filters"
     title="Filters"
     onClose={applyFilters}
-    footer={<PlinthButton onClick={() => filters.current?.close()}>Apply</PlinthButton>}
+    footer={
+        <PlinthButton commandfor="filters" command="close">
+            Apply
+        </PlinthButton>
+    }
 >
     …
 </PlinthSheet>;

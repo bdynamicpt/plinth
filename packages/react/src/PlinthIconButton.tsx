@@ -1,6 +1,6 @@
 // Markup contract: packages/css/src/components/button.css (icon button)
 import type { ComponentProps } from 'react';
-import { buttonVariant, type ButtonVariant } from './button';
+import { buttonVariant, type ButtonVariant, type InvokerCommandProps } from './button';
 import { classNames } from './markup';
 import { controlSizes, iconSizeFor, resolveSize, type ControlSize } from './size';
 
@@ -17,10 +17,16 @@ interface IconButtonOptions {
   mirror?: boolean;
 }
 
-/** A `<button>` with only an icon, or with an `href` a link that looks like one. */
+/**
+ * A `<button>` with only an icon, or with an `href` a link that looks like one. The button takes
+ * `commandfor` and `command`; a link doesn't.
+ */
 export type PlinthIconButtonProps =
   | (IconButtonOptions &
-      Omit<ComponentProps<'button'>, keyof IconButtonOptions> & { href?: undefined })
+      InvokerCommandProps &
+      Omit<ComponentProps<'button'>, keyof IconButtonOptions | keyof InvokerCommandProps> & {
+        href?: undefined;
+      })
   | (IconButtonOptions & Omit<ComponentProps<'a'>, keyof IconButtonOptions> & { href: string });
 
 export function PlinthIconButton({

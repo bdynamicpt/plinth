@@ -95,6 +95,8 @@ The same names in every layer. React takes the Vue props, with the icon as `chil
 
 `class`, `wire:*`, `x-*` and `@click` reach the button or link; in React, `className`, `onClick`,
 `ref` and every other prop do.
+A button (not a link) also takes `commandfor` and `command`, typed in React since React's own
+types don't list them yet.
 
 ```blade tab="Blade"
 <x-plinth::icon-button label="Close" variant="secondary" wire:click="close">

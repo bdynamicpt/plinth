@@ -51,9 +51,6 @@ export function PlinthDialog({
   const dialogId = id?.trim() || `plinth-dialog-${generatedId}`;
   const hasDescription = Boolean(description?.trim());
   const side = dialogSidePhone(sidePhone);
-  // React passes lowercase attributes it doesn't know as they are, so the invoker command reaches
-  // the button.
-  const command = { commandfor: dialogId, command: 'close' };
 
   // The project's own attributes come after Plinth's and win, as in Blade and Vue; its class is
   // added to Plinth's.
@@ -87,7 +84,8 @@ export function PlinthDialog({
               className="plinth-dialog-close"
               label={closeLabel}
               variant="ghost"
-              {...command}
+              commandfor={dialogId}
+              command="close"
             >
               {/* The cross is dialogCloseIcon (dialog.ts), written out; parity keeps the copies equal. */}
               <svg

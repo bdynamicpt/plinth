@@ -86,9 +86,6 @@ export function PlinthConfirmDialog({
   const errorAttributes = hasError
     ? { 'aria-invalid': true, 'aria-describedby': `${dialogId}-error` }
     : {};
-  // React passes lowercase attributes it doesn't know as they are, so the invoker command reaches
-  // the button.
-  const command = { commandfor: dialogId, command: 'close', value: 'cancel' };
 
   let field = null;
   if (type !== 'simple') {
@@ -163,7 +160,7 @@ export function PlinthConfirmDialog({
           ) : null}
         </div>
         <div className="plinth-dialog-footer">
-          <PlinthButton variant="secondary" {...command}>
+          <PlinthButton variant="secondary" commandfor={dialogId} command="close" value="cancel">
             {cancelLabel}
           </PlinthButton>
           <PlinthButton
