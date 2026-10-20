@@ -90,14 +90,15 @@ component; `.claude/skills/new-component/SKILL.md` walks through the rest.
    slot is a prop that takes a node, and nothing reads `window` or `document` while rendering.
 6. **Parity test**: cases in `storybook/test/parity.test.ts`, one per story and one with extra
    attributes, so the Blade, Vue and React output must match the story's markup.
-7. **Docs**: an MDX page next to the story, `storybook/stories/components/<Name>.mdx`, in the
-   shape of `Badge.mdx`: what it is and when to use it, its first example with
-   **`<AtEveryWidth of={…} />`** under it (the story at 390, 768 and 1440 px, in dark and light;
-   a story that opens a sheet or dialog passes a `height`), the **markup contract** (the markup, a
-   table of its parts and one of its attributes and states), a section with a canvas for each
-   variant and state, **accessibility** (accessible name, what is announced, keyboard, what the
-   app must add), and **in Blade, Vue and React** (a table of the props in each, an example, and
-   which attributes reach which element).
+7. **Docs**: a page on the site, `site/components/<name>.md`, in the shape of `badge.md`: what
+   it is, when not to use it, a section with a live example (a fenced `blade example` block) for each
+   variant and state, the **markup contract** (a table of its parts and one of its attributes and
+   states), the **props** in Blade, Vue and React (a table, an example in each, and which
+   attributes reach which element), and **accessibility** (accessible name, what is announced,
+   keyboard, what the app must add). Add the component to `site/config/components.php` and give
+   it a card preview in `site/resources/views/catalogue/previews/<name>.blade.php`. Storybook
+   writes the component's docs page from its stories, with the story at 390, 768 and 1440 px in
+   dark and light, so it needs no MDX page.
 8. **Screenshots** in the pull request, at 390, 768 and 1440 px in light and dark.
 
 The Blade, Vue and React layers only print markup. They hold no styles, and they do not add

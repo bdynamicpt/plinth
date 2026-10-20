@@ -1,6 +1,6 @@
 ---
 name: new-component
-description: Adds a component to Plinth across every layer (CSS with its markup contract, Storybook story and docs, Blade component, Vue component, React component, Pest, Vitest and parity tests) and checks it against the component rules. Use when asked to add, create or scaffold a Plinth component.
+description: Adds a component to Plinth across every layer (CSS with its markup contract, Storybook story, Blade component, Vue component, React component, Pest, Vitest and parity tests, the docs page on the site) and checks it against the component rules. Use when asked to add, create or scaffold a Plinth component.
 ---
 
 # A new Plinth component
@@ -39,7 +39,8 @@ It writes a minimal component in every layer, all printing `<div class="plinth-<
 | `packages/css/src/components/<name>.css`                     | the contract comment and `@layer plinth`                                       |
 | `storybook/stories/components/<name>.ts`                     | the markup function (the contract itself)                                      |
 | `storybook/stories/components/<Name>.stories.ts`             | the stories, the docs description and the import of the component's source CSS |
-| `storybook/stories/components/<Name>.mdx`                    | the docs page, in the shape of `Badge.mdx`                                     |
+| `site/components/<name>.md`                                  | the docs page on the site, in the shape of `badge.md`                          |
+| `site/resources/views/catalogue/previews/<name>.blade.php`   | the live preview on the components page's card                                 |
 | `packages/blade/resources/views/components/<name>.blade.php` | `<x-plinth::<name>>`                                                           |
 | `packages/blade/tests/Feature/<Name>Test.php`                | Pest tests                                                                     |
 | `packages/vue/src/Plinth<Name>.vue`                          | the Vue component                                                              |
@@ -69,6 +70,11 @@ Then by hand:
   Add new enums to the list check in `packages/blade/tests/Feature/EnumsTest.php`. React keeps
   the same list in `packages/react/src/` (it cannot import Vue's), checked against Vue's in
   `packages/react/test/lists.test.ts`. PHP classes are `final`.
+- `site/config/components.php`: an entry for the component (its name, group and one-line
+  description, `css` when its stylesheet has another name, and a `playground` when it has
+  variants, sizes or states), and the new count in
+  `site/tests/Feature/Components/CatalogueTest.php`. Without the entry the site has no page for
+  it.
 
 ## 3. Shape it into the real component
 
@@ -96,14 +102,16 @@ Change all five together so they keep printing the same markup:
   without their own `render`); galleries such as `AllTones` may have a `render`. The
   `docs.description.component` says what it is, when to use it, and anything a user must add
   (an accessible name, `aria-controls`, …).
-- **Docs page:** `<Name>.mdx` next to the story, in the shape of `Badge.mdx` (the scaffold writes
-  its headings): the intro and a canvas with controls, then **`<AtEveryWidth of={…} />`** with
-  the same story (the phone, tablet and desktop frames, in dark and light; pass `height` when
-  the story opens a sheet or dialog, which takes no room in the page), **Markup contract** (the markup, a table
-  of parts, a table of attributes and states with values and defaults), a section per variant or
-  state with its canvas, **Accessibility**, and **In Blade, Vue and React** (a props table for
-  all three, an example in each, what is forwarded where, the events Vue emits and React's
-  callbacks). Every story appears in a canvas.
+- **Docs page:** `site/components/<name>.md`, in the shape of `badge.md` (the scaffold writes
+  its headings; docs/adr/0007). The site renders it with the real Blade components: a
+  fenced `blade example` block prints its code and the live result. It has the intro, **When not to
+  use it**, a section per variant or state with its example, **Markup contract** (a table of
+  parts, a table of attributes and states with values and defaults), **Props** (a table for
+  Blade, Vue and React, what is forwarded where, the events Vue emits and React's callbacks, and
+  an example in each in fenced blocks with `tab="Blade"`, `tab="Vue"` and `tab="React"`), and **Accessibility**. Storybook writes the component's own docs page from the
+  stories (`storybook/blocks/DocsPage.tsx`, with the "at every width" block), so there is no MDX
+  page. Make the preview in `catalogue/previews/` a small, neutral example; after changing
+  `packages/blade`, run `composer reinstall bdynamicpt/plinth` in `site/` and look at the page.
 - **Tests:** Blade, Vue and React each cover the full markup, defaults, every variant, the
   fallback, escaping and extra attributes (React: the `ref` too), at 100% coverage.
 
