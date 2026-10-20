@@ -4,6 +4,7 @@ import PlinthBadge from './PlinthBadge.vue';
 import PlinthButton from './PlinthButton.vue';
 import PlinthCallout from './PlinthCallout.vue';
 import PlinthCodeBlock from './PlinthCodeBlock.vue';
+import PlinthConfirmDialog from './PlinthConfirmDialog.vue';
 import PlinthDataTable from './PlinthDataTable.vue';
 import PlinthDataTableCell from './PlinthDataTableCell.vue';
 import PlinthDataTableColumn from './PlinthDataTableColumn.vue';
@@ -29,6 +30,7 @@ export {
   PlinthButton,
   PlinthCallout,
   PlinthCodeBlock,
+  PlinthConfirmDialog,
   PlinthDataTable,
   PlinthDataTableCell,
   PlinthDataTableColumn,
@@ -61,6 +63,16 @@ export {
 } from './callout';
 export { type CodeBlockTab } from './code-block';
 export {
+  confirmDialogFieldLabels,
+  confirmDialogKind,
+  confirmDialogKinds,
+  confirmDialogPattern,
+  confirmDialogTone,
+  confirmDialogTones,
+  type ConfirmDialogKind,
+  type ConfirmDialogTone,
+} from './confirm-dialog';
+export {
   dataTableCellKind,
   dataTableCellKinds,
   dataTableSort,
@@ -85,6 +97,7 @@ export const Plinth: Plugin = {
     app.component('PlinthButton', PlinthButton);
     app.component('PlinthCallout', PlinthCallout);
     app.component('PlinthCodeBlock', PlinthCodeBlock);
+    app.component('PlinthConfirmDialog', PlinthConfirmDialog);
     app.component('PlinthDataTable', PlinthDataTable);
     app.component('PlinthDataTableCell', PlinthDataTableCell);
     app.component('PlinthDataTableColumn', PlinthDataTableColumn);

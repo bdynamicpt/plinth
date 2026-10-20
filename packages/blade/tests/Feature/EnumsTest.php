@@ -3,6 +3,8 @@
 use BDynamic\Plinth\Enums\ButtonVariant;
 use BDynamic\Plinth\Enums\CalloutRole;
 use BDynamic\Plinth\Enums\CalloutTone;
+use BDynamic\Plinth\Enums\ConfirmDialogKind;
+use BDynamic\Plinth\Enums\ConfirmDialogTone;
 use BDynamic\Plinth\Enums\DataTableCellKind;
 use BDynamic\Plinth\Enums\DataTableSort;
 use BDynamic\Plinth\Enums\DialogSidePhone;
@@ -29,7 +31,9 @@ it('defaults each choice the way the components do', function () {
         ->and(DataTableSort::default())->toBe(DataTableSort::None)
         ->and(DataTableCellKind::default())->toBe(DataTableCellKind::Field)
         ->and(CalloutTone::default())->toBe(CalloutTone::Neutral)
-        ->and(CalloutRole::default())->toBe(CalloutRole::Note);
+        ->and(CalloutRole::default())->toBe(CalloutRole::Note)
+        ->and(ConfirmDialogKind::default())->toBe(ConfirmDialogKind::Simple)
+        ->and(ConfirmDialogTone::default())->toBe(ConfirmDialogTone::Neutral);
 });
 
 it('resolves an optional side to a case or nothing', function () {
@@ -92,6 +96,14 @@ it('matches the lists the Vue layer and the stories use', function () {
         // The icon's paths, as Vue writes them in calloutIcons.
         preg_match('/<svg[^>]*>(.*)<\/svg>/', $tone->icon(), $paths);
         expect($vue('callout.ts'))->toContain($paths[1]);
+    }
+    foreach ([...ConfirmDialogKind::values(), ...ConfirmDialogTone::values()] as $value) {
+        expect($vue('confirm-dialog.ts'))->toContain("'{$value}'");
+    }
+    foreach (ConfirmDialogKind::cases() as $kind) {
+        if ($kind->fieldLabel() !== null) {
+            expect($vue('confirm-dialog.ts'))->toContain("'{$kind->fieldLabel()}'");
+        }
     }
     foreach ([...DataTableSort::values(), ...DataTableCellKind::values()] as $value) {
         expect($vue('data-table.ts'))->toContain("'{$value}'");

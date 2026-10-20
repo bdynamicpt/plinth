@@ -3,6 +3,7 @@ export { PlinthBadge, type PlinthBadgeProps } from './PlinthBadge';
 export { PlinthButton, type PlinthButtonProps } from './PlinthButton';
 export { PlinthCallout, type PlinthCalloutProps } from './PlinthCallout';
 export { PlinthCodeBlock, type PlinthCodeBlockProps } from './PlinthCodeBlock';
+export { PlinthConfirmDialog, type PlinthConfirmDialogProps } from './PlinthConfirmDialog';
 export { PlinthDataTable, type PlinthDataTableProps } from './PlinthDataTable';
 export { PlinthDataTableCell, type PlinthDataTableCellProps } from './PlinthDataTableCell';
 export { PlinthDataTableColumn, type PlinthDataTableColumnProps } from './PlinthDataTableColumn';
@@ -33,6 +34,16 @@ export {
   type CalloutTone,
 } from './callout';
 export { type CodeBlockTab } from './code-block';
+export {
+  confirmDialogFieldLabels,
+  confirmDialogKind,
+  confirmDialogKinds,
+  confirmDialogPattern,
+  confirmDialogTone,
+  confirmDialogTones,
+  type ConfirmDialogKind,
+  type ConfirmDialogTone,
+} from './confirm-dialog';
 export {
   dataTableCellKind,
   dataTableCellKinds,
