@@ -45,24 +45,6 @@ final class Markup
         return $this->print($this->parse($rendered), 'html');
     }
 
-    /**
-     * The Plinth components an example uses, by name (button, data-table-row).
-     *
-     * @return list<string>
-     */
-    public function components(string $source): array
-    {
-        $names = [];
-
-        foreach ($this->source($source)->querySelectorAll('*') as $element) {
-            if (str_starts_with($element->localName, 'x-plinth::')) {
-                $names[] = Str::after($element->localName, 'x-plinth::');
-            }
-        }
-
-        return array_values(array_unique($names));
-    }
-
     /** Blade source, with its self-closing components closed the way an HTML parser understands. */
     private function source(string $source): Element
     {

@@ -128,27 +128,27 @@ buttons.
 
 ## Props
 
-The same names in Blade and Vue; the React layer is coming in
-[#66](https://github.com/bdynamicpt/plinth/issues/66).
+The same names in every layer. React takes the Vue props, with the rows as `children` and the
+header row as the `head` prop, which takes a node.
 
-| Component         | Prop        | Blade                                          | Vue                  | Default |
-| ----------------- | ----------- | ---------------------------------------------- | -------------------- | ------- |
-| data-table        | caption     | `caption="Invoices"`                           | `caption="Invoices"` | none    |
-| data-table        | header row  | `<x-slot:head>`                                | `#head` slot         | none    |
-| data-table        | rows        | the slot                                       | the default slot     | none    |
-| data-table-column | sort        | `sort="ascending"` (or a `DataTableSort` case) | `sort="ascending"`   | none    |
-| data-table-column | numeric     | `numeric`                                      | `numeric`            | off     |
-| data-table-column | hideOnPhone | `hide-on-phone`                                | `hide-on-phone`      | off     |
-| data-table-row    | selected    | `:selected="true"`                             | `:selected="true"`   | none    |
-| data-table-cell   | label       | `label="Total"`                                | `label="Total"`      | none    |
-| data-table-cell   | kind        | `kind="title"` (or a `DataTableCellKind` case) | `kind="title"`       | `field` |
-| data-table-cell   | numeric     | `numeric`                                      | `numeric`            | off     |
-| data-table-cell   | hideOnPhone | `hide-on-phone`                                | `hide-on-phone`      | off     |
-| data-table-empty  | columns     | `:columns="4"`                                 | `:columns="4"`       | `1`     |
-| data-table-sort   | label       | the slot                                       | the default slot     | none    |
+| Component         | Prop        | Blade                                          | Vue                  | React                | Default |
+| ----------------- | ----------- | ---------------------------------------------- | -------------------- | -------------------- | ------- |
+| data-table        | caption     | `caption="Invoices"`                           | `caption="Invoices"` | `caption="Invoices"` | none    |
+| data-table        | header row  | `<x-slot:head>`                                | `#head` slot         | `head` (a node)      | none    |
+| data-table        | rows        | the slot                                       | the default slot     | `children`           | none    |
+| data-table-column | sort        | `sort="ascending"` (or a `DataTableSort` case) | `sort="ascending"`   | `sort="ascending"`   | none    |
+| data-table-column | numeric     | `numeric`                                      | `numeric`            | `numeric`            | off     |
+| data-table-column | hideOnPhone | `hide-on-phone`                                | `hide-on-phone`      | `hideOnPhone`        | off     |
+| data-table-row    | selected    | `:selected="true"`                             | `:selected="true"`   | `selected={true}`    | none    |
+| data-table-cell   | label       | `label="Total"`                                | `label="Total"`      | `label="Total"`      | none    |
+| data-table-cell   | kind        | `kind="title"` (or a `DataTableCellKind` case) | `kind="title"`       | `kind="title"`       | `field` |
+| data-table-cell   | numeric     | `numeric`                                      | `numeric`            | `numeric`            | off     |
+| data-table-cell   | hideOnPhone | `hide-on-phone`                                | `hide-on-phone`      | `hideOnPhone`        | off     |
+| data-table-empty  | columns     | `:columns="4"`                                 | `:columns="4"`       | `columns={4}`        | `1`     |
+| data-table-sort   | label       | the slot                                       | the default slot     | `children`           | none    |
 
 An unknown sort falls back to `none` and an unknown kind to `field`. The app's attributes
-(`wire:key`, `wire:click`, `@click`, `data-*`, `aria-*`) reach each part's root.
+(`wire:key`, `wire:click`, `@click`, `onClick`, `data-*`, `aria-*`) reach each part's root.
 
 ```blade tab="Blade"
 <x-plinth::data-table caption="Invoices">
@@ -187,6 +187,45 @@ An unknown sort falls back to `none` and an unknown kind to `field`. The app's a
   </PlinthDataTableRow>
   <PlinthDataTableEmpty v-if="invoices.length === 0" :columns="3">No invoices yet.</PlinthDataTableEmpty>
 </PlinthDataTable>
+```
+
+```tsx tab="React"
+import {
+    PlinthDataTable,
+    PlinthDataTableCell,
+    PlinthDataTableColumn,
+    PlinthDataTableEmpty,
+    PlinthDataTableRow,
+    PlinthDataTableSort,
+} from '@bdynamic/plinth/react';
+
+<PlinthDataTable
+    caption="Invoices"
+    head={
+        <>
+            <PlinthDataTableColumn>Invoice</PlinthDataTableColumn>
+            <PlinthDataTableColumn sort={sort === 'date' ? direction : 'none'}>
+                <PlinthDataTableSort onClick={() => sortBy('date')}>Date</PlinthDataTableSort>
+            </PlinthDataTableColumn>
+            <PlinthDataTableColumn numeric>Total</PlinthDataTableColumn>
+        </>
+    }
+>
+    {invoices.map((invoice) => (
+        <PlinthDataTableRow key={invoice.id}>
+            <PlinthDataTableCell label="Invoice" kind="title">
+                {invoice.number}
+            </PlinthDataTableCell>
+            <PlinthDataTableCell label="Date">{invoice.date}</PlinthDataTableCell>
+            <PlinthDataTableCell label="Total" numeric>
+                {invoice.total}
+            </PlinthDataTableCell>
+        </PlinthDataTableRow>
+    ))}
+    {invoices.length === 0 ? (
+        <PlinthDataTableEmpty columns={3}>No invoices yet.</PlinthDataTableEmpty>
+    ) : null}
+</PlinthDataTable>;
 ```
 
 ## Accessibility

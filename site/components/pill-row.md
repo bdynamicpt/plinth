@@ -72,18 +72,18 @@ touch screen; the row's padding grows to fit it when a project makes pills short
 ## Props
 
 The row and each pill are their own components, so the app's attributes and listeners
-(`wire:click`, `x-on:click`, `@click`) land on the pill. The same names in Blade and Vue; the React
-layer is coming in [#66](https://github.com/bdynamicpt/plinth/issues/66).
+(`wire:click`, `x-on:click`, `@click`, `onClick`) land on the pill. The same names in every layer;
+React takes the Vue props, with the label as `children`.
 
-| Component | Prop     | Blade                            | Vue                            | Default |
-| --------- | -------- | -------------------------------- | ------------------------------ | ------- |
-| pill row  | label    | `label="Status"`                 | `label="Status"`               | none    |
-| pill row  | nav      | `nav`, makes it a `<nav>`        | `nav`                          | off     |
-| pill      | count    | `count="5"` or `:count="$open"`  | `:count="5"`                   | none    |
-| pill      | href     | `href="/tasks"`, makes it a link | `href="/tasks"`                | none    |
-| pill      | selected | `selected` or `:selected="$on"`  | `selected` or `:selected="on"` | off     |
-| pill      | disabled | `disabled`                       | `disabled`                     | off     |
-| pill      | label    | the slot                         | the default slot               | none    |
+| Component | Prop     | Blade                            | Vue                            | React            | Default |
+| --------- | -------- | -------------------------------- | ------------------------------ | ---------------- | ------- |
+| pill row  | label    | `label="Status"`                 | `label="Status"`               | `label="Status"` | none    |
+| pill row  | nav      | `nav`, makes it a `<nav>`        | `nav`                          | `nav`            | off     |
+| pill      | count    | `count="5"` or `:count="$open"`  | `:count="5"`                   | `count={5}`      | none    |
+| pill      | href     | `href="/tasks"`, makes it a link | `href="/tasks"`                | `href="/tasks"`  | none    |
+| pill      | selected | `selected` or `:selected="$on"`  | `selected` or `:selected="on"` | `selected={on}`  | off     |
+| pill      | disabled | `disabled`                       | `disabled`                     | `disabled`       | off     |
+| pill      | label    | the slot                         | the default slot               | `children`       | none    |
 
 ```blade tab="Blade"
 <x-plinth::pill-row label="Status">
@@ -102,6 +102,23 @@ layer is coming in [#66](https://github.com/bdynamicpt/plinth/issues/66).
   <PlinthPill href="/overview" :selected="route.name === 'overview'">Overview</PlinthPill>
   <PlinthPill href="/tasks" :count="8" :selected="route.name === 'tasks'">Tasks</PlinthPill>
 </PlinthPillRow>
+```
+
+```tsx tab="React"
+import { PlinthPill, PlinthPillRow } from '@bdynamic/plinth/react';
+
+<PlinthPillRow label="Status">
+    {statuses.map((status) => (
+        <PlinthPill
+            key={status.value}
+            count={status.count}
+            selected={filter === status.value}
+            onClick={() => setFilter(status.value)}
+        >
+            {status.label}
+        </PlinthPill>
+    ))}
+</PlinthPillRow>;
 ```
 
 ## Accessibility

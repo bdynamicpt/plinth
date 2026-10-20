@@ -11,7 +11,6 @@ final readonly class Component
         public string $name,
         public string $group,
         public string $description,
-        public bool $react,
         public array $files,
         public ?Playground $playground,
     ) {}
@@ -30,6 +29,6 @@ final readonly class Component
     /** @return list<string> */
     public function layers(): array
     {
-        return $this->react ? ['HTML', 'Blade', 'Vue', 'React'] : ['HTML', 'Blade', 'Vue'];
+        return ['HTML', 'Blade', 'Vue', 'React'];
     }
 }

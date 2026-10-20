@@ -113,20 +113,23 @@ router's link: with Vue Router, `<RouterLink custom v-slot="{ href, navigate, is
 
 ## Props
 
-The same names in Blade and Vue; the React layer is coming in
-[#66](https://github.com/bdynamicpt/plinth/issues/66).
+The same names in every layer. React takes the Vue props, with the title as `children` and the
+slots as props that take a node.
 
-| Prop        | Blade                               | Vue                               | Default |
-| ----------- | ----------------------------------- | --------------------------------- | ------- |
-| description | `description="Monthly, by email"`   | `description="Monthly, by email"` | none    |
-| href        | `href="/settings"`, makes it a link | `href="/settings"`                | none    |
-| button      | `button`, makes it a button         | `button`                          | off     |
-| chevron     | `chevron`                           | `chevron`                         | off     |
-| current     | `current` or `:current="$active"`   | `current` or `:current="active"`  | off     |
-| disabled    | `disabled`                          | `disabled`                        | off     |
-| leading     | `<x-slot:leading>`                  | `#leading` slot                   | none    |
-| trailing    | `<x-slot:trailing>`                 | `#trailing` slot                  | none    |
-| title       | the slot                            | the default slot                  | none    |
+| Prop        | Blade                               | Vue                               | React                             | Default |
+| ----------- | ----------------------------------- | --------------------------------- | --------------------------------- | ------- |
+| description | `description="Monthly, by email"`   | `description="Monthly, by email"` | `description="Monthly, by email"` | none    |
+| href        | `href="/settings"`, makes it a link | `href="/settings"`                | `href="/settings"`                | none    |
+| button      | `button`, makes it a button         | `button`                          | `button`                          | off     |
+| chevron     | `chevron`                           | `chevron`                         | `chevron`                         | off     |
+| current     | `current` or `:current="$active"`   | `current` or `:current="active"`  | `current={active}`                | off     |
+| disabled    | `disabled`                          | `disabled`                        | `disabled`                        | off     |
+| leading     | `<x-slot:leading>`                  | `#leading` slot                   | `leading` (a node)                | none    |
+| trailing    | `<x-slot:trailing>`                 | `#trailing` slot                  | `trailing` (a node)               | none    |
+| title       | the slot                            | the default slot                  | `children`                        | none    |
+
+Extra attributes and listeners (`wire:click`, `@click`, `onClick`) reach the root: the `<a>`, the
+`<button>` or the `<div>`.
 
 ```blade tab="Blade"
 <x-plinth::list-row :href="route('settings.language')" chevron wire:navigate>
@@ -143,6 +146,18 @@ The same names in Blade and Vue; the React layer is coming in
 <PlinthListRow button description="Email and push" @click="openNotifications">
   Notifications
 </PlinthListRow>
+```
+
+```tsx tab="React"
+import { PlinthListRow } from '@bdynamic/plinth/react';
+
+<PlinthListRow href="/settings/language" chevron trailing="English">
+    Language
+</PlinthListRow>;
+
+<PlinthListRow button description="Email and push" onClick={openNotifications}>
+    Notifications
+</PlinthListRow>;
 ```
 
 ## Accessibility

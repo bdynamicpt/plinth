@@ -74,18 +74,22 @@ every avatar follows; see [branding your project](../docs/branding.md).
 
 ## Props
 
-The same names in every layer. The React layer is coming in
-[#66](https://github.com/bdynamicpt/plinth/issues/66).
+The same names in every layer. React takes the Vue props.
 
-| Prop        | Blade                                      | Vue                     | Default       |
-| ----------- | ------------------------------------------ | ----------------------- | ------------- |
-| name        | `name="Ana Lima"` or `:name="$user->name"` | `:name="user.name"`     | none          |
-| src         | `:src="$user->photo_url"`                  | `:src="user.photoUrl"`  | none          |
-| initials    | `initials="NW"`                            | `initials="NW"`         | from the name |
-| size        | `size="lg"` (or a `Size` case)             | `size="lg"`             | `md`          |
-| status      | `status="success"` (or a `Tone` case)      | `status="success"`      | none          |
-| statusLabel | `status-label="Online"`                    | `status-label="Online"` | none          |
-| decorative  | `decorative`                               | `decorative`            | off           |
+| Prop        | Blade                                      | Vue                     | React                  | Default       |
+| ----------- | ------------------------------------------ | ----------------------- | ---------------------- | ------------- |
+| name        | `name="Ana Lima"` or `:name="$user->name"` | `:name="user.name"`     | `name={user.name}`     | none          |
+| src         | `:src="$user->photo_url"`                  | `:src="user.photoUrl"`  | `src={user.photoUrl}`  | none          |
+| initials    | `initials="NW"`                            | `initials="NW"`         | `initials="NW"`        | from the name |
+| size        | `size="lg"` (or a `Size` case)             | `size="lg"`             | `size="lg"`            | `md`          |
+| status      | `status="success"` (or a `Tone` case)      | `status="success"`      | `status="success"`     | none          |
+| statusLabel | `status-label="Online"`                    | `status-label="Online"` | `statusLabel="Online"` | none          |
+| decorative  | `decorative`                               | `decorative`            | `decorative`           | off           |
+
+Extra attributes reach the root `<span>`: in Blade through `$attributes`, in Vue by falling
+through, and in React as props (`className`, added to Plinth's class, `id`, `data-*`, `aria-*` and
+`ref`). Vue and React warn in the console about an avatar with no name that isn't decorative, and
+about a status without its label.
 
 ```blade tab="Blade"
 <x-plinth::avatar :name="$user->name" :src="$user->photo_url" status="success" status-label="Online" />
@@ -95,6 +99,12 @@ The same names in every layer. The React layer is coming in
 
 ```vue tab="Vue"
 <PlinthAvatar :name="user.name" :src="user.photoUrl" size="lg" />
+```
+
+```tsx tab="React"
+import { PlinthAvatar } from '@bdynamic/plinth/react';
+
+<PlinthAvatar name={user.name} src={user.photoUrl} status="success" statusLabel="Online" />;
 ```
 
 ## Accessibility

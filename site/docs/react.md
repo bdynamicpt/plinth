@@ -1,17 +1,12 @@
 # React
 
 The React 19 components print the same markup as the Blade and Vue ones, from the same CSS
-([ADR 6](../../docs/adr/0006-a-react-layer.md)). They suit a React app, an Inertia one included.
+([ADR 6](../../docs/adr/0006-a-react-layer.md)). They suit a React app, an Inertia one included, and every
+component has one.
 
 ```bash
 npm install @bdynamic/plinth
 ```
-
-> [!NOTE]
-> The React layer is being ported: badge, button, callout, code block, icon and icon button are
-> there today, and the rest follow in
-> [#66](https://github.com/bdynamicpt/plinth/issues/66). Until a component is ported, its plain
-> HTML works in JSX as it is.
 
 ## Set it up
 
@@ -50,7 +45,9 @@ The React components take Vue's props by the same names, so the docs for one ser
 - **No effects while rendering.** Nothing reads `window` or `document` during render, so the
   components render the same on the server, for Inertia's SSR, and in the browser.
 - **Native behaviour.** A sheet is a `<dialog>`: open it with a button that has `commandfor` and
-  `command="show-modal"`, or call `showModal()` on a ref.
+  `command="show-modal"`, or call `showModal()` on its `ref`, which is the dialog itself.
+  `onClose` is the dialog's close event. React's types don't list `command` and `commandfor` yet:
+  they work as they are, but TypeScript wants them spread in.
 
 ## Your brand
 
