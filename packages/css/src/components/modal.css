@@ -250,6 +250,14 @@
       box-shadow: none;
     }
 
+    /* As a scrolling area the root can take focus (Chrome and Firefox), so it shows the ring. */
+    :is(.plinth-dialog, .plinth-sheet, .plinth-drawer):has(
+        > * > :is(.plinth-dialog-handle, .plinth-sheet-handle, .plinth-drawer-handle)
+      ):focus-visible {
+      outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+      outline-offset: var(--plinth-focus-ring-offset-inset);
+    }
+
     :is(.plinth-dialog, .plinth-sheet, .plinth-drawer):has(
         > * > :is(.plinth-dialog-handle, .plinth-sheet-handle, .plinth-drawer-handle)
       )::before {

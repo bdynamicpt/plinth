@@ -148,6 +148,8 @@ and `onClose` is the dialog's close event.
 - The current page's row says so (`aria-current="page"`).
 - The user's avatar is decorative: the name next to it says who it is.
 - Every row keeps a 40px touch target.
+- On a phone it has the sheet's grab handle and closes when it is swiped down; the handle is
+  decorative, and the close button and Escape close it too.
 
 The markup contract is at the top of
 [`packages/css/src/components/menu-sheet.css`](../../packages/css/src/components/menu-sheet.css).

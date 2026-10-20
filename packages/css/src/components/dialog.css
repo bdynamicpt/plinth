@@ -4,21 +4,27 @@
  *
  * <dialog id="settings" class="plinth-dialog" closedby="any"
  *   aria-labelledby="settings-title" aria-describedby="settings-description">
- *   <div class="plinth-dialog-header">
- *     <h2 id="settings-title" class="plinth-dialog-title">Settings</h2>
- *     <p id="settings-description" class="plinth-dialog-description">Changes apply at once.</p>
- *     <button type="button" class="plinth-button plinth-icon-button plinth-dialog-close"
- *       data-variant="ghost" data-size="md" aria-label="Close" commandfor="settings"
- *       command="close">
- *       <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
- *     </button>
+ *   <div class="plinth-dialog-panel">
+ *     <div class="plinth-dialog-handle" aria-hidden="true"></div>
+ *     <div class="plinth-dialog-header">
+ *       <h2 id="settings-title" class="plinth-dialog-title">Settings</h2>
+ *       <p id="settings-description" class="plinth-dialog-description">Changes apply at once.</p>
+ *       <button type="button" class="plinth-button plinth-icon-button plinth-dialog-close"
+ *         data-variant="ghost" data-size="md" aria-label="Close" commandfor="settings"
+ *         command="close">
+ *         <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
+ *       </button>
+ *     </div>
+ *     <div class="plinth-dialog-body">…</div>
+ *     <div class="plinth-dialog-footer">…</div>
  *   </div>
- *   <div class="plinth-dialog-body">…</div>
- *   <div class="plinth-dialog-footer">…</div>
  * </dialog>
  *
  * The root is the <dialog>, and it needs an id: commandfor and aria-labelledby point at it, and
- * the title's and description's ids are the root's id with -title and -description. The title is
+ * the title's and description's ids are the root's id with -title and -description. The panel is
+ * the root's only child and holds the parts. The handle is there only on a dismissible dialog
+ * with data-side-phone="bottom": decorative (aria-hidden), shown below 768px, where the dialog is
+ * dragged down to close (modal.css). The title is
  * required; the description (and its aria-describedby) and the footer are optional. The close
  * button is an icon button (button.css and icon.css). It needs modal.css, the base it shares with
  * the sheet: the surface, the backdrop, the scroll lock, the motion, the safe areas and the parts
