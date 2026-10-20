@@ -199,6 +199,29 @@ return [
             ],
         ],
 
+        'confirm-dialog' => [
+            'name' => 'Confirmation dialog',
+            'group' => 'Overlays',
+            'description' => 'Asks before an action happens: a yes, a phrase typed exactly, or a password.',
+            'playground' => [
+                'template' => "<x-plinth::button variant=\"secondary\" commandfor=\"playground-confirm\" command=\"show-modal\">{opener}</x-plinth::button>\n<x-plinth::confirm-dialog id=\"playground-confirm\" title=\"{title}\" message=\"{message}\" confirm-label=\"{confirm}\"{attributes} />",
+                'options' => [
+                    'kind' => [
+                        'values' => ['simple', 'type', 'password'],
+                        'default' => 'simple',
+                        'print' => ['type' => 'kind="type" phrase="harbour"'],
+                        'content' => [
+                            'simple' => ['{opener}' => 'Archive 3 tickets', '{title}' => 'Archive 3 tickets?', '{message}' => 'You can bring them back from the archive.', '{confirm}' => 'Archive'],
+                            'type' => ['{opener}' => 'Delete project', '{title}' => 'Delete this project?', '{message}' => 'Its tickets and files go with it, and this cannot be undone.', '{confirm}' => 'Delete project'],
+                            'password' => ['{opener}' => 'Change billing email', '{title}' => 'Change the billing email?', '{message}' => 'Enter your password to go on.', '{confirm}' => 'Change email'],
+                        ],
+                    ],
+                    'tone' => ['values' => ['neutral', 'danger'], 'default' => 'neutral'],
+                ],
+                'states' => ['busy'],
+            ],
+        ],
+
         'menu-sheet' => [
             'name' => 'Menu sheet',
             'group' => 'Overlays',
@@ -225,7 +248,6 @@ return [
     */
 
     'coming' => [
-        62 => ['name' => 'Confirmation dialog', 'description' => 'Simple, type to confirm, or a password.'],
         63 => ['name' => 'Drawer', 'description' => 'A draggable bottom panel with snap points.'],
     ],
 

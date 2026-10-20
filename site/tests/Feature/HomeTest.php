@@ -18,7 +18,7 @@ it('shows the home page with every section', function () {
             'Same components. Your colour, your corners, your theme.',
             'Every decision, written down.',
             'An inbox, a settings page, billing, a landing page.',
-            '16 components today, each with its contract.',
+            '17 components today, each with its contract.',
         ]);
 });
 
