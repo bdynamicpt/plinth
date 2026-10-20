@@ -21,6 +21,11 @@
         gap: var(--plinth-space-1);
     }
 
+    /* Until Alpine runs the choices do nothing, so they stay hidden and the defaults show. */
+    .site-switcher-group[x-cloak] {
+        display: none;
+    }
+
     .site-switcher-label {
         font-size: var(--plinth-font-size-sm);
         font-weight: var(--plinth-font-weight-medium);
