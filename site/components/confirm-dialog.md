@@ -42,14 +42,20 @@ title, message, field and error take the root's `id` with `-title`, `-message`, 
 It is always an alert dialog (`role="alertdialog"`) with `closedby="closerequest"` and no close
 button, so a stray tap on the backdrop leaves it open. It closes three ways:
 
-- **Cancel** closes it without submitting anything, whatever is in the field.
-- **Escape** acts as Cancel: the browser fires `cancel`, then `close`.
+- **Cancel** closes it without submitting anything, whatever is in the field. It has
+  `value="cancel"`, so the dialog's `returnValue` is `"cancel"`.
+- **Escape** acts as Cancel: the browser fires `cancel`, then `close`, with an empty
+  `returnValue`.
 - **The confirm button** submits the form, once the browser has checked the field. Enter in the
   field does the same, since it is the form's only submit button. The dialog closes with
   `returnValue` set to `"confirm"`.
 
 When it opens, the browser focuses the first control: the field, or Cancel when there is none.
 So the safe choice is where the focus starts.
+
+The browser doesn't empty the field when the dialog closes. Call `reset()` on its form on `close`,
+so the phrase is typed afresh the next time and a password doesn't stay in the page (the examples
+under [Confirming](#confirming) do).
 
 ## Three kinds
 
@@ -75,13 +81,15 @@ it shows the browser's message and puts the focus in the field.
 ```
 
 The label reads "Type **harbour** to confirm". Write your own with **`field-label`**, with
-`:phrase` where the phrase goes: `field-label="Escreva :phrase para confirmar"`.
+`:phrase` where the phrase goes: `field-label="Escreva :phrase para confirmar"`. Keep `:phrase` in
+it: the label is the only place that shows the phrase, and the browser's message doesn't.
 
 ### Password
 
 A password field (`type="password"`, `name="password"`, `autocomplete="current-password"`,
 `required`), so the browser's password manager can fill it in. **Plinth never checks the
-password**: your app does, on the server. While it checks, set **`busy`**, which makes the confirm
+password**: your app does, on the server. The field is required, so the confirm button looks
+disabled until something is typed. While it checks, set **`busy`**, which makes the confirm
 button busy; then close the dialog, or set **`error`**.
 
 ```blade example
@@ -129,7 +137,8 @@ app checks, then call `close('confirm')` on the dialog, or set `error`.
 
 **In Livewire,** put `wire:ignore.self` on the dialog, so a re-render doesn't drop its `open`
 attribute, and always pass an `id`. Listen with Alpine, which doesn't prevent the submit unless
-you ask it to:
+you ask it to. A Livewire component can set `busy` only once its request is back, so an Alpine
+flag is what keeps a second Enter from submitting again while the password is checked:
 
 ```blade tab="Blade"
 <x-plinth::button variant="secondary" commandfor="archive" command="show-modal">Archive</x-plinth::button>
@@ -139,9 +148,12 @@ you ask it to:
 
 <x-plinth::confirm-dialog id="billing" kind="password" title="Change the billing email?"
     message="…" confirm-label="Change email" :error="$errors->first('password')"
-    wire:ignore.self
-    x-on:submit.prevent="$wire.changeEmail(new FormData($event.target).get('password'))
-        .then((changed) => changed && $el.close('confirm'))" />
+    wire:ignore.self x-data="{ checking: false }"
+    x-on:submit.prevent="if (checking) return; checking = true;
+        $wire.changeEmail(new FormData($event.target).get('password'))
+            .then((changed) => { checking = false; changed && $el.close('confirm') })"
+    x-on:close="$el.querySelector('form').reset()" />
+
 ```
 
 ```vue tab="Vue"
@@ -155,6 +167,7 @@ you ask it to:
     :busy="checking"
     :error="error"
     @submit.prevent="check"
+    @close="($event.target as HTMLDialogElement).querySelector('form')?.reset()"
 />
 
 <script setup lang="ts">
@@ -203,6 +216,7 @@ const [error, setError] = useState<string>();
         if (changed) billing.current?.close('confirm');
         else setError('That password isn’t right. Try again.');
     }}
+    onClose={() => billing.current?.querySelector('form')?.reset()}
 />;
 ```
 

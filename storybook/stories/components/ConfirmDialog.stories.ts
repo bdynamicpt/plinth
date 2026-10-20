@@ -121,7 +121,10 @@ const passwordArgs: Partial<ConfirmDialogArgs> = {
   confirmLabel: 'Change email',
 };
 
-/** Password, empty: the field is required, and the app checks what is typed. */
+/**
+ * Password, empty: the field is required, so the confirm button looks disabled until something is
+ * typed; the app checks what is.
+ */
 export const Password: Story = { args: { ...passwordArgs, id: 'billing' } };
 
 /** Busy: the app is checking the password, and the confirm button shows it. */
@@ -145,6 +148,7 @@ export const BottomOnPhone: Story = {
   args: { ...typeArgs, id: 'delete-bottom', sidePhone: 'bottom' },
 };
 
+/** A long question, message, phrase and labels wrap, and the buttons share the footer. */
 export const LongText: Story = {
   args: {
     id: 'long',
@@ -161,8 +165,6 @@ export const LongText: Story = {
 
 /** Right-to-left text: the actions start on the left. */
 export const RightToLeft: Story = {
-  render: (args) => {
-    const rtl = { ...args, ...typeArgs, id: 'delete-rtl' } as ConfirmDialogArgs;
-    return `<div dir="rtl">${opener(rtl)}${confirmDialog(rtl)}</div>`;
-  },
+  args: { ...typeArgs, id: 'delete-rtl' },
+  render: (args) => `<div dir="rtl">${opener(args)}${confirmDialog(args)}</div>`,
 };

@@ -104,7 +104,7 @@ export function confirmDialog(
     '<div class="plinth-dialog-footer">',
     button(
       { label: cancelLabel, variant: 'secondary', size: 'md', disabled: false, busy: false },
-      { commandfor: id, command: 'close' },
+      { commandfor: id, command: 'close', value: 'cancel' },
     ),
     button(
       {

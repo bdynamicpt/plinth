@@ -54,7 +54,9 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-  /** The dialog closed: confirmed (returnValue "confirm"), cancelled, Escape or close(). */
+  /**
+   * The dialog closed: its returnValue is "confirm" (confirmed), "cancel" (Cancel) or "" (Escape).
+   */
   close: [event: Event];
 }>();
 
@@ -75,9 +77,8 @@ if (type.value === 'type' && !props.phrase?.trim()) {
 const generatedId = useId();
 const dialogId = computed(() => props.id?.trim() || `plinth-confirm-dialog-${generatedId}`);
 const side = computed(() => dialogSidePhone(props.sidePhone));
-// The phrase and the field's label are read only when the dialog has a field, the phrase only by
-// the type-to-confirm kind, which has one.
-const phraseText = computed(() => props.phrase!.trim());
+// The field's label is read only when the dialog has a field.
+const phraseText = computed(() => props.phrase?.trim() ?? '');
 const hasError = computed(() => type.value !== 'simple' && Boolean(props.error?.trim()));
 // The label's text around each :phrase; the phrase goes in a <strong> between them.
 const labelParts = computed(() => {
@@ -157,7 +158,7 @@ defineExpose({
         </p>
       </div>
       <div class="plinth-dialog-footer">
-        <PlinthButton variant="secondary" :commandfor="dialogId" command="close">{{
+        <PlinthButton variant="secondary" :commandfor="dialogId" command="close" value="cancel">{{
           cancelLabel
         }}</PlinthButton>
         <PlinthButton

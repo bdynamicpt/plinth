@@ -8,7 +8,7 @@ import {
 } from '../src/index.ts';
 
 const cancel =
-  '<button type="button" class="plinth-button" data-variant="secondary" data-size="md" commandfor="archive" command="close">' +
+  '<button type="button" class="plinth-button" data-variant="secondary" data-size="md" commandfor="archive" command="close" value="cancel">' +
   '<span class="plinth-button-label">Cancel</span></button>';
 
 const confirm = (variant = 'primary') =>
@@ -166,6 +166,15 @@ describe('PlinthConfirmDialog', () => {
     expect(generated.attributes('aria-describedby')).toBe(`${id}-message`);
     expect(generated.find('label').attributes('for')).toBe(`${id}-field`);
     expect(dialogWith({ id: ' archive ' }).attributes('id')).toBe('archive');
+  });
+
+  it('takes a kind that changes after it is created, and the phrase with it', async () => {
+    const wrapper = dialogWith();
+    await wrapper.setProps({ kind: 'type' });
+
+    expect(wrapper.find('input').attributes('pattern')).toBe('');
+    await wrapper.setProps({ phrase: 'harbour' });
+    expect(wrapper.find('input').attributes('pattern')).toBe('harbour');
   });
 
   it('needs a title, a message, and a phrase to type', () => {

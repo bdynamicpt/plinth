@@ -43,7 +43,7 @@ interface ConfirmDialogOptions {
  * A confirmation dialog on a `<dialog>`: open it with a button that has `commandfor` and
  * `command="show-modal"`, or with `showModal()` on a ref. `onSubmit` (it bubbles from the form)
  * is the confirm, after the browser checked the field; `onClose` is the dialog's close event
- * (Vue's `close`), with `returnValue` "confirm" when it was confirmed.
+ * (Vue's `close`), with `returnValue` "confirm", "cancel" (Cancel) or "" (Escape).
  */
 export type PlinthConfirmDialogProps = ConfirmDialogOptions &
   Omit<ComponentProps<'dialog'>, keyof ConfirmDialogOptions | 'children'>;
@@ -88,7 +88,7 @@ export function PlinthConfirmDialog({
     : {};
   // React passes lowercase attributes it doesn't know as they are, so the invoker command reaches
   // the button.
-  const command = { commandfor: dialogId, command: 'close' };
+  const command = { commandfor: dialogId, command: 'close', value: 'cancel' };
 
   let field = null;
   if (type !== 'simple') {

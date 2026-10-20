@@ -11,7 +11,7 @@ import {
 } from '../src/index.ts';
 
 const cancel =
-  '<button type="button" data-variant="secondary" data-size="md" commandfor="archive" command="close" class="plinth-button">' +
+  '<button type="button" data-variant="secondary" data-size="md" commandfor="archive" command="close" value="cancel" class="plinth-button">' +
   '<span class="plinth-button-label">Cancel</span></button>';
 
 const confirm = (variant = 'primary') =>

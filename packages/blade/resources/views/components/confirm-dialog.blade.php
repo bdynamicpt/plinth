@@ -68,7 +68,7 @@
             @endif
         </div>
         <div class="plinth-dialog-footer">
-            <x-plinth::button variant="secondary" :commandfor="$id" command="close">{{ $cancelLabel }}</x-plinth::button>
+            <x-plinth::button variant="secondary" :commandfor="$id" command="close" value="cancel">{{ $cancelLabel }}</x-plinth::button>
             <x-plinth::button class="plinth-confirm-dialog-confirm" type="submit" value="confirm" :variant="$tone === \BDynamic\Plinth\Enums\ConfirmDialogTone::Danger ? 'danger' : 'primary'" :busy="$busy">{{ $confirmLabel }}</x-plinth::button>
         </div>
     </form>

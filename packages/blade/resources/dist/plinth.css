@@ -1297,8 +1297,8 @@
  *     </div>
  *     <div class="plinth-dialog-footer">
  *       <button type="button" class="plinth-button" data-variant="secondary" data-size="md"
- *         commandfor="delete" command="close"><span class="plinth-button-label">Cancel</span>
- *       </button>
+ *         commandfor="delete" command="close" value="cancel">
+ *         <span class="plinth-button-label">Cancel</span></button>
  *       <button type="submit" class="plinth-button plinth-confirm-dialog-confirm"
  *         data-variant="danger" data-size="md" value="confirm">
  *         <span class="plinth-button-label">Delete</span></button>
@@ -1314,21 +1314,26 @@
  * dialog's name and description. data-side-phone="bottom" makes it a bottom sheet below 768px, as
  * on the dialog. A project may set its own role and closedby.
  *
- * Its content is a <form method="dialog">. Cancel is a button with command="close", which closes
- * the dialog with an empty returnValue and never submits, so it works whatever is in the field.
+ * Its content is a <form method="dialog">. Cancel is a button with command="close" and
+ * value="cancel", which closes the dialog with returnValue "cancel" and never submits, so it works
+ * whatever is in the field; Escape closes it with an empty returnValue.
  * Confirm is the form's only submit button, so Enter in the field confirms too: once the browser
  * has checked the field, the form fires submit (it bubbles to the dialog, where the app listens)
  * and the dialog closes with returnValue "confirm". The browser focuses the first control when it
- * opens: the field, or Cancel when there is none.
+ * opens: the field, or Cancel when there is none. The browser doesn't empty the field when the
+ * dialog closes, so the app calls reset() on the form on close: the phrase is typed afresh each
+ * time, and a password doesn't stay in the page.
  *
  * Kinds (no attribute: the markup is what differs):
  * - simple: the message only.
  * - type to confirm: a text field with required and pattern, the phrase with its pattern
  *   characters escaped. The browser blocks the submit until the text matches, and while the form
  *   is :invalid the confirm button looks disabled, through CSS alone (it isn't disabled: a press
- *   shows the browser's message and focuses the field). The label shows the phrase in <strong>.
+ *   shows the browser's message and focuses the field). The label shows the phrase in <strong>;
+ *   a label of the app's own must keep it (:phrase), or nobody can tell what to type.
  * - password: a field with type="password", name="password", autocomplete="current-password" and
- *   required. Plinth never checks a password: the app calls preventDefault() on the submit, sets
+ *   required, so the confirm button looks disabled until something is typed. Plinth never checks
+ *   a password: the app calls preventDefault() on the submit, sets
  *   the confirm button busy while it checks, then closes the dialog (close("confirm")) or shows
  *   the error.
  *

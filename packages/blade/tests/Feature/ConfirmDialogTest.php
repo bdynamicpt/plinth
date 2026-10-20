@@ -6,7 +6,7 @@ use BDynamic\Plinth\Enums\DialogSidePhone;
 use Illuminate\Support\Facades\Blade;
 
 $cancel = '<button class="plinth-button" type="button" data-variant="secondary" data-size="md"'
-    .' commandfor="archive" command="close"><span class="plinth-button-label">Cancel</span></button>';
+    .' commandfor="archive" command="close" value="cancel"><span class="plinth-button-label">Cancel</span></button>';
 
 $confirm = fn (string $variant = 'primary', string $label = 'Archive') => '<button class="plinth-button plinth-confirm-dialog-confirm" type="submit"'
     .' data-variant="'.$variant.'" data-size="md" value="confirm"><span class="plinth-button-label">'.$label.'</span></button>';
