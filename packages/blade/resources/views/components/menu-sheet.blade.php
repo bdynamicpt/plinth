@@ -12,7 +12,7 @@
     $id = filled($id) ? trim($id) : 'plinth-menu-sheet-'.\Illuminate\Support\Str::lower(\Illuminate\Support\Str::random(8));
     $userHref = filled($userHref) ? $userHref : null;
 @endphp
-<x-plinth::sheet :attributes="$attributes->merge(['class' => 'plinth-menu-sheet'])" :id="$id" :title="$title" :close-label="$closeLabel" placement="end">
+<x-plinth::sheet :attributes="$attributes->merge(['class' => 'plinth-menu-sheet'])" :id="$id" :title="$title" :close-label="$closeLabel" side="end" side-phone="bottom">
     @if (filled($userName))
         <x-plinth::list-row class="plinth-menu-sheet-user" :description="filled($userDetail) ? $userDetail : null" :href="$userHref" :chevron="$userHref !== null">
             <x-slot:leading><x-plinth::avatar :name="$userName" :src="filled($userSrc) ? $userSrc : null" size="lg" decorative /></x-slot:leading>

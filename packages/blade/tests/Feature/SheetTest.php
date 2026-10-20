@@ -1,6 +1,6 @@
 <?php
 
-use BDynamic\Plinth\Enums\SheetPlacement;
+use BDynamic\Plinth\Enums\SheetSide;
 use Illuminate\Support\Facades\Blade;
 
 $close = '<button class="plinth-button plinth-icon-button plinth-sheet-close" type="button"'
@@ -16,7 +16,7 @@ it('prints the dialog, the header, the body and the footer', function () use ($c
     );
 
     expect(squish($html))->toBe(
-        '<dialog id="filters" class="plinth-sheet" data-placement="center" closedby="any"'
+        '<dialog id="filters" class="plinth-sheet" data-side="end" closedby="any"'
         .' aria-labelledby="filters-title" aria-describedby="filters-description">'
         .'<div class="plinth-sheet-header">'
         .'<h2 id="filters-title" class="plinth-sheet-title">Filters</h2>'
@@ -44,16 +44,31 @@ it('leaves out an empty or blank description and a missing footer', function () 
     }
 });
 
-it('takes a placement, and falls back to center', function () {
-    $placement = fn (mixed $value) => Blade::render(
-        '<x-plinth::sheet id="filters" title="Filters" :placement="$value">Body</x-plinth::sheet>',
+it('takes a side, and falls back to end', function () {
+    $side = fn (mixed $value) => Blade::render(
+        '<x-plinth::sheet id="filters" title="Filters" :side="$value">Body</x-plinth::sheet>',
         ['value' => $value],
     );
 
-    expect($placement('end'))->toContain('data-placement="end"')
-        ->and($placement(SheetPlacement::End))->toContain('data-placement="end"')
-        ->and($placement('start'))->toContain('data-placement="center"')
-        ->and($placement(null))->toContain('data-placement="center"');
+    expect($side('start'))->toContain('data-side="start"')
+        ->and($side('top'))->toContain('data-side="top"')
+        ->and($side(SheetSide::Bottom))->toContain('data-side="bottom"')
+        ->and($side('left'))->toContain('data-side="end"')
+        ->and($side(null))->toContain('data-side="end"');
+});
+
+it('takes a side on a phone, and leaves it out when it is missing or unknown', function () {
+    $sidePhone = fn (mixed $value) => Blade::render(
+        '<x-plinth::sheet id="filters" title="Filters" side="end" :side-phone="$value">Body</x-plinth::sheet>',
+        ['value' => $value],
+    );
+
+    expect($sidePhone('bottom'))->toContain('data-side="end" data-side-phone="bottom" closedby="any"')
+        ->and($sidePhone(SheetSide::Start))->toContain('data-side-phone="start"')
+        ->and($sidePhone('left'))->not->toContain('data-side-phone')
+        ->and($sidePhone(null))->not->toContain('data-side-phone')
+        ->and(Blade::render('<x-plinth::sheet id="filters" title="Filters">Body</x-plinth::sheet>'))
+        ->not->toContain('data-side-phone');
 });
 
 it('takes the close button\'s label', function () {

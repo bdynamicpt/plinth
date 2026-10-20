@@ -1,8 +1,8 @@
 # Menu sheet
 
 The app shell's menu: a [sheet](sheet.md) with the signed-in user, the navigation and the account
-actions. The header's menu button opens it. On a phone it slides up from the bottom; from 768px up
-it is a full-height panel on the inline-end edge.
+actions. The header's menu button opens it. It is a sheet with `side="end" side-phone="bottom"`: on
+a phone it slides up from the bottom; from 768px up it is a full-height panel on the end edge.
 
 ## When not to use it
 
@@ -31,12 +31,12 @@ The menu stays closed until you press its button.
 </x-plinth::menu-sheet>
 ```
 
-| Part                         | Element          | Required | What it is                                                       |
-| ---------------------------- | ---------------- | -------- | ---------------------------------------------------------------- |
-| `.plinth-menu-sheet`         | `<dialog>`       | yes      | On a sheet's root, always `data-placement="end"`, with no footer |
-| `.plinth-menu-sheet-user`    | `<a>` or `<div>` | no       | A list row with a decorative avatar, the name and a detail line  |
-| `.plinth-menu-sheet-nav`     | `<nav>`          | yes      | Named by the title; holds list cards of link rows                |
-| `.plinth-menu-sheet-account` | `<div>`          | no       | A list card of account actions, on the bottom edge of the panel  |
+| Part                         | Element          | Required | What it is                                                                             |
+| ---------------------------- | ---------------- | -------- | -------------------------------------------------------------------------------------- |
+| `.plinth-menu-sheet`         | `<dialog>`       | yes      | On a sheet's root, always `data-side="end"` `data-side-phone="bottom"`, with no footer |
+| `.plinth-menu-sheet-user`    | `<a>` or `<div>` | no       | A list row with a decorative avatar, the name and a detail line                        |
+| `.plinth-menu-sheet-nav`     | `<nav>`          | yes      | Named by the title; holds list cards of link rows                                      |
+| `.plinth-menu-sheet-account` | `<div>`          | no       | A list card of account actions, on the bottom edge of the panel                        |
 
 - Everything the sheet does holds: the browser traps focus, closes it on Escape or a tap on the
   backdrop, and returns focus to the menu button. Give it an **`id`** and point the header's menu

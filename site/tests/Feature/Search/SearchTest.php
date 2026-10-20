@@ -31,7 +31,7 @@ it('puts the search in the header of every page, opened by its buttons', functio
     foreach (['/', '/docs/installation', '/components', '/components/button', '/docs/decisions'] as $page) {
         $this->get($page)
             ->assertOk()
-            ->assertSee('<dialog id="site-search" class="plinth-sheet site-search"', false)
+            ->assertSee('<dialog id="site-search" class="plinth-dialog site-search"', false)
             ->assertSee('x-data="siteSearch(\'\/search.json\')"', false)
             ->assertSee('commandfor="site-search" command="show-modal" aria-keyshortcuts="Meta+K Control+K"', false)
             ->assertSee('<label class="site-visually-hidden" for="site-search-input">Search the docs</label>', false)

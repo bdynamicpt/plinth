@@ -2,7 +2,7 @@
 import { useId, type ComponentProps, type ReactNode } from 'react';
 import { PlinthIconButton } from './PlinthIconButton';
 import { classNames, hasContent } from './markup';
-import { sheetPlacement, type SheetPlacement } from './sheet';
+import { sheetSide, sheetSidePhone, type SheetSide } from './sheet';
 
 interface SheetOptions {
   /** The dialog's id; one is generated when it is missing. */
@@ -13,8 +13,10 @@ interface SheetOptions {
   description?: string;
   /** The close button's accessible name. */
   closeLabel?: string;
-  /** Where the sheet shows from 768px up. */
-  placement?: SheetPlacement;
+  /** The edge the sheet comes from, at every width. */
+  side?: SheetSide;
+  /** The edge below 768px, when it is another one. */
+  sidePhone?: SheetSide;
   /** The actions under the body (Vue's `footer` slot). */
   footer?: ReactNode;
 }
@@ -31,7 +33,8 @@ export function PlinthSheet({
   title,
   description,
   closeLabel = 'Close',
-  placement,
+  side,
+  sidePhone,
   footer,
   className,
   children,
@@ -52,7 +55,8 @@ export function PlinthSheet({
   return (
     <dialog
       id={sheetId}
-      data-placement={sheetPlacement(placement)}
+      data-side={sheetSide(side)}
+      data-side-phone={sheetSidePhone(sidePhone)}
       closedby="any"
       aria-labelledby={`${sheetId}-title`}
       aria-describedby={hasDescription ? `${sheetId}-description` : undefined}

@@ -74,7 +74,7 @@ export { headingLevel, headingLevels, type HeadingLevel } from './heading';
 export { controlSizes, iconSizeFor, resolveSize, sizes, type ControlSize, type Size } from './size';
 export { iconSizes, type IconSize } from './icon';
 export { listRowChevron } from './list-row';
-export { sheetCloseIcon, sheetPlacement, sheetPlacements, type SheetPlacement } from './sheet';
+export { sheetCloseIcon, sheetSide, sheetSidePhone, sheetSides, type SheetSide } from './sheet';
 export { tones, type Tone } from './tones';
 
 /** Registers every Plinth component globally: `app.use(Plinth)`. */

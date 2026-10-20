@@ -56,7 +56,7 @@ export function menuSheet(
     account?.trim() ? `<div class="plinth-menu-sheet-account">${account}</div>` : '',
   ].join('');
   return sheet(
-    { id, title, closeLabel, placement: 'end', body },
+    { id, title, closeLabel, side: 'end', sidePhone: 'bottom', body },
     { class: ['plinth-menu-sheet', extraClass].filter(Boolean).join(' '), ...others },
   );
 }

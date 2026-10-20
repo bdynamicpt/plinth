@@ -92,7 +92,6 @@ describe('tiers', () => {
       'list-row.height',
       'pill.height',
       'dialog.width',
-      'sheet.width',
       'sheet.side-width',
       'section-menu.height',
       'section-menu.item-height',

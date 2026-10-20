@@ -1,8 +1,8 @@
 /*
- * The search (⌘K): the header's buttons that open it, and the sheet's field, status and results.
- * The sheet, the result groups and rows are Plinth's (sheet, list card, list row). On a phone the
- * sheet keeps its full height, so the field doesn't move while the results change; from 768px it
- * is wider than a dialog and hangs from near the top.
+ * The search (⌘K): the header's buttons that open it, and the dialog's field, status and results.
+ * The dialog, the result groups and rows are Plinth's (dialog, list card, list row). On a phone the
+ * dialog is a bottom sheet that keeps its full height, so the field doesn't move while the results
+ * change; from 768px it is wider than a dialog and hangs from near the top.
  */
 
 @layer site {
@@ -26,7 +26,7 @@
     }
 
     .site-search {
-        --plinth-sheet-width: calc(var(--plinth-size-dialog) * 1.25);
+        --plinth-dialog-width: calc(var(--plinth-size-dialog) * 1.25);
 
         block-size: calc(100dvh - var(--plinth-space-12));
     }

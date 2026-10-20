@@ -37,8 +37,9 @@ import {
   listRowChevron,
   resolveSize,
   sheetCloseIcon,
-  sheetPlacement,
-  sheetPlacements,
+  sheetSide,
+  sheetSidePhone,
+  sheetSides,
   sizes,
   tones,
 } from '../src/index.ts';
@@ -60,7 +61,7 @@ describe('the shared lists', () => {
     expect(dataTableSortIcon).toBe(vueDataTable.dataTableSortIcon);
     expect(headingLevels).toEqual(vueHeading.headingLevels);
     expect(listRowChevron).toBe(vueListRow.listRowChevron);
-    expect(sheetPlacements).toEqual(vueSheet.sheetPlacements);
+    expect(sheetSides).toEqual(vueSheet.sheetSides);
     expect(sheetCloseIcon).toBe(vueSheet.sheetCloseIcon);
     expect(dialogSidePhones).toEqual(vueDialog.dialogSidePhones);
     expect(dialogCloseIcon).toBe(vueDialog.dialogCloseIcon);
@@ -77,7 +78,10 @@ describe('the shared lists', () => {
     expect(dataTableSort('sideways')).toBe('none');
     expect(dataTableCellKind('header')).toBe('field');
     expect(headingLevel('h1')).toBe('h2');
-    expect(sheetPlacement('start')).toBe('center');
+    expect(sheetSide('left')).toBe('end');
+    expect(sheetSide('top')).toBe('top');
+    expect(sheetSidePhone('left')).toBeUndefined();
+    expect(sheetSidePhone('bottom')).toBe('bottom');
     expect(dialogSidePhone('top')).toBe('center');
     expect(dialogSidePhone('bottom')).toBe('bottom');
     expect(sizes.map(iconSizeFor)).toEqual(['sm', 'sm', 'md', 'md', 'md']);

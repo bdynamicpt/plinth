@@ -25,7 +25,8 @@ describe('PlinthMenuSheet', () => {
 
     expect(menu.tagName).toBe('DIALOG');
     expect(menu.className).toBe('plinth-sheet plinth-menu-sheet');
-    expect(menu.dataset.placement).toBe('end');
+    expect(menu.dataset.side).toBe('end');
+    expect(menu.dataset.sidePhone).toBe('bottom');
     expect(menu.querySelector('h2')?.textContent).toBe('Menu');
     expect(user.tagName).toBe('A');
     expect(user.getAttribute('href')).toBe('/profile');
