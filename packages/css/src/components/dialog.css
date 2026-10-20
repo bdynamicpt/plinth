@@ -33,8 +33,10 @@
  * close button is always there). Not dismissible, for a choice the person must make:
  * role="alertdialog", closedby="closerequest" and no close button, so a stray tap on the backdrop
  * does nothing and it closes through its own buttons, with Escape acting as Cancel (the browser
- * fires cancel, then close, with an empty returnValue). Give it a description: an alert dialog's
- * message is its accessible description. A project may set its own closedby.
+ * fires cancel, then close, with an empty returnValue). It needs an action that closes it,
+ * usually in the footer, the least destructive first: a touch screen has no Escape, and the
+ * browser focuses the first control. Give it a description: an alert dialog's message is its
+ * accessible description. A project may set its own closedby.
  *
  * Presentation: centred at every width, dialog.width wide (less the screen's margin on a phone),
  * its height capped by the screen's, fading and rising into place. data-side-phone="bottom" (the

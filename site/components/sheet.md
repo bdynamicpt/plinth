@@ -185,5 +185,9 @@ Every layer needs a `title` and throws without one. Extra attributes, such as `c
 - Motion drops to nothing under `prefers-reduced-motion`.
 - Every control in it keeps a 40 × 40px touch target.
 
+The sheet and the [dialog](dialog.md) share one base, `modal.css`: the surface, the backdrop, the
+scroll lock, the motion, the safe areas and the header, body and footer. `plinth.css` has it; a
+page that loads the components one by one loads `modal.css` with `sheet.css`.
+
 The markup contract is at the top of
 [`packages/css/src/components/sheet.css`](../../packages/css/src/components/sheet.css).

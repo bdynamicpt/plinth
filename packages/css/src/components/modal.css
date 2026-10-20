@@ -155,7 +155,11 @@
       margin-block-end: 0;
     }
 
-    /* A browser can focus a scrolling area that has nothing focusable in it. */
+    /*
+     * A browser can focus a scrolling area that has nothing focusable in it (Chrome and Firefox
+     * do, Safari doesn't yet), so a long body of text only is better with a link or a control in
+     * it.
+     */
     :is(.plinth-dialog-body, .plinth-sheet-body):focus-visible {
       outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
       outline-offset: var(--plinth-focus-ring-offset-inset);

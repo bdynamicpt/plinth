@@ -47,8 +47,10 @@ Set `dismissible` to `false` for a choice the person has to make. The dialog bec
 dialog (`role="alertdialog"`) with no close button and `closedby="closerequest"`, so a stray tap
 on the backdrop leaves it open. It closes through its own buttons, and Escape acts as Cancel: the
 browser fires `cancel` and then `close`, with an empty `returnValue`, as a Cancel button with
-`command="close"` does. Give it a description, which assistive technology reads as the alert's
-message.
+`command="close"` does. It needs an action that closes it, usually in the footer: a touch screen
+has no Escape key. Put the least destructive action first, since the browser focuses the first
+control when the dialog opens. Give it a description, which assistive technology reads as the
+alert's message.
 
 ```blade example
 <x-plinth::button variant="secondary" commandfor="example-leave" command="show-modal">Leave the page</x-plinth::button>

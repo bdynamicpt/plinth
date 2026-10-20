@@ -4,10 +4,12 @@ import { button } from './button.ts';
 import { dialog, type DialogArgs } from './dialog.ts';
 import { listCard } from './list-card.ts';
 import type { ListRowArgs } from './list-row.ts';
+import { pillRow } from './pill-row.ts';
 import '@bdynamic/plinth-css/src/components/icon.css';
 import '@bdynamic/plinth-css/src/components/button.css';
 import '@bdynamic/plinth-css/src/components/list-row.css';
 import '@bdynamic/plinth-css/src/components/list-card.css';
+import '@bdynamic/plinth-css/src/components/pill-row.css';
 import '@bdynamic/plinth-css/src/components/modal.css';
 import '@bdynamic/plinth-css/src/components/dialog.css';
 
@@ -23,13 +25,23 @@ const row = (title: string, extra: Partial<ListRowArgs> = {}): ListRowArgs => ({
   ...extra,
 });
 
-/** A short form: Plinth has no field component yet, so the story styles its own inputs. */
-const field = (id: string, label: string, value: string, type = 'text') =>
-  `<label for="${id}" style="display: grid; gap: var(--plinth-space-1); font-size: var(--plinth-font-size-sm); color: var(--plinth-color-text-muted);">${label}` +
-  `<input id="${id}" type="${type}" value="${value}" style="box-sizing: border-box; min-block-size: var(--plinth-touch-target); padding-inline: var(--plinth-space-3); font: inherit; font-size: var(--plinth-font-size-md); color: var(--plinth-color-text); background: var(--plinth-color-surface); border: var(--plinth-border-width-thin) solid var(--plinth-color-border); border-radius: var(--plinth-radius-control);"></label>`;
+const pills = (labels: string[]) =>
+  labels.map((label, n) => ({ label, selected: n === 0, disabled: false }));
 
-const form = (id: string) =>
-  `<div style="display: grid; gap: var(--plinth-space-4);">${field(`${id}-name`, 'Name', 'North harbour')}${field(`${id}-email`, 'Contact email', 'team@example.com', 'email')}</div>`;
+/** A project's settings: who sees it, and the rows that open its other settings. */
+const settings = () =>
+  `<div style="display: grid; gap: var(--plinth-space-4);">${pillRow({
+    label: 'Visibility',
+    nav: false,
+    pills: pills(['Private', 'Workspace', 'Public']),
+  })}${listCard({
+    headingLevel: 'h3',
+    rows: [
+      row('Name', { trailing: 'North harbour', button: true, chevron: true }),
+      row('Owner', { trailing: 'Sam Lee', button: true, chevron: true }),
+      row('Archive when done', { trailing: 'Off', button: true }),
+    ],
+  })}</div>`;
 
 const footer = (id: string) =>
   action('Cancel', 'secondary', { commandfor: id, command: 'close' }) +
@@ -49,11 +61,11 @@ const meta = {
   },
   args: {
     id: 'project',
-    title: 'Edit project',
+    title: 'Project settings',
     closeLabel: 'Close',
     dismissible: true,
     sidePhone: 'center',
-    body: form('project'),
+    body: settings(),
     footer: footer('project'),
   },
   argTypes: {
@@ -69,7 +81,10 @@ const meta = {
     docs: {
       description: {
         component:
-          'A modal for a form, details or settings on a native dialog, centred at every width.',
+          'A modal for a form, details or settings on a native dialog, centred at every width. ' +
+          'Give it an id for commandfor. One that is not dismissible needs a description (its ' +
+          'message) and an action that closes it, the least destructive first. In Livewire, put ' +
+          'wire:ignore.self on it.',
       },
     },
   },
@@ -84,8 +99,8 @@ export const Default: Story = {};
 export const WithDescription: Story = {
   args: {
     id: 'project-described',
-    description: 'The name shows to everyone in the workspace.',
-    body: form('project-described'),
+    description: 'Who can see the project, and who looks after it.',
+    body: settings(),
     footer: footer('project-described'),
   },
 };
@@ -112,7 +127,7 @@ export const BottomOnPhone: Story = {
   args: {
     id: 'project-bottom',
     sidePhone: 'bottom',
-    body: form('project-bottom'),
+    body: settings(),
     footer: footer('project-bottom'),
   },
 };
@@ -138,14 +153,21 @@ export const WithoutFooter: Story = {
 /** More content than fits: the body scrolls, the header and footer stay put. */
 export const LongContent: Story = {
   args: {
-    id: 'terms',
-    title: 'Terms of service',
-    footer: footer('terms'),
-    body: Array.from(
-      { length: 12 },
-      (_, n) =>
-        `<p>Section ${n + 1}. The service is provided as it is, and the terms may change with notice. Read each section before you accept them.</p>`,
-    ).join(''),
+    id: 'notifications',
+    title: 'Notifications',
+    footer: footer('notifications'),
+    // Spacing between the cards is the page's layout, not the dialog's.
+    body: `<div style="display: grid; gap: var(--plinth-space-4);">${[1, 2, 3]
+      .map((n) =>
+        listCard({
+          heading: `Group ${n}`,
+          headingLevel: 'h3',
+          rows: ['Mentions', 'Replies', 'New items', 'Weekly summary'].map((title) =>
+            row(title, { trailing: 'On', button: true, chevron: true }),
+          ),
+        }),
+      )
+      .join('')}</div>`,
   },
 };
 
@@ -155,7 +177,7 @@ export const LongTitle: Story = {
     title: 'A title long enough to wrap onto a second line on a narrow phone screen',
     description:
       'And a description that explains what the dialog is for, written long enough to wrap onto more than one line.',
-    body: form('long-title'),
+    body: settings(),
     footer: footer('long-title'),
   },
 };
@@ -166,7 +188,7 @@ export const RightToLeft: Story = {
     const rtl = {
       ...args,
       id: 'project-rtl',
-      body: form('project-rtl'),
+      body: settings(),
       footer: footer('project-rtl'),
     };
     return `<div dir="rtl">${opener(rtl)}${dialog(rtl)}</div>`;
