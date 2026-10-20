@@ -84,6 +84,8 @@ const meta = {
     account: { control: false },
   },
   parameters: {
+    // The open dialog takes no room in the page, so the frames at every width get their height.
+    everyWidth: { height: 720 },
     docs: {
       description: {
         component:

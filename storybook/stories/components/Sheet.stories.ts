@@ -71,6 +71,8 @@ const meta = {
     footer: { control: false },
   },
   parameters: {
+    // The open dialog takes no room in the page, so the frames at every width get their height.
+    everyWidth: { height: 720 },
     docs: {
       description: {
         component: 'A modal panel on a native dialog: slides up on a phone, a dialog from 768px.',
