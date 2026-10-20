@@ -29,3 +29,4 @@ Thumbs.db
 /resources/decisions
 /resources/tokens.json
 /resources/repository
+/public/search.json

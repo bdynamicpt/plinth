@@ -37,6 +37,9 @@ rm -rf resources/repository
 mkdir -p resources/repository
 cp "$root/CONTRIBUTING.md" resources/repository/
 
+# The search index, served as public/search.json.
+php artisan site:search-index
+
 # PHP without the dev tools, then Laravel's caches (config, events, routes and views).
 composer install --no-dev --no-interaction --no-progress --prefer-dist --optimize-autoloader
 php artisan optimize

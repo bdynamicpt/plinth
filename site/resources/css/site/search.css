@@ -1,0 +1,125 @@
+/*
+ * The search (⌘K): the header's buttons that open it, and the sheet's field, status and results.
+ * The sheet, the result groups and rows are Plinth's (sheet, list card, list row). On a phone the
+ * sheet keeps its full height, so the field doesn't move while the results change; from 768px it
+ * is wider than a dialog and hangs from near the top.
+ */
+
+@layer site {
+    .site-search-open.is-wide {
+        display: none;
+        color: var(--plinth-color-text-muted);
+    }
+
+    .site-search-shortcut,
+    .site-search-keys kbd {
+        padding-inline: var(--plinth-space-1);
+        font-family: var(--plinth-font-family-mono);
+        font-size: var(--plinth-font-size-xs);
+        color: var(--plinth-color-text-subtle);
+        border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+        border-radius: var(--plinth-radius-control);
+    }
+
+    .site-search-shortcut {
+        margin-inline-start: var(--plinth-space-2);
+    }
+
+    .site-search {
+        --plinth-sheet-width: calc(var(--plinth-size-dialog) * 1.25);
+
+        block-size: calc(100dvh - var(--plinth-space-12));
+    }
+
+    .site-search-field {
+        position: sticky;
+        inset-block-start: 0;
+        z-index: var(--plinth-layer-sticky);
+        display: flex;
+        gap: var(--plinth-space-2);
+        align-items: center;
+        min-block-size: var(--plinth-touch-target);
+        padding-inline: var(--plinth-space-3);
+        color: var(--plinth-color-text-muted);
+        background: var(--plinth-color-surface);
+        border: var(--plinth-border-width-thin) solid var(--plinth-color-border-strong);
+        border-radius: var(--plinth-radius-control);
+        box-shadow: 0 calc(var(--plinth-space-4) * -1) 0 var(--plinth-color-surface-raised);
+    }
+
+    .site-search-field:has(.site-search-input:focus-visible) {
+        outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+        outline-offset: var(--plinth-focus-ring-offset);
+    }
+
+    .site-search-field-icon {
+        flex: none;
+    }
+
+    /* 16px or more on a touch screen, so the phone doesn't zoom in on the field. */
+    .site-search-input {
+        flex: 1;
+        min-inline-size: 0;
+        min-block-size: var(--plinth-touch-target);
+        padding: 0;
+        font: inherit;
+        font-size: var(--plinth-font-size-xl);
+        color: var(--plinth-color-text);
+        outline: none;
+        background: none;
+        border: 0;
+    }
+
+    .site-search-input::placeholder {
+        color: var(--plinth-color-text-subtle);
+        opacity: 1;
+    }
+
+    .site-search-status {
+        margin-block: var(--plinth-space-3);
+        font-size: var(--plinth-font-size-sm);
+        color: var(--plinth-color-text-muted);
+    }
+
+    .site-search-results {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-4);
+    }
+
+    /* The key hints are for a keyboard, so a touch screen leaves them out. */
+    .site-search-keys {
+        display: none;
+        margin-block: 0 var(--plinth-space-3);
+        font-size: var(--plinth-font-size-sm);
+        color: var(--plinth-color-text-subtle);
+    }
+
+    @media (pointer: fine) {
+        .site-search-input {
+            font-size: var(--plinth-font-size-md);
+        }
+
+        .site-search-keys {
+            display: block;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .site-search {
+            block-size: auto;
+            max-block-size: calc(100dvh - 2 * var(--plinth-space-16));
+            margin-block: var(--plinth-space-16) auto;
+        }
+    }
+
+    @media (min-width: 1280px) {
+        .site-search-open.is-compact {
+            display: none;
+        }
+
+        .site-search-open.is-wide {
+            display: inline-flex;
+        }
+    }
+}
