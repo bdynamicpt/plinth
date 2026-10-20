@@ -137,6 +137,11 @@ With `scrollbar-gutter: stable` on `html`, so the page doesn't shift when the sc
 and `overscroll-behavior: contain` on the sheet's scrolling area, so scrolling past its end
 doesn't move the page. This ships with the sheet.
 
+(The gutter came out again in [#104](https://github.com/bdynamicpt/plinth/issues/104): the browser
+never draws the top layer in the scrollbar gutter, so a stable gutter left a strip of the page
+beside an open sheet. While a modal is open the page now has no gutter, and with a classic
+scrollbar it shifts by the scrollbar's width under the backdrop.)
+
 ### 8. No bottom bar
 
 This ADR first decided how a bottom bar would stay usable with the on-screen keyboard. The phone
