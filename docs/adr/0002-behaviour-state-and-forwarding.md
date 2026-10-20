@@ -85,13 +85,25 @@ So a component works inside Livewire, Alpine and Vue apps:
   `aria-*` reach it, and classes are added rather than replaced.
 - **Vue** components let attributes fall through to the same root, and emit documented events
   (`open`, `close`, `select`) instead of handling them internally.
+- **React** components spread the rest of their props onto the same root (docs/adr/0006).
+- **The project's attribute wins.** When a project passes an attribute the component also sets
+  on its root (`aria-hidden="false"` on an icon, `aria-pressed="mixed"` on an icon button,
+  `role`, `data-tone`), the project's value is the one printed, in every layer. That is what
+  Blade's `$attributes->merge()` does, so Vue binds the project's attributes after its own
+  (falling through to the root does this; a component with `inheritAttrs: false` puts
+  `v-bind="…"` last), and React spreads them after its own props. `class` is the exception: the
+  project's classes are added to Plinth's, never replace them. A project that overrides an
+  attribute the contract owns takes over what it means; Plinth doesn't guard against that, and a
+  component that must not lose an attribute takes it as a prop instead. Each component's parity
+  cases include one with a clashing attribute, so the layers cannot disagree.
 - **The root is the element the app talks to.** When the useful target is an inner interactive
   element (the button in a row, the link in a nav item), that element becomes the root of its own
   component (`<x-plinth::nav-item>` renders the `<a>`), so forwarding always lands on the root.
   The contract names the root of every component.
 - **Parity tests** render each component with extra attributes too (a class, an id, `data-*`,
-  `aria-*`), and compare Blade and Vue with the story's markup, so forwarding cannot drift between
-  the layers. Pest checks that `wire:*` and `x-*` attributes reach the root.
+  `aria-*`) and with a clashing attribute, and compare Blade, Vue and React with the story's
+  markup, so forwarding cannot drift between the layers. Pest checks that `wire:*` and `x-*`
+  attributes reach the root.
 
 ### 6. Only what the platform can't do goes in a layer
 
@@ -137,5 +149,10 @@ revisits the keyboard question in its own issue.
 - Tapping the backdrop to close a sheet waits for Safari to ship `closedby`, so every sheet has a
   visible close button.
 - Components stay stateless and reusable across projects; each app decides where its state lives.
-- Livewire, Alpine and Vue apps reach every component through its root, and a parity case per
-  component keeps Blade and Vue forwarding the same attributes.
+- Livewire, Alpine, Vue and React apps reach every component through its root, and parity cases
+  per component keep Blade, Vue and React forwarding the same attributes.
+- A project can override any attribute on a root, including the ARIA the contract sets, and is
+  then responsible for what it says.
+- Amended 2026-10-20 ([#71](https://github.com/bdynamicpt/plinth/issues/71)): the project's
+  attribute wins a clash in every layer. The icon and icon button's Vue and React layers had let
+  Plinth's value win, unlike Blade.
