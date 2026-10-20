@@ -1,4 +1,4 @@
-{{-- The site's header: the wordmark, the main navigation, the theme switch, GitHub and, on a phone, the menu. --}}
+{{-- The site's header: the wordmark, the main navigation, the search, the theme switch, GitHub and, on a phone, the menu. --}}
 @props(['overlay' => false, 'current' => null])
 @php
     $nav = config('site.nav');
@@ -23,6 +23,14 @@
         </nav>
 
         <div class="site-header-actions">
+            {{-- The search: an icon button, and from 1280px a wider button that shows the shortcut. --}}
+            <x-plinth::icon-button class="site-search-open is-compact" label="Search" commandfor="site-search" command="show-modal" aria-keyshortcuts="Meta+K Control+K">
+                <x-site.glyph name="search" />
+            </x-plinth::icon-button>
+            <x-plinth::button class="site-search-open is-wide" variant="secondary" size="sm" commandfor="site-search" command="show-modal" aria-keyshortcuts="Meta+K Control+K">
+                <x-slot:icon><x-site.glyph name="search" /></x-slot:icon>
+                Search <kbd class="site-search-shortcut" aria-hidden="true" x-data="shortcut" x-text="label">Ctrl K</kbd>
+            </x-plinth::button>
             <div class="site-theme-switch" x-data="themeSwitch" x-cloak>
                 <x-plinth::icon-button label="Dark theme" :pressed="false" x-bind:aria-pressed="dark ? 'true' : 'false'" x-on:click="toggle">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -41,6 +49,8 @@
         </div>
     </div>
 </header>
+
+<x-site.search />
 
 <x-plinth::menu-sheet id="site-menu" title="Menu">
     <x-plinth::list-card>

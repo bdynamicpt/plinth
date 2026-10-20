@@ -85,7 +85,9 @@ and the Forge fallback build the same way:
 2. copies Storybook into `public/storybook`, the ADRs into `resources/decisions`, the tokens
    build into `resources/tokens.json` and `CONTRIBUTING.md` into `resources/repository`, since
    only `site/` is deployed and the docs read them;
-3. runs `composer install --no-dev` and `php artisan optimize` (config, events, routes and views
+3. writes the search index (⌘K) to `public/search.json` with `php artisan site:search-index`, so
+   the web server serves it as a file (without it, Laravel builds it at `/search.json`);
+4. runs `composer install --no-dev` and `php artisan optimize` (config, events, routes and views
    cached).
 
 To try it locally, run it in a fresh clone: it swaps `vendor/` for one without the dev tools.

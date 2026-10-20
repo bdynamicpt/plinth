@@ -9,7 +9,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{-- The search sheet has a field: resizing the page for the on-screen keyboard keeps it in view. --}}
+    <meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
     <title>{{ filled($title) ? $title.' · Plinth' : 'Plinth, the design system with one markup contract' }}</title>
     <meta name="description" content="{{ $description }}">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">

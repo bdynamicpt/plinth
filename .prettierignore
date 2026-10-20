@@ -9,3 +9,4 @@ packages/blade/resources/dist/
 site/public/build/
 site/storage/
 site/bootstrap/cache/
+site/public/search.json
