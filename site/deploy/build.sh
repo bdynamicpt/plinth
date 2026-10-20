@@ -42,4 +42,7 @@ php artisan site:search-index
 
 # PHP without the dev tools, then Laravel's caches (config, events, routes and views).
 composer install --no-dev --no-interaction --no-progress --prefer-dist --optimize-autoloader
+# The Blade package comes from ../packages/blade as a copy (symlink: false), and `composer install`
+# keeps the old copy while the lock file is unchanged, so a new component would be missing.
+composer reinstall bdynamicpt/plinth --no-interaction --no-progress --optimize-autoloader
 php artisan optimize
