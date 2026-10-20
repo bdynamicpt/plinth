@@ -6,6 +6,8 @@ middle of the screen, or as a full-height panel on the side.
 
 ## When not to use it
 
+- For a form, details or settings centred on the screen at every width: use the
+  [dialog](dialog.md), which shares the sheet's base.
 - For a message the page can show in place: use a [callout](callout.md).
 - For the app's menu: use the [menu sheet](menu-sheet.md), which is a sheet already.
 - For a long or many-step task: give it its own page.
