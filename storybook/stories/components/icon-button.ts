@@ -18,7 +18,10 @@ export interface IconButtonArgs {
   svg: string;
 }
 
-/** The icon button's markup contract. Blade and Vue must print exactly this (see parity.test.ts). */
+/**
+ * The icon button's markup contract. Blade, Vue and React must print exactly this (see
+ * parity.test.ts).
+ */
 export function iconButton(
   { label, variant, size, href, disabled, busy, pressed, mirror, svg }: IconButtonArgs,
   attributes: Attributes = {},

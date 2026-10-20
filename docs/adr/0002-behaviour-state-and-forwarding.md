@@ -94,8 +94,11 @@ So a component works inside Livewire, Alpine and Vue apps:
   `v-bind="…"` last), and React spreads them after its own props. `class` is the exception: the
   project's classes are added to Plinth's, never replace them. A project that overrides an
   attribute the contract owns takes over what it means; Plinth doesn't guard against that, and a
-  component that must not lose an attribute takes it as a prop instead. Each component's parity
-  cases include one with a clashing attribute, so the layers cannot disagree.
+  component that must not lose an attribute takes it as a prop instead. An attribute passed with
+  no value (`null` in Blade, `null` or `undefined` in Vue, `undefined` in React) is a clash too:
+  it removes Plinth's attribute in every layer, so a wrapper that passes its own optional props
+  through leaves out the ones it doesn't set. Each component's parity cases include one with a clashing attribute,
+  so the layers cannot disagree.
 - **The root is the element the app talks to.** When the useful target is an inner interactive
   element (the button in a row, the link in a nav item), that element becomes the root of its own
   component (`<x-plinth::nav-item>` renders the `<a>`), so forwarding always lands on the root.

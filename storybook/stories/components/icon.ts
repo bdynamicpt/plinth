@@ -15,8 +15,8 @@ export interface IconArgs {
 import { escape, rootAttributes, type Attributes } from './markup.ts';
 
 /**
- * The icon's markup contract. Blade and Vue must print exactly this (see parity.test.ts). A label
- * can also come as an aria-label attribute; a blank one leaves the icon decorative.
+ * The icon's markup contract. Blade, Vue and React must print exactly this (see parity.test.ts).
+ * A label can also come as an aria-label attribute; a blank one leaves the icon decorative.
  */
 export function icon({ size, label, mirror, svg }: IconArgs, attributes: Attributes = {}): string {
   const { 'aria-label': ariaLabel, ...others } = attributes;

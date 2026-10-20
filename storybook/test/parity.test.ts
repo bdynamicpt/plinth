@@ -330,6 +330,19 @@ const cases: ParityCase[] = [
     },
     { 'aria-pressed': 'mixed' },
   ),
+  iconButtonCase(
+    'Icon button/link with a clashing attribute',
+    {
+      label: 'Next',
+      variant: 'ghost',
+      size: 'md',
+      href: '#next',
+      disabled: true,
+      busy: false,
+      svg: sampleIcons.check,
+    },
+    { role: 'button' },
+  ),
   ...storyArgs<AvatarArgs>(avatarStories).map(([story, args]) =>
     avatarCase(`Avatar/${story}`, args),
   ),
@@ -1215,6 +1228,7 @@ describe('parity with the stories', () => {
       'Icon button/with extra attributes',
       'Icon button/with an aria-label attribute',
       'Icon button/with a clashing attribute',
+      'Icon button/link with a clashing attribute',
       'Avatar/Initials',
       'Avatar/Image',
       'Avatar/GivenInitials',

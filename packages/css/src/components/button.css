@@ -10,7 +10,7 @@
  * With an href it is <a class="plinth-button" href="…"> instead; the icons are optional.
  *
  * data-mirror on an icon flips it in right-to-left text, for arrows (mirror-icon and
- * mirror-trailing in Blade and Vue).
+ * mirror-trailing in Blade, Vue and React).
  *
  * Variants (data-variant): primary (default, also when missing; inverted neutral unless a brand
  * colours it), accent (the brand's colour, for marketing and brand moments), secondary, ghost, danger, and
