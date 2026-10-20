@@ -177,10 +177,13 @@ const filters = useRef<HTMLDialogElement>(null);
 
 ## Scrolling and the keyboard
 
-The body scrolls on its own, and scrolling past its end doesn't move the page. While a sheet is
-open the page under it doesn't scroll at all, and `scrollbar-gutter: stable` keeps the page from
-shifting when its scrollbar goes. A top or bottom sheet stops short of the other edge, so it
-reads as a sheet over the page, and each side clears the safe areas it touches: the home
+The body scrolls on its own, and scrolling past its end doesn't move the page. While a sheet is open
+the page under it doesn't scroll at all, and it drops its scrollbar gutter, so the backdrop and the
+sheet reach the edge of the screen. With a scrollbar that takes space, the page shifts by its width
+under the backdrop; with overlay scrollbars nothing moves. A project that sets `scrollbar-gutter` on
+`html` outside a layer or in a layer after `plinth` drops it the same way:
+`html:has(:modal) { scrollbar-gutter: auto; }`. A top or bottom sheet stops short of the other edge,
+so it reads as a sheet over the page, and each side clears the safe areas it touches: the home
 indicator, the notch and the status bar.
 
 iOS lays the on-screen keyboard over the page instead of resizing it, so a field low in a sheet can

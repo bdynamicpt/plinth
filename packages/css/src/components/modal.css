@@ -31,10 +31,14 @@
  *   it doesn't.
  *
  * The motion runs on the motion tokens, which drop to 0ms under prefers-reduced-motion. While a
- * modal is open the page under it doesn't scroll (html:has(…:modal)), and scrollbar-gutter:
- * stable keeps it from shifting. The body scrolls, with overscroll-behavior: contain; the header
- * and footer stay put; the margins of the body's first and last child are reset, so its padding is
- * its edge. On a phone the footer's actions share its width; from 768px up they sit at its end.
+ * modal is open the page under it doesn't scroll (html:has(…:modal)), and it has no scrollbar
+ * gutter (scrollbar-gutter: auto, over a project's stable in an earlier layer): the top layer is
+ * never drawn in the gutter, so a gutter would leave a strip of the page beside a sheet on the end
+ * edge or the full width. Where the scrollbar takes space the page shifts by its width under the
+ * backdrop; overlay scrollbars take no space and nothing shifts. The body scrolls, with
+ * overscroll-behavior: contain; the header and footer stay put; the margins of the body's first and
+ * last child are reset, so its padding is its edge. On a phone the footer's actions share its
+ * width; from 768px up they sit at its end.
  *
  * A bottom panel on a phone (a sheet whose side below 768px is the bottom, a dialog with
  * data-side-phone="bottom" that can be dismissed, and the drawer) has a grab handle, and the
@@ -56,12 +60,9 @@
 
 @layer plinth {
   @layer modal {
-    html:has(:is(.plinth-dialog, .plinth-sheet, .plinth-drawer)) {
-      scrollbar-gutter: stable;
-    }
-
     html:has(:is(.plinth-dialog, .plinth-sheet, .plinth-drawer):modal) {
       overflow: hidden;
+      scrollbar-gutter: auto;
     }
 
     :is(.plinth-dialog, .plinth-sheet, .plinth-drawer) {

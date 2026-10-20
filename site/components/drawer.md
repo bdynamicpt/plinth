@@ -192,6 +192,13 @@ the handle on a phone and close when they are swiped down, the same way; the dra
 points. A dialog that can't be dismissed, such as the [confirmation dialog](confirm-dialog.md),
 has no handle.
 
+## Scrolling
+
+While a drawer is open the page under it doesn't scroll, and it reaches the edge of the screen as
+the dialog and the sheet do: the page drops its scrollbar gutter, so where the scrollbar takes space
+the page shifts by its width under the backdrop. The [sheet](sheet.md)'s "Scrolling and the
+keyboard" has the details, with how a project that sets its own gutter drops it.
+
 ## Motion and depth
 
 The drawer slides up and back down on `--plinth-duration-normal`; from 768px up it moves as the
