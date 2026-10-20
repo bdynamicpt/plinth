@@ -394,6 +394,20 @@ const cases: ParityCase[] = [
     },
     { 'aria-label': 'More actions' },
   ),
+  withBlankLabel(
+    iconButtonCase(
+      'Icon button/with a blank label and an aria-label attribute',
+      {
+        label: '',
+        variant: 'ghost',
+        size: 'md',
+        disabled: false,
+        busy: false,
+        svg: sampleIcons.arrow,
+      },
+      { 'aria-label': 'Next' },
+    ),
+  ),
   iconButtonCase(
     'Icon button/with a clashing attribute',
     {
@@ -407,6 +421,16 @@ const cases: ParityCase[] = [
     },
     { 'aria-pressed': 'mixed' },
   ),
+  iconButtonCase('Icon button/pressed link', {
+    label: 'Next page',
+    variant: 'secondary',
+    size: 'md',
+    href: '#next',
+    pressed: true,
+    disabled: false,
+    busy: false,
+    svg: sampleIcons.arrow,
+  }),
   iconButtonCase(
     'Icon button/link with a clashing attribute',
     {
@@ -959,6 +983,15 @@ function iconButtonCase(
       html: true,
     },
     blade: { component: 'icon-button', props, attributes, slot: args.svg },
+  };
+}
+
+/** Passes `label=""` itself, which iconButtonCase leaves out, so a blank label falls back. */
+function withBlankLabel(c: ParityCase): ParityCase {
+  return {
+    ...c,
+    vue: { ...c.vue, props: { label: '', ...c.vue.props } },
+    blade: { ...c.blade, props: { label: '', ...c.blade.props } },
   };
 }
 
@@ -1520,10 +1553,13 @@ describe('parity with the stories', () => {
       'Icon button/NotPressed',
       'Icon button/Link',
       'Icon button/Disabled',
+      'Icon button/DisabledPressed',
       'Icon button/Busy',
       'Icon button/with extra attributes',
       'Icon button/with an aria-label attribute',
+      'Icon button/with a blank label and an aria-label attribute',
       'Icon button/with a clashing attribute',
+      'Icon button/pressed link',
       'Icon button/link with a clashing attribute',
       'Avatar/Initials',
       'Avatar/Image',

@@ -19,7 +19,7 @@ more (⋯), search, edit, a star for favourite.
 Every icon button needs a **`label`**. It is the button's only name: screen readers read it, voice
 control uses it, and it is the text to show in a tooltip (pass it as `title` too if you want the
 browser's). Blade refuses to render an icon button without one, Vue warns, and React's types
-require the prop; in Vue and React, make sure it is not blank.
+require the prop. A blank `label` falls back to an `aria-label` attribute in every layer.
 
 ```blade example
 <x-plinth::icon-button label="Search"><x-site.glyph name="search" /></x-plinth::icon-button>
@@ -68,7 +68,8 @@ small icon buttons in a row are still easy to hit; leave a little space between 
 ## Links, states and direction
 
 With an `href` it is a link (for example _Next page_). `disabled` and `busy` work as on the
-button. Set `mirror` on an icon that points a direction, so it flips in right-to-left text.
+button. A link is never a toggle: `pressed` is ignored on one and `aria-pressed` is never printed.
+Set `mirror` on an icon that points a direction, so it flips in right-to-left text.
 
 ```blade example
 <x-plinth::icon-button label="Next page" href="#" mirror><x-site.glyph name="arrow-right" /></x-plinth::icon-button>
@@ -120,10 +121,12 @@ import { PlinthIconButton } from '@bdynamic/plinth/react';
 - The `label` is the accessible name, printed as `aria-label`; the icon inside is hidden from
   screen readers.
 - A toggle prints `aria-pressed="true"` or `"false"`, so its state is announced; without
-  `pressed` there is no `aria-pressed`.
+  `pressed` there is no `aria-pressed`. In forced colours, pressed takes the system's highlight
+  colour, since the tint is dropped there.
 - Busy sets `aria-busy` and `aria-disabled` and keeps focus; a disabled link has no `href`,
   `role="link"` and `aria-disabled="true"`.
-- The focus ring shows on `:focus-visible`, offset on the filled variants.
+- The focus ring shows on `:focus-visible`, against the edge on ghost, secondary and
+  danger-ghost, and offset further on the filled variants.
 - Every size keeps a 40 × 40px touch target on a touch screen.
 
 The markup contract is in
