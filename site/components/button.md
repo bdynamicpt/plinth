@@ -135,6 +135,8 @@ node.
 
 `class`, `type`, `wire:*`, `x-*` and `@click` reach the button itself; in React, `className`
 (added to Plinth's classes), `type`, `onClick`, `ref` and every other prop do.
+A button (not a link) also takes `commandfor` and `command`, typed in React since React's own
+types don't list them yet.
 
 ```blade tab="Blade"
 <x-plinth::button variant="secondary" wire:click="cancel">Cancel</x-plinth::button>

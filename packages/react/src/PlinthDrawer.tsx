@@ -61,9 +61,6 @@ export function PlinthDrawer({
   const drawerId = id?.trim() || `plinth-drawer-${generatedId}`;
   const hasDescription = Boolean(description?.trim());
   const points = drawerSnapPoints(snapPoints);
-  // React passes lowercase attributes it doesn't know as they are, so the invoker command reaches
-  // the button.
-  const command = { commandfor: drawerId, command: 'close' };
 
   // The project's own attributes come after Plinth's and win, as in Blade and Vue; its class is
   // added to Plinth's.
@@ -95,7 +92,8 @@ export function PlinthDrawer({
             className="plinth-drawer-close"
             label={closeLabel}
             variant="ghost"
-            {...command}
+            commandfor={drawerId}
+            command="close"
           >
             {/* The cross is drawerCloseIcon (drawer.ts), written out; parity keeps the copies equal. */}
             <svg

@@ -24,7 +24,12 @@ export { PlinthSectionMenu, type PlinthSectionMenuProps } from './PlinthSectionM
 export { PlinthSectionMenuItem, type PlinthSectionMenuItemProps } from './PlinthSectionMenuItem';
 export { PlinthSheet, type PlinthSheetProps } from './PlinthSheet';
 export { avatarGlyph, avatarSizes, initialsFrom, type AvatarSize } from './avatar';
-export { buttonVariants, type ButtonVariant } from './button';
+export {
+  buttonVariants,
+  type ButtonVariant,
+  type InvokerCommand,
+  type InvokerCommandProps,
+} from './button';
 export {
   calloutIcons,
   calloutRole,

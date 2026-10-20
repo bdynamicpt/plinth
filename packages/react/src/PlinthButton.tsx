@@ -1,6 +1,6 @@
 // Markup contract: packages/css/src/components/button.css
 import type { ComponentProps, ReactNode } from 'react';
-import { buttonVariant, type ButtonVariant } from './button';
+import { buttonVariant, type ButtonVariant, type InvokerCommandProps } from './button';
 import { classNames, hasContent } from './markup';
 import { controlSizes, iconSizeFor, resolveSize, type ControlSize } from './size';
 
@@ -20,9 +20,16 @@ interface ButtonOptions {
   mirrorTrailing?: boolean;
 }
 
-/** A `<button>`, or with an `href` a link that looks like one. */
+/**
+ * A `<button>`, or with an `href` a link that looks like one. The button takes `commandfor` and
+ * `command`; a link doesn't, since invoker commands are a button's.
+ */
 export type PlinthButtonProps =
-  | (ButtonOptions & Omit<ComponentProps<'button'>, keyof ButtonOptions> & { href?: undefined })
+  | (ButtonOptions &
+      InvokerCommandProps &
+      Omit<ComponentProps<'button'>, keyof ButtonOptions | keyof InvokerCommandProps> & {
+        href?: undefined;
+      })
   | (ButtonOptions & Omit<ComponentProps<'a'>, keyof ButtonOptions> & { href: string });
 
 export function PlinthButton({

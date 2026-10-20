@@ -46,9 +46,12 @@ The React components take Vue's props by the same names, so the docs for one ser
   components render the same on the server, for Inertia's SSR, and in the browser.
 - **Native behaviour.** A sheet is a `<dialog>`: open it with a button that has `commandfor` and
   `command="show-modal"`, or call `showModal()` on its `ref`, which is the dialog itself.
-  `onClose` is the dialog's close event. React's types don't list `command` and `commandfor` yet
-  ([#99](https://github.com/bdynamicpt/plinth/issues/99)):
-  they work as they are, but TypeScript wants them spread in.
+  `onClose` is the dialog's close event.
+- **Invoker commands are typed on Plinth's buttons.** `@types/react` doesn't list `command` and
+  `commandfor` yet, though React passes them to the DOM as they are. `PlinthButton` and
+  `PlinthIconButton` take them as typed props (a link doesn't, since commands are a button's), and
+  the `InvokerCommand` type lists the values. Plinth leaves React's global types alone, so on a
+  plain `<button>` spread them in until React's types catch up.
 
 ## Your brand
 

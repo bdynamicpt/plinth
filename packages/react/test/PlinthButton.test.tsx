@@ -217,4 +217,28 @@ describe('PlinthButton', () => {
     expect(button.getAttribute('data-variant')).toBe('custom');
     expect(link.getAttribute('role')).toBe('button');
   });
+
+  it('takes the invoker command attributes as typed props, and a link does not', () => {
+    expect(
+      renderToStaticMarkup(
+        <PlinthButton commandfor="filters" command="show-modal">
+          Filters
+        </PlinthButton>,
+      ),
+    ).toBe(
+      '<button type="button" data-variant="primary" data-size="md" commandfor="filters" command="show-modal" class="plinth-button"><span class="plinth-button-label">Filters</span></button>',
+    );
+    expect(
+      root(<PlinthButton command="--refresh">Refresh</PlinthButton>).getAttribute('command'),
+    ).toBe('--refresh');
+
+    // @ts-expect-error a command that is neither a native one nor a custom `--` one
+    root(<PlinthButton command="open">Open</PlinthButton>);
+    root(
+      // @ts-expect-error a link sends no invoker command
+      <PlinthButton href="/filters" commandfor="filters">
+        Filters
+      </PlinthButton>,
+    );
+  });
 });

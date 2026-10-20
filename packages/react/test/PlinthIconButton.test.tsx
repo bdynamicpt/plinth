@@ -170,4 +170,22 @@ describe('PlinthIconButton', () => {
     expect(button.getAttribute('aria-pressed')).toBe('mixed');
     expect(link.getAttribute('role')).toBe('button');
   });
+
+  it('takes the invoker command attributes as typed props, and a link does not', () => {
+    const button = root(
+      <PlinthIconButton label="Close" commandfor="filters" command="close">
+        {svg}
+      </PlinthIconButton>,
+    );
+
+    expect(button.getAttribute('commandfor')).toBe('filters');
+    expect(button.getAttribute('command')).toBe('close');
+
+    root(
+      // @ts-expect-error a link sends no invoker command
+      <PlinthIconButton href="/filters" label="Filters" command="show-modal">
+        {svg}
+      </PlinthIconButton>,
+    );
+  });
 });

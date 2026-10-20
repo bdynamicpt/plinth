@@ -53,9 +53,6 @@ export function PlinthSheet({
   const phone = sheetSidePhone(sidePhone);
   // A bottom sheet on a phone has the grab handle.
   const handle = (phone ?? sheetSide(side)) === 'bottom';
-  // React passes lowercase attributes it doesn't know as they are, so the invoker command reaches
-  // the button.
-  const command = { commandfor: sheetId, command: 'close' };
 
   // The project's own attributes come after Plinth's and win, as in Blade and Vue; its class is
   // added to Plinth's.
@@ -86,7 +83,8 @@ export function PlinthSheet({
             className="plinth-sheet-close"
             label={closeLabel}
             variant="ghost"
-            {...command}
+            commandfor={sheetId}
+            command="close"
           >
             {/* The cross is sheetCloseIcon (sheet.ts), written out; parity keeps the copies equal. */}
             <svg
