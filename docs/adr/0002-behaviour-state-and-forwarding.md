@@ -133,14 +133,14 @@ html:has(dialog:modal) {
 }
 ```
 
-With `scrollbar-gutter: stable` on `html`, so the page doesn't shift when the scrollbar goes,
-and `overscroll-behavior: contain` on the sheet's scrolling area, so scrolling past its end
-doesn't move the page. This ships with the sheet.
+With `scrollbar-gutter: stable` on `html` (superseded, below), so the page doesn't shift when the
+scrollbar goes, and `overscroll-behavior: contain` on the sheet's scrolling area, so scrolling past
+its end doesn't move the page. This ships with the sheet.
 
-(The gutter came out again in [#104](https://github.com/bdynamicpt/plinth/issues/104): the browser
-never draws the top layer in the scrollbar gutter, so a stable gutter left a strip of the page
-beside an open sheet. While a modal is open the page now has no gutter, and with a classic
-scrollbar it shifts by the scrollbar's width under the backdrop.)
+Superseded in [#104](https://github.com/bdynamicpt/plinth/issues/104): the stable gutter was
+removed. The browser never draws the top layer in the scrollbar gutter, so it left a strip of the
+page beside an open sheet. While a modal is open the page now has no gutter, and where the
+scrollbar takes space the page shifts by its width under the backdrop.
 
 ### 8. No bottom bar
 

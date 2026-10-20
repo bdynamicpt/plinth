@@ -165,9 +165,9 @@ const project = useRef<HTMLDialogElement>(null);
 The body scrolls on its own, and scrolling past its end doesn't move the page; the header and the
 footer stay put. While a dialog is open the page under it doesn't scroll at all, and it drops its
 scrollbar gutter, so the backdrop and the dialog reach the edge of the screen. With a scrollbar that
-takes space (Windows, Linux), the page shifts by its width under the backdrop; with overlay
-scrollbars (phones, macOS) nothing moves. A project that sets `scrollbar-gutter` on `html` outside a
-layer drops it the same way: `html:has(:modal) { scrollbar-gutter: auto; }`.
+takes space, the page shifts by its width under the backdrop; with overlay scrollbars nothing moves.
+A project that sets `scrollbar-gutter` on `html` outside a layer or in a layer after `plinth` drops
+it the same way: `html:has(:modal) { scrollbar-gutter: auto; }`.
 
 iOS lays the on-screen keyboard over the page instead of resizing it, so a field low in a dialog
 can end up under the keyboard. For a dialog with a form, set `interactive-widget=resizes-content`
