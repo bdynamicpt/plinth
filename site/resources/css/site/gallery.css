@@ -26,6 +26,7 @@
         background: var(--plinth-color-surface);
         border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
         border-radius: calc(var(--plinth-radius-container) + var(--plinth-space-1));
+        isolation: isolate;
     }
 
     .site-tile-list {

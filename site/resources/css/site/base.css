@@ -42,6 +42,12 @@
 }
 
 @layer site {
+    /* The page's content stacks on its own, so nothing in it (a demo's header, say) can draw over
+       the site's header. */
+    .site-main {
+        isolation: isolate;
+    }
+
     [x-cloak] {
         display: none;
     }

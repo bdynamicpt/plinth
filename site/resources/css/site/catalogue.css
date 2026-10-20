@@ -119,6 +119,7 @@
         background: var(--plinth-color-surface);
         border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
         border-radius: var(--plinth-radius-container);
+        isolation: isolate;
     }
 
     .site-catalogue-header-preview {

@@ -129,6 +129,7 @@
         border-block-end: 0;
         border-start-start-radius: var(--plinth-radius-container);
         border-start-end-radius: var(--plinth-radius-container);
+        isolation: isolate;
     }
 
     .site-preview-side {
@@ -168,6 +169,7 @@
         min-inline-size: 0;
     }
 
+    /* The demo's header doesn't stick; the frame isolates it, so its z-index stays inside. */
     .site-preview-header {
         position: static;
     }
