@@ -23,8 +23,8 @@ the tier a brand overrides. See [Foundations](foundations.md) for all of them.
 
 ## Component tokens
 
-A few values a project may need to tune for one component, such as the header's height or a side
-sheet's width. They are built from semantic tokens. See
+A few values a project may need to tune for one component, such as the header's height, a side
+sheet's width or a callout's tint. They are built from semantic tokens. See
 [Component tokens](component-tokens.md).
 
 ## How they are built

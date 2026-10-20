@@ -80,11 +80,11 @@ Screenshot comparison is paused until the foundations settle
 
 The tokens are in `packages/tokens/tokens/`, in three tiers ([ADR 1](docs/adr/0001-design-tokens-in-dtcg-built-with-style-dictionary.md)):
 
-| Tier      | File                                                 | Custom properties               | Used by                             |
-| --------- | ---------------------------------------------------- | ------------------------------- | ----------------------------------- |
-| Primitive | `primitives.json`                                    | `--plinth-ref-color-neutral-50` | semantic tokens only                |
-| Semantic  | `semantic.json`, `semantic.light.json`, `.dark.json` | `--plinth-color-surface`        | components; projects override these |
-| Component | `component.json`                                     | `--plinth-header-height`        | one component                       |
+| Tier      | File                                                   | Custom properties               | Used by                             |
+| --------- | ------------------------------------------------------ | ------------------------------- | ----------------------------------- |
+| Primitive | `primitives.json`                                      | `--plinth-ref-color-neutral-50` | semantic tokens only                |
+| Semantic  | `semantic.json`, `semantic.light.json`, `.dark.json`   | `--plinth-color-surface`        | components; projects override these |
+| Component | `component.json`, `component.light.json`, `.dark.json` | `--plinth-header-height`        | one component                       |
 
 The website has a page for each under **Foundations** (colour, typography, spacing and sizes,
 radii and elevation, layers and breakpoints, motion, the focus ring and component tokens), each

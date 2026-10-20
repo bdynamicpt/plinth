@@ -33,6 +33,11 @@ it('reads a token, tolerating missing or odd fields', function () {
         ->and(Token::fromArray([])->path)->toBe([]);
 });
 
+it('shows a translucent tint as its colour and how much of it', function () {
+    expect(Token::tint('color-mix(in srgb, #2563eb 6%, transparent)'))->toBe('#2563eb at 6%')
+        ->and(Token::tint('#2563eb'))->toBeNull();
+});
+
 it('names the primitive a value is built from by its step', function () {
     expect(Token::step('ref.color.neutral.50'))->toBe('neutral 50')
         ->and(Token::step('space.14'))->toBe('space 14')

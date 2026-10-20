@@ -258,6 +258,16 @@
     --plinth-elevation-1: 0 1px 2px 0 #0000001a;
     --plinth-elevation-2: 0 4px 12px 0 #00000026;
     --plinth-elevation-3: 0 12px 32px 0 #00000026;
+    --plinth-callout-neutral-surface: var(--plinth-color-surface-sunken);
+    --plinth-callout-neutral-border: var(--plinth-color-border);
+    --plinth-callout-info-surface: color-mix(in srgb, var(--plinth-color-info) 6%, transparent);
+    --plinth-callout-info-border: color-mix(in srgb, var(--plinth-color-info) 24%, transparent);
+    --plinth-callout-success-surface: color-mix(in srgb, var(--plinth-color-success) 6%, transparent);
+    --plinth-callout-success-border: color-mix(in srgb, var(--plinth-color-success) 24%, transparent);
+    --plinth-callout-warning-surface: color-mix(in srgb, var(--plinth-color-warning) 6%, transparent);
+    --plinth-callout-warning-border: color-mix(in srgb, var(--plinth-color-warning) 24%, transparent);
+    --plinth-callout-danger-surface: color-mix(in srgb, var(--plinth-color-danger) 6%, transparent);
+    --plinth-callout-danger-border: color-mix(in srgb, var(--plinth-color-danger) 24%, transparent);
   }
 
   [data-theme="dark"],
@@ -305,6 +315,16 @@
     --plinth-elevation-1: 0 1px 2px 0 #0000004d;
     --plinth-elevation-2: 0 4px 12px 0 #00000080;
     --plinth-elevation-3: 0 12px 32px 0 #00000099;
+    --plinth-callout-neutral-surface: var(--plinth-color-surface-sunken);
+    --plinth-callout-neutral-border: var(--plinth-color-border);
+    --plinth-callout-info-surface: color-mix(in srgb, var(--plinth-color-info) 8%, transparent);
+    --plinth-callout-info-border: color-mix(in srgb, var(--plinth-color-info) 24%, transparent);
+    --plinth-callout-success-surface: color-mix(in srgb, var(--plinth-color-success) 8%, transparent);
+    --plinth-callout-success-border: color-mix(in srgb, var(--plinth-color-success) 24%, transparent);
+    --plinth-callout-warning-surface: color-mix(in srgb, var(--plinth-color-warning) 8%, transparent);
+    --plinth-callout-warning-border: color-mix(in srgb, var(--plinth-color-warning) 24%, transparent);
+    --plinth-callout-danger-surface: color-mix(in srgb, var(--plinth-color-danger) 8%, transparent);
+    --plinth-callout-danger-border: color-mix(in srgb, var(--plinth-color-danger) 24%, transparent);
   }
 
   @media (prefers-color-scheme: dark) {
@@ -352,6 +372,16 @@
       --plinth-elevation-1: 0 1px 2px 0 #0000004d;
       --plinth-elevation-2: 0 4px 12px 0 #00000080;
       --plinth-elevation-3: 0 12px 32px 0 #00000099;
+      --plinth-callout-neutral-surface: var(--plinth-color-surface-sunken);
+      --plinth-callout-neutral-border: var(--plinth-color-border);
+      --plinth-callout-info-surface: color-mix(in srgb, var(--plinth-color-info) 8%, transparent);
+      --plinth-callout-info-border: color-mix(in srgb, var(--plinth-color-info) 24%, transparent);
+      --plinth-callout-success-surface: color-mix(in srgb, var(--plinth-color-success) 8%, transparent);
+      --plinth-callout-success-border: color-mix(in srgb, var(--plinth-color-success) 24%, transparent);
+      --plinth-callout-warning-surface: color-mix(in srgb, var(--plinth-color-warning) 8%, transparent);
+      --plinth-callout-warning-border: color-mix(in srgb, var(--plinth-color-warning) 24%, transparent);
+      --plinth-callout-danger-surface: color-mix(in srgb, var(--plinth-color-danger) 8%, transparent);
+      --plinth-callout-danger-border: color-mix(in srgb, var(--plinth-color-danger) 24%, transparent);
     }
   }
 
@@ -827,8 +857,10 @@
  * </div>
  *
  * Tones (data-tone): neutral (default, also when the attribute is missing), info, success,
- * warning, danger. Each tints the surface and the icon, and has its own icon shape; the title or
- * the text still says what kind of note it is, so the tone is never the only signal.
+ * warning, danger. Each tints the surface, the hairline border and the icon, and has its own icon
+ * shape; the title or the text still says what kind of note it is, so the tone is never the only
+ * signal. The tints are the component tokens --plinth-callout-<tone>-surface and -border: faint
+ * and translucent, quieter than the status surfaces a badge uses.
  *
  * role: note (default) for a note that is part of the page; status for a message the app adds
  * after something happens (announced politely); alert for an urgent one (announced at once). A
@@ -843,7 +875,8 @@
 
 @layer plinth {
   .plinth-callout {
-    --plinth-callout-surface: var(--plinth-color-surface-sunken);
+    --plinth-callout-surface: var(--plinth-callout-neutral-surface);
+    --plinth-callout-border: var(--plinth-callout-neutral-border);
     --plinth-callout-icon-color: var(--plinth-color-text-muted);
 
     display: flex;
@@ -858,27 +891,31 @@
     color: var(--plinth-color-text);
     overflow-wrap: anywhere;
     background-color: var(--plinth-callout-surface);
-    border: 1px solid var(--plinth-color-border);
+    border: 1px solid var(--plinth-callout-border);
     border-radius: var(--plinth-radius-container);
   }
 
   .plinth-callout[data-tone='info'] {
-    --plinth-callout-surface: var(--plinth-color-info-surface);
+    --plinth-callout-surface: var(--plinth-callout-info-surface);
+    --plinth-callout-border: var(--plinth-callout-info-border);
     --plinth-callout-icon-color: var(--plinth-color-info-text);
   }
 
   .plinth-callout[data-tone='success'] {
-    --plinth-callout-surface: var(--plinth-color-success-surface);
+    --plinth-callout-surface: var(--plinth-callout-success-surface);
+    --plinth-callout-border: var(--plinth-callout-success-border);
     --plinth-callout-icon-color: var(--plinth-color-success-text);
   }
 
   .plinth-callout[data-tone='warning'] {
-    --plinth-callout-surface: var(--plinth-color-warning-surface);
+    --plinth-callout-surface: var(--plinth-callout-warning-surface);
+    --plinth-callout-border: var(--plinth-callout-warning-border);
     --plinth-callout-icon-color: var(--plinth-color-warning-text);
   }
 
   .plinth-callout[data-tone='danger'] {
-    --plinth-callout-surface: var(--plinth-color-danger-surface);
+    --plinth-callout-surface: var(--plinth-callout-danger-surface);
+    --plinth-callout-border: var(--plinth-callout-danger-border);
     --plinth-callout-icon-color: var(--plinth-color-danger-text);
   }
 

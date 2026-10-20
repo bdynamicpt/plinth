@@ -39,7 +39,7 @@
                                 @if ($colour)
                                     <span class="site-token-swatch" style="--site-token-colour: {{ $value }}" aria-hidden="true"></span>
                                 @endif
-                                {{ \App\Docs\Token::step($ref) ?? $value }}
+                                {{ \App\Docs\Token::step($ref) ?? \App\Docs\Token::tint($value) ?? $value }}
                             </span>
                         </x-plinth::data-table-cell>
                     @endforeach

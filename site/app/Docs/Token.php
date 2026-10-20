@@ -54,6 +54,14 @@ final readonly class Token
         return implode(' ', array_slice($segments, $segments[0] === 'ref' ? 2 : 0));
     }
 
+    /** A translucent tint, color-mix(in srgb, #2563eb 6%, transparent), as its colour and how much of it (#2563eb at 6%). */
+    public static function tint(string $value): ?string
+    {
+        return preg_match('/^color-mix\(in srgb, (.+) (\d+(?:\.\d+)?%), transparent\)$/', $value, $match) === 1
+            ? "{$match[1]} at {$match[2]}"
+            : null;
+    }
+
     /** How the foundations tables show the token beside its value, if they can. */
     public function preview(): ?string
     {
