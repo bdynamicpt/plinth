@@ -28,8 +28,14 @@ describe('PlinthPillRow', () => {
     expect(row.hasAttribute('aria-label')).toBe(false);
   });
 
+  it('gives a nav row its ref', () => {
+    const ref = createRef<HTMLElement>();
+
+    expect(root(<PlinthPillRow ref={ref} nav />)).toBe(ref.current);
+  });
+
   it('passes other props and the ref to the root, and lets a project attribute win', () => {
-    const ref = createRef<HTMLDivElement>();
+    const ref = createRef<HTMLElement>();
     const row = root(<PlinthPillRow ref={ref} className="mb-4" role="toolbar" />);
 
     expect(row.className).toBe('plinth-pill-row mb-4');
@@ -52,6 +58,13 @@ describe('PlinthPill', () => {
     expect(pill.getAttribute('aria-pressed')).toBe('false');
     expect(pill.querySelector('.plinth-pill-count')?.textContent).toBe('0');
     expect(onClick).toHaveBeenCalledOnce();
+  });
+
+  it('escapes the label and the count', () => {
+    expect(renderToStaticMarkup(<PlinthPill count="<b>">{'<i>Open</i>'}</PlinthPill>)).toBe(
+      '<button type="button" aria-pressed="false" class="plinth-pill"><span class="plinth-pill-label">&lt;i&gt;Open&lt;/i&gt;</span>' +
+        '<span class="plinth-pill-count">&lt;b&gt;</span></button>',
+    );
   });
 
   it('leaves out a missing or blank count', () => {

@@ -108,8 +108,9 @@ its width up to half the row, so a long title wraps before a short value does.
 
 Plinth never routes. A link row is a plain `<a href>`, so in a single-page app hand it your
 router's link: with Vue Router, `<RouterLink custom v-slot="{ href, navigate, isActive }">` around
-`<PlinthListRow :href="href" :current="isActive" @click="navigate">`; in Livewire, add
-`wire:navigate`. The listener and the attribute land on the row's root.
+`<PlinthListRow :href="href" :current="isActive" @click="navigate">`; in React, pass the router's
+`href` (React Router's `useHref`) and an `onClick` that calls `preventDefault()` and then
+navigates; in Livewire, add `wire:navigate`. The listener and the attribute land on the row's root.
 
 ## Props
 

@@ -1,5 +1,5 @@
 // Markup contract: packages/css/src/components/list-row.css
-import type { ComponentProps, ElementType, ReactNode } from 'react';
+import type { ComponentProps, ElementType, ReactNode, Ref } from 'react';
 import { classNames, hasContent } from './markup';
 
 interface ListRowOptions {
@@ -19,13 +19,17 @@ interface ListRowOptions {
   trailing?: ReactNode;
 }
 
-/** A link with an `href`, a `<button>` with `button`, otherwise a static `<div>`. */
+/**
+ * A link with an `href`, a `<button>` with `button`, otherwise a static `<div>`. Without an
+ * `href` the root may be either, so its `ref` is an HTMLElement.
+ */
 export type PlinthListRowProps =
   | (ListRowOptions & Omit<ComponentProps<'a'>, keyof ListRowOptions> & { href: string })
   | (ListRowOptions &
-      Omit<ComponentProps<'button'>, keyof ListRowOptions> & { href?: undefined; button: true })
-  | (ListRowOptions &
-      Omit<ComponentProps<'div'>, keyof ListRowOptions> & { href?: undefined; button?: false });
+      Omit<ComponentProps<'button'>, keyof ListRowOptions | 'ref'> & {
+        href?: undefined;
+        ref?: Ref<HTMLElement>;
+      });
 
 export function PlinthListRow({
   description,

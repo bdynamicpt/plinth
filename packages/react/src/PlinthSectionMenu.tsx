@@ -9,6 +9,7 @@ interface SectionMenuOptions {
   nav?: boolean;
 }
 
+/** A `<nav>`, or without `nav` a `<div role="group">`. */
 export type PlinthSectionMenuProps = SectionMenuOptions &
   Omit<ComponentProps<'nav'>, keyof SectionMenuOptions>;
 

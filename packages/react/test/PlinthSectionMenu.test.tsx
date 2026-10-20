@@ -64,6 +64,16 @@ describe('PlinthSectionMenuItem', () => {
     ).toBe(true);
   });
 
+  it('escapes the label and the count', () => {
+    expect(
+      renderToStaticMarkup(
+        <PlinthSectionMenuItem count="<b>">{'<i>Tasks</i>'}</PlinthSectionMenuItem>,
+      ),
+    ).toContain(
+      '<span class="plinth-section-menu-label">&lt;i&gt;Tasks&lt;/i&gt;</span><span class="plinth-section-menu-count">&lt;b&gt;</span>',
+    );
+  });
+
   it('leaves out a missing or blank count, and keeps zero', () => {
     const count = (value: string | number | null | undefined) =>
       root(<PlinthSectionMenuItem count={value}>Tasks</PlinthSectionMenuItem>).querySelector(

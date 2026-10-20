@@ -89,6 +89,23 @@ describe('PlinthAvatar', () => {
     ]);
   });
 
+  it('stays quiet in production, as Vue does', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    vi.stubEnv('NODE_ENV', 'production');
+
+    render(<PlinthAvatar name=" " status="danger" />);
+
+    vi.unstubAllEnvs();
+    expect(warn).not.toHaveBeenCalled();
+  });
+
+  it('escapes the name and the initials', () => {
+    expect(renderToStaticMarkup(<PlinthAvatar name="<b>A</b>" initials="<i>" />)).toBe(
+      '<span data-size="md" role="img" aria-label="&lt;b&gt;A&lt;/b&gt;" class="plinth-avatar">' +
+        '<span class="plinth-avatar-initials" aria-hidden="true">&lt;i&gt;</span></span>',
+    );
+  });
+
   it('passes other props and the ref to the root, and lets a project attribute win', () => {
     const ref = createRef<HTMLSpanElement>();
     const avatar = root(

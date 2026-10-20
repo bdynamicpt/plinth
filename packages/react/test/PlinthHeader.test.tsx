@@ -23,9 +23,22 @@ describe('PlinthHeader', () => {
     );
   });
 
-  it('leaves out leading and actions that print nothing', () => {
-    expect(renderToStaticMarkup(<PlinthHeader title="Settings" leading=" " actions={null} />)).toBe(
-      '<header class="plinth-header"><h1 class="plinth-header-title">Settings</h1></header>',
+  it('leaves out leading and actions that print nothing, an empty list or fragment too', () => {
+    for (const [leading, actions] of [
+      [' ', null],
+      [[], <>{false}</>],
+    ]) {
+      expect(
+        renderToStaticMarkup(<PlinthHeader title="Settings" leading={leading} actions={actions} />),
+      ).toBe(
+        '<header class="plinth-header"><h1 class="plinth-header-title">Settings</h1></header>',
+      );
+    }
+  });
+
+  it('escapes the title', () => {
+    expect(renderToStaticMarkup(<PlinthHeader title="<b>A</b>" />)).toContain(
+      '<h1 class="plinth-header-title">&lt;b&gt;A&lt;/b&gt;</h1>',
     );
   });
 

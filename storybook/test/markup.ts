@@ -82,13 +82,16 @@ export function renderBlade(cases: BladeCase[]): string[] {
 }
 
 /**
- * A React prop name for an HTML attribute: `class` is `className`, `for` is `htmlFor`, and a
+ * A React prop name for an HTML attribute: `class` is `className`, `for` is `htmlFor`,
+ * `readonly` is `readOnly`, `tabindex` is `tabIndex`, and a
  * dashed SVG attribute such as `stroke-width` is camel case. `data-*` and `aria-*` stay as they
  * are.
  */
 export function reactProp(name: string): string {
   if (name === 'class') return 'className';
   if (name === 'for') return 'htmlFor';
+  if (name === 'readonly') return 'readOnly';
+  if (name === 'tabindex') return 'tabIndex';
   if (name.startsWith('data-') || name.startsWith('aria-')) return name;
   return name.replace(/-([a-z])/g, (_, char: string) => char.toUpperCase());
 }

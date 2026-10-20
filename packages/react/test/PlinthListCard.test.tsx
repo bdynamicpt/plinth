@@ -37,6 +37,13 @@ describe('PlinthListCard', () => {
     ).toBe('H2');
   });
 
+  it('escapes the heading and the footer', () => {
+    expect(renderToStaticMarkup(<PlinthListCard heading="<b>A</b>" footer="<i>B</i>" />)).toBe(
+      '<div class="plinth-list-card"><h2 class="plinth-list-card-heading">&lt;b&gt;A&lt;/b&gt;</h2>' +
+        '<ul class="plinth-list-card-list" role="list"></ul><p class="plinth-list-card-footer">&lt;i&gt;B&lt;/i&gt;</p></div>',
+    );
+  });
+
   it('leaves out a blank heading and footer', () => {
     const card = root(<PlinthListCard heading=" " footer="  " />);
 

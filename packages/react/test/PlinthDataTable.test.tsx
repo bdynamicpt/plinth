@@ -58,6 +58,33 @@ describe('PlinthDataTable', () => {
     );
   });
 
+  it('escapes the caption, the labels and the text', () => {
+    const html = renderToStaticMarkup(
+      <PlinthDataTable
+        caption="<b>Q&A</b>"
+        head={<PlinthDataTableColumn>{'<i>x</i>'}</PlinthDataTableColumn>}
+      >
+        <PlinthDataTableRow>
+          <PlinthDataTableCell label="<i>y</i>">{'<b>z</b>'}</PlinthDataTableCell>
+        </PlinthDataTableRow>
+        <PlinthDataTableEmpty>{'<b>none</b>'}</PlinthDataTableEmpty>
+      </PlinthDataTable>,
+    );
+
+    for (const text of [
+      '&lt;b&gt;Q&amp;A&lt;/b&gt;',
+      '&lt;i&gt;x&lt;/i&gt;',
+      '&lt;i&gt;y&lt;/i&gt;',
+      '&lt;b&gt;z&lt;/b&gt;',
+      '&lt;b&gt;none&lt;/b&gt;',
+    ]) {
+      expect(html).toContain(text);
+    }
+    expect(
+      renderToStaticMarkup(<PlinthDataTableSort>{'<b>Date</b>'}</PlinthDataTableSort>),
+    ).toContain('&lt;b&gt;Date&lt;/b&gt;');
+  });
+
   it('leaves out a blank caption', () => {
     expect(root(<PlinthDataTable caption=" " />).querySelector('caption')).toBeNull();
   });
@@ -111,10 +138,11 @@ describe('PlinthDataTableColumn', () => {
 });
 
 describe('PlinthDataTableSort', () => {
-  it('prints the sort button with its icon, and takes a click', () => {
+  it('prints the sort button with its icon, and takes a click and a ref', () => {
     const onClick = vi.fn();
+    const ref = createRef<HTMLButtonElement>();
     const button = root(
-      <PlinthDataTableSort className="is-busy" onClick={onClick}>
+      <PlinthDataTableSort ref={ref} className="is-busy" onClick={onClick}>
         Date
       </PlinthDataTableSort>,
     );
@@ -125,6 +153,7 @@ describe('PlinthDataTableSort', () => {
         `${dataTableSortIcon}</button>`,
     );
     expect(onClick).toHaveBeenCalledOnce();
+    expect(ref.current).toBe(button);
     expect(
       root(<PlinthDataTableSort type="submit">Date</PlinthDataTableSort>).getAttribute('type'),
     ).toBe('submit');
@@ -137,9 +166,14 @@ describe('PlinthDataTableRow', () => {
       inBody(<PlinthDataTableRow selected={value} />).getAttribute('aria-selected');
 
     expect([undefined, true, false].map(selected)).toEqual([null, 'true', 'false']);
-    expect(
-      inBody(<PlinthDataTableRow selected aria-selected="false" className="is-new" />).outerHTML,
-    ).toBe('<tr role="row" aria-selected="false" class="plinth-data-table-row is-new"></tr>');
+    const ref = createRef<HTMLTableRowElement>();
+    const row = inBody(
+      <PlinthDataTableRow ref={ref} selected aria-selected="false" className="is-new" id="r" />,
+    );
+    expect(row.outerHTML).toBe(
+      '<tr role="row" aria-selected="false" id="r" class="plinth-data-table-row is-new"></tr>',
+    );
+    expect(ref.current).toBe(row);
   });
 });
 
@@ -163,15 +197,18 @@ describe('PlinthDataTableCell', () => {
     expect(cell.getAttribute('data-phone')).toBe('hidden');
   });
 
-  it('passes other props, letting a project attribute win', () => {
+  it('passes other props and the ref, letting a project attribute win', () => {
+    const ref = createRef<HTMLTableCellElement>();
     const cell = inRow(
-      <PlinthDataTableCell className="truncate" role="gridcell">
+      <PlinthDataTableCell ref={ref} className="truncate" role="gridcell" data-key="date">
         x
       </PlinthDataTableCell>,
     );
 
     expect(cell.className).toBe('plinth-data-table-cell truncate');
     expect(cell.getAttribute('role')).toBe('gridcell');
+    expect(cell.getAttribute('data-key')).toBe('date');
+    expect(ref.current).toBe(cell);
   });
 });
 
@@ -196,13 +233,14 @@ describe('PlinthDataTableEmpty', () => {
   });
 
   it('passes other props, letting a project attribute win', () => {
-    expect(
-      inBody(
-        <PlinthDataTableEmpty className="is-filtered" role="presentation">
-          No orders yet.
-        </PlinthDataTableEmpty>,
-      ).outerHTML,
-    ).toBe(
+    const ref = createRef<HTMLTableRowElement>();
+    const empty = inBody(
+      <PlinthDataTableEmpty ref={ref} className="is-filtered" role="presentation">
+        No orders yet.
+      </PlinthDataTableEmpty>,
+    );
+    expect(ref.current).toBe(empty);
+    expect(empty.outerHTML).toBe(
       '<tr role="presentation" class="plinth-data-table-empty is-filtered"><td class="plinth-data-table-empty-cell" role="cell" colspan="1">No orders yet.</td></tr>',
     );
   });

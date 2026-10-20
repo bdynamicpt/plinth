@@ -73,7 +73,9 @@ touch screen; the row's padding grows to fit it when a project makes pills short
 
 The row and each pill are their own components, so the app's attributes and listeners
 (`wire:click`, `x-on:click`, `@click`, `onClick`) land on the pill. The same names in every layer;
-React takes the Vue props, with the label as `children`.
+React takes the Vue props, with the label as `children`. Other attributes reach each root (the
+row's `<div>` or `<nav>`, the pill's `<button>` or `<a>`), and in React so do `className`, added
+to Plinth's class, and the `ref`.
 
 | Component | Prop     | Blade                            | Vue                            | React            | Default |
 | --------- | -------- | -------------------------------- | ------------------------------ | ---------------- | ------- |

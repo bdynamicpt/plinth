@@ -46,7 +46,8 @@ The React components take Vue's props by the same names, so the docs for one ser
   components render the same on the server, for Inertia's SSR, and in the browser.
 - **Native behaviour.** A sheet is a `<dialog>`: open it with a button that has `commandfor` and
   `command="show-modal"`, or call `showModal()` on its `ref`, which is the dialog itself.
-  `onClose` is the dialog's close event. React's types don't list `command` and `commandfor` yet:
+  `onClose` is the dialog's close event. React's types don't list `command` and `commandfor` yet
+  ([#99](https://github.com/bdynamicpt/plinth/issues/99)):
   they work as they are, but TypeScript wants them spread in.
 
 ## Your brand

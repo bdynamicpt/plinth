@@ -111,6 +111,30 @@ describe('PlinthListRow', () => {
     expect(row.hasAttribute('aria-disabled')).toBe(false);
   });
 
+  it('takes a button flag and an href that may be missing, as Vue does', () => {
+    const flag: boolean = false;
+    const url: string | undefined = undefined;
+    const ref = createRef<HTMLElement>();
+
+    expect(root(<PlinthListRow button={flag}>A</PlinthListRow>).tagName).toBe('DIV');
+    expect(
+      root(
+        <PlinthListRow ref={ref} href={url}>
+          A
+        </PlinthListRow>,
+      ).tagName,
+    ).toBe('DIV');
+    expect(ref.current?.tagName).toBe('DIV');
+  });
+
+  it('escapes the title and the description', () => {
+    expect(
+      renderToStaticMarkup(<PlinthListRow description="<i>x</i>">{'<b>A</b>'}</PlinthListRow>),
+    ).toContain(
+      '&lt;b&gt;A&lt;/b&gt;</span><span class="plinth-list-row-description">&lt;i&gt;x&lt;/i&gt;',
+    );
+  });
+
   it('passes other props and the ref to the root, and lets a project attribute win', () => {
     const ref = createRef<HTMLButtonElement>();
     const row = root(

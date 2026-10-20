@@ -1,5 +1,5 @@
 // Markup contract: packages/css/src/components/pill-row.css
-import type { ComponentProps, ElementType } from 'react';
+import type { ComponentProps, ElementType, Ref } from 'react';
 import { classNames } from './markup';
 
 interface PillRowOptions {
@@ -9,7 +9,9 @@ interface PillRowOptions {
   nav?: boolean;
 }
 
-export type PlinthPillRowProps = PillRowOptions & Omit<ComponentProps<'div'>, keyof PillRowOptions>;
+/** A `<div role="group">`, or with `nav` a `<nav>`, so its `ref` is an HTMLElement. */
+export type PlinthPillRowProps = PillRowOptions &
+  Omit<ComponentProps<'div'>, keyof PillRowOptions | 'ref'> & { ref?: Ref<HTMLElement> };
 
 export function PlinthPillRow({
   label,

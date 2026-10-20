@@ -4,6 +4,9 @@ import { avatarSize, initialsFrom, type AvatarSize } from './avatar';
 import { classNames } from './markup';
 import { tone as toTone, type Tone } from './tones';
 
+// The app's bundler replaces it, as it does in React itself.
+declare const process: { env: { NODE_ENV?: string } };
+
 interface AvatarOptions {
   /** Whose avatar it is: the accessible name, and where initials come from. */
   name?: string;
@@ -34,10 +37,10 @@ export function PlinthAvatar({
   const label = decorative ? undefined : dataTone && statusLabel ? `${name}, ${statusLabel}` : name;
   const letters = initials ?? initialsFrom(name);
 
-  // The same mistakes Blade refuses, and Vue warns about: an avatar with no name, and a status
-  // only colour explains.
+  // The same mistakes Blade refuses, and Vue warns about while developing: an avatar with no
+  // name, and a status only colour explains.
   useEffect(() => {
-    if (decorative) return;
+    if (decorative || process.env.NODE_ENV === 'production') return;
     if (!name.trim()) {
       console.warn('PlinthAvatar needs a name, or decorative when the name is shown next to it.');
     }

@@ -1,5 +1,6 @@
 import { fireEvent, render } from '@testing-library/react';
 import { createRef, type ReactElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 import { PlinthMenuSheet } from '../src/index.ts';
 
@@ -59,6 +60,16 @@ describe('PlinthMenuSheet', () => {
     expect(row.querySelector('img')).toBeNull();
     expect(row.querySelector('.plinth-avatar-initials')?.textContent).toBe('SL');
     expect(user.querySelector('.plinth-menu-sheet-account')).toBeNull();
+  });
+
+  it('escapes the title, the name and the detail', () => {
+    const html = renderToStaticMarkup(
+      <PlinthMenuSheet id="menu" title="<b>M</b>" userName="<i>Sam</i>" userDetail="<u>x</u>" />,
+    );
+
+    expect(html).toContain('&lt;b&gt;M&lt;/b&gt;</h2>');
+    expect(html).toContain('<span class="plinth-list-row-title">&lt;i&gt;Sam&lt;/i&gt;</span>');
+    expect(html).toContain('<span class="plinth-list-row-description">&lt;u&gt;x&lt;/u&gt;</span>');
   });
 
   it('generates an id when it has none, and trims one it is given', () => {

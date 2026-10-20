@@ -88,7 +88,8 @@ Alpine, `x-ref="filters"` on the sheet and `$refs.filters.showModal()`.
 In Vue, the component exposes **`showModal()`** and **`close()`**, and emits **`close`** (with the
 dialog's native event) whenever the dialog closes. In React, the **`ref`** is the `<dialog>`
 itself, with its own `showModal()` and `close()`, and **`onClose`** is the dialog's close event.
-React's types don't list `command` and `commandfor` yet; they work as they are, but TypeScript
+React's types don't list `command` and `commandfor` yet
+([#99](https://github.com/bdynamicpt/plinth/issues/99)); they work as they are, but TypeScript
 wants them spread in (`{...{ commandfor: 'filters', command: 'show-modal' }}`), or use the ref.
 
 ```blade tab="Blade"

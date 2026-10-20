@@ -86,18 +86,6 @@ The same names in every layer. React takes the Vue props, with the rows as `chil
 An unknown level falls back to `h2`. `class` (`className` in React), `id`, `data-*` and `aria-*`
 reach the root `<div>`.
 
-```tsx tab="React"
-import { PlinthListCard, PlinthListRow } from '@bdynamic/plinth/react';
-
-<PlinthListCard heading="Preferences" footer="Changes apply on every device you are signed in on.">
-    <li>
-        <PlinthListRow href="/settings/notifications" chevron>
-            Notifications
-        </PlinthListRow>
-    </li>
-</PlinthListCard>;
-```
-
 ## Accessibility
 
 - The list prints `role="list"`, which Safari needs to keep announcing a list without bullets.

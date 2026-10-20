@@ -93,5 +93,13 @@ describe('the markup helpers', () => {
       false,
     ]);
     expect(['x', 0].map(hasContent)).toEqual([true, true]);
+    expect([[], [false, null, ' '], <></>, <>{false}</>, <>{[]}</>].map(hasContent)).toEqual([
+      false,
+      false,
+      false,
+      false,
+      false,
+    ]);
+    expect([['x'], <>x</>, <i />].map(hasContent)).toEqual([true, true, true]);
   });
 });

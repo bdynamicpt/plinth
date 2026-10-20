@@ -45,6 +45,20 @@ describe('PlinthSheet', () => {
     expect(sheet.hasAttribute('aria-describedby')).toBe(false);
     expect(sheet.querySelector('.plinth-sheet-description')).toBeNull();
     expect(sheet.querySelector('.plinth-sheet-footer')).toBeNull();
+    expect(
+      root(<PlinthSheet title="Filters" footer={[false, null]} />).querySelector(
+        '.plinth-sheet-footer',
+      ),
+    ).toBeNull();
+  });
+
+  it('escapes the title and the description', () => {
+    const html = renderToStaticMarkup(
+      <PlinthSheet id="x" title="<b>A</b>" description="<i>B</i>" />,
+    );
+
+    expect(html).toContain('class="plinth-sheet-title">&lt;b&gt;A&lt;/b&gt;</h2>');
+    expect(html).toContain('class="plinth-sheet-description">&lt;i&gt;B&lt;/i&gt;</p>');
   });
 
   it('takes a placement, and falls back to center', () => {
