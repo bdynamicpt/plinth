@@ -179,6 +179,8 @@
         </div>
     </section>
 
+    @include('home.brand-switcher')
+
     @if ($decisions->isNotEmpty())
         <section id="decisions" class="site-section site-section-sunken" aria-labelledby="decisions-title">
             <div class="site-container site-decisions-inner">
@@ -192,6 +194,8 @@
             </div>
         </section>
     @endif
+
+    @include('home.gallery')
 
     <section class="site-cta" aria-labelledby="cta-title">
         <div class="site-cta-glow" aria-hidden="true"></div>

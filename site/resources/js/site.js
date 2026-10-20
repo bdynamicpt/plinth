@@ -1,6 +1,6 @@
 /*
  * The site's few behaviours, as Alpine components: the theme switch, the copy buttons, the
- * header that sits over the hero and the components' playground. Everything works without them except what they add.
+ * header that sits over the hero, the home page's brand switcher and the components' playground. Everything works without them except what they add.
  */
 import Alpine from 'alpinejs';
 
@@ -60,6 +60,39 @@ Alpine.data('siteHeader', () => ({
 
     update() {
         this.scrolled = window.scrollY > 8;
+    },
+}));
+
+/*
+ * The home page's brand switcher: the brand colour and corners picked (each pair's CSS and style
+ * come from the server) and the theme, which follows the page's until one is picked.
+ */
+Alpine.data('brandSwitcher', (pairs, accent, corners) => ({
+    accent,
+    corners,
+    theme: null,
+    page: 'dark',
+
+    init() {
+        this.sync();
+        systemDark.addEventListener('change', () => this.sync());
+        new MutationObserver(() => this.sync()).observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme'],
+        });
+    },
+
+    sync() {
+        this.page =
+            document.documentElement.dataset.theme ?? (systemDark.matches ? 'dark' : 'light');
+    },
+
+    get pair() {
+        return pairs[`${this.accent} ${this.corners}`];
+    },
+
+    get shown() {
+        return this.theme ?? this.page;
     },
 }));
 

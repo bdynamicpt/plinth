@@ -13,5 +13,7 @@
 @import url('./site/header.css');
 @import url('./site/footer.css');
 @import url('./site/home.css');
+@import url('./site/switcher.css');
+@import url('./site/gallery.css');
 @import url('./site/docs.css');
 @import url('./site/catalogue.css');

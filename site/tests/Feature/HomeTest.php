@@ -15,7 +15,9 @@ it('shows the home page with every section', function () {
             'Write it in Blade, Vue or React. Ship the same HTML.',
             'Built on the platform. Tested on every story.',
             'Your brand is a few custom properties.',
+            'Same components. Your colour, your corners, your theme.',
             'Every decision, written down.',
+            'An inbox, a settings page, billing, a landing page.',
             '15 components today, each with its contract.',
         ]);
 });
@@ -29,7 +31,27 @@ it('builds the page from Plinth components', function () {
         ->assertSee('class="plinth-code-block"', false)
         ->assertSee('class="plinth-code-block site-layers-output"', false)
         ->assertSee('class="plinth-sheet plinth-menu-sheet"', false)
-        ->assertSee('id="site-menu"', false);
+        ->assertSee('id="site-menu"', false)
+        ->assertSee('class="plinth-section-menu"', false)
+        ->assertSee('class="plinth-callout"', false)
+        ->assertSee('class="plinth-avatar"', false);
+});
+
+it('shows the brand switcher with Plinth\'s defaults, ready for Alpine', function () {
+    $this->get('/')
+        ->assertSee('x-data="brandSwitcher(', false)
+        ->assertSee('aria-labelledby="switcher-accent"', false)
+        ->assertSee('aria-labelledby="switcher-corners"', false)
+        ->assertSee('aria-labelledby="switcher-theme"', false)
+        ->assertSeeInOrder(['Plinth blue', 'Teal', 'Ember', 'Violet', 'Sharp', 'Plinth', 'Round', 'Dark', 'Light'])
+        ->assertSee('aria-pressed="true" x-bind:aria-pressed="String(accent === \'blue\')"', false)
+        ->assertSee('<span x-text="pair.css">/* Plinth&#039;s defaults: nothing to override. */</span>', false)
+        ->assertSee('--site-swatch: light-dark(oklch(0.52 0.1 185), oklch(0.76 0.12 180))', false);
+});
+
+it('shows the gallery with made-up content', function () {
+    $this->get('/')
+        ->assertSeeInOrder(['Inbox', 'Sam Carter', 'Settings', 'Alex Morgan', 'Billing', 'Your card expires next month', 'Invoices that chase themselves', 'Landing page']);
 });
 
 it('shows the header and footer links', function () {
