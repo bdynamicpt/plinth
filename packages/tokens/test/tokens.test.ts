@@ -17,38 +17,67 @@ const token = (path: string): Token => {
 };
 const tier = (name: Token['tier']) => tokens.filter((t) => t.tier === name);
 
-/** Relative luminance (WCAG 2) of a hex or oklch() colour. */
-function luminance(color: string): number {
-  const linear = (channel: number) =>
-    channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
-  let rgb: [number, number, number];
+/** A hex or oklch() colour as gamma-encoded sRGB channels from 0 to 1. */
+function srgb(color: string): [number, number, number] {
   const oklch = /^oklch\(([\d.]+) ([\d.]+) ([\d.]+)/.exec(color);
-  if (oklch) {
-    // oklch -> oklab -> linear sRGB (Björn Ottosson's matrices).
-    const [L, C, h] = oklch.slice(1).map(Number) as [number, number, number];
-    const a = C * Math.cos((h * Math.PI) / 180);
-    const b = C * Math.sin((h * Math.PI) / 180);
-    const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3;
-    const m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3;
-    const s = (L - 0.0894841775 * a - 1.291485548 * b) ** 3;
-    const clamp = (x: number) => Math.min(1, Math.max(0, x));
-    rgb = [
-      clamp(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s),
-      clamp(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s),
-      clamp(-0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s),
-    ];
-  } else {
-    rgb = [1, 3, 5].map((i) => linear(parseInt(color.slice(i, i + 2), 16) / 255)) as [
+  if (!oklch) {
+    return [1, 3, 5].map((i) => parseInt(color.slice(i, i + 2), 16) / 255) as [
       number,
       number,
       number,
     ];
   }
-  return 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
+  // oklch -> oklab -> linear sRGB (Björn Ottosson's matrices) -> gamma-encoded sRGB.
+  const [L, C, h] = oklch.slice(1).map(Number) as [number, number, number];
+  const a = C * Math.cos((h * Math.PI) / 180);
+  const b = C * Math.sin((h * Math.PI) / 180);
+  const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3;
+  const m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3;
+  const s = (L - 0.0894841775 * a - 1.291485548 * b) ** 3;
+  const encode = (x: number) => {
+    const c = Math.min(1, Math.max(0, x));
+    return c <= 0.0031308 ? c * 12.92 : 1.055 * c ** (1 / 2.4) - 0.055;
+  };
+  return [
+    encode(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s),
+    encode(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s),
+    encode(-0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s),
+  ];
+}
+
+/** Relative luminance (WCAG 2) of a colour, given as a hex or oklch() string or sRGB channels. */
+function luminance(color: string | [number, number, number]): number {
+  const linear = (channel: number) =>
+    channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+  const [r, g, b] = (typeof color === 'string' ? srgb(color) : color).map(linear) as [
+    number,
+    number,
+    number,
+  ];
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+/**
+ * A translucent tint, color-mix(in srgb, <colour> N%, transparent), laid over a background the
+ * way the browser paints it.
+ */
+function over(tint: string, background: string): [number, number, number] {
+  const mix = /^color-mix\(in srgb, (.+) ([\d.]+)%, transparent\)$/.exec(tint);
+  if (!mix) return srgb(tint);
+  const alpha = Number(mix[2]) / 100;
+  const [top, bottom] = [srgb(mix[1]!), srgb(background)];
+  return top.map((channel, i) => channel * alpha + bottom[i]! * (1 - alpha)) as [
+    number,
+    number,
+    number,
+  ];
 }
 
 /** WCAG 2 contrast ratio between two colours. */
-function contrast(a: string, b: string): number {
+function contrast(
+  a: string | [number, number, number],
+  b: string | [number, number, number],
+): number {
   const [light, dark] = [luminance(a), luminance(b)].sort((x, y) => y - x) as [number, number];
   return (light + 0.05) / (dark + 0.05);
 }
@@ -66,6 +95,10 @@ describe('tiers', () => {
       'sheet.side-width',
       'section-menu.height',
       'section-menu.item-height',
+      ...['neutral', 'info', 'success', 'warning', 'danger'].flatMap((tone) => [
+        `callout.${tone}-surface`,
+        `callout.${tone}-border`,
+      ]),
     ]);
   });
 
@@ -179,8 +212,26 @@ describe('tiers', () => {
   });
 
   it('builds component tokens from semantic tokens', () => {
+    const semantic = new Set(tier('semantic').map((t) => t.cssVar));
     for (const t of tier('component')) {
-      expect(byPath.get(t.ref!)?.tier, t.name).toBe('semantic');
+      for (const css of [t.css, t.darkCss ?? t.css]) {
+        const used = css.match(/var\(--plinth-[\w-]+\)/g);
+        expect(used, t.name).not.toBeNull();
+        for (const v of used!) expect(semantic.has(v), `${t.name}: ${v}`).toBe(true);
+      }
+    }
+  });
+
+  it('gives the callout tints of its own, in light and dark', () => {
+    for (const tone of ['info', 'success', 'warning', 'danger']) {
+      for (const part of ['surface', 'border']) {
+        const t = token(`callout.${tone}-${part}`);
+        expect(t.darkCss, t.name).toMatch(
+          new RegExp(
+            `^color-mix\\(in srgb, var\\(--plinth-color-${tone}\\) \\d+%, transparent\\)$`,
+          ),
+        );
+      }
     }
   });
 });
@@ -238,6 +289,35 @@ describe('contrast', () => {
       'danger-surface',
     ])('the focus ring stands out on %s (3:1)', (bg) => {
       expect(contrast(value('focus-ring'), value(bg))).toBeGreaterThanOrEqual(3);
+    });
+  });
+});
+
+describe('callout contrast', () => {
+  const tones = ['info', 'success', 'warning', 'danger'] as const;
+  const backgrounds = ['surface', 'surface-raised', 'surface-sunken'] as const;
+
+  describe.each(['light', 'dark'] as const)('%s', (mode) => {
+    const value = (path: string) => {
+      const t = token(path);
+      return mode === 'light' ? t.value : t.dark!;
+    };
+    const cases = tones.flatMap((tone) => backgrounds.map((bg) => [tone, bg] as const));
+
+    it.each(cases)('the %s callout’s text meets 4.5:1 on %s', (tone, bg) => {
+      const tint = over(value(`callout.${tone}-surface`), value(`color.${bg}`));
+      expect(contrast(value('color.text'), tint)).toBeGreaterThanOrEqual(4.5);
+      expect(contrast(value('color.text-muted'), tint)).toBeGreaterThanOrEqual(4.5);
+    });
+
+    it.each(cases)('the %s callout’s icon meets 3:1 on %s', (tone, bg) => {
+      const tint = over(value(`callout.${tone}-surface`), value(`color.${bg}`));
+      expect(contrast(value(`color.${tone}-text`), tint)).toBeGreaterThanOrEqual(3);
+    });
+
+    it.each(cases)('the focus ring stands out in the %s callout on %s (3:1)', (tone, bg) => {
+      const tint = over(value(`callout.${tone}-surface`), value(`color.${bg}`));
+      expect(contrast(value('color.focus-ring'), tint)).toBeGreaterThanOrEqual(3);
     });
   });
 });

@@ -33,8 +33,10 @@ major, which keeps the same DTCG support and API.
    changes with the theme): named by role (`color.surface`, `radius.pill`, `space.4`,
    `control.md`, `layer.sheet`, `elevation.2`). Components use these, and a project overrides
    these.
-3. **Component** (`component.json`): only values a project may need to tune for one component,
-   such as `header.height`. Built from semantic tokens.
+3. **Component** (`component.json`, and `component.light.json` / `component.dark.json` for what
+   changes with the theme): only values a project may need to tune for one component, such as
+   `header.height` or the callout's tints. Built from semantic tokens: a reference, or a value
+   such as a `color-mix()` whose references the build writes as `var()`s.
 
 A semantic token that only points at another token is written as `var()` of it, so changing a
 primitive flows through. Components use semantic and component tokens only: Stylelint rejects

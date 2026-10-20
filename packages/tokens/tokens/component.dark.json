@@ -1,0 +1,55 @@
+{
+  "$description": "Component tokens that change with the theme (dark): only values a project may need to tune per component.",
+  "callout": {
+    "neutral-surface": {
+      "$type": "color",
+      "$value": "{color.surface-sunken}",
+      "$description": "A neutral callout's background."
+    },
+    "neutral-border": {
+      "$type": "color",
+      "$value": "{color.border}",
+      "$description": "A neutral callout's hairline border."
+    },
+    "info-surface": {
+      "$type": "color",
+      "$value": "color-mix(in srgb, {color.info} 8%, transparent)",
+      "$description": "A faint, translucent info tint, so a full-width callout stays quiet on any surface."
+    },
+    "info-border": {
+      "$type": "color",
+      "$value": "color-mix(in srgb, {color.info} 24%, transparent)",
+      "$description": "A translucent info hairline around the callout."
+    },
+    "success-surface": {
+      "$type": "color",
+      "$value": "color-mix(in srgb, {color.success} 8%, transparent)",
+      "$description": "A faint, translucent success tint, so a full-width callout stays quiet on any surface."
+    },
+    "success-border": {
+      "$type": "color",
+      "$value": "color-mix(in srgb, {color.success} 24%, transparent)",
+      "$description": "A translucent success hairline around the callout."
+    },
+    "warning-surface": {
+      "$type": "color",
+      "$value": "color-mix(in srgb, {color.warning} 8%, transparent)",
+      "$description": "A faint, translucent warning tint, so a full-width callout stays quiet on any surface."
+    },
+    "warning-border": {
+      "$type": "color",
+      "$value": "color-mix(in srgb, {color.warning} 24%, transparent)",
+      "$description": "A translucent warning hairline around the callout."
+    },
+    "danger-surface": {
+      "$type": "color",
+      "$value": "color-mix(in srgb, {color.danger} 8%, transparent)",
+      "$description": "A faint, translucent danger tint, so a full-width callout stays quiet on any surface."
+    },
+    "danger-border": {
+      "$type": "color",
+      "$value": "color-mix(in srgb, {color.danger} 24%, transparent)",
+      "$description": "A translucent danger hairline around the callout."
+    }
+  }
+}

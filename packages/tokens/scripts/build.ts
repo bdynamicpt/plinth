@@ -7,7 +7,8 @@
  * - tailwind-theme.css  the semantic tokens as Tailwind v4 theme variables
  *
  * Tiers: primitives (tokens/primitives.json, named --plinth-ref-*), semantic (semantic.json and
- * semantic.<theme>.json) and component (component.json). See docs/adr/0001.
+ * semantic.<theme>.json) and component (component.json and component.<theme>.json). See
+ * docs/adr/0001.
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { basename } from 'node:path';
@@ -49,14 +50,20 @@ const tierOf: Record<string, Tier> = {
   'semantic.light.json': 'semantic',
   'semantic.dark.json': 'semantic',
   'component.json': 'component',
+  'component.light.json': 'component',
+  'component.dark.json': 'component',
 };
 const banner = '/* Built from packages/tokens/tokens/*.json. Do not edit by hand. */';
 
 async function load(theme: Theme): Promise<TransformedToken[]> {
   const sd = new StyleDictionary({
-    source: ['primitives.json', 'semantic.json', `semantic.${theme}.json`, 'component.json'].map(
-      source,
-    ),
+    source: [
+      'primitives.json',
+      'semantic.json',
+      `semantic.${theme}.json`,
+      'component.json',
+      `component.${theme}.json`,
+    ].map(source),
     usesDtcg: true,
     log: { verbosity: 'silent', warnings: 'disabled' },
     platforms: {
@@ -69,13 +76,19 @@ async function load(theme: Theme): Promise<TransformedToken[]> {
   const { allTokens, tokens } = await sd.getPlatformTokens('css');
 
   // A token that is only a reference becomes var(--that-token), so overriding the referenced
-  // token flows through; anything else is written as its value.
+  // token flows through, and so does each reference inside a value such as a color-mix();
+  // anything else is written as its value.
   for (const token of allTokens) {
     const original = token.original.$value;
     if (typeof original === 'string' && /^\{[^}]+\}$/.test(original)) {
       const [target] = getReferences(original, tokens, { usesDtcg: true });
       token.css = `var(--${target!.name})`;
       token.ref = original.slice(1, -1);
+    } else if (typeof original === 'string' && /\{[^}]+\}/.test(original)) {
+      token.css = original.replace(/\{[^}]+\}/g, (reference) => {
+        const [target] = getReferences(reference, tokens, { usesDtcg: true });
+        return `var(--${target!.name})`;
+      });
     } else {
       token.css = String(token.$value);
     }
@@ -84,7 +97,8 @@ async function load(theme: Theme): Promise<TransformedToken[]> {
 }
 
 function toToken(light: TransformedToken, dark?: TransformedToken): Token {
-  const themed = dark !== undefined && basename(light.filePath).startsWith('semantic.light');
+  const themed =
+    dark !== undefined && /^(semantic|component)\.light\./.test(basename(light.filePath));
   return {
     path: light.path,
     name: `--${light.name}`,
