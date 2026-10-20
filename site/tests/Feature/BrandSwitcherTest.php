@@ -35,6 +35,8 @@ it('writes the CSS a project would add, and the same declarations as the preview
           --plinth-color-accent-active: light-dark(oklch(0.42 0.08 185), oklch(0.86 0.08 180));
           --plinth-color-accent-text: light-dark(oklch(0.45 0.09 185), oklch(0.82 0.1 180));
           --plinth-color-accent-subtle: light-dark(oklch(0.95 0.03 185), oklch(0.3 0.05 185));
+          --plinth-color-accent-subtle-hover: light-dark(oklch(0.92 0.04 185), oklch(0.35 0.06 185));
+          --plinth-color-accent-subtle-active: light-dark(oklch(0.89 0.05 185), oklch(0.39 0.07 185));
           --plinth-color-on-accent: light-dark(oklch(0.99 0 0), oklch(0.2 0.03 185));
           --plinth-color-focus-ring: light-dark(oklch(0.52 0.1 185), oklch(0.82 0.1 180));
           --plinth-radius-control: 0.125rem;

@@ -115,6 +115,8 @@
     border-radius: var(--plinth-radius-control);
     transition:
       background-color var(--plinth-duration-fast) var(--plinth-easing-standard),
+      border-color var(--plinth-duration-fast) var(--plinth-easing-standard),
+      box-shadow var(--plinth-duration-fast) var(--plinth-easing-standard),
       color var(--plinth-duration-fast) var(--plinth-easing-standard);
   }
 
@@ -141,15 +143,20 @@
       var(--plinth-color-accent);
   }
 
-  /* A pressed button can be pressed again, so it answers hover and press with a step on the tint. */
-  @media (hover: hover) {
+  /*
+   * A pressed button can be pressed again, so it answers hover and press with a step on the tint.
+   * Not in forced colours, where the tint would replace the system highlight under the label.
+   */
+  @media (hover: hover) and (forced-colors: none) {
     button.plinth-section-menu-item:enabled[aria-pressed='true']:hover {
       background-color: var(--plinth-color-accent-subtle-hover);
     }
   }
 
-  button.plinth-section-menu-item:enabled[aria-pressed='true']:active {
-    background-color: var(--plinth-color-accent-subtle-active);
+  @media (forced-colors: none) {
+    button.plinth-section-menu-item:enabled[aria-pressed='true']:active {
+      background-color: var(--plinth-color-accent-subtle-active);
+    }
   }
 
   .plinth-section-menu-item:disabled,
@@ -161,6 +168,11 @@
   .plinth-section-menu-item:focus-visible {
     outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
     outline-offset: var(--plinth-focus-ring-offset);
+  }
+
+  /* A gap between the ring and the accent edge, so focus and selection read apart. */
+  .plinth-section-menu-item:is([aria-pressed='true'], [aria-current='page']):focus-visible {
+    outline-offset: var(--plinth-focus-ring-offset-filled);
   }
 
   .plinth-section-menu-count {

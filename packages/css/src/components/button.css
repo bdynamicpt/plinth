@@ -83,7 +83,8 @@
     box-shadow: var(--plinth-button-inner-edge);
     transition:
       background-color var(--plinth-duration-fast) var(--plinth-easing-standard),
-      border-color var(--plinth-duration-fast) var(--plinth-easing-standard);
+      border-color var(--plinth-duration-fast) var(--plinth-easing-standard),
+      box-shadow var(--plinth-duration-fast) var(--plinth-easing-standard);
   }
 
   /* The brand's colour, for marketing and brand moments (Upgrade plan): at most one per screen. */
@@ -214,6 +215,11 @@
     --plinth-button-inner-edge: inset 0 0 0
       calc(var(--plinth-border-width-thick) - var(--plinth-border-width-thin))
       var(--plinth-color-accent);
+  }
+
+  /* A gap between the ring and the pressed accent edge, so focus and pressed read apart. */
+  .plinth-icon-button[aria-pressed='true']:focus-visible {
+    outline-offset: var(--plinth-focus-ring-offset-filled);
   }
 
   .plinth-button-label {
