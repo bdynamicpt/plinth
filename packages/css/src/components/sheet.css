@@ -31,17 +31,21 @@
  *
  * Side (data-side), at every width: end (default, also when missing or unknown) and start are
  * full-height panels on the inline-end and inline-start edges, sheet.side-width wide and at
- * most the screen's width less a gap, so the page shows beside them; top and bottom are the screen's width on the
- * top and bottom edges, as tall as their content up to the screen's height less a gap. The sides
- * are logical: in right-to-left text end is the left edge and start the right.
+ * most the screen's width less a gap, so the page shows beside them; top and bottom are the
+ * screen's width on the top and bottom edges, as tall as their content up to the screen's height
+ * less a gap that also clears the safe area at the other edge. The sides are logical: in
+ * right-to-left text end is the left edge and start the right.
  *
  * Side on a phone (data-side-phone, optional): the side below 768px, one of the same four; from
  * 768px up data-side holds. data-side="end" data-side-phone="bottom" is a side panel on a tablet
- * or desktop and a bottom sheet on a phone. Leave it out to keep data-side at every width.
+ * or desktop and a bottom sheet on a phone. Leave it out to keep data-side at every width. It
+ * takes only those four values: any other makes the phone's side end (the layers never print
+ * one, and leave the attribute out instead).
  *
  * The edge the sheet sits on has no border or radius; the edge facing the page has a hairline
- * (in forced colours too), and a top or bottom sheet rounds the corners facing the page. Each side clears the safe areas
- * it touches (the notch, the status bar and the home indicator, with viewport-fit=cover).
+ * (in forced colours too), and a top or bottom sheet rounds the corners facing the page. Each
+ * side clears the safe areas it touches (the notch, the status bar and the home indicator, with
+ * viewport-fit=cover).
  *
  * The description is a secondary line, at the size of a list row's description.
  *
@@ -91,7 +95,6 @@
 
   .plinth-sheet:where([data-side='start']:not([data-side-phone]), [data-side-phone='start']) {
     --plinth-modal-offset: calc(-100% * var(--plinth-sheet-direction)) 0;
-    --plinth-modal-safe-area-end: env(safe-area-inset-bottom);
 
     inset-block: 0;
     inset-inline: 0 auto;
@@ -111,7 +114,9 @@
     inset-block: 0 auto;
     inset-inline: 0;
     inline-size: 100%;
-    max-block-size: calc(100dvh - var(--plinth-space-12));
+    max-block-size: calc(
+      100dvh - max(var(--plinth-space-12), env(safe-area-inset-bottom) + var(--plinth-space-4))
+    );
     padding-block: env(safe-area-inset-top) 0;
     padding-inline: var(--plinth-sheet-safe-area-inline-start)
       var(--plinth-sheet-safe-area-inline-end);
@@ -124,12 +129,13 @@
 
   .plinth-sheet:where([data-side='bottom']:not([data-side-phone]), [data-side-phone='bottom']) {
     --plinth-modal-offset: 0 100%;
-    --plinth-modal-safe-area-end: env(safe-area-inset-bottom);
 
     inset-block: auto 0;
     inset-inline: 0;
     inline-size: 100%;
-    max-block-size: calc(100dvh - var(--plinth-space-12));
+    max-block-size: calc(
+      100dvh - max(var(--plinth-space-12), env(safe-area-inset-top) + var(--plinth-space-4))
+    );
     padding-block: 0;
     padding-inline: var(--plinth-sheet-safe-area-inline-start)
       var(--plinth-sheet-safe-area-inline-end);
@@ -179,7 +185,9 @@
       inset-block: 0 auto;
       inset-inline: 0;
       inline-size: 100%;
-      max-block-size: calc(100dvh - var(--plinth-space-12));
+      max-block-size: calc(
+        100dvh - max(var(--plinth-space-12), env(safe-area-inset-bottom) + var(--plinth-space-4))
+      );
       padding-inline: var(--plinth-sheet-safe-area-inline-start)
         var(--plinth-sheet-safe-area-inline-end);
       border-block-end-width: var(--plinth-border-width-thin);
@@ -194,7 +202,9 @@
       inset-block: auto 0;
       inset-inline: 0;
       inline-size: 100%;
-      max-block-size: calc(100dvh - var(--plinth-space-12));
+      max-block-size: calc(
+        100dvh - max(var(--plinth-space-12), env(safe-area-inset-top) + var(--plinth-space-4))
+      );
       padding-block: 0;
       padding-inline: var(--plinth-sheet-safe-area-inline-start)
         var(--plinth-sheet-safe-area-inline-end);

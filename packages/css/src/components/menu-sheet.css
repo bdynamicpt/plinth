@@ -29,8 +29,8 @@
  *   </div>
  * </dialog>
  *
- * It is a sheet (sheet.css), always data-side="end" data-side-phone="bottom", with no footer; everything the sheet's
- * contract says holds, and it needs modal.css, sheet.css, list-row.css, list-card.css, avatar.css,
+ * It is a sheet (sheet.css), always data-side="end" data-side-phone="bottom", with no footer;
+ * everything the sheet's contract says holds, and it needs modal.css, sheet.css, list-row.css, list-card.css, avatar.css,
  * button.css and icon.css. The root's id is required in practice: the header's menu button opens
  * it with <button commandfor="menu" command="show-modal">, the close button points at it too, and
  * the dialog and the nav are named by the title, whose id is the root's id with -title.

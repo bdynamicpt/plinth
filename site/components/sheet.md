@@ -47,12 +47,12 @@ opens the sheet. Set the close button's name with **`close-label`** in the page'
 
 **`side`** sets the edge the sheet comes from, at every width.
 
-| Value           | The sheet                                                                         |
-| --------------- | --------------------------------------------------------------------------------- |
-| `end` (default) | a full-height panel on the end edge, `--plinth-sheet-side-width` wide             |
-| `start`         | a full-height panel on the start edge, `--plinth-sheet-side-width` wide           |
-| `top`           | the screen's width on the top edge, as tall as its content, short of the bottom   |
-| `bottom`        | the screen's width on the bottom edge, as tall as its content, clearing the notch |
+| Value           | The sheet                                                                                  |
+| --------------- | ------------------------------------------------------------------------------------------ |
+| `end` (default) | a full-height panel on the end edge, `--plinth-sheet-side-width` wide                      |
+| `start`         | a full-height panel on the start edge, `--plinth-sheet-side-width` wide                    |
+| `top`           | the screen's width on the top edge, as tall as its content, short of the bottom            |
+| `bottom`        | the screen's width on the bottom edge, as tall as its content, clearing the home indicator |
 
 The sides are logical: in left-to-right text the end edge is the right and the start edge the left,
 and in right-to-left text they swap. A side panel is never wider than the screen less a gap, so the
@@ -74,7 +74,8 @@ as `data-side` on the root.
 **`side-phone`** (optional) sets the edge below 768px, one of the same four. From 768px up `side`
 holds. `side="end" side-phone="bottom"` is a side panel on a tablet or a desktop and a bottom sheet
 on a phone, which is where a thumb reaches; the [menu sheet](menu-sheet.md) is a sheet like that.
-Leave it out to keep `side` at every width. An unknown value prints nothing, so `side` holds.
+Leave it out to keep `side` at every width. Every layer leaves out an unknown value, so `side`
+holds; in plain HTML, `data-side-phone` takes only the four sides.
 
 CSS makes the switch from `data-side-phone` on the root, so it is the same in every layer and
 needs no script.

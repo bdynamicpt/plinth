@@ -148,6 +148,26 @@ export const BottomStartOnPhone: Story = {
   },
 };
 
+/** On the start edge from 768px up, on the end edge on a phone. */
+export const StartEndOnPhone: Story = {
+  args: {
+    id: 'filters-start-end',
+    side: 'start',
+    sidePhone: 'end',
+    footer: footer('filters-start-end'),
+  },
+};
+
+/** On the bottom edge from 768px up, on the top edge on a phone. */
+export const BottomTopOnPhone: Story = {
+  args: {
+    id: 'filters-bottom-top',
+    side: 'bottom',
+    sidePhone: 'top',
+    footer: footer('filters-bottom-top'),
+  },
+};
+
 export const WithDescription: Story = {
   args: {
     id: 'filters-described',
@@ -240,6 +260,19 @@ export const RightToLeftStart: Story = {
       id: 'filters-rtl-start',
       side: 'start' as const,
       footer: footer('filters-rtl-start'),
+    };
+    return `<div dir="rtl">${opener(rtl)}${sheet(rtl)}</div>`;
+  },
+};
+
+/** Right-to-left text, on the end edge from 768px up and the start edge on a phone: the right. */
+export const RightToLeftStartOnPhone: Story = {
+  render: (args) => {
+    const rtl = {
+      ...args,
+      id: 'filters-rtl-phone',
+      sidePhone: 'start' as const,
+      footer: footer('filters-rtl-phone'),
     };
     return `<div dir="rtl">${opener(rtl)}${sheet(rtl)}</div>`;
   },

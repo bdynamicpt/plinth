@@ -1432,6 +1432,8 @@ describe('parity with the stories', () => {
       'Sheet/StartBottomOnPhone',
       'Sheet/TopBottomOnPhone',
       'Sheet/BottomStartOnPhone',
+      'Sheet/StartEndOnPhone',
+      'Sheet/BottomTopOnPhone',
       'Sheet/WithDescription',
       'Sheet/WithoutFooter',
       'Sheet/LongContent',
