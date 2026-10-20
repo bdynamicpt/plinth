@@ -207,6 +207,7 @@
     --plinth-data-table-row-height: var(--plinth-size-row);
     --plinth-list-row-height: var(--plinth-size-row);
     --plinth-pill-height: var(--plinth-control-md);
+    --plinth-dialog-width: var(--plinth-size-dialog);
     --plinth-sheet-width: var(--plinth-size-dialog);
     --plinth-sheet-side-width: var(--plinth-size-panel);
     --plinth-section-menu-height: var(--plinth-space-14);
@@ -1743,6 +1744,102 @@
   }
 }
 
+/* dialog.css */
+/*
+ * Dialog: a modal for a form, the details of something or its settings, centred on the screen at
+ * every width; with data-side-phone="bottom" it is a bottom sheet below 768px.
+ *
+ * <dialog id="settings" class="plinth-dialog" closedby="any"
+ *   aria-labelledby="settings-title" aria-describedby="settings-description">
+ *   <div class="plinth-dialog-header">
+ *     <h2 id="settings-title" class="plinth-dialog-title">Settings</h2>
+ *     <p id="settings-description" class="plinth-dialog-description">Changes apply at once.</p>
+ *     <button type="button" class="plinth-button plinth-icon-button plinth-dialog-close"
+ *       data-variant="ghost" data-size="md" aria-label="Close" commandfor="settings"
+ *       command="close">
+ *       <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
+ *     </button>
+ *   </div>
+ *   <div class="plinth-dialog-body">…</div>
+ *   <div class="plinth-dialog-footer">…</div>
+ * </dialog>
+ *
+ * The root is the <dialog>, and it needs an id: commandfor and aria-labelledby point at it, and
+ * the title's and description's ids are the root's id with -title and -description. The title is
+ * required; the description (and its aria-describedby) and the footer are optional. The close
+ * button is an icon button (button.css and icon.css). It needs modal.css, the base it shares with
+ * the sheet: the surface, the backdrop, the scroll lock, the motion, the safe areas and the parts
+ * are there, and this file sets only where the dialog sits and how big it is.
+ *
+ * Open it with showModal() or a <button commandfor="settings" command="show-modal">. Open is the
+ * native state, [open]; the browser puts the dialog in the top layer, makes the page inert, traps
+ * focus, and returns focus to what opened it. The dialog fires close when it closes.
+ *
+ * Dismissible (the default): closedby="any" and the close button; the close button, Escape and a
+ * tap on the backdrop close it (closedby="any" is an enhancement Safari doesn't have yet, so the
+ * close button is always there). Not dismissible, for a choice the person must make:
+ * role="alertdialog", closedby="closerequest" and no close button, so a stray tap on the backdrop
+ * does nothing and it closes through its own buttons, with Escape acting as Cancel (the browser
+ * fires cancel, then close, with an empty returnValue). Give it a description: an alert dialog's
+ * message is its accessible description. A project may set its own closedby.
+ *
+ * Presentation: centred at every width, dialog.width wide (less the screen's margin on a phone),
+ * its height capped by the screen's, fading and rising into place. data-side-phone="bottom" (the
+ * only value; leave it out for centred) makes it a bottom sheet below 768px: the screen's width,
+ * on the bottom edge, sliding up, its last part clearing the home indicator; from 768px up it is
+ * centred like any dialog.
+ *
+ * On a phone the dialog's height is capped by 100dvh, which doesn't, on its own, clear the
+ * on-screen keyboard: a page with a form in a dialog sets interactive-widget=resizes-content in
+ * its viewport meta where the browser supports it, as for the sheet.
+ *
+ * In Livewire, a re-render would morph the open dialog back to the server's markup and drop its
+ * open attribute: put wire:ignore.self on the dialog (or keep it outside the component that
+ * re-renders), and always pass an id, since a generated one changes on every render.
+ */
+
+@layer plinth {
+  .plinth-dialog {
+    --plinth-modal-offset: 0 var(--plinth-space-4);
+    --plinth-modal-closed-opacity: 0;
+
+    inset: 0;
+    inline-size: min(100% - 2 * var(--plinth-space-4), var(--plinth-dialog-width));
+    max-block-size: calc(100dvh - 2 * var(--plinth-space-4));
+    margin: auto;
+  }
+
+  .plinth-dialog[data-side-phone='bottom'] {
+    --plinth-modal-offset: 0 100%;
+    --plinth-modal-closed-opacity: 1;
+    --plinth-modal-safe-area-end: env(safe-area-inset-bottom);
+
+    inset-block: auto 0;
+    inline-size: 100%;
+    max-block-size: calc(100dvh - var(--plinth-space-12));
+    margin: 0;
+    border-block-end-width: 0;
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+  }
+
+  @media (min-width: 768px) {
+    .plinth-dialog,
+    .plinth-dialog[data-side-phone='bottom'] {
+      --plinth-modal-offset: 0 var(--plinth-space-4);
+      --plinth-modal-closed-opacity: 0;
+      --plinth-modal-safe-area-end: initial;
+
+      inset: 0;
+      inline-size: min(100% - 2 * var(--plinth-space-8), var(--plinth-dialog-width));
+      max-block-size: calc(100dvh - 2 * var(--plinth-space-8));
+      margin: auto;
+      border-block-end-width: var(--plinth-border-width-thin);
+      border-radius: var(--plinth-radius-container);
+    }
+  }
+}
+
 /* header.css */
 /*
  * Header: the top bar of the phone shell, with a leading action, the page's title and trailing
@@ -2185,7 +2282,7 @@
  * </dialog>
  *
  * It is a sheet (sheet.css), always data-placement="end", with no footer; everything the sheet's
- * contract says holds, and it needs sheet.css, list-row.css, list-card.css, avatar.css,
+ * contract says holds, and it needs modal.css, sheet.css, list-row.css, list-card.css, avatar.css,
  * button.css and icon.css. The root's id is required in practice: the header's menu button opens
  * it with <button commandfor="menu" command="show-modal">, the close button points at it too, and
  * the dialog and the nav are named by the title, whose id is the root's id with -title.
@@ -2232,6 +2329,202 @@
   /* A link to the profile rounds its hover tint like the list cards' corners below it. */
   a.plinth-menu-sheet-user {
     border-radius: var(--plinth-radius-container);
+  }
+}
+
+/* modal.css */
+/*
+ * Modal base: what the dialog (dialog.css) and the sheet (sheet.css) share, written once so they
+ * can't drift apart (docs/adr/0005): the root's surface and motion, the backdrop, the scroll lock,
+ * the safe areas, and the header, title, description, close button, body and footer. It has no
+ * markup of its own and no class: each component keeps its own root and part classes
+ * (plinth-dialog, plinth-dialog-header, …; plinth-sheet, plinth-sheet-header, …), listed here in
+ * :is(). A page that loads the components one by one loads modal.css with them.
+ *
+ * The rules sit in a layer inside plinth (plinth.modal), so a component's own rules win over them
+ * whatever the order the files load in, and a project's utilities win over both.
+ *
+ * Each component sets where its root sits and how big it is, and tunes the motion and the safe
+ * area through three custom properties on the root; it never sets translate or opacity itself:
+ * - --plinth-modal-offset: where the root slides in from and back out to (a translate value;
+ *   0 0, the default, is no slide);
+ * - --plinth-modal-closed-opacity: its opacity while it opens and closes (0 fades it, 1, the
+ *   default, doesn't);
+ * - --plinth-modal-safe-area-end: env(safe-area-inset-bottom) when the root reaches the bottom
+ *   edge of the screen, so its last part clears the home indicator; initial (the default) when
+ *   it doesn't.
+ *
+ * The motion runs on the motion tokens, which drop to 0ms under prefers-reduced-motion. While a
+ * modal is open the page under it doesn't scroll (html:has(…:modal)), and scrollbar-gutter:
+ * stable keeps it from shifting. The body scrolls, with overscroll-behavior: contain; the header
+ * and footer stay put; the margins of the body's first and last child are reset, so its padding is
+ * its edge. On a phone the footer's actions share its width; from 768px up they sit at its end.
+ */
+
+@layer plinth {
+  @layer modal {
+    html:has(:is(.plinth-dialog, .plinth-sheet)) {
+      scrollbar-gutter: stable;
+    }
+
+    html:has(:is(.plinth-dialog, .plinth-sheet):modal) {
+      overflow: hidden;
+    }
+
+    :is(.plinth-dialog, .plinth-sheet) {
+      --plinth-modal-offset: 0 0;
+      --plinth-modal-closed-opacity: 1;
+      --plinth-modal-safe-area-end: initial;
+
+      position: fixed;
+      box-sizing: border-box;
+      flex-direction: column;
+      max-inline-size: 100%;
+      padding: 0;
+      overflow: hidden;
+      font-family: var(--plinth-font-family-body);
+      color: var(--plinth-color-text);
+      background-color: var(--plinth-color-surface-raised);
+      border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+      border-radius: var(--plinth-radius-container);
+      box-shadow: var(--plinth-elevation-3);
+      opacity: var(--plinth-modal-closed-opacity);
+      translate: var(--plinth-modal-offset);
+      transition:
+        translate var(--plinth-duration-normal) var(--plinth-easing-exit),
+        opacity var(--plinth-duration-normal) var(--plinth-easing-exit),
+        overlay var(--plinth-duration-normal) allow-discrete,
+        display var(--plinth-duration-normal) allow-discrete;
+    }
+
+    :is(.plinth-dialog, .plinth-sheet)[open] {
+      display: flex;
+      opacity: 1;
+      translate: 0 0;
+      transition-timing-function: var(--plinth-easing-enter);
+    }
+
+    @starting-style {
+      :is(.plinth-dialog, .plinth-sheet)[open] {
+        opacity: var(--plinth-modal-closed-opacity);
+        translate: var(--plinth-modal-offset);
+      }
+    }
+
+    :is(.plinth-dialog, .plinth-sheet)::backdrop {
+      background-color: var(--plinth-color-overlay);
+      opacity: 0;
+      transition:
+        opacity var(--plinth-duration-normal) var(--plinth-easing-standard),
+        overlay var(--plinth-duration-normal) allow-discrete,
+        display var(--plinth-duration-normal) allow-discrete;
+    }
+
+    :is(.plinth-dialog, .plinth-sheet)[open]::backdrop {
+      opacity: 1;
+    }
+
+    @starting-style {
+      :is(.plinth-dialog, .plinth-sheet)[open]::backdrop {
+        opacity: 0;
+      }
+    }
+
+    :is(.plinth-dialog-header, .plinth-sheet-header) {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--plinth-space-1) var(--plinth-space-3);
+      align-items: center;
+      padding-block: var(--plinth-space-3);
+      padding-inline: var(--plinth-space-4) var(--plinth-space-3);
+      border-block-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+    }
+
+    /* With no close button, the header's padding is even. */
+    :is(.plinth-dialog-header, .plinth-sheet-header):not(
+      :has(> :is(.plinth-dialog-close, .plinth-sheet-close))
+    ) {
+      padding-inline-end: var(--plinth-space-4);
+    }
+
+    :is(.plinth-dialog-title, .plinth-sheet-title) {
+      grid-column: 1;
+      margin: 0;
+      font-size: var(--plinth-font-size-lg);
+      font-weight: var(--plinth-font-weight-semibold);
+      line-height: var(--plinth-font-leading-tight);
+      letter-spacing: var(--plinth-font-tracking-tight);
+      overflow-wrap: anywhere;
+    }
+
+    :is(.plinth-dialog-description, .plinth-sheet-description) {
+      grid-column: 1;
+      margin: 0;
+      font-size: var(--plinth-font-size-sm);
+      line-height: var(--plinth-font-leading-normal);
+      color: var(--plinth-color-text-muted);
+      overflow-wrap: anywhere;
+    }
+
+    :is(.plinth-dialog-close, .plinth-sheet-close) {
+      grid-row: 1;
+      grid-column: 2;
+    }
+
+    :is(.plinth-dialog-body, .plinth-sheet-body) {
+      flex: 1 1 auto;
+      min-block-size: 0;
+      padding: var(--plinth-space-4);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      font-size: var(--plinth-font-size-md);
+      line-height: var(--plinth-font-leading-normal);
+    }
+
+    /* The body's padding is its edge: the first and last child's margins don't add to it. */
+    :is(.plinth-dialog-body, .plinth-sheet-body) > :first-child {
+      margin-block-start: 0;
+    }
+
+    :is(.plinth-dialog-body, .plinth-sheet-body) > :last-child {
+      margin-block-end: 0;
+    }
+
+    /* A browser can focus a scrolling area that has nothing focusable in it. */
+    :is(.plinth-dialog-body, .plinth-sheet-body):focus-visible {
+      outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+      outline-offset: var(--plinth-focus-ring-offset-inset);
+    }
+
+    /* The last part clears the home indicator when the root reaches the bottom edge. */
+    :is(.plinth-dialog-body, .plinth-sheet-body):last-child {
+      padding-block-end: max(
+        var(--plinth-space-4),
+        var(--plinth-modal-safe-area-end, var(--plinth-space-4))
+      );
+    }
+
+    :is(.plinth-dialog-footer, .plinth-sheet-footer) {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--plinth-space-2);
+      justify-content: flex-end;
+      padding-block: var(--plinth-space-3)
+        max(var(--plinth-space-3), var(--plinth-modal-safe-area-end, var(--plinth-space-3)));
+      padding-inline: var(--plinth-space-4);
+      border-block-start: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+    }
+
+    /* On a phone the footer's actions share its width. */
+    :is(.plinth-dialog-footer, .plinth-sheet-footer) > * {
+      flex: 1 1 0;
+    }
+
+    @media (min-width: 768px) {
+      :is(.plinth-dialog-footer, .plinth-sheet-footer) > * {
+        flex: none;
+      }
+    }
   }
 }
 
@@ -2643,11 +2936,11 @@
  *
  * The description is a secondary line, at the size of a list row's description.
  *
- * The body scrolls, with overscroll-behavior: contain; the header and footer stay put; the
- * margins of its first and last child are reset, so its padding is its edge. While a
- * sheet is open the page under it doesn't scroll (html:has(.plinth-sheet:modal)), and
- * scrollbar-gutter: stable keeps it from shifting. The sheet slides (and the centred one fades)
- * in and out on the motion tokens, which drop to 0ms under prefers-reduced-motion.
+ * The surface, the backdrop, the scroll lock, the motion, the safe areas and the parts come from
+ * the modal base (modal.css), which the dialog shares; load it with this file. The body scrolls,
+ * the header and footer stay put, and the page under an open sheet doesn't scroll. The sheet
+ * slides (and the centred one fades) in and out on the motion tokens, which drop to 0ms under
+ * prefers-reduced-motion. This file sets only where the sheet sits and how big it is.
  *
  * On a phone the sheet sits on the bottom edge and its height is capped by 100dvh, which clears
  * the home indicator (env(safe-area-inset-bottom)) but not, on its own, the on-screen keyboard:
@@ -2661,157 +2954,25 @@
  */
 
 @layer plinth {
-  html:has(.plinth-sheet) {
-    scrollbar-gutter: stable;
-  }
-
-  html:has(.plinth-sheet:modal) {
-    overflow: hidden;
-  }
-
   .plinth-sheet {
-    --plinth-sheet-offset: 0 100%;
+    --plinth-modal-offset: 0 100%;
+    --plinth-modal-safe-area-end: env(safe-area-inset-bottom);
 
-    position: fixed;
     inset-block: auto 0;
     inset-inline: 0;
-    box-sizing: border-box;
-    flex-direction: column;
     inline-size: 100%;
-    max-inline-size: 100%;
     max-block-size: calc(100dvh - var(--plinth-space-12));
-    padding: 0;
     margin: 0;
-    overflow: hidden;
-    font-family: var(--plinth-font-family-body);
-    color: var(--plinth-color-text);
-    background-color: var(--plinth-color-surface-raised);
-    border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
     border-block-end-width: 0;
-    border-start-start-radius: var(--plinth-radius-container);
-    border-start-end-radius: var(--plinth-radius-container);
-    box-shadow: var(--plinth-elevation-3);
-    translate: var(--plinth-sheet-offset);
-    transition:
-      translate var(--plinth-duration-normal) var(--plinth-easing-exit),
-      opacity var(--plinth-duration-normal) var(--plinth-easing-exit),
-      overlay var(--plinth-duration-normal) allow-discrete,
-      display var(--plinth-duration-normal) allow-discrete;
-  }
-
-  .plinth-sheet[open] {
-    display: flex;
-    translate: 0 0;
-    transition-timing-function: var(--plinth-easing-enter);
-  }
-
-  @starting-style {
-    .plinth-sheet[open] {
-      translate: var(--plinth-sheet-offset);
-    }
-  }
-
-  .plinth-sheet::backdrop {
-    background-color: var(--plinth-color-overlay);
-    opacity: 0;
-    transition:
-      opacity var(--plinth-duration-normal) var(--plinth-easing-standard),
-      overlay var(--plinth-duration-normal) allow-discrete,
-      display var(--plinth-duration-normal) allow-discrete;
-  }
-
-  .plinth-sheet[open]::backdrop {
-    opacity: 1;
-  }
-
-  @starting-style {
-    .plinth-sheet[open]::backdrop {
-      opacity: 0;
-    }
-  }
-
-  .plinth-sheet-header {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: var(--plinth-space-1) var(--plinth-space-3);
-    align-items: center;
-    padding-block: var(--plinth-space-3);
-    padding-inline: var(--plinth-space-4) var(--plinth-space-3);
-    border-block-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
-  }
-
-  .plinth-sheet-title {
-    grid-column: 1;
-    margin: 0;
-    font-size: var(--plinth-font-size-lg);
-    font-weight: var(--plinth-font-weight-semibold);
-    line-height: var(--plinth-font-leading-tight);
-    letter-spacing: var(--plinth-font-tracking-tight);
-    overflow-wrap: anywhere;
-  }
-
-  .plinth-sheet-description {
-    grid-column: 1;
-    margin: 0;
-    font-size: var(--plinth-font-size-sm);
-    line-height: var(--plinth-font-leading-normal);
-    color: var(--plinth-color-text-muted);
-    overflow-wrap: anywhere;
-  }
-
-  .plinth-sheet-close {
-    grid-row: 1;
-    grid-column: 2;
-  }
-
-  .plinth-sheet-body {
-    flex: 1 1 auto;
-    min-block-size: 0;
-    padding: var(--plinth-space-4);
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    font-size: var(--plinth-font-size-md);
-    line-height: var(--plinth-font-leading-normal);
-  }
-
-  /* The body's padding is its edge: the first and last child's margins don't add to it. */
-  .plinth-sheet-body > :first-child {
-    margin-block-start: 0;
-  }
-
-  .plinth-sheet-body > :last-child {
-    margin-block-end: 0;
-  }
-
-  /* A browser can focus a scrolling area that has nothing focusable in it. */
-  .plinth-sheet-body:focus-visible {
-    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
-    outline-offset: var(--plinth-focus-ring-offset-inset);
-  }
-
-  .plinth-sheet-footer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--plinth-space-2);
-    justify-content: flex-end;
-    padding-block: var(--plinth-space-3) max(var(--plinth-space-3), env(safe-area-inset-bottom));
-    padding-inline: var(--plinth-space-4);
-    border-block-start: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
-  }
-
-  /* On a phone the footer's actions share its width. */
-  .plinth-sheet-footer > * {
-    flex: 1 1 0;
-  }
-
-  /* On a phone the last part clears the home indicator (the footer does it too). */
-  .plinth-sheet-body:last-child {
-    padding-block-end: max(var(--plinth-space-4), env(safe-area-inset-bottom));
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
   }
 
   @media (min-width: 768px) {
     .plinth-sheet {
-      --plinth-sheet-offset: 0 var(--plinth-space-4);
+      --plinth-modal-offset: 0 var(--plinth-space-4);
+      --plinth-modal-closed-opacity: 0;
+      --plinth-modal-safe-area-end: initial;
 
       inset: 0;
       inline-size: min(100% - 2 * var(--plinth-space-8), var(--plinth-sheet-width));
@@ -2819,21 +2980,14 @@
       margin: auto;
       border-block-end-width: var(--plinth-border-width-thin);
       border-radius: var(--plinth-radius-container);
-      opacity: 0;
-    }
-
-    .plinth-sheet[open] {
-      opacity: 1;
-    }
-
-    @starting-style {
-      .plinth-sheet[open] {
-        opacity: 0;
-      }
     }
 
     .plinth-sheet[data-placement='end'] {
-      --plinth-sheet-offset: 100% 0;
+      --plinth-modal-offset: 100% 0;
+      --plinth-modal-closed-opacity: 1;
+
+      /* The full-height panel still reaches the bottom edge. */
+      --plinth-modal-safe-area-end: env(safe-area-inset-bottom);
 
       inset-block: 0;
       inset-inline: auto 0;
@@ -2847,26 +3001,12 @@
       border-width: 0;
       border-inline-start-width: var(--plinth-border-width-thin);
       border-radius: 0;
-      opacity: 1;
     }
 
     .plinth-sheet[data-placement='end']:dir(rtl) {
-      --plinth-sheet-offset: -100% 0;
+      --plinth-modal-offset: -100% 0;
 
       padding-inline-end: env(safe-area-inset-left);
-    }
-
-    .plinth-sheet-footer > * {
-      flex: none;
-    }
-
-    /* Only a full-height panel still reaches the bottom edge and keeps the safe-area padding. */
-    .plinth-sheet:not([data-placement='end']) > .plinth-sheet-body:last-child {
-      padding-block-end: var(--plinth-space-4);
-    }
-
-    .plinth-sheet:not([data-placement='end']) > .plinth-sheet-footer {
-      padding-block-end: var(--plinth-space-3);
     }
   }
 

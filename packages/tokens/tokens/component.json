@@ -27,6 +27,13 @@
       "$description": "A pill's height; on a touch screen it keeps a 40px hit area."
     }
   },
+  "dialog": {
+    "width": {
+      "$type": "dimension",
+      "$value": "{size.dialog}",
+      "$description": "A dialog's width; on a phone it is the screen's width less a margin, or the screen's as a bottom sheet."
+    }
+  },
   "sheet": {
     "width": {
       "$type": "dimension",

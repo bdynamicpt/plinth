@@ -12,6 +12,7 @@ import '@bdynamic/plinth-css/src/components/button.css';
 import '@bdynamic/plinth-css/src/components/badge.css';
 import '@bdynamic/plinth-css/src/components/list-row.css';
 import '@bdynamic/plinth-css/src/components/list-card.css';
+import '@bdynamic/plinth-css/src/components/modal.css';
 import '@bdynamic/plinth-css/src/components/sheet.css';
 
 const action = (label: string, variant: 'primary' | 'secondary' | 'danger', extra = {}) =>

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import * as vueAvatar from '../../vue/src/avatar.ts';
 import * as vueCallout from '../../vue/src/callout.ts';
 import * as vueDataTable from '../../vue/src/data-table.ts';
+import * as vueDialog from '../../vue/src/dialog.ts';
 import * as vueHeading from '../../vue/src/heading.ts';
 import * as vueListRow from '../../vue/src/list-row.ts';
 import * as vueSheet from '../../vue/src/sheet.ts';
@@ -26,6 +27,9 @@ import {
   dataTableSort,
   dataTableSortIcon,
   dataTableSorts,
+  dialogCloseIcon,
+  dialogSidePhone,
+  dialogSidePhones,
   headingLevel,
   headingLevels,
   iconSizeFor,
@@ -58,6 +62,8 @@ describe('the shared lists', () => {
     expect(listRowChevron).toBe(vueListRow.listRowChevron);
     expect(sheetPlacements).toEqual(vueSheet.sheetPlacements);
     expect(sheetCloseIcon).toBe(vueSheet.sheetCloseIcon);
+    expect(dialogSidePhones).toEqual(vueDialog.dialogSidePhones);
+    expect(dialogCloseIcon).toBe(vueDialog.dialogCloseIcon);
   });
 
   it('fall back the way the Vue layer does', () => {
@@ -72,6 +78,8 @@ describe('the shared lists', () => {
     expect(dataTableCellKind('header')).toBe('field');
     expect(headingLevel('h1')).toBe('h2');
     expect(sheetPlacement('start')).toBe('center');
+    expect(dialogSidePhone('top')).toBe('center');
+    expect(dialogSidePhone('bottom')).toBe('bottom');
     expect(sizes.map(iconSizeFor)).toEqual(['sm', 'sm', 'md', 'md', 'md']);
   });
 });

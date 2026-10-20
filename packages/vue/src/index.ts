@@ -10,6 +10,7 @@ import PlinthDataTableColumn from './PlinthDataTableColumn.vue';
 import PlinthDataTableEmpty from './PlinthDataTableEmpty.vue';
 import PlinthDataTableRow from './PlinthDataTableRow.vue';
 import PlinthDataTableSort from './PlinthDataTableSort.vue';
+import PlinthDialog from './PlinthDialog.vue';
 import PlinthHeader from './PlinthHeader.vue';
 import PlinthIcon from './PlinthIcon.vue';
 import PlinthIconButton from './PlinthIconButton.vue';
@@ -34,6 +35,7 @@ export {
   PlinthDataTableEmpty,
   PlinthDataTableRow,
   PlinthDataTableSort,
+  PlinthDialog,
   PlinthHeader,
   PlinthIcon,
   PlinthIconButton,
@@ -67,6 +69,7 @@ export {
   type DataTableCellKind,
   type DataTableSort,
 } from './data-table';
+export { dialogCloseIcon, dialogSidePhone, dialogSidePhones, type DialogSidePhone } from './dialog';
 export { headingLevel, headingLevels, type HeadingLevel } from './heading';
 export { controlSizes, iconSizeFor, resolveSize, sizes, type ControlSize, type Size } from './size';
 export { iconSizes, type IconSize } from './icon';
@@ -88,6 +91,7 @@ export const Plinth: Plugin = {
     app.component('PlinthDataTableEmpty', PlinthDataTableEmpty);
     app.component('PlinthDataTableRow', PlinthDataTableRow);
     app.component('PlinthDataTableSort', PlinthDataTableSort);
+    app.component('PlinthDialog', PlinthDialog);
     app.component('PlinthHeader', PlinthHeader);
     app.component('PlinthIcon', PlinthIcon);
     app.component('PlinthIconButton', PlinthIconButton);

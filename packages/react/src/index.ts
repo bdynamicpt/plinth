@@ -9,6 +9,7 @@ export { PlinthDataTableColumn, type PlinthDataTableColumnProps } from './Plinth
 export { PlinthDataTableEmpty, type PlinthDataTableEmptyProps } from './PlinthDataTableEmpty';
 export { PlinthDataTableRow, type PlinthDataTableRowProps } from './PlinthDataTableRow';
 export { PlinthDataTableSort, type PlinthDataTableSortProps } from './PlinthDataTableSort';
+export { PlinthDialog, type PlinthDialogProps } from './PlinthDialog';
 export { PlinthHeader, type PlinthHeaderProps } from './PlinthHeader';
 export { PlinthIcon, type PlinthIconProps } from './PlinthIcon';
 export { PlinthIconButton, type PlinthIconButtonProps } from './PlinthIconButton';
@@ -41,6 +42,7 @@ export {
   type DataTableCellKind,
   type DataTableSort,
 } from './data-table';
+export { dialogCloseIcon, dialogSidePhone, dialogSidePhones, type DialogSidePhone } from './dialog';
 export { headingLevel, headingLevels, type HeadingLevel } from './heading';
 export { controlSizes, iconSizeFor, resolveSize, sizes, type ControlSize, type Size } from './size';
 export { iconSizes, type IconSize } from './icon';

@@ -1,0 +1,94 @@
+/*
+ * Dialog: a modal for a form, the details of something or its settings, centred on the screen at
+ * every width; with data-side-phone="bottom" it is a bottom sheet below 768px.
+ *
+ * <dialog id="settings" class="plinth-dialog" closedby="any"
+ *   aria-labelledby="settings-title" aria-describedby="settings-description">
+ *   <div class="plinth-dialog-header">
+ *     <h2 id="settings-title" class="plinth-dialog-title">Settings</h2>
+ *     <p id="settings-description" class="plinth-dialog-description">Changes apply at once.</p>
+ *     <button type="button" class="plinth-button plinth-icon-button plinth-dialog-close"
+ *       data-variant="ghost" data-size="md" aria-label="Close" commandfor="settings"
+ *       command="close">
+ *       <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
+ *     </button>
+ *   </div>
+ *   <div class="plinth-dialog-body">…</div>
+ *   <div class="plinth-dialog-footer">…</div>
+ * </dialog>
+ *
+ * The root is the <dialog>, and it needs an id: commandfor and aria-labelledby point at it, and
+ * the title's and description's ids are the root's id with -title and -description. The title is
+ * required; the description (and its aria-describedby) and the footer are optional. The close
+ * button is an icon button (button.css and icon.css). It needs modal.css, the base it shares with
+ * the sheet: the surface, the backdrop, the scroll lock, the motion, the safe areas and the parts
+ * are there, and this file sets only where the dialog sits and how big it is.
+ *
+ * Open it with showModal() or a <button commandfor="settings" command="show-modal">. Open is the
+ * native state, [open]; the browser puts the dialog in the top layer, makes the page inert, traps
+ * focus, and returns focus to what opened it. The dialog fires close when it closes.
+ *
+ * Dismissible (the default): closedby="any" and the close button; the close button, Escape and a
+ * tap on the backdrop close it (closedby="any" is an enhancement Safari doesn't have yet, so the
+ * close button is always there). Not dismissible, for a choice the person must make:
+ * role="alertdialog", closedby="closerequest" and no close button, so a stray tap on the backdrop
+ * does nothing and it closes through its own buttons, with Escape acting as Cancel (the browser
+ * fires cancel, then close, with an empty returnValue). Give it a description: an alert dialog's
+ * message is its accessible description. A project may set its own closedby.
+ *
+ * Presentation: centred at every width, dialog.width wide (less the screen's margin on a phone),
+ * its height capped by the screen's, fading and rising into place. data-side-phone="bottom" (the
+ * only value; leave it out for centred) makes it a bottom sheet below 768px: the screen's width,
+ * on the bottom edge, sliding up, its last part clearing the home indicator; from 768px up it is
+ * centred like any dialog.
+ *
+ * On a phone the dialog's height is capped by 100dvh, which doesn't, on its own, clear the
+ * on-screen keyboard: a page with a form in a dialog sets interactive-widget=resizes-content in
+ * its viewport meta where the browser supports it, as for the sheet.
+ *
+ * In Livewire, a re-render would morph the open dialog back to the server's markup and drop its
+ * open attribute: put wire:ignore.self on the dialog (or keep it outside the component that
+ * re-renders), and always pass an id, since a generated one changes on every render.
+ */
+
+@layer plinth {
+  .plinth-dialog {
+    --plinth-modal-offset: 0 var(--plinth-space-4);
+    --plinth-modal-closed-opacity: 0;
+
+    inset: 0;
+    inline-size: min(100% - 2 * var(--plinth-space-4), var(--plinth-dialog-width));
+    max-block-size: calc(100dvh - 2 * var(--plinth-space-4));
+    margin: auto;
+  }
+
+  .plinth-dialog[data-side-phone='bottom'] {
+    --plinth-modal-offset: 0 100%;
+    --plinth-modal-closed-opacity: 1;
+    --plinth-modal-safe-area-end: env(safe-area-inset-bottom);
+
+    inset-block: auto 0;
+    inline-size: 100%;
+    max-block-size: calc(100dvh - var(--plinth-space-12));
+    margin: 0;
+    border-block-end-width: 0;
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+  }
+
+  @media (min-width: 768px) {
+    .plinth-dialog,
+    .plinth-dialog[data-side-phone='bottom'] {
+      --plinth-modal-offset: 0 var(--plinth-space-4);
+      --plinth-modal-closed-opacity: 0;
+      --plinth-modal-safe-area-end: initial;
+
+      inset: 0;
+      inline-size: min(100% - 2 * var(--plinth-space-8), var(--plinth-dialog-width));
+      max-block-size: calc(100dvh - 2 * var(--plinth-space-8));
+      margin: auto;
+      border-block-end-width: var(--plinth-border-width-thin);
+      border-radius: var(--plinth-radius-container);
+    }
+  }
+}

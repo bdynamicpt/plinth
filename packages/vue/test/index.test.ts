@@ -13,6 +13,7 @@ import {
   PlinthDataTableEmpty,
   PlinthDataTableRow,
   PlinthDataTableSort,
+  PlinthDialog,
   PlinthHeader,
   PlinthIcon,
   PlinthIconButton,
@@ -42,6 +43,7 @@ describe('the Plinth plugin', () => {
     expect(app.component('PlinthDataTableEmpty')).toBe(PlinthDataTableEmpty);
     expect(app.component('PlinthDataTableRow')).toBe(PlinthDataTableRow);
     expect(app.component('PlinthDataTableSort')).toBe(PlinthDataTableSort);
+    expect(app.component('PlinthDialog')).toBe(PlinthDialog);
     expect(app.component('PlinthHeader')).toBe(PlinthHeader);
     expect(app.component('PlinthIcon')).toBe(PlinthIcon);
     expect(app.component('PlinthIconButton')).toBe(PlinthIconButton);
