@@ -47,7 +47,6 @@ const slots = useSlots();
 const generatedId = useId();
 const rootId = computed(() => props.id?.trim() || undefined);
 const name = computed(() => `${rootId.value ?? `plinth-code-block-${generatedId}`}-language`);
-const hasLabel = computed(() => Boolean(props.label?.trim()) || hasContent(slots.label?.()));
 const shownTabs = computed(() => codeBlockTabs(props.tabs));
 // Only the first tab to show is the app's: after that the radios keep the reader's choice.
 const checked = checkedTab(codeBlockTabs(props.tabs), props.selected);
@@ -79,9 +78,11 @@ async function copyCode(event: MouseEvent) {
 <template>
   <div :id="rootId" class="plinth-code-block">
     <div class="plinth-code-block-header">
-      <span v-if="hasLabel" class="plinth-code-block-label"
-        ><slot name="label">{{ label }}</slot></span
-      >
+      <!-- Checked as it renders: slots aren't reactive, and the parent may add the label later. -->
+      <span v-if="hasContent(slots.label?.())" class="plinth-code-block-label"
+        ><slot name="label"
+      /></span>
+      <span v-else-if="label?.trim()" class="plinth-code-block-label">{{ label }}</span>
       <div
         v-if="shownTabs.length"
         class="plinth-code-block-tabs"

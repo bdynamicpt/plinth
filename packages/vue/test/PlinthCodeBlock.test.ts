@@ -1,5 +1,5 @@
 import { flushPromises, mount } from '@vue/test-utils';
-import { h } from 'vue';
+import { h, nextTick, ref } from 'vue';
 import { renderToString } from 'vue/server-renderer';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { checkedTab, codeBlockText } from '../src/code-block.ts';
@@ -160,6 +160,34 @@ describe('PlinthCodeBlock', () => {
       '<span class="plinth-code-block-label">HTML <b>Parity</b></span>',
     );
     expect(empty.find('.plinth-code-block-label').exists()).toBe(false);
+  });
+
+  it('prints the label prop when the label slot is blank', () => {
+    const wrapper = mount(PlinthCodeBlock, {
+      props: { label: 'brand.css' },
+      slots: { label: ' ', default: 'x' },
+    });
+
+    expect(wrapper.get('.plinth-code-block-label').html()).toBe(
+      '<span class="plinth-code-block-label">brand.css</span>',
+    );
+  });
+
+  it('shows a label slot the parent adds later', async () => {
+    const file = ref('');
+    const wrapper = mount({
+      components: { PlinthCodeBlock },
+      setup: () => ({ file }),
+      template: `<PlinthCodeBlock :copy="false">
+        <template v-if="file" #label>{{ file }}</template>
+        x
+      </PlinthCodeBlock>`,
+    });
+
+    expect(wrapper.find('.plinth-code-block-label').exists()).toBe(false);
+    file.value = 'brand.css';
+    await nextTick();
+    expect(wrapper.get('.plinth-code-block-label').text()).toBe('brand.css');
   });
 
   it('prints a highlighter’s markup as it is', () => {
