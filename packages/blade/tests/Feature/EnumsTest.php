@@ -5,6 +5,7 @@ use BDynamic\Plinth\Enums\CalloutRole;
 use BDynamic\Plinth\Enums\CalloutTone;
 use BDynamic\Plinth\Enums\DataTableCellKind;
 use BDynamic\Plinth\Enums\DataTableSort;
+use BDynamic\Plinth\Enums\DialogSidePhone;
 use BDynamic\Plinth\Enums\HeadingLevel;
 use BDynamic\Plinth\Enums\SheetPlacement;
 use BDynamic\Plinth\Enums\Size;
@@ -24,6 +25,7 @@ it('defaults each choice the way the components do', function () {
         ->and(Size::default())->toBe(Size::Medium)
         ->and(HeadingLevel::default())->toBe(HeadingLevel::Two)
         ->and(SheetPlacement::default())->toBe(SheetPlacement::Center)
+        ->and(DialogSidePhone::default())->toBe(DialogSidePhone::Center)
         ->and(DataTableSort::default())->toBe(DataTableSort::None)
         ->and(DataTableCellKind::default())->toBe(DataTableCellKind::Field)
         ->and(CalloutTone::default())->toBe(CalloutTone::Neutral)
@@ -72,6 +74,9 @@ it('matches the lists the Vue layer and the stories use', function () {
     }
     foreach (SheetPlacement::values() as $value) {
         expect($vue('sheet.ts'))->toContain("'{$value}'");
+    }
+    foreach (DialogSidePhone::values() as $value) {
+        expect($vue('dialog.ts'))->toContain("'{$value}'");
     }
     foreach ([...CalloutTone::values(), ...CalloutRole::values()] as $value) {
         expect($vue('callout.ts'))->toContain("'{$value}'");

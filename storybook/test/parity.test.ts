@@ -10,6 +10,7 @@ import {
   PlinthDataTableEmpty,
   PlinthDataTableRow,
   PlinthDataTableSort,
+  PlinthDialog,
   PlinthHeader,
   PlinthIcon,
   PlinthIconButton,
@@ -34,6 +35,7 @@ import {
   PlinthDataTableEmpty as ReactDataTableEmpty,
   PlinthDataTableRow as ReactDataTableRow,
   PlinthDataTableSort as ReactDataTableSort,
+  PlinthDialog as ReactDialog,
   PlinthHeader as ReactHeader,
   PlinthIcon as ReactIcon,
   PlinthIconButton as ReactIconButton,
@@ -82,6 +84,8 @@ import {
   type DataTableColumnArgs,
   type DataTableRowArgs,
 } from '../stories/components/data-table.ts';
+import * as dialogStories from '../stories/components/Dialog.stories.ts';
+import { dialog, type DialogArgs } from '../stories/components/dialog.ts';
 import * as headerStories from '../stories/components/Header.stories.ts';
 import { header, type HeaderArgs } from '../stories/components/header.ts';
 import * as iconButtonStories from '../stories/components/IconButton.stories.ts';
@@ -156,6 +160,7 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthDataTableEmpty, ReactDataTableEmpty],
   [PlinthDataTableRow, ReactDataTableRow],
   [PlinthDataTableSort, ReactDataTableSort],
+  [PlinthDialog, ReactDialog],
   [PlinthHeader, ReactHeader],
   [PlinthIcon, ReactIcon],
   [PlinthIconButton, ReactIconButton],
@@ -214,6 +219,16 @@ const sheetDefaults: SheetArgs = {
   placement: 'center',
   body: '<p>Body</p>',
   footer: '<button type="button">Apply</button>',
+};
+
+const dialogDefaults: DialogArgs = {
+  id: 'project',
+  title: 'Edit project',
+  closeLabel: 'Close',
+  dismissible: true,
+  sidePhone: 'center',
+  body: '<p>Body</p>',
+  footer: '<button type="button">Save</button>',
 };
 
 const menuSheetDefaults: MenuSheetArgs = {
@@ -547,6 +562,38 @@ const cases: ParityCase[] = [
   sheetCase('Sheet/unknown placement', {
     ...sheetDefaults,
     placement: 'start' as SheetArgs['placement'],
+  }),
+  ...storyArgs<DialogArgs>(dialogStories).map(([story, args]) =>
+    dialogCase(`Dialog/${story}`, args),
+  ),
+  dialogCase(
+    'Dialog/with extra attributes',
+    { ...dialogDefaults, description: 'The name shows to everyone.' },
+    {
+      class: 'is-busy',
+      'data-testid': 'project',
+      'aria-busy': 'true',
+      closedby: 'closerequest',
+    },
+  ),
+  dialogCase('Dialog/with a clashing attribute', dialogDefaults, {
+    'aria-labelledby': 'project-heading',
+  }),
+  dialogCase(
+    'Dialog/not dismissible, with a clashing role',
+    { ...dialogDefaults, dismissible: false },
+    { role: 'dialog', closedby: 'none' },
+  ),
+  dialogCase('Dialog/blank description, no footer', {
+    ...dialogDefaults,
+    description: '  ',
+    footer: undefined,
+  }),
+  dialogCase('Dialog/empty footer', { ...dialogDefaults, footer: '  ' }),
+  dialogCase('Dialog/id with spaces', { ...dialogDefaults, id: 'project' }, {}, ' project '),
+  dialogCase('Dialog/unknown side', {
+    ...dialogDefaults,
+    sidePhone: 'top' as DialogArgs['sidePhone'],
   }),
   ...storyArgs<MenuSheetArgs>(menuSheetStories).map(([story, args]) =>
     menuSheetCase(`Menu sheet/${story}`, args),
@@ -967,6 +1014,36 @@ function menuSheetCase(
   };
 }
 
+/** The dialog's parity; its body and footer are markup, passed in as the slots. */
+function dialogCase(
+  story: string,
+  args: DialogArgs,
+  attributes: Attributes = {},
+  id: string = args.id,
+): ParityCase {
+  const props = {
+    id,
+    title: args.title,
+    ...(args.description ? { description: args.description } : {}),
+    closeLabel: args.closeLabel,
+    dismissible: args.dismissible,
+    sidePhone: args.sidePhone,
+  };
+  const named: Record<string, string> = args.footer ? { footer: args.footer } : {};
+  return {
+    story,
+    markup: dialog(args, attributes),
+    vue: {
+      component: PlinthDialog,
+      props: { ...props, ...attributes },
+      slot: args.body,
+      html: true,
+      named,
+    },
+    blade: { component: 'dialog', props, attributes, slot: args.body, named },
+  };
+}
+
 /** The sheet's own parity; its body and footer are markup, passed in as the slots. */
 function sheetCase(
   story: string,
@@ -1358,6 +1435,20 @@ describe('parity with the stories', () => {
       'Sheet/empty footer',
       'Sheet/id with spaces',
       'Sheet/unknown placement',
+      'Dialog/Default',
+      'Dialog/WithDescription',
+      'Dialog/NotDismissible',
+      'Dialog/BottomOnPhone',
+      'Dialog/WithoutFooter',
+      'Dialog/LongContent',
+      'Dialog/LongTitle',
+      'Dialog/with extra attributes',
+      'Dialog/with a clashing attribute',
+      'Dialog/not dismissible, with a clashing role',
+      'Dialog/blank description, no footer',
+      'Dialog/empty footer',
+      'Dialog/id with spaces',
+      'Dialog/unknown side',
       'Menu sheet/Default',
       'Menu sheet/WithPhoto',
       'Menu sheet/StaticUser',

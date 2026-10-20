@@ -91,6 +91,7 @@ describe('tiers', () => {
       'data-table.row-height',
       'list-row.height',
       'pill.height',
+      'dialog.width',
       'sheet.width',
       'sheet.side-width',
       'section-menu.height',

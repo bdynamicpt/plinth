@@ -11,6 +11,7 @@ import '@bdynamic/plinth-css/src/components/button.css';
 import '@bdynamic/plinth-css/src/components/avatar.css';
 import '@bdynamic/plinth-css/src/components/list-row.css';
 import '@bdynamic/plinth-css/src/components/list-card.css';
+import '@bdynamic/plinth-css/src/components/modal.css';
 import '@bdynamic/plinth-css/src/components/sheet.css';
 import '@bdynamic/plinth-css/src/components/header.css';
 import '@bdynamic/plinth-css/src/components/menu-sheet.css';
@@ -83,6 +84,8 @@ const meta = {
     account: { control: false },
   },
   parameters: {
+    // The open dialog takes no room in the page, so the frames at every width get their height.
+    everyWidth: { height: 720 },
     docs: {
       description: {
         component:

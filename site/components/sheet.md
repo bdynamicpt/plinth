@@ -6,6 +6,8 @@ middle of the screen, or as a full-height panel on the side.
 
 ## When not to use it
 
+- For a form, details or settings centred on the screen at every width: use the
+  [dialog](dialog.md), which shares the sheet's base.
 - For a message the page can show in place: use a [callout](callout.md).
 - For the app's menu: use the [menu sheet](menu-sheet.md), which is a sheet already.
 - For a long or many-step task: give it its own page.
@@ -182,6 +184,10 @@ Every layer needs a `title` and throws without one. Extra attributes, such as `c
 - The close button is always there, so the sheet closes where a tap on the backdrop doesn't.
 - Motion drops to nothing under `prefers-reduced-motion`.
 - Every control in it keeps a 40 × 40px touch target.
+
+The sheet and the [dialog](dialog.md) share one base, `modal.css`: the surface, the backdrop, the
+scroll lock, the motion, the safe areas and the header, body and footer. `plinth.css` has it; a
+page that loads the components one by one loads `modal.css` with `sheet.css`.
 
 The markup contract is at the top of
 [`packages/css/src/components/sheet.css`](../../packages/css/src/components/sheet.css).

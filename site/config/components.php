@@ -182,6 +182,23 @@ return [
             'description' => 'The row under the header that switches between a page\'s sections.',
         ],
 
+        'dialog' => [
+            'name' => 'Dialog',
+            'group' => 'Overlays',
+            'description' => 'A modal for a form, details or settings, centred at every width.',
+            'playground' => [
+                'template' => "<x-plinth::button variant=\"secondary\" commandfor=\"playground-dialog\" command=\"show-modal\">Edit project</x-plinth::button>\n<x-plinth::dialog id=\"playground-dialog\" title=\"Edit project\" description=\"The name shows to everyone in the workspace.\"{attributes}>\n    <p>Rename the project, or move it to another workspace.</p>\n    <x-slot:footer>\n        <x-plinth::button variant=\"secondary\" commandfor=\"playground-dialog\" command=\"close\">Cancel</x-plinth::button>\n        <x-plinth::button commandfor=\"playground-dialog\" command=\"close\">Save</x-plinth::button>\n    </x-slot:footer>\n</x-plinth::dialog>",
+                'options' => [
+                    'dismissible' => [
+                        'values' => ['true', 'false'],
+                        'default' => 'true',
+                        'print' => ['false' => ':dismissible="false"'],
+                    ],
+                    'side-phone' => ['values' => ['center', 'bottom'], 'default' => 'center'],
+                ],
+            ],
+        ],
+
         'menu-sheet' => [
             'name' => 'Menu sheet',
             'group' => 'Overlays',
@@ -207,7 +224,6 @@ return [
     */
 
     'coming' => [
-        60 => ['name' => 'Dialog', 'description' => 'A centred dialog, and the base it shares with the sheet.'],
         62 => ['name' => 'Confirmation dialog', 'description' => 'Simple, type to confirm, or a password.'],
         63 => ['name' => 'Drawer', 'description' => 'A draggable bottom panel with snap points.'],
     ],

@@ -12,6 +12,7 @@ import '@bdynamic/plinth-css/src/components/button.css';
 import '@bdynamic/plinth-css/src/components/badge.css';
 import '@bdynamic/plinth-css/src/components/list-row.css';
 import '@bdynamic/plinth-css/src/components/list-card.css';
+import '@bdynamic/plinth-css/src/components/modal.css';
 import '@bdynamic/plinth-css/src/components/sheet.css';
 
 const action = (label: string, variant: 'primary' | 'secondary' | 'danger', extra = {}) =>
@@ -70,6 +71,8 @@ const meta = {
     footer: { control: false },
   },
   parameters: {
+    // The open dialog takes no room in the page, so the frames at every width get their height.
+    everyWidth: { height: 720 },
     docs: {
       description: {
         component: 'A modal panel on a native dialog: slides up on a phone, a dialog from 768px.',

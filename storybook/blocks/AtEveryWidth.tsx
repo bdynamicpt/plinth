@@ -99,7 +99,8 @@ interface AtEveryWidthProps {
   /**
    * The height of every frame in px. Leave it out and each frame takes its story's height; set
    * it for a story that opens something in the top layer (a sheet, a dialog), which takes no
-   * room in the page.
+   * room in the page. A story file can set it for its docs page with the `everyWidth: { height }`
+   * parameter.
    */
   height?: number;
 }
@@ -110,6 +111,8 @@ interface AtEveryWidthProps {
  */
 export function AtEveryWidth({ of, height }: AtEveryWidthProps) {
   const { story } = useOf(of, ['story']);
+  const frameHeight =
+    height ?? (story.parameters.everyWidth as { height?: number } | undefined)?.height;
   const globals = usePageGlobals();
   const [theme, setTheme] = useState<Theme>(globals.theme);
 
@@ -148,7 +151,7 @@ export function AtEveryWidth({ of, height }: AtEveryWidthProps) {
             title={`${story.title} / ${story.name}, ${label.toLowerCase()} (${width}px), ${theme}`}
             label={label}
             width={width}
-            height={height}
+            height={frameHeight}
           />
         ))}
       </div>

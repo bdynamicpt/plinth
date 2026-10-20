@@ -45,8 +45,10 @@ and the header, body and footer parts, so they cannot drift apart. Each has its 
 ### 2. Dialog
 
 Centred at every width. `dismissible` (default `true`): when `false` the dialog has
-`closedby="none"`, no close button and `role="alertdialog"`, so it closes only through its own
-buttons and Escape acts as Cancel. This replaces a separate "alert dialog": whether a person may
+`closedby="closerequest"`, no close button and `role="alertdialog"`, so a tap on the backdrop
+leaves it open, it closes through its own buttons, and Escape acts as Cancel. (This said
+`closedby="none"` at first; but `none` makes a browser that supports `closedby` ignore Escape too,
+while `closerequest` keeps Escape and drops only the light dismiss, the same in every browser.) This replaces a separate "alert dialog": whether a person may
 walk away is a property, and the role follows from it. `side-phone="bottom"` makes it a bottom
 sheet below 768px.
 
