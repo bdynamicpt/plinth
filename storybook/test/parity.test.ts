@@ -23,12 +23,28 @@ import {
   PlinthSheet,
 } from '@bdynamic/plinth-vue';
 import {
+  PlinthAvatar as ReactAvatar,
   PlinthBadge as ReactBadge,
   PlinthButton as ReactButton,
   PlinthCallout as ReactCallout,
   PlinthCodeBlock as ReactCodeBlock,
+  PlinthDataTable as ReactDataTable,
+  PlinthDataTableCell as ReactDataTableCell,
+  PlinthDataTableColumn as ReactDataTableColumn,
+  PlinthDataTableEmpty as ReactDataTableEmpty,
+  PlinthDataTableRow as ReactDataTableRow,
+  PlinthDataTableSort as ReactDataTableSort,
+  PlinthHeader as ReactHeader,
   PlinthIcon as ReactIcon,
   PlinthIconButton as ReactIconButton,
+  PlinthListCard as ReactListCard,
+  PlinthListRow as ReactListRow,
+  PlinthMenuSheet as ReactMenuSheet,
+  PlinthPill as ReactPill,
+  PlinthPillRow as ReactPillRow,
+  PlinthSectionMenu as ReactSectionMenu,
+  PlinthSectionMenuItem as ReactSectionMenuItem,
+  PlinthSheet as ReactSheet,
 } from '@bdynamic/plinth-react';
 import { createElement, type ComponentType } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -104,8 +120,7 @@ import { htmlToReact, normalize, reactProps, renderBlade, withoutAlpine } from '
  * but the class (the code block's id is a prop), so they have no clashing case.
  *
  * React takes the same props as Vue (docs/adr/0006), so a case's React side is its Vue side
- * with slots as `children` and node props. The React layer is being ported (#65, #66):
- * `reactComponents` lists the components that have one so far.
+ * with slots as `children` and node props.
  */
 interface ParityCase {
   story: string;
@@ -128,14 +143,30 @@ interface ParityCase {
   };
 }
 
-/** Each Vue component that has a React one so far, and that React component. */
+/** Each Vue component and its React one. */
 const reactComponents = new Map<Component, unknown>([
+  [PlinthAvatar, ReactAvatar],
   [PlinthBadge, ReactBadge],
-  [PlinthIcon, ReactIcon],
   [PlinthButton, ReactButton],
-  [PlinthIconButton, ReactIconButton],
-  [PlinthCodeBlock, ReactCodeBlock],
   [PlinthCallout, ReactCallout],
+  [PlinthCodeBlock, ReactCodeBlock],
+  [PlinthDataTable, ReactDataTable],
+  [PlinthDataTableCell, ReactDataTableCell],
+  [PlinthDataTableColumn, ReactDataTableColumn],
+  [PlinthDataTableEmpty, ReactDataTableEmpty],
+  [PlinthDataTableRow, ReactDataTableRow],
+  [PlinthDataTableSort, ReactDataTableSort],
+  [PlinthHeader, ReactHeader],
+  [PlinthIcon, ReactIcon],
+  [PlinthIconButton, ReactIconButton],
+  [PlinthListCard, ReactListCard],
+  [PlinthListRow, ReactListRow],
+  [PlinthMenuSheet, ReactMenuSheet],
+  [PlinthPill, ReactPill],
+  [PlinthPillRow, ReactPillRow],
+  [PlinthSectionMenu, ReactSectionMenu],
+  [PlinthSectionMenuItem, ReactSectionMenuItem],
+  [PlinthSheet, ReactSheet],
 ]);
 
 /**
@@ -1439,28 +1470,17 @@ describe('parity with the stories', () => {
       expect(normalize(withoutAlpine(blade[i]!))).toBe(normalize(c.markup));
     });
 
-    const react = reactComponents.get(c.vue.component);
-    if (react) {
-      it('React prints the story markup', () => {
-        expect(normalize(renderReact(react, c.vue))).toBe(normalize(c.markup));
-      });
-    }
+    it('React prints the story markup', () => {
+      expect(normalize(renderReact(reactComponents.get(c.vue.component), c.vue))).toBe(
+        normalize(c.markup),
+      );
+    });
   });
 });
 
 describe('the React side', () => {
-  it('covers badge, icon, button, icon button, code block and callout', () => {
-    const covered = new Set(
-      cases.filter((c) => reactComponents.has(c.vue.component)).map((c) => c.story.split('/')[0]),
-    );
-    expect([...covered]).toEqual([
-      'Badge',
-      'Icon',
-      'Button',
-      'Icon button',
-      'Code block',
-      'Callout',
-    ]);
+  it('has a React component for every Vue one', () => {
+    expect(cases.filter((c) => !reactComponents.has(c.vue.component))).toEqual([]);
   });
 
   it('turns markup into the elements React prints back', () => {
@@ -1471,6 +1491,10 @@ describe('the React side', () => {
     expect(
       normalize(renderToStaticMarkup(createElement('i', null, htmlToReact('a<b>c</b>')))),
     ).toBe(normalize('<i>a<b>c</b></i>'));
+    const html = '<button disabled="" style="display: grid; --gap: 1rem">x</button>';
+    expect(normalize(renderToStaticMarkup(createElement('i', null, htmlToReact(html))))).toBe(
+      normalize(`<i>${html}</i>`),
+    );
   });
 });
 
@@ -1481,8 +1505,17 @@ describe('normalize', () => {
     );
   });
 
+  it('ignores the spacing in a style', () => {
+    expect(normalize('<i style="display:grid;gap:var(--x)">x</i>')).toBe(
+      normalize('<i style=" display: grid ; gap: var(--x); ">x</i>'),
+    );
+  });
+
   it('still tells different markup apart', () => {
     expect(normalize('<span class="a">x</span>')).not.toBe(normalize('<span class="b">x</span>'));
     expect(normalize('<span>x</span>')).not.toBe(normalize('<span><i></i>x</span>'));
+    expect(normalize('<i style="color: red">x</i>')).not.toBe(
+      normalize('<i style="color: blue">x</i>'),
+    );
   });
 });
