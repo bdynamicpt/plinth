@@ -259,6 +259,8 @@
     --plinth-color-danger-solid-active: var(--plinth-ref-color-red-800);
     --plinth-color-on-danger: var(--plinth-ref-color-neutral-0);
     --plinth-color-accent-subtle: var(--plinth-ref-color-brand-50);
+    --plinth-color-accent-subtle-hover: var(--plinth-ref-color-brand-100);
+    --plinth-color-accent-subtle-active: var(--plinth-ref-color-brand-200);
     --plinth-elevation-1: 0 1px 2px 0 #0000001a;
     --plinth-elevation-2: 0 4px 12px 0 #00000026;
     --plinth-elevation-3: 0 12px 32px 0 #00000026;
@@ -316,6 +318,8 @@
     --plinth-color-danger-solid-active: var(--plinth-ref-color-red-800);
     --plinth-color-on-danger: var(--plinth-ref-color-neutral-0);
     --plinth-color-accent-subtle: var(--plinth-ref-color-brand-950);
+    --plinth-color-accent-subtle-hover: var(--plinth-ref-color-brand-900);
+    --plinth-color-accent-subtle-active: var(--plinth-ref-color-brand-800);
     --plinth-elevation-1: 0 1px 2px 0 #0000004d;
     --plinth-elevation-2: 0 4px 12px 0 #00000080;
     --plinth-elevation-3: 0 12px 32px 0 #00000099;
@@ -373,6 +377,8 @@
       --plinth-color-danger-solid-active: var(--plinth-ref-color-red-800);
       --plinth-color-on-danger: var(--plinth-ref-color-neutral-0);
       --plinth-color-accent-subtle: var(--plinth-ref-color-brand-950);
+      --plinth-color-accent-subtle-hover: var(--plinth-ref-color-brand-900);
+      --plinth-color-accent-subtle-active: var(--plinth-ref-color-brand-800);
       --plinth-elevation-1: 0 1px 2px 0 #0000004d;
       --plinth-elevation-2: 0 4px 12px 0 #00000080;
       --plinth-elevation-3: 0 12px 32px 0 #00000099;
@@ -643,9 +649,10 @@
  * </a>
  *
  * aria-label is required: it is the only name the button has. A toggle has aria-pressed
- * ("true" or "false"), and pressed shows the selection tint (accent-subtle, accent-text), with
- * the Highlight system colour in forced colours. A link is never a toggle: aria-pressed is
- * never printed on one.
+ * ("true" or "false"), and pressed shows the selection tint (accent-subtle, accent-text) inside
+ * a 2px accent edge (border-width.thick), so colour is not its only cue; it still answers hover
+ * and press with a step on the tint. In forced colours it takes the Highlight system colour. A
+ * link is never a toggle: aria-pressed is never printed on one.
  */
 
 @layer plinth {
@@ -685,7 +692,8 @@
     box-shadow: var(--plinth-button-inner-edge);
     transition:
       background-color var(--plinth-duration-fast) var(--plinth-easing-standard),
-      border-color var(--plinth-duration-fast) var(--plinth-easing-standard);
+      border-color var(--plinth-duration-fast) var(--plinth-easing-standard),
+      box-shadow var(--plinth-duration-fast) var(--plinth-easing-standard);
   }
 
   /* The brand's colour, for marketing and brand moments (Upgrade plan): at most one per screen. */
@@ -806,13 +814,21 @@
     padding-inline: 0;
   }
 
+  /* The border and an inset ring make the 2px edge, so pressed doesn't move the icon. */
   .plinth-icon-button[aria-pressed='true'] {
     --plinth-button-surface: var(--plinth-color-accent-subtle);
-    --plinth-button-surface-hover: var(--plinth-color-accent-subtle);
-    --plinth-button-surface-active: var(--plinth-color-accent-subtle);
+    --plinth-button-surface-hover: var(--plinth-color-accent-subtle-hover);
+    --plinth-button-surface-active: var(--plinth-color-accent-subtle-active);
     --plinth-button-text: var(--plinth-color-accent-text);
-    --plinth-button-edge: transparent;
-    --plinth-button-inner-edge: none;
+    --plinth-button-edge: var(--plinth-color-accent);
+    --plinth-button-inner-edge: inset 0 0 0
+      calc(var(--plinth-border-width-thick) - var(--plinth-border-width-thin))
+      var(--plinth-color-accent);
+  }
+
+  /* A gap between the ring and the pressed accent edge, so focus and pressed read apart. */
+  .plinth-icon-button[aria-pressed='true']:focus-visible {
+    outline-offset: var(--plinth-focus-ring-offset-filled);
   }
 
   .plinth-button-label {
@@ -3116,7 +3132,9 @@
  * States, set by the app:
  * - selected: a button pill always prints aria-pressed, "true" or "false"; a link pill prints
  *   aria-current="page" for the page being shown. Selected takes the selection tint
- *   (accent-subtle, accent-text) and an accent edge, where the others have a neutral one.
+ *   (accent-subtle, accent-text) inside a 2px accent edge (border-width.thick), where the others
+ *   have a 1px neutral one, so colour is not its only cue. A pressed button still answers hover
+ *   and press with a step on the tint (accent-subtle-hover, accent-subtle-active).
  * - disabled: `disabled` on a <button>; on a link, no href, role="link" and aria-disabled="true".
  * - hover only where the device can hover; the focus ring on :focus-visible.
  *
@@ -3175,6 +3193,7 @@
     transition:
       background-color var(--plinth-duration-fast) var(--plinth-easing-standard),
       border-color var(--plinth-duration-fast) var(--plinth-easing-standard),
+      box-shadow var(--plinth-duration-fast) var(--plinth-easing-standard),
       color var(--plinth-duration-fast) var(--plinth-easing-standard);
   }
 
@@ -3202,10 +3221,29 @@
     background-color: var(--plinth-color-surface-sunken);
   }
 
+  /* The border and an inset ring make the 2px edge, so selecting doesn't move the label. */
   .plinth-pill:is([aria-pressed='true'], [aria-current='page']) {
     color: var(--plinth-color-accent-text);
     background-color: var(--plinth-color-accent-subtle);
     border-color: var(--plinth-color-accent);
+    box-shadow: inset 0 0 0 calc(var(--plinth-border-width-thick) - var(--plinth-border-width-thin))
+      var(--plinth-color-accent);
+  }
+
+  /*
+   * A pressed button can be pressed again, so it answers hover and press with a step on the tint.
+   * Not in forced colours, where the tint would replace the system highlight under the label.
+   */
+  @media (hover: hover) and (forced-colors: none) {
+    button.plinth-pill:enabled[aria-pressed='true']:hover {
+      background-color: var(--plinth-color-accent-subtle-hover);
+    }
+  }
+
+  @media (forced-colors: none) {
+    button.plinth-pill:enabled[aria-pressed='true']:active {
+      background-color: var(--plinth-color-accent-subtle-active);
+    }
   }
 
   .plinth-pill:disabled,
@@ -3217,6 +3255,11 @@
   .plinth-pill:focus-visible {
     outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
     outline-offset: var(--plinth-focus-ring-offset);
+  }
+
+  /* A gap between the ring and the accent edge, so focus and selection read apart. */
+  .plinth-pill:is([aria-pressed='true'], [aria-current='page']):focus-visible {
+    outline-offset: var(--plinth-focus-ring-offset-filled);
   }
 
   .plinth-pill-count {
@@ -3289,8 +3332,10 @@
  * States, set by the app:
  * - current: a link prints aria-current="page" for the section being shown; a button always
  *   prints aria-pressed, "true" or "false". The current item takes the selection tint
- *   (accent-subtle, accent-text) with an accent edge, so colour is not its only cue; the others
- *   are muted text on no surface, like a ghost button.
+ *   (accent-subtle, accent-text) inside a 2px accent edge (border-width.thick), so colour is not
+ *   its only cue; the others are muted text on no surface, like a ghost button. A pressed button
+ *   still answers hover and press with a step on the tint (accent-subtle-hover,
+ *   accent-subtle-active).
  * - disabled: `disabled` on a <button>; on a link, no href, role="link" and aria-disabled="true".
  * - hover only where the device can hover; the focus ring on :focus-visible.
  *
@@ -3377,6 +3422,8 @@
     border-radius: var(--plinth-radius-control);
     transition:
       background-color var(--plinth-duration-fast) var(--plinth-easing-standard),
+      border-color var(--plinth-duration-fast) var(--plinth-easing-standard),
+      box-shadow var(--plinth-duration-fast) var(--plinth-easing-standard),
       color var(--plinth-duration-fast) var(--plinth-easing-standard);
   }
 
@@ -3394,10 +3441,29 @@
     background-color: var(--plinth-color-surface-sunken);
   }
 
+  /* The border and an inset ring make the 2px edge, so selecting doesn't move the label. */
   .plinth-section-menu-item:is([aria-pressed='true'], [aria-current='page']) {
     color: var(--plinth-color-accent-text);
     background-color: var(--plinth-color-accent-subtle);
     border-color: var(--plinth-color-accent);
+    box-shadow: inset 0 0 0 calc(var(--plinth-border-width-thick) - var(--plinth-border-width-thin))
+      var(--plinth-color-accent);
+  }
+
+  /*
+   * A pressed button can be pressed again, so it answers hover and press with a step on the tint.
+   * Not in forced colours, where the tint would replace the system highlight under the label.
+   */
+  @media (hover: hover) and (forced-colors: none) {
+    button.plinth-section-menu-item:enabled[aria-pressed='true']:hover {
+      background-color: var(--plinth-color-accent-subtle-hover);
+    }
+  }
+
+  @media (forced-colors: none) {
+    button.plinth-section-menu-item:enabled[aria-pressed='true']:active {
+      background-color: var(--plinth-color-accent-subtle-active);
+    }
   }
 
   .plinth-section-menu-item:disabled,
@@ -3409,6 +3475,11 @@
   .plinth-section-menu-item:focus-visible {
     outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
     outline-offset: var(--plinth-focus-ring-offset);
+  }
+
+  /* A gap between the ring and the accent edge, so focus and selection read apart. */
+  .plinth-section-menu-item:is([aria-pressed='true'], [aria-current='page']):focus-visible {
+    outline-offset: var(--plinth-focus-ring-offset-filled);
   }
 
   .plinth-section-menu-count {

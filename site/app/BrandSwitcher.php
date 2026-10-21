@@ -17,8 +17,8 @@ final class BrandSwitcher
     public const string DEFAULT_CORNERS = 'plinth';
 
     /**
-     * Each colour for light and for dark: accent, hover, active, text, subtle, on-accent and the
-     * focus ring. Plinth blue is Plinth's own, so it overrides nothing.
+     * Each colour for light and for dark: accent, hover, active, text, subtle (with its hover and
+     * active steps), on-accent and the focus ring. Plinth blue is Plinth's own, so it overrides nothing.
      *
      * @var array<string, Accent>
      */
@@ -54,6 +54,8 @@ final class BrandSwitcher
         'accent-active' => 'oklch(0.42 0.08 185)',
         'accent-text' => 'oklch(0.45 0.09 185)',
         'accent-subtle' => 'oklch(0.95 0.03 185)',
+        'accent-subtle-hover' => 'oklch(0.92 0.04 185)',
+        'accent-subtle-active' => 'oklch(0.89 0.05 185)',
         'on-accent' => 'oklch(0.99 0 0)',
         'focus-ring' => 'oklch(0.52 0.1 185)',
     ];
@@ -64,6 +66,8 @@ final class BrandSwitcher
         'accent-active' => 'oklch(0.86 0.08 180)',
         'accent-text' => 'oklch(0.82 0.1 180)',
         'accent-subtle' => 'oklch(0.3 0.05 185)',
+        'accent-subtle-hover' => 'oklch(0.35 0.06 185)',
+        'accent-subtle-active' => 'oklch(0.39 0.07 185)',
         'on-accent' => 'oklch(0.2 0.03 185)',
         'focus-ring' => 'oklch(0.82 0.1 180)',
     ];
@@ -74,6 +78,8 @@ final class BrandSwitcher
         'accent-active' => 'oklch(0.42 0.13 42)',
         'accent-text' => 'oklch(0.47 0.15 42)',
         'accent-subtle' => 'oklch(0.95 0.03 50)',
+        'accent-subtle-hover' => 'oklch(0.92 0.04 50)',
+        'accent-subtle-active' => 'oklch(0.89 0.05 50)',
         'on-accent' => 'oklch(0.99 0 0)',
         'focus-ring' => 'oklch(0.52 0.16 42)',
     ];
@@ -84,6 +90,8 @@ final class BrandSwitcher
         'accent-active' => 'oklch(0.85 0.11 52)',
         'accent-text' => 'oklch(0.82 0.12 52)',
         'accent-subtle' => 'oklch(0.3 0.06 45)',
+        'accent-subtle-hover' => 'oklch(0.35 0.07 45)',
+        'accent-subtle-active' => 'oklch(0.39 0.08 45)',
         'on-accent' => 'oklch(0.2 0.03 45)',
         'focus-ring' => 'oklch(0.82 0.12 52)',
     ];
@@ -94,6 +102,8 @@ final class BrandSwitcher
         'accent-active' => 'oklch(0.42 0.17 295)',
         'accent-text' => 'oklch(0.48 0.19 295)',
         'accent-subtle' => 'oklch(0.95 0.03 295)',
+        'accent-subtle-hover' => 'oklch(0.92 0.04 295)',
+        'accent-subtle-active' => 'oklch(0.89 0.05 295)',
         'on-accent' => 'oklch(0.99 0 0)',
         'focus-ring' => 'oklch(0.52 0.2 295)',
     ];
@@ -104,6 +114,8 @@ final class BrandSwitcher
         'accent-active' => 'oklch(0.83 0.11 295)',
         'accent-text' => 'oklch(0.8 0.12 295)',
         'accent-subtle' => 'oklch(0.3 0.07 295)',
+        'accent-subtle-hover' => 'oklch(0.35 0.08 295)',
+        'accent-subtle-active' => 'oklch(0.39 0.09 295)',
         'on-accent' => 'oklch(0.2 0.03 295)',
         'focus-ring' => 'oklch(0.8 0.12 295)',
     ];

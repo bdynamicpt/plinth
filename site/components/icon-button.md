@@ -45,7 +45,8 @@ dialog; **primary** or **accent** rarely, for the one main action in a compact p
 ## Toggles
 
 Set `pressed` to make it a toggle, such as favourite, bold or mute: `true` or `false` prints
-`aria-pressed`, so screen readers announce the state, and pressed shows the selection tint. Keep
+`aria-pressed`, so screen readers announce the state, and pressed shows the selection tint inside a
+2px accent edge; it still answers hover and press, with a step on the tint. Keep
 the label the same in both states (_Notifications_), since `aria-pressed` already says whether it
 is on.
 
@@ -123,8 +124,9 @@ import { PlinthIconButton } from '@bdynamic/plinth/react';
 - The `label` is the accessible name, printed as `aria-label`; the icon inside is hidden from
   screen readers.
 - A toggle prints `aria-pressed="true"` or `"false"`, so its state is announced; without
-  `pressed` there is no `aria-pressed`. In forced colours, pressed takes the system's highlight
-  colour, since the tint is dropped there.
+  `pressed` there is no `aria-pressed`. Pressed has a 2px accent edge as well as its tint, so
+  colour is not its only cue. In forced colours, pressed takes the system's highlight colour,
+  since the tint is dropped there.
 - Busy sets `aria-busy` and `aria-disabled` and keeps focus; a disabled link has no `href`,
   `role="link"` and `aria-disabled="true"`.
 - The focus ring shows on `:focus-visible`, against the edge on ghost, secondary and

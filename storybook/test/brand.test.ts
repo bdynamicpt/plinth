@@ -75,6 +75,8 @@ describe('the example brand', () => {
       ['text-muted', 'surface-sunken'],
       ['accent-text', 'surface'],
       ['accent-text', 'accent-subtle'],
+      ['accent-text', 'accent-subtle-hover'],
+      ['accent-text', 'accent-subtle-active'],
       ['on-accent', 'accent'],
       ['on-accent', 'accent-hover'],
       ['on-accent', 'accent-active'],
@@ -91,5 +93,9 @@ describe('the example brand', () => {
         expect(contrast(color('focus-ring'), color(bg))).toBeGreaterThanOrEqual(3);
       },
     );
+
+    it.each(['surface', 'surface-raised'])('the selected edge stands out on %s (3:1)', (bg) => {
+      expect(contrast(color('accent'), color(bg))).toBeGreaterThanOrEqual(3);
+    });
   });
 });
